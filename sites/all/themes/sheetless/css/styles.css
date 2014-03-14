@@ -17,6 +17,10 @@
 /* Optionally, add your own components here. */
 @import "print.css";
 
+body {
+	background-color: green;
+}
+
 /* SMACSS theme rules */
 /* @import "theme-A.css"; */
 /* @import "theme-B.css"; */
