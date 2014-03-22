@@ -1,0 +1,12 @@
+<?php
+/**
+ * @file
+ * Bootstrap integration.
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function views_bootstrap_views_api() {
+  return array("api" => "3.0");
+}
