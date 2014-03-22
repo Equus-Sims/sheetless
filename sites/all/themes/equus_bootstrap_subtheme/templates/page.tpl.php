@@ -78,7 +78,7 @@
     <div class="navbar-header">
       <?php if ($logo): ?>
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
-        <img src="<?php print drupal_get_path('theme', 'equus_bootstrap_subtheme'); ?>/Logo.svg" alt="<?php print t('Home'); ?>" />
+        <img src="<?php print $base_path . drupal_get_path('theme', 'equus_bootstrap_subtheme'); ?>/Logo.svg" alt="<?php print t('Home'); ?>" />
       </a>
       <?php endif; ?>
 
