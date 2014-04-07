@@ -1,0 +1,43 @@
+; $Id:
+name = Community Accounting API
+description = Defines transaction entity with a swoppable controller, a default currency, 'worth' field, and the forms, views theme callbacks for basic manipulation
+package = Community Accounting
+configure = admin/accounting
+core = 7.x
+
+dependencies[] = ctools
+dependencies[] = field
+dependencies[] = token
+dependencies[] = user_chooser (>=1.2)
+dependencies[] = entity
+
+files[] = mcapi.install
+files[] = mcapi.inc
+files[] = mcapi.admin.inc
+files[] = mcapi.controller
+files[] = mcapi.drush.inc
+files[] = mcapi.variable.inc
+files[] = mcapi.rules.inc
+
+;ctools implementation for currencies
+files[] = mcapi.mcapicurrencies_default.inc
+files[] = plugins/export_ui/mcapi_ui.inc
+files[] = plugins/export_ui/mcapi_ui.class.php
+
+;views integration
+files[] = views/mcapi.views.inc
+files[] = views/mcapi.views_default.inc
+files[] = views/views_handler_field_mcapi_state.inc
+files[] = views/views_handler_field_mcapi_users_totals.inc
+files[] = views/views_handler_field_transaction.inc
+files[] = views/views_handler_field_transaction_operations.inc
+files[] = views/views_handler_filter_mcapi_currency.inc
+files[] = views/views_handler_filter_mcapi_states.inc
+files[] = views/views_handler_filter_mcapi_types.inc
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

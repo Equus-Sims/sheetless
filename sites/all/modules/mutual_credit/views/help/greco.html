@@ -1,0 +1,4 @@
+<p>This is the only performance metric for mutual credit systems. It is the ratio of the daily trading volume to the total extent of the system - that is, the total credit currently extended. </p>
+<p>This proportion indicates how many days trade it would take to clear all credit. In a business exchange, a figure of 100 days should be considered normal.
+<p>This figure should be used to inform the setting of balance limits. A figure above 100 days indicates that the exchange is slow compared to the amount of credit available and that credit might be curbed. A figure below 100 days might indicate that higher credits are needed.
+<p>This metric is experimental.</p>

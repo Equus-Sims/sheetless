@@ -1,0 +1,15 @@
+; $Id: mc_sms.info,v 1.1.2.1 2010/12/06 13:19:46 hutch Exp $
+name = Interface for accountants
+description = Navigate transactions and create new ones
+package = Community Accounting
+core = "7.x"
+dependencies[] = mcapi
+dependencies[] = user_chooser
+
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

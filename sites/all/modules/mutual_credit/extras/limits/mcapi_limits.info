@@ -1,0 +1,17 @@
+; $Id:
+name = Balance limits
+description = Keep your exchange currency on the rails by limiting the amount of credit / users can issue and hold.
+package = Community Accounting
+core = 7.x
+
+dependencies[] = mcapi
+
+files[] = views/mcapi_limits_views.inc
+files[] = views/views_handler_field_mcapi_limits.inc
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

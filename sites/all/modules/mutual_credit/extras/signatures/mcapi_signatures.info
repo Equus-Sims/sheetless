@@ -1,0 +1,20 @@
+; $Id:
+name = Transaction signing
+description = Require signatures on certain transaction types before they move into 'finished' state. 
+package = Community Accounting
+configure = admin/accounting/workflow/signatures
+core = 7.x
+
+files[] = mcapi_signatures.inc
+files[] = mcapi_signatures.variable.inc
+files[] = views/mcapi_signatures.views.inc
+files[] = views/mcapi_signatures.views_default.inc
+
+dependencies[] = mcapi
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

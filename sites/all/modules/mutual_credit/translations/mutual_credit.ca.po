@@ -1,0 +1,3670 @@
+# $Id$
+#
+# Catalan translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  transaction_totals.tpl.php: n/a
+#  mcapi.admin.inc: n/a
+#  mcapi.tokens.inc: n/a
+#  views/mcapi.views.inc: n/a
+#  mcapi.variable.inc: n/a
+#  mcapi.module,v 1.1.2.6 2010/12/22 19:30:29 matslats
+#  plugins/export_ui/mcapi_ui.class.php: n/a
+#  views/views_plugin_access_currency.inc: n/a
+#  extras/forms/mcapi_forms.admin.inc: n/a
+#  extras/signatures/mcapi_signatures.inc: n/a
+#  extras/forms/mcapi_forms.inc: n/a
+#  mcapi.inc,v 1.1.2.7 2010/12/22 19:30:29 matslats
+#  mcapi.install,v 1.1.2.4 2010/12/15 22:04:03 matslats
+#  views/mcapi.views_default.inc: n/a
+#  mcapi.info.inc: n/a
+#  extras/accountant_ui/accountant_ui.views_default.inc: n/a
+#  views/views_handler_filter_mcapi_states.inc: n/a
+#  extras/accountant_ui/accountant_ui.inc: n/a
+#  views/mcapi_index_views.views.inc: n/a
+#  views/mcapi_index_views.views_default.inc: n/a
+#  views/mcapi_index_views.views_template.inc: n/a
+#  views/views_handler_filter_mcapi_currency.inc: n/a
+#  mcapi.mcapicurrencies_default.inc: n/a
+#  extras/import/mcapi_import.module: n/a
+#  extras/bank_slave/bank_slave.views_template.inc: n/a
+#  mcapi.info: n/a
+#  mc_sms.info,v 1.1.2.1 2010/12/06 13:19:46 hutch
+#  extras/balance_history/mcapi_balance_history.info: n/a
+#  extras/forms/mcapi_forms.info: n/a
+#  extras/import/mcapi_import.info: n/a
+#  extras/intertrading/intertrading.info: n/a
+#  extras/limits/mcapi_limits.info: n/a
+#  extras/signatures/mcapi_signatures.info: n/a
+#  views/mcapi_index_views.info: n/a
+#  extras/bank_slave/bank_slave.variable.inc: n/a
+#  extras/intertrading/intertrading.module: n/a
+#  extras/accountant_ui/accountant_ui.module: n/a
+#  extras/balance_history/mcapi_balance_history.module: n/a
+#  extras/bank_slave/bank_slave.mcapiforms_default.inc: n/a
+#  views/views_handler_field_mcapi_users_totals.inc: n/a
+#  extras/bank_slave/bank_slave.module: n/a
+#  extras/command/mcapi_command.module: n/a
+#  extras/limits/mcapi_limits.inc: n/a
+#  extras/forms/plugins/export_ui/mcapi_forms_ui.class.php: n/a
+#  views/views_handler_filter_mcapi_index_diff.inc: n/a
+#  extras/forms/mcapi_forms.i18n.inc: n/a
+#  extras/forms/mcapi_forms.mcapiforms_default.inc: n/a
+#  extras/forms/mcapi_forms.tokens.inc: n/a
+#  extras/forms/mcapi_forms.module: n/a
+#  extras/forms/mcapi_forms.install: n/a
+#  extras/forms/plugins/export_ui/mcapi_forms_ui.inc: n/a
+#  extras/intertrading/intertrading.admin.inc: n/a
+#  extras/intertrading/intertrading.variable.inc: n/a
+#  extras/intertrading/intertrading.inc: n/a
+#  extras/intertrading/intertrading.install: n/a
+#  extras/limits/balance_limits.tpl.php: n/a
+#  extras/limits/trading_limits.tpl.php: n/a
+#  extras/limits/mcapi_limits.module: n/a
+#  extras/limits/views/mcapi_limits.views.inc: n/a
+#  extras/signatures/pending_signatures.tpl.php: n/a
+#  extras/signatures/mcapi_signatures.module: n/a
+#  extras/signatures/mcapi_signatures.variable.inc: n/a
+#  extras/signatures/views/mcapi_signatures.views_default.inc: n/a
+#  extras/signatures/views/mcapi_signatures.views.inc: n/a
+#  extras/signatures/mcapi_signatures.install: n/a
+#  plugins/export_ui/mcapi_ui.inc: n/a
+#  views/views_plugin_access_user_arg1.inc: n/a
+#  views/views_handler_field_transaction.inc: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-06-18 23:04+0200\n"
+"PO-Revision-Date: 2013-06-18 23:04+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Catalan <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: certificate.tpl.php:39
+msgid "On @recorded<br />!payer <strong>paid</strong> !payee</br />the sum of !worth"
+msgstr ""
+
+#: certificate.tpl.php:52
+msgid "For:"
+msgstr ""
+
+#: certificate.tpl.php:58
+msgid "Dependent transactions"
+msgstr "Transaccions dependents"
+
+#: transaction_totals.tpl.php:26
+msgid "Given / Gotten"
+msgstr ""
+
+#: transaction_totals.tpl.php:47
+msgid "Income: !quant"
+msgstr ""
+
+#: transaction_totals.tpl.php:48
+msgid "Volume: !volume"
+msgstr ""
+
+#: transaction_totals.tpl.php:49
+msgid "Transactions: @count"
+msgstr ""
+
+#: mcapi.admin.inc:8;20 mcapi.rules.inc:47;61 mcapi.tokens.inc:79 views/mcapi.views.inc:17
+msgid "Transaction"
+msgstr "Transacció"
+
+#: mcapi.admin.inc:29
+msgid "A transaction certificate"
+msgstr ""
+
+#: mcapi.admin.inc:59
+msgid "Search index"
+msgstr "Índex de la cerca"
+
+#: mcapi.admin.inc:63
+msgid "Search result"
+msgstr "Resultat de la cerca"
+
+#: mcapi.admin.inc:74
+msgid "Accounting"
+msgstr ""
+
+#: mcapi.admin.inc:75
+msgid "Manage all aspects of your community's money system"
+msgstr ""
+
+#: mcapi.admin.inc:86
+msgid "Record transaction"
+msgstr ""
+
+#: mcapi.admin.inc:87
+msgid "Log a transaction in the database"
+msgstr ""
+
+#: mcapi.admin.inc:97
+msgid "Misc settings"
+msgstr ""
+
+#: mcapi.admin.inc:105
+msgid "Configure currency"
+msgstr ""
+
+#: mcapi.admin.inc:115
+msgid "Transaction certificate"
+msgstr ""
+
+#: mcapi.admin.inc:233
+msgid "Undo mode"
+msgstr ""
+
+#: mcapi.admin.inc:234
+msgid "What should happen when a user or admin deletes a transaction.?"
+msgstr ""
+
+#: mcapi.admin.inc:235
+msgid "Some system operations may 'scratch' transactions"
+msgstr ""
+
+#: mcapi.admin.inc:236
+msgid "Cannot be changed after a transaction has been undone"
+msgstr ""
+
+#: mcapi.admin.inc:239
+msgid "Wipe slate - remove transactions from database"
+msgstr ""
+
+#: mcapi.admin.inc:240
+msgid "Scratch - use deleted transaction state"
+msgstr ""
+
+#: mcapi.admin.inc:241
+msgid "Reverse - create an equal and opposite transaction"
+msgstr ""
+
+#: mcapi.admin.inc:247
+msgid "View balances in user profile"
+msgstr ""
+
+#: mcapi.admin.inc:248
+msgid "Small impact on performance; it may be necessary to edit user-profile.tpl.php"
+msgstr ""
+
+#: mcapi.admin.inc:254 mcapi.variable.inc:63
+msgid "Transaction sentence template"
+msgstr ""
+
+#: mcapi.admin.inc:255
+msgid "Use the tokens to define how the transaction will read when displayed in sentence mode"
+msgstr ""
+
+#: mcapi.admin.inc:280
+msgid "Edit currency '!name'"
+msgstr ""
+
+#: mcapi.admin.inc:280 mcapi.module:731
+msgid "Declare currency"
+msgstr ""
+
+#: mcapi.admin.inc:289
+msgid "Name of currency"
+msgstr "Nom de la moneda"
+
+#: mcapi.admin.inc:290
+msgid "Use the plural"
+msgstr "Usa el plural"
+
+#: mcapi.admin.inc:301
+msgid "Acknowledgement currencies are abundant - they are issued whenever valued is created; they can be used as a medium of exchange but there is no guarantee of redemption."
+msgstr ""
+
+#: mcapi.admin.inc:302
+msgid "These are sometimes called 'social' currencies, because by encouraging and recognising volunteer service, they bind the community together."
+msgstr ""
+
+#: mcapi.admin.inc:303
+msgid "This is the choice for all timebanking systems and most LETS."
+msgstr ""
+
+#: mcapi.admin.inc:316
+msgid "Exchange currencies are 'sufficient' - they are issued and redeemed as as users earn and spend."
+msgstr ""
+
+#: mcapi.admin.inc:317
+msgid "The sum of all balances of active accounts, including the reservoir account, is zero, and ideally, accounts are returned to zero before being deactivated."
+msgstr ""
+
+#: mcapi.admin.inc:318
+msgid "To stop accounts straying too far from zero, positive and negative balance limits are often used."
+msgstr ""
+
+#: mcapi.admin.inc:319
+msgid "This model is sometimes called mutual credit, barter, or reciprocal exchange."
+msgstr ""
+
+#: mcapi.admin.inc:332
+msgid "Commodity currencies are scarce - the quantity is tied to the amount of a valuable commodity in a trusted warehouse."
+msgstr ""
+
+#: mcapi.admin.inc:333
+msgid "They are valued according to that commodity, and redeemed for that commodity, although fractional reserve rules may apply."
+msgstr ""
+
+#: mcapi.admin.inc:334
+msgid "Effectively the commodity is monetised, this brings confidence to the commodity, for the cost of the stuff in storage."
+msgstr ""
+
+#: mcapi.admin.inc:335
+msgid "This would be the choice for all 'dollar-backed' complementary currencies."
+msgstr ""
+
+#: mcapi.admin.inc:346
+msgid "Basis of issuance"
+msgstr ""
+
+#: mcapi.admin.inc:347
+msgid "Currently only affects visualisation."
+msgstr ""
+
+#: mcapi.admin.inc:350
+msgctxt "currency-type"
+msgid "Acknowledgement"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:55
+msgid "Acknowledgement"
+msgstr ""
+
+#: mcapi.admin.inc:351
+msgctxt "currency-type"
+msgid "Exchange"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:56
+msgid "Exchange"
+msgstr ""
+
+#: mcapi.admin.inc:352
+msgctxt "currency-type"
+msgid "Backed by a commodity"
+msgstr ""
+
+#: mcapi.admin.inc:360
+msgid "Declared by"
+msgstr ""
+
+#: mcapi.admin.inc:370
+msgid "Reservoir account"
+msgstr ""
+
+#: mcapi.admin.inc:371
+msgid "Account used for issuing and taxing"
+msgstr ""
+
+#: mcapi.admin.inc:380
+msgid "Appearance"
+msgstr "Aparença"
+
+#: mcapi.admin.inc:396
+msgid "Subdivisions"
+msgstr "Subdivisions"
+
+#: mcapi.admin.inc:399
+msgid "Integer values only"
+msgstr "Només valors enters"
+
+#: mcapi.admin.inc:400
+msgid "Cents in same field"
+msgstr ""
+
+#: mcapi.admin.inc:401
+msgid "Cents in separate field"
+msgstr "Céntims en camp separat"
+
+#: mcapi.admin.inc:402;422
+msgid "Allowed subdivisions"
+msgstr "Subdivisions permeses"
+
+#: mcapi.admin.inc:408
+msgid "Delimiter"
+msgstr ""
+
+#: mcapi.admin.inc:409
+msgid "A character to go in between your integer and cents or other formatted subdivisions"
+msgstr ""
+
+#: mcapi.admin.inc:423
+msgid "On each line put \"hundredths| visible text\". The visible text will be displayed after the delimiter."
+msgstr ""
+
+#: mcapi.admin.inc:441
+msgid "Display format"
+msgstr "Format de la presentació"
+
+#: mcapi.admin.inc:442
+msgid "Write an expression to control the display of the currency using html, css and [quantity]."
+msgstr ""
+
+#: mcapi.admin.inc:443
+msgid "For example, !a shows as !b"
+msgstr "Per exemple, !a es mostra com a !b"
+
+#: mcapi.admin.inc:453
+msgid "Zero value display"
+msgstr ""
+
+#: mcapi.admin.inc:454
+msgid "Use html."
+msgstr ""
+
+#: mcapi.admin.inc:461
+msgid "Zero transaction already exist so this field is required"
+msgstr ""
+
+#: mcapi.admin.inc:464
+msgid "Leave blank to disallow zero value transactions"
+msgstr ""
+
+#: mcapi.admin.inc:472
+msgid "Currency access"
+msgstr ""
+
+#: mcapi.admin.inc:493 views/views_plugin_access_currency.inc:40
+msgid "Use the currency"
+msgstr ""
+
+#: mcapi.admin.inc:494
+msgid "Determine which users are permitted to use this currency"
+msgstr ""
+
+#: mcapi.admin.inc:501 views/views_plugin_access_currency.inc:41
+msgid "View aggregated user transaction data"
+msgstr ""
+
+#: mcapi.admin.inc:502
+msgid "Such as users' balances, gross income, number of transactions"
+msgstr ""
+
+#: mcapi.admin.inc:509 views/views_plugin_access_currency.inc:42
+msgid "View aggregated system data"
+msgstr ""
+
+#: mcapi.admin.inc:510
+msgid "Look at currency usage stats stripped of personal information"
+msgstr ""
+
+#: mcapi.admin.inc:520;641
+msgid "Privacy"
+msgstr ""
+
+#: mcapi.admin.inc:521
+msgid "Determine who can view transactions in each state."
+msgstr ""
+
+#: mcapi.admin.inc:521
+msgid "Any the checked conditions must return TRUE"
+msgstr ""
+
+#: mcapi.admin.inc:529
+msgid "Transactions in state '@state'"
+msgstr ""
+
+#: mcapi.admin.inc:539;642
+msgid "Transaction operations"
+msgstr ""
+
+#: mcapi.admin.inc:540
+msgid "Determine who can do what to transactions"
+msgstr ""
+
+#: mcapi.admin.inc:540
+msgid "Any of the checked conditions must return TRUE"
+msgstr ""
+
+#: mcapi.admin.inc:556
+msgid "Update"
+msgstr "Actualitza"
+
+#: mcapi.admin.inc:563
+msgid "Currency format must contain token '[quantity]'"
+msgstr ""
+
+#: mcapi.admin.inc:576
+msgid "line \"@val\" should contain a pipe character, |"
+msgstr ""
+
+#: mcapi.admin.inc:581
+msgid "'@val' should be an integer from  0 to 99, followed directly by a pipe, |, followed directly by a word or phrase with no unusual characters"
+msgstr ""
+
+#: mcapi.admin.inc:589
+msgid "Keys must be unique in field @fieldname"
+msgstr ""
+
+#: mcapi.admin.inc:592
+msgid "There should be at least two lines in field '@fieldname'"
+msgstr ""
+
+#: mcapi.admin.inc:606
+msgid "Invalid currency specified: @num"
+msgstr ""
+
+#: mcapi.admin.inc:643
+msgid "Currency Access"
+msgstr ""
+
+#: mcapi.admin.inc:647
+msgid "Resave currency @name, paying attention to '@prop'"
+msgstr ""
+
+#: mcapi.admin.inc:665
+msgid "Reservoir account does not have access to the currency!"
+msgstr ""
+
+#: mcapi.admin.inc:686
+msgid "Make a dependent payment"
+msgstr ""
+
+#: mcapi.admin.inc:692
+msgid "Completed transaction notification"
+msgstr ""
+
+#: mcapi.admin.inc:693
+msgid "Mail sent to the participants when the transaction completes"
+msgstr ""
+
+#: mcapi.admin.inc:699
+msgid "Create transaction with entity owner"
+msgstr ""
+
+#: mcapi.admin.inc:700
+msgid "Pay or charge the node or comment owner, or the user"
+msgstr ""
+
+#: mcapi.admin.inc:714
+msgid "Currencies per transaction"
+msgstr ""
+
+#: mcapi.admin.inc:717
+msgid "One currency per transaction"
+msgstr ""
+
+#: mcapi.admin.inc:718
+msgid "Many currencies per transaction"
+msgstr ""
+
+#: mcapi.admin.inc:725 extras/forms/mcapi_forms.admin.inc:252
+msgid "Submit"
+msgstr "Envia"
+
+#: mcapi.admin.inc:744
+msgid "Transaction saved by [transaction:creator]"
+msgstr ""
+
+#: mcapi.admin.inc:746
+msgid "A transaction for [transaction:worth] has been finalised"
+msgstr ""
+
+#: mcapi.admin.inc:747
+msgid "More details can be found at:"
+msgstr ""
+
+#: mcapi.admin.inc:748
+msgid "To change your notification settings, visit your profile at:"
+msgstr ""
+
+#: mcapi.admin.inc:749
+msgid "The team at [site:name]"
+msgstr ""
+
+#: mcapi.admin.inc:752
+msgid "Mail will be sent to the payer and payee, except for the logged in user."
+msgstr ""
+
+#: mcapi.admin.inc:755
+msgid "Only send for these transaction types."
+msgstr ""
+
+#: mcapi.admin.inc:777
+msgid "Mail template"
+msgstr "Plantilla de correu"
+
+#: mcapi.admin.inc:781 extras/signatures/mcapi_signatures.inc:258
+msgid "Subject"
+msgstr "Assumpte"
+
+#: mcapi.admin.inc:787 extras/signatures/mcapi_signatures.inc:264
+msgid "Body"
+msgstr "Cos"
+
+#: mcapi.admin.inc:802
+msgid "Carbon copy"
+msgstr ""
+
+#: mcapi.admin.inc:803
+msgid "Send an extra copy to this address"
+msgstr ""
+
+#: mcapi.admin.inc:829 extras/forms/mcapi_forms.admin.inc:136 extras/forms/mcapi_forms.inc:96
+msgid "Direction"
+msgstr ""
+
+#: mcapi.admin.inc:832
+msgid "User pays account 1"
+msgstr ""
+
+#: mcapi.admin.inc:833
+msgid "Account 1 pays user"
+msgstr ""
+
+#: mcapi.admin.inc:844;947 mcapi.inc:565 mcapi.module:1119;1216;1236;1264 mcapi.install:269 views/mcapi.views_default.inc:182
+msgid "Worth"
+msgstr ""
+
+#: mcapi.admin.inc:847
+msgid "What is the fixed value of this transaction?"
+msgstr ""
+
+#: mcapi.admin.inc:847
+msgid "this value will be overwritten if the passed entity has the 'worth' field"
+msgstr ""
+
+#: mcapi.admin.inc:857;963
+msgid "Rounding"
+msgstr ""
+
+#: mcapi.admin.inc:859;965
+msgid "Up"
+msgstr "Amunt"
+
+#: mcapi.admin.inc:859;965
+msgid "Down"
+msgstr "Avall"
+
+#: mcapi.admin.inc:866;974
+msgid "Transaction description text"
+msgstr ""
+
+#: mcapi.admin.inc:909
+msgid "Conditions"
+msgstr ""
+
+#: mcapi.admin.inc:910
+msgid "A dependent transaction will only be created when the main transaction meets these conditions"
+msgstr ""
+
+#: mcapi.admin.inc:918
+msgid "Presets"
+msgstr ""
+
+#: mcapi.admin.inc:919
+msgid "Specify the properties of the dependent transaction"
+msgstr ""
+
+#: mcapi.admin.inc:919
+msgid "It will have the type 'dependent'."
+msgstr ""
+
+#: mcapi.admin.inc:923
+msgid "Participants"
+msgstr ""
+
+#: mcapi.admin.inc:924
+msgid "Determine who will pay whom"
+msgstr ""
+
+#: mcapi.admin.inc:927
+msgid "Mapping"
+msgstr ""
+
+#: mcapi.admin.inc:928
+msgid "On a node trigger, the payer and payee will both evaluate to the node author"
+msgstr ""
+
+#: mcapi.admin.inc:931
+msgid "Payer pays other"
+msgstr ""
+
+#: mcapi.admin.inc:932
+msgid "Payee pays other"
+msgstr ""
+
+#: mcapi.admin.inc:933
+msgid "Other pays payer"
+msgstr ""
+
+#: mcapi.admin.inc:934
+msgid "Other pays payee"
+msgstr ""
+
+#: mcapi.admin.inc:939
+msgid "Other account"
+msgstr ""
+
+#: mcapi.admin.inc:948
+msgid "The value of the transction may depend on the value of the main transaction."
+msgstr ""
+
+#: mcapi.admin.inc:954
+msgid "Enter a number, a percentage, or a formula using [q] for the transaction quantity."
+msgstr ""
+
+#: mcapi.admin.inc:1009
+msgid "Invalid formula"
+msgstr ""
+
+#: mcapi.admin.inc:1020
+msgid "Which of the text fields below is used for the transaction description?."
+msgstr ""
+
+#: mcapi.admin.inc:1045
+msgid "Transaction types"
+msgstr "Tipus de transacció"
+
+#: mcapi.admin.inc:1045 mcapi.inc:121 mcapi.info.inc:16
+msgid "Transaction type"
+msgstr ""
+
+#: mcapi.inc:32
+msgid "Transaction #@serial"
+msgstr ""
+
+#: mcapi.inc:70
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: mcapi.inc:105
+msgid "Account to be debited"
+msgstr ""
+
+#: mcapi.inc:113
+msgid "Account to be credited"
+msgstr ""
+
+#: mcapi.inc:130 mcapi.info.inc:53 extras/accountant_ui/accountant_ui.views_default.inc:293 views/mcapi.views.inc:81 views/views_handler_filter_mcapi_states.inc:13;36;74
+msgid "State"
+msgstr "Estat"
+
+#: mcapi.inc:139
+msgid "Recorded by"
+msgstr ""
+
+#: mcapi.inc:150 extras/accountant_ui/accountant_ui.inc:77
+msgid "Record"
+msgstr ""
+
+#: mcapi.inc:192
+msgid "Transaction was already submitted"
+msgstr ""
+
+#: mcapi.inc:227
+msgid "Invalid transaction state: @value."
+msgstr ""
+
+#: mcapi.inc:303
+msgid "That e-mail address is not valid."
+msgstr ""
+
+#: mcapi.inc:375
+msgid "Problem with calculation for dependent transaction: @val"
+msgstr ""
+
+#: mcapi.inc:503
+msgid "@fieldname must be numeric"
+msgstr ""
+
+#: mcapi.inc:506
+msgid "Negative values not allowed"
+msgstr ""
+
+#: mcapi.inc:511
+msgid "This currency does not exist: @currcode"
+msgstr ""
+
+#: mcapi.inc:517
+msgid "@division is not a permitted division of currency @name"
+msgstr ""
+
+#: mcapi.inc:535 mcapi.module:1317
+msgid "!name field is required."
+msgstr ""
+
+#: mcapi.inc:615 mcapi.module:1395 extras/accountant_ui/accountant_ui.views_default.inc:295
+msgid "Quantity"
+msgstr "Quantitat"
+
+#: mcapi.inc:629
+msgid "Fraction"
+msgstr ""
+
+#: mcapi.inc:638
+msgid "Cents"
+msgstr ""
+
+#: mcapi.inc:796 views/mcapi_index_views.views.inc:180 views/mcapi_index_views.views_default.inc:115;289 views/mcapi_index_views.views_template.inc:620 views/views_handler_filter_mcapi_currency.inc:41
+msgid "Currency"
+msgstr "Moneda"
+
+#: mcapi.info.inc:10 views/mcapi_index_views.views.inc:21
+msgid "Transaction ID"
+msgstr "ID de la transacció"
+
+#: mcapi.info.inc:12
+msgid "The unique serial number of the transaction."
+msgstr ""
+
+#: mcapi.info.inc:24 extras/accountant_ui/accountant_ui.inc:37 extras/accountant_ui/accountant_ui.views_default.inc:292 views/mcapi.views.inc:43;58 views/mcapi.views_default.inc:179
+msgid "Payer"
+msgstr "Pagador"
+
+#: mcapi.info.inc:25
+msgid "The user ID of the payer"
+msgstr ""
+
+#: mcapi.info.inc:32 extras/accountant_ui/accountant_ui.inc:47 extras/accountant_ui/accountant_ui.views_default.inc:291 views/mcapi.views.inc:62;77 views/mcapi.views_default.inc:178
+msgid "Payee"
+msgstr ""
+
+#: mcapi.info.inc:33
+msgid "The user ID of the payee"
+msgstr ""
+
+#: mcapi.info.inc:40
+msgid "Transaction creation moment"
+msgstr ""
+
+#: mcapi.info.inc:41
+msgid "Stored as unixtime, displayed as a date"
+msgstr ""
+
+#: mcapi.info.inc:46
+msgid "User who created the transaction"
+msgstr ""
+
+#: mcapi.mcapicurrencies_default.inc:16
+msgid "Community Coins"
+msgstr ""
+
+#: mcapi.mcapicurrencies_default.inc:83
+msgid "Euros"
+msgstr ""
+
+#: mcapi.rules.inc:51
+msgid "Transaction state"
+msgstr ""
+
+#: mcapi.rules.inc:68
+msgid "Community accounting"
+msgstr ""
+
+#: mcapi.rules.inc:90
+msgid "Worth at least"
+msgstr ""
+
+#: mcapi.tokens.inc:80
+msgid "Tokens related to a transaction cluster."
+msgstr ""
+
+#: mcapi.tokens.inc:87 views/mcapi_index_views.views.inc:31
+msgid "Unique serial number"
+msgstr ""
+
+#: mcapi.tokens.inc:88
+msgid "The unique serial number of the transaction cluster."
+msgstr ""
+
+#: mcapi.tokens.inc:91
+msgid "Payer name"
+msgstr ""
+
+#: mcapi.tokens.inc:92
+msgid "The user whose account is credited"
+msgstr ""
+
+#: mcapi.tokens.inc:95
+msgid "Payee name"
+msgstr ""
+
+#: mcapi.tokens.inc:96
+msgid "The user whose account is debited"
+msgstr ""
+
+#: mcapi.tokens.inc:99 views/mcapi.views.inc:113 views/mcapi_index_views.views_default.inc:50
+msgid "Created"
+msgstr "Creat"
+
+#: mcapi.tokens.inc:100
+msgid "When the transaction was created"
+msgstr ""
+
+#: mcapi.tokens.inc:103 views/mcapi.views.inc:104;109
+msgid "Creator"
+msgstr ""
+
+#: mcapi.tokens.inc:104
+msgid "The user who first recorded the transaction"
+msgstr ""
+
+#: mcapi.tokens.inc:107
+msgid "Difference to payer in the main transaction"
+msgstr ""
+
+#: mcapi.tokens.inc:108
+msgid "Total change to payers balance from transaction cluster"
+msgstr ""
+
+#: mcapi.tokens.inc:111
+msgid "Difference to payee in the main transaction"
+msgstr ""
+
+#: mcapi.tokens.inc:112
+msgid "Total change to payees balance from transaction cluster"
+msgstr ""
+
+#: mcapi.tokens.inc:115
+msgid "Certificate"
+msgstr ""
+
+#: mcapi.tokens.inc:116
+msgid "An HTML laid out view of the transaction cluster"
+msgstr ""
+
+#: mcapi.tokens.inc:119
+msgid "Links"
+msgstr ""
+
+#: mcapi.tokens.inc:120
+msgid "Links to transaction operations"
+msgstr ""
+
+#: mcapi.tokens.inc:127
+msgid "Absolute url"
+msgstr ""
+
+#: mcapi.tokens.inc:128
+msgid "A link to the transaction's own page."
+msgstr ""
+
+#: mcapi.variable.inc:36
+msgid "Mixed transactions"
+msgstr ""
+
+#: mcapi.variable.inc:37
+msgid "Whether to allow more than one transaction per currency"
+msgstr ""
+
+#: mcapi.variable.inc:45
+msgid "Transaction description field"
+msgstr ""
+
+#: mcapi.variable.inc:47
+msgid "Optional nominated fieldAPI field for describing the transaction"
+msgstr ""
+
+#: mcapi.variable.inc:53
+msgid "Transaction delete mode"
+msgstr ""
+
+#: mcapi.variable.inc:55
+msgid "Whether transactions should be deleted, erased or offset"
+msgstr ""
+
+#: mcapi.variable.inc:64
+msgid "A tokenised string used for rendering a transaction in one sentence or statement."
+msgstr ""
+
+#: mcapi.variable.inc:70
+msgid "Show balances"
+msgstr ""
+
+#: mcapi.variable.inc:71
+msgid "Whether to render the balances in the user profile (a block is already available)"
+msgstr ""
+
+#: mcapi.variable.inc:90
+msgid "Accounting variables"
+msgstr ""
+
+#: mcapi.module:105
+msgid "Reversal of @label"
+msgstr ""
+
+#: mcapi.module:115
+msgid "Failed to reverse transaction: @message"
+msgstr ""
+
+#: mcapi.module:178
+msgid "Unable to load transaction @serial"
+msgstr ""
+
+#: mcapi.module:222
+msgid "The intention of this package is to put the money creation power in the hands of the producers and users of money and to reduce dependence of ordinary people on rapacious global financial capital."
+msgstr ""
+
+#: mcapi.module:223
+msgid "This software has been five years in the conceiving and making and has been supported only by informal donations."
+msgstr ""
+
+#: mcapi.module:236
+msgid "Send mail notifications for completed transactions using the action/trigger system: !link"
+msgstr ""
+
+#: mcapi.module:250
+msgid "Is the textfield on your transaction used for the description? !link"
+msgstr ""
+
+#: mcapi.module:418 extras/import/mcapi_import.module:55
+msgid "Balances"
+msgstr ""
+
+#: mcapi.module:431
+msgid "Trading status"
+msgstr ""
+
+#: mcapi.module:432
+msgid "@user's account"
+msgstr ""
+
+#: mcapi.module:448
+msgid "User"
+msgstr "Usuari"
+
+#: mcapi.module:451
+msgid "Show as part of profile being viewed"
+msgstr ""
+
+#: mcapi.module:452
+msgid "Show for logged in user"
+msgstr ""
+
+#: mcapi.module:547
+msgid "Are you sure you want to delete?"
+msgstr ""
+
+#: mcapi.module:549
+msgid "This transaction will disappear without a trace (apart from site backups)"
+msgstr ""
+
+#: mcapi.module:552
+msgid "Only the site administrator will be able to restore this transaction."
+msgstr ""
+
+#: mcapi.module:600
+msgid "A transaction must involve two different users"
+msgstr ""
+
+#: mcapi.module:612
+msgid "@fieldname required for completed transaction"
+msgstr ""
+
+#: mcapi.module:636
+msgid "Cleared"
+msgstr ""
+
+#: mcapi.module:637
+msgid "the last state of the workflow"
+msgstr ""
+
+#: mcapi.module:643
+msgid "See 'delete mode' settings for more info, !link"
+msgstr ""
+
+#: mcapi.module:646
+msgid "Undone"
+msgstr ""
+
+#: mcapi.module:693
+msgid "State explanations: @explanations"
+msgstr ""
+
+#: mcapi.module:719;776
+msgid "Transact"
+msgstr ""
+
+#: mcapi.module:720
+msgid "Register exchanges with other members, subject each currency's permissions"
+msgstr ""
+
+#: mcapi.module:723;777
+msgid "Manage all transactions"
+msgstr ""
+
+#: mcapi.module:724
+msgid "Retrospectively manage transactions"
+msgstr ""
+
+#: mcapi.module:727
+msgid "Configure all currencies"
+msgstr ""
+
+#: mcapi.module:728
+msgid "Edit the properties of any currency"
+msgstr ""
+
+#: mcapi.module:732
+msgid "Create a new currency"
+msgstr ""
+
+#: mcapi.module:776;777
+msgid "Users with permission to '@perm'"
+msgstr ""
+
+#: mcapi.module:778
+msgid "The payee in the transaction"
+msgstr ""
+
+#: mcapi.module:779
+msgid "The payer in the transaction"
+msgstr ""
+
+#: mcapi.module:780
+msgid "Anyone, even anonymous users"
+msgstr ""
+
+#: mcapi.module:781
+msgid "The creator of the transaction"
+msgstr ""
+
+#: mcapi.module:1021
+msgid "A transaction was deleted"
+msgstr ""
+
+#: mcapi.module:1023
+msgid "Check for dependent transactions before inserting"
+msgstr ""
+
+#: mcapi.module:1024
+msgid "A transaction was inserted or changed state"
+msgstr ""
+
+#: mcapi.module:1098
+msgid "Automated transaction failed: @message"
+msgstr ""
+
+#: mcapi.module:1217
+msgid "One or more values, each denominated in a currency"
+msgstr ""
+
+#: mcapi.module:1306
+msgid "User @name cannot use @currency"
+msgstr ""
+
+#: mcapi.module:1388 plugins/export_ui/mcapi_ui.class.php:102
+msgid "Currency code"
+msgstr "Codi de moneda"
+
+#: mcapi.module:1445
+msgid "Disable the account and delete its content."
+msgstr ""
+
+#: mcapi.module:1446
+msgid "Your account will be blocked and you will no longer be able to log in. All of your content will be deleted."
+msgstr ""
+
+#: mcapi.module:1459
+msgid "Invalid transaction type: @value"
+msgstr ""
+
+#: mcapi.module:904
+msgid "mcapi"
+msgstr ""
+
+#: mcapi.module:904
+msgid "Nonexistent currency '@currcode' requested from: @list"
+msgstr ""
+
+#: mcapi.install:32
+msgid "For ease of setup, authenticated user has been granted 'transact' permission."
+msgstr ""
+
+#: mcapi.install:44;929
+msgid "[transaction:payer] paid [transaction:payee] [transaction:worth] [transaction:links]"
+msgstr ""
+
+#: mcapi.install:54
+msgid "A new user was created for trading. uid: :uid name: demo, pass: demo"
+msgstr ""
+
+#: mcapi.install:206
+msgid "Universal currency code (8 chars, immutable)"
+msgstr ""
+
+#: mcapi.install:268
+msgid "Use up to two decimal places, with a point '.' if necessary"
+msgstr ""
+
+#: mcapi.install:494
+msgid "@num currencies have been upgraded"
+msgstr ""
+
+#: mcapi.install:572 extras/bank_slave/bank_slave.views_template.inc:166
+msgid "Description"
+msgstr "Descripció"
+
+#: mcapi.install:639
+msgid "Upgrading @count transaction nodes from nid @first to nid @last"
+msgstr ""
+
+#: mcapi.install:792
+msgid "Notify transactees"
+msgstr ""
+
+#: (duplicate) mcapi.install:18  mcapi.info:0 extras/accountant_ui/accountant_ui.info:0 extras/balance_history/mcapi_balance_history.info:0 extras/bank_slave/bank_slave.info:0 extras/command/mcapi_command.info:0 extras/forms/mcapi_forms.info:0 extras/import/mcapi_import.info:0 extras/intertrading/intertrading.info:0 extras/limits/mcapi_limits.info:0 extras/signatures/mcapi_signatures.info:0 views/mcapi_index_views.info:0
+msgid "Community Accounting"
+msgstr ""
+
+#: (duplicate) mcapi.install:19 
+msgid "'Entity tokens' module has a longstanding issue and will only render the worth field as separate properties, currcode, and quantity"
+msgstr ""
+
+#: mcapi.info:0
+msgid "Community Accounting API"
+msgstr ""
+
+#: mcapi.info:0
+msgid "Defines transaction entity with a swoppable controller, a default currency, 'worth' field, and the forms, views theme callbacks for basic manipulation"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:17 extras/bank_slave/bank_slave.variable.inc:12
+msgid "A username, email, or user ID"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:41
+msgid "Payees"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:51
+msgid "Payers"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:56
+msgid "Mail all payees (optional)"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:56
+msgid "Mail all payers (optional)"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:58
+msgid "Do not use payer and payee tokens because all will receive the same mail."
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.inc:97 extras/intertrading/intertrading.module:434
+msgid "Are you sure?"
+msgstr "Esteu segur?"
+
+#: extras/accountant_ui/accountant_ui.inc:152
+msgid "Skipped transaction in which account '@account' pays itself"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.views_default.inc:290
+msgid "A transaction view with all the filters exposed."
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.views_default.inc:294 views/mcapi.views.inc:93 views/mcapi_index_views.views.inc:81
+msgid "Type"
+msgstr "Tipus"
+
+#: extras/accountant_ui/accountant_ui.module:9
+msgid "Mass payments"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:10
+msgid "One-off payments between one account and several other accounts"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:19
+msgid "Many to one"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:28
+msgid "One to many"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:37
+msgid "One to few"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:46
+msgid "Few to one"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:55
+msgid "Log transaction"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.module:56
+msgid "One-off transaction creation, with all the values exposed."
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.info:0
+msgid "Interface for accountants"
+msgstr ""
+
+#: extras/accountant_ui/accountant_ui.info:0
+msgid "Navigate transactions and create new ones"
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.module:16
+msgid "Balance over time. "
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.module:28
+msgid "Balance over time"
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.module:41
+msgid "This data perspective is most valuable for exchange currencies, in which users' balances should stay within range of zero."
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.module:50
+msgid "Width in pixels"
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.info:0
+msgid "Balance History"
+msgstr ""
+
+#: extras/balance_history/mcapi_balance_history.info:0
+msgid "A google charts implementation showing the account balance over time"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.mcapiforms_default.inc:49
+msgid "Track !currcode income to !bank"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.mcapiforms_default.inc:103
+msgid "Track !currcode outgoings from !bank"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.variable.inc:11
+msgid "Account which holds subscriptions"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:127
+msgid "@name @currency"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:161
+msgid "Configure admin/accounting/bank before creating this view"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:162
+msgid "A bank statement for each account & currency."
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:163
+msgid "Bank statement"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:164
+msgid "No activity has been logged in this period"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:165 views/mcapi_index_views.views.inc:235;246
+msgid "Date"
+msgstr "Data"
+
+#: extras/bank_slave/bank_slave.views_template.inc:167
+msgid "Deposit"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:168
+msgid "Withdrawal"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.views_template.inc:169 views/mcapi_index_views.views.inc:150 views/mcapi_index_views.views_default.inc:287 views/mcapi_index_views.views_template.inc:621 views/views_handler_field_mcapi_users_totals.inc:38
+msgid "Balance"
+msgstr "Saldo"
+
+#: extras/bank_slave/bank_slave.module:31
+msgid "Log bank transactions"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:32
+msgid "Create transactions involving the designated bank accounts"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:42
+msgid "Accounts to be used for mirroring"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:43
+msgid "Each listed account represents all the different currency accounts in one bank."
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:57
+msgid "Banking currencies"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:58
+msgid "Choose at least one from these commodity currencies"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:87
+msgid "Bank payments must involve a designated bank account"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:94
+msgid "Payment involving bank account @num was excluded"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:100
+msgid "Banks can only use commodity currencies"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:5
+msgid "Mirror bank account"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:6
+msgid "Settings for mirroring your org bank account"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:15
+msgid "Log banking transactions"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.module:16
+msgid "Forms for logging"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.info:0
+msgid "Bank Slave"
+msgstr ""
+
+#: extras/bank_slave/bank_slave.info:0
+msgid "Increase your organisation's transparency: designate an account as a bank account, and track all transactions in that account & publish the accounts."
+msgstr ""
+
+#: extras/command/mcapi_command.module:29
+msgid "Transact via sms"
+msgstr ""
+
+#: extras/command/mcapi_command.module:30
+msgid "Register new transactions over SMS"
+msgstr ""
+
+#: extras/command/mcapi_command.module:53
+msgid "Incoming messages from phones"
+msgstr ""
+
+#: extras/command/mcapi_command.module:54
+msgid "Define the form of the text messages."
+msgstr ""
+
+#: extras/command/mcapi_command.module:55;82
+msgid "Try to include variations and get feedback from your users as to what works."
+msgstr ""
+
+#: extras/command/mcapi_command.module:56;83 extras/limits/mcapi_limits.inc:96;104
+msgid "Use the following tokens:"
+msgstr "Usa el següents tokens:"
+
+#: extras/command/mcapi_command.module:63
+msgid "Expressions for recording a transfer"
+msgstr ""
+
+#: extras/command/mcapi_command.module:65
+msgid "One per line."
+msgstr ""
+
+#: extras/command/mcapi_command.module:66
+msgid "Case insensitive."
+msgstr ""
+
+#: extras/command/mcapi_command.module:67
+msgid "Example: pay johnsmith 14 for gardening"
+msgstr ""
+
+#: extras/command/mcapi_command.module:77
+msgid "Currently the commands will only work with one currency, in order to keep the user interface simple."
+msgstr ""
+
+#: extras/command/mcapi_command.module:80
+msgid "Responses"
+msgstr ""
+
+#: extras/command/mcapi_command.module:81
+msgid "Messages send to phones"
+msgstr ""
+
+#: extras/command/mcapi_command.module:89
+msgid "Response for a successful exchange"
+msgstr ""
+
+#: extras/command/mcapi_command.module:90
+msgid "Leave blank for no response, or put [inherit] to show default messages"
+msgstr ""
+
+#: extras/command/mcapi_command.module:96
+msgid "Error response"
+msgstr ""
+
+#: extras/command/mcapi_command.module:97
+msgid "Response in case the incoming message cannot be parsed"
+msgstr ""
+
+#: extras/command/mcapi_command.module:103
+msgid "Twitter success response"
+msgstr ""
+
+#: extras/command/mcapi_command.module:104
+msgid "Assumes the tweeter is following this system's twitter account."
+msgstr ""
+
+#: extras/command/mcapi_command.module:104
+msgid "Leave blank for no response"
+msgstr ""
+
+#: extras/command/mcapi_command.module:123
+msgid "Each expression should include '@token' : @expression"
+msgstr ""
+
+#: extras/command/mcapi_command.module:130
+msgid "'@template' should include EITHER [transaction:payee] OR [transaction:payer]"
+msgstr ""
+
+#: extras/command/mcapi_command.module:140
+msgid "Command line interface"
+msgstr ""
+
+#: extras/command/mcapi_command.module:145
+msgid "Sender"
+msgstr ""
+
+#: extras/command/mcapi_command.module:146
+msgid "Any user of currency @currname"
+msgstr ""
+
+#: extras/command/mcapi_command.module:154
+msgid "Command"
+msgstr ""
+
+#: extras/command/mcapi_command.module:155
+msgid "Test your commands here, no more than 160 characters."
+msgstr ""
+
+#: extras/command/mcapi_command.module:155
+msgid "E.g. pay admin 14 for cleaning"
+msgstr ""
+
+#: extras/command/mcapi_command.module:162
+msgid "Send"
+msgstr ""
+
+#: extras/command/mcapi_command.module:191
+msgid "Transaction created."
+msgstr ""
+
+#: extras/command/mcapi_command.module:191
+msgid "Your current balance is @num"
+msgstr ""
+
+#: extras/command/mcapi_command.module:196
+msgid "Transaction passed validation."
+msgstr ""
+
+#: extras/command/mcapi_command.module:282
+msgid "Unknown user: @string"
+msgstr ""
+
+#: extras/command/mcapi_command.module:285
+msgid "@user may not use %currency"
+msgstr ""
+
+#: extras/command/mcapi_command.module:317
+msgid "Transaction created. Your new balance is @num"
+msgstr ""
+
+#: extras/command/mcapi_command.module:325
+msgid "Transaction created into state '@state'"
+msgstr ""
+
+#: extras/command/mcapi_command.module:352
+msgid "Transaction completed"
+msgstr ""
+
+#: extras/command/mcapi_command.module:364
+msgid "mcapi command"
+msgstr ""
+
+#: extras/command/mcapi_command.module:364
+msgid "Failed to execute twitter command: @message"
+msgstr ""
+
+#: extras/command/mcapi_command.module:15
+msgid "Command syntax"
+msgstr ""
+
+#: extras/command/mcapi_command.module:16
+msgid "Useful for SMS and twitter interfaces"
+msgstr ""
+
+#: extras/command/mcapi_command.info:0
+msgid "Transaction commands"
+msgstr ""
+
+#: extras/command/mcapi_command.info:0
+msgid "Interact with accounting module using string commands. Works with SMS Framework or Twitter modules"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:9
+msgid "Create transaction forms for specific use-cases. Use with caution as not all permutations are meaningful."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:27
+msgid "3rd Party"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:28
+msgid "1st Party"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:37
+msgid "Default"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:39
+msgid "Architecture"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:40
+msgid "Every form is a menu callback with its own access control. Don't forget currencies have their own access control as well."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:46 extras/forms/plugins/export_ui/mcapi_forms_ui.class.php:94
+msgid "Path"
+msgstr "Camí"
+
+#: extras/forms/mcapi_forms.admin.inc:47
+msgid "Unique path to this form. Don't forget you can use a path alias over this"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:55
+msgid "Menu link location"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:56
+msgid "Choose the menu, or menu item-type."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:56
+msgid "Some choices may not produce a menu item"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:57
+msgid "For more info, see 'type' info at !link"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:61
+msgid "No menu item"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:70
+msgid "Access control"
+msgstr "Control d'accés"
+
+#: extras/forms/mcapi_forms.admin.inc:71
+msgid "In addition to currency access control, and block access control, access to this form can be restricted."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:79
+msgid "Make block available"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:80
+msgid "The block is named according the path."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:81
+msgid "Remember that blocks have their own caching and access control."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:90
+msgid "perspective"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:91
+msgid "Whether this is completed by a 3rd party or a participant."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:130
+msgid "Other user"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:137
+msgid "Either 'incoming' or 'outgoing' relative to the logged in user"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:140
+msgid "Neither"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:141 views/views_handler_filter_mcapi_index_diff.inc:21
+msgid "Incoming"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:142 views/views_handler_filter_mcapi_index_diff.inc:27
+msgid "Outgoing"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:156
+msgid "This field does not respond to changes in the above field."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:167
+msgid "Hierarchical select widget cannot remember default values placed here"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:175
+msgid "Use zero to include a currency as an option on the form."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:176
+msgid "Leave blank to exclude the currency."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:177
+msgid "Numeric values are also valid"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:189
+msgid "User experience"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:190
+msgid "Form & confirmation form appearance"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:196 plugins/export_ui/mcapi_ui.class.php:99
+msgid "Title"
+msgstr "Títol"
+
+#: extras/forms/mcapi_forms.admin.inc:197
+msgid "For use in block title and menu links."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:197
+msgid "Leave blank to jump to the confirmation stage."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:204
+msgid "Main form"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:205;235
+msgid "Use the tokens with HTML & css to design your payment form. Linebreaks will be replaced automatically."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:219
+msgid "Confirmation page title"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:225
+msgid "Confirmation preview mode"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:228
+msgid "Tokenised sentence"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:234
+msgid "use tokens here"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:251
+msgid "Form submission"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:252
+msgid "Settings for @field"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:257 extras/forms/mcapi_forms.i18n.inc:52
+msgid "Save button label"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:258
+msgid "The text to appear on the 'save' button, or the absolute url of an image."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:264
+msgid "Destination"
+msgstr "Destí"
+
+#: extras/forms/mcapi_forms.admin.inc:265
+msgid "Goes to the new transaction certificate by default."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:272 extras/forms/mcapi_forms.i18n.inc:53
+msgid "Confirmation message"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:273
+msgid "Contents of the message box."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:282
+msgid "Put the default language here, then !link."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:283
+msgid "translate"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:314
+msgid "Default value"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:342
+msgid "This field is required"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:346
+msgid "Strip theme container"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:347
+msgid "Disable the outer container, so it doesn't render the field #title and #description but gives you fuller control in the template below."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:369
+msgid "Either preset @tokenname, or include that token in the template."
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:396
+msgid "Required field '@name' must be used in the form template"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:403
+msgid "Use zero in the worth field"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:454
+msgid "Users to choose from"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:463
+msgid "Preset field to"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:464
+msgid "Configure this widget more at !link"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:480
+msgid "Request"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:481
+msgid "Payment"
+msgstr "Pagament"
+
+#: extras/forms/mcapi_forms.admin.inc:487
+msgid "Widget"
+msgstr "Giny"
+
+#: extras/forms/mcapi_forms.admin.inc:490
+msgid "Dropdown select box"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:491
+msgid "Radio buttons"
+msgstr "Botons d'opció"
+
+#: extras/forms/mcapi_forms.admin.inc:497
+msgid "'incoming' option label"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:503
+msgid "'outgoing' option label"
+msgstr ""
+
+#: extras/forms/mcapi_forms.admin.inc:520
+msgid "Path is already in use"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:9
+msgid "Designed forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:10
+msgid "Templates for payment forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:24
+msgid "Community accounting designed forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:46
+msgid "Page title"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:48
+msgid "Template"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:51
+msgid "Sure title"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:54
+msgid "Incoming direction"
+msgstr ""
+
+#: extras/forms/mcapi_forms.i18n.inc:55
+msgid "Outgoing direction"
+msgstr ""
+
+#: extras/forms/mcapi_forms.inc:82
+msgid "Other person"
+msgstr ""
+
+#: extras/forms/mcapi_forms.inc:94 extras/intertrading/intertrading.module:404
+msgid "Please choose..."
+msgstr "Si us plau, seleccioneu..."
+
+#: extras/forms/mcapi_forms.inc:117
+msgid "Preview"
+msgstr ""
+
+#: extras/forms/mcapi_forms.inc:132
+msgid "Back"
+msgstr "Enrere"
+
+#: extras/forms/mcapi_forms.inc:246
+msgid "Who was it with?"
+msgstr ""
+
+#: extras/forms/mcapi_forms.mcapiforms_default.inc:138
+msgid "Description:"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:32
+msgid "nonexistent field '@fieldname' in transaction form"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:59
+msgid "Mcapi forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:60
+msgid "Tokens to put in stage 1 of the transaction forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:66
+msgid "3rd party: Payer name"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:67
+msgid "User whose account is credited"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:70
+msgid "3rd party: Payee name"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:71
+msgid "User whose account is debited"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:74
+msgid "1st party: Direction of transaction"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:75
+msgid "Relative to the logged in user"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:78
+msgid "1st party: Second person"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:79
+msgid "The 'other' user in the transaction, not the logged in user"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:82
+msgid "Created date"
+msgstr ""
+
+#: extras/forms/mcapi_forms.tokens.inc:83
+msgid "A popup field for choosing the date"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:86
+msgid "You may need permission to use the text format to edit this form"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:94
+msgid "Test your form before enabling for users!"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:121
+msgid "Transaction form:"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:256
+msgid "Design transaction forms"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:257
+msgid "Create and edit the forms used to record and edit transactions"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:332
+msgid "Css menu tab identifier"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:333
+msgid "The second stage of the the transaction form works best when the menu tabs are hidden."
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:334
+msgid "Write the css identifier for the div on this page containing the menu items which 'List', 'Update' & 'Settings'."
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:335
+msgid "Don't forget the leading . or #"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:378
+msgid "The default values are set in the form designer: !link"
+msgstr ""
+
+#: extras/forms/mcapi_forms.module:26
+msgid "Designed form"
+msgstr ""
+
+#: extras/forms/mcapi_forms.install:73
+msgid "Payment form"
+msgstr ""
+
+#: extras/forms/mcapi_forms.info:0
+msgid "Forms and form builder UI"
+msgstr ""
+
+#: extras/forms/mcapi_forms.info:0
+msgid "Exportable transaction form builder"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.class.php:73
+msgid "Translate"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.class.php:92 views/mcapi.views_default.inc:181 views/mcapi_index_views.views_default.inc:288
+msgid "Name"
+msgstr "Nom"
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.class.php:95 plugins/export_ui/mcapi_ui.class.php:107
+msgid "Storage"
+msgstr "Emmagatzemament"
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.class.php:96 plugins/export_ui/mcapi_ui.class.php:108 views/mcapi.views.inc:133 views/mcapi_index_views.views.inc:195
+msgid "Operations"
+msgstr "Operacions"
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:29
+msgid "transaction form"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:30
+msgid "Transaction form"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:31
+msgid "transaction forms"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:32
+msgid "Transaction forms"
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:51
+msgid "This action will permanently remove any customizations made to this form."
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:52
+msgid "The form has been reverted."
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:55
+msgid "This action will permanently remove the form from your database."
+msgstr ""
+
+#: extras/forms/plugins/export_ui/mcapi_forms_ui.inc:56
+msgid "The form has been deleted."
+msgstr ""
+
+#: extras/import/mcapi_import.module:10
+msgid "Create transactions to and from the currency reservoir account to create 'Carried forward' balances."
+msgstr ""
+
+#: extras/import/mcapi_import.module:11;26
+msgid "Prepare a csv file and paste as text into the box below."
+msgstr ""
+
+#: extras/import/mcapi_import.module:12
+msgid "The 'migrate' module is too complex for this, so this bespoke solution is provided."
+msgstr ""
+
+#: extras/import/mcapi_import.module:13
+msgid "Include only users with no transactions recorded in that currency."
+msgstr ""
+
+#: extras/import/mcapi_import.module:14
+msgid "Paste 2 or 3 comma separated columns into the field below, the first column should be the uid or email, the second column the current balance, and optionally the third column should be the user's gross income until now (turnover)."
+msgstr ""
+
+#: extras/import/mcapi_import.module:15
+msgid "The second column SHOULD add up to 0 for currencies of exchange, but this will not be checked as all transactions will be done with the reservoir account."
+msgstr ""
+
+#: extras/import/mcapi_import.module:16
+msgid "Quotes are optional."
+msgstr ""
+
+#: extras/import/mcapi_import.module:17
+msgid "The first line should read (third column is optional): !code"
+msgstr ""
+
+#: extras/import/mcapi_import.module:22
+msgid "Ensure your balance limits settings will not conflict with the import. Consider temporarily disabling the limits module"
+msgstr ""
+
+#: extras/import/mcapi_import.module:25
+msgid "Import a whole transaction history."
+msgstr ""
+
+#: extras/import/mcapi_import.module:27
+msgid "Payer and Payee should be user IDs or email addresses."
+msgstr ""
+
+#: extras/import/mcapi_import.module:28
+msgid "Category names should be comma separated in the same field."
+msgstr ""
+
+#: extras/import/mcapi_import.module:29
+msgid "'created' is optional, but will be converted to unixtime using php function !strtotime."
+msgstr ""
+
+#: extras/import/mcapi_import.module:30
+msgid "Other field API fields must have the same name; a cardinality of 1 will be assumed and the value will be put in the 'value' column."
+msgstr ""
+
+#: extras/import/mcapi_import.module:33
+msgid "This page allows you to import users' balances and gross incomes for users already on the system."
+msgstr ""
+
+#: extras/import/mcapi_import.module:34
+msgid "To import users, see the User Import Framework (UIF) module."
+msgstr ""
+
+#: extras/import/mcapi_import.module:76;77
+msgid "uid or email of a user"
+msgstr ""
+
+#: extras/import/mcapi_import.module:78
+msgid "floating point number, consistent with the currency settings"
+msgstr ""
+
+#: extras/import/mcapi_import.module:79
+msgid "a string which can be parsed by php's !strtotime"
+msgstr ""
+
+#: extras/import/mcapi_import.module:80
+msgid "integer transaction state"
+msgstr ""
+
+#: extras/import/mcapi_import.module:81
+msgid "machine name of transaction type"
+msgstr ""
+
+#: extras/import/mcapi_import.module:85
+msgid "one line describing what was exchanged"
+msgstr ""
+
+#: extras/import/mcapi_import.module:90
+msgid "Comma separated category names to be imported into the '@name' vocabulary"
+msgstr ""
+
+#: extras/import/mcapi_import.module:92
+msgid "The possible headings for the csv array are: (* required)"
+msgstr ""
+
+#: extras/import/mcapi_import.module:103
+msgid "Fallback transaction type"
+msgstr ""
+
+#: extras/import/mcapi_import.module:104
+msgid "If no valid transaction type is provided, use this."
+msgstr ""
+
+#: extras/import/mcapi_import.module:112
+msgid "Fallback transaction state"
+msgstr ""
+
+#: extras/import/mcapi_import.module:113
+msgid "If no valid transaction state is provided, use this."
+msgstr ""
+
+#: extras/import/mcapi_import.module:122
+msgid "paste data"
+msgstr ""
+
+#: extras/import/mcapi_import.module:129
+msgid "Adjust user created date"
+msgstr ""
+
+#: extras/import/mcapi_import.module:130
+msgid "Set account created property to one day before the first transaction. This is useful if member import didn't work!"
+msgstr ""
+
+#: extras/import/mcapi_import.module:136
+msgid "Test"
+msgstr ""
+
+#: extras/import/mcapi_import.module:137
+msgid "Don't import. Just report back on the user ids."
+msgstr ""
+
+#: extras/import/mcapi_import.module:159;162
+msgid "'quantity' must be greater than 0 in line @num"
+msgstr ""
+
+#: extras/import/mcapi_import.module:165
+msgid "'created'must evaluate using strtotime() in line @num: @val"
+msgstr ""
+
+#: extras/import/mcapi_import.module:176
+msgid "Field @fieldname will be imported."
+msgstr ""
+
+#: extras/import/mcapi_import.module:179
+msgid "Field @fieldname cannot be imported using this primitive tool."
+msgstr ""
+
+#: extras/import/mcapi_import.module:189
+msgid "The following types are invalid and would be replaced by @type: @types"
+msgstr ""
+
+#: extras/import/mcapi_import.module:199
+msgid "The following states are invalid and would be replaced by @state: @state"
+msgstr ""
+
+#: extras/import/mcapi_import.module:206
+msgid "The following new terms would be created: @terms"
+msgstr ""
+
+#: extras/import/mcapi_import.module:209
+msgid "Unknown users would be replaced with the reservoir account: @users"
+msgstr ""
+
+#: extras/import/mcapi_import.module:215;256
+msgid "Importing transactions"
+msgstr ""
+
+#: extras/import/mcapi_import.module:230
+msgid "testing mode is ON!"
+msgstr ""
+
+#: extras/import/mcapi_import.module:231
+msgid "Successfully simulated import of @num transactions"
+msgstr ""
+
+#: extras/import/mcapi_import.module:300
+msgid "@count transactions ignored."
+msgstr ""
+
+#: extras/import/mcapi_import.module:340
+msgid "Transaction type for imported transactions"
+msgstr ""
+
+#: extras/import/mcapi_import.module:372
+msgid "The following users are unknown to this site: @users"
+msgstr ""
+
+#: extras/import/mcapi_import.module:376
+msgid "The following users already have transactions: @users"
+msgstr ""
+
+#: extras/import/mcapi_import.module:383
+msgid "Balance (second item) on row @num is not numeric: @val"
+msgstr ""
+
+#: extras/import/mcapi_import.module:389
+msgid "Gross income (third item) on row @rownum is not numeric: @val"
+msgstr ""
+
+#: extras/import/mcapi_import.module:391
+msgid "gross income (third item) on row @rownum cannot be less than 0: @val"
+msgstr ""
+
+#: extras/import/mcapi_import.module:436 views/mcapi_index_views.views_template.inc:618 views/views_handler_field_mcapi_users_totals.inc:36
+msgid "Gross income"
+msgstr ""
+
+#: extras/import/mcapi_import.module:437 views/mcapi_index_views.views_template.inc:617 views/views_handler_field_mcapi_users_totals.inc:37
+msgid "Gross expenditure"
+msgstr ""
+
+#: extras/import/mcapi_import.module:457
+msgid "Carried Forward"
+msgstr ""
+
+#: extras/import/mcapi_import.module:466
+msgid "Failed to import balance for member @uid: !message"
+msgstr ""
+
+#: extras/import/mcapi_import.module:515
+msgid "Number of fields does not match header in row @num"
+msgstr ""
+
+#: extras/import/mcapi_import.module:531
+msgid "The starting balance of the imported user"
+msgstr ""
+
+#: extras/import/mcapi_import.module:532
+msgid "The total income ever of this user."
+msgstr ""
+
+#: extras/import/mcapi_import.module:533
+msgid "The currency code (optional, default is @currcode)"
+msgstr ""
+
+#: extras/import/mcapi_import.module:535
+msgid "Importing balance (and gross income) per user is incompatible with importing the transaction history."
+msgstr ""
+
+#: extras/import/mcapi_import.module:48
+msgid "Import"
+msgstr ""
+
+#: extras/import/mcapi_import.module:60 plugins/export_ui/mcapi_ui.class.php:106 views/mcapi.views.inc:21 views/mcapi.views_default.inc:17;187;191
+msgid "Transactions"
+msgstr "Transaccions"
+
+#: extras/import/mcapi_import.module:61
+msgid "Import transactions for users already on the system."
+msgstr ""
+
+#: extras/import/mcapi_import.info:0
+msgid "Import transactions"
+msgstr ""
+
+#: extras/import/mcapi_import.info:0
+msgid "Paste a csv to import initial user balances or a whole transaction history."
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:22
+msgid "Name of intertrading currency"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:25 extras/intertrading/intertrading.module:161
+msgid "Latitude"
+msgstr "Latitud"
+
+#: extras/intertrading/intertrading.admin.inc:26 extras/intertrading/intertrading.module:168
+msgid "Longitude"
+msgstr "Longitud"
+
+#: extras/intertrading/intertrading.admin.inc:27
+msgid "Relative value"
+msgstr "Valor relatiu"
+
+#: extras/intertrading/intertrading.admin.inc:30
+msgid "Balances add up to zero"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:31
+msgid "Yes"
+msgstr "Sí"
+
+#: extras/intertrading/intertrading.admin.inc:31
+msgid "No"
+msgstr "No"
+
+#: extras/intertrading/intertrading.admin.inc:33
+msgid "Number of traders"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:34
+msgid "Last 30 days transactions"
+msgstr "Transaccions dels últims 30 dies"
+
+#: extras/intertrading/intertrading.admin.inc:36
+msgid "Last 365 days volume"
+msgstr "Volum dels últims 365 dies"
+
+#: extras/intertrading/intertrading.admin.inc:40
+msgid "Largest negative balance"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:44
+msgid "Balance of Trade"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:48
+msgid "Visibility"
+msgstr "Visibilitat"
+
+#: extras/intertrading/intertrading.admin.inc:49
+msgid "Public"
+msgstr "Públic"
+
+#: extras/intertrading/intertrading.admin.inc:49
+msgid "Not public"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:68
+msgid "Intertrading server"
+msgstr "Servidor d'intercanvis federat"
+
+#: extras/intertrading/intertrading.admin.inc:69
+msgid "The url of the server."
+msgstr "La url del servidor"
+
+#: extras/intertrading/intertrading.admin.inc:70;111
+msgid "WARNING. This cannot and should not be easily changed once your account on the intertrading server is created"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:95
+msgid "Account for external transactions"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:96
+msgid "WARNING. Once set, this cannot be changed."
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:97
+msgid "Please ensure the mail for this account goes to a responsible person: @mail"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:109 extras/intertrading/intertrading.variable.inc:19
+msgid "The value of the currency, relative to a common denominator."
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:110 extras/intertrading/intertrading.variable.inc:20
+msgid "If 1 tick is 1 minute and your currency is hours, then enter 60"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:132
+msgid "Handshake with server"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:143
+msgid "Ticks must be greater than zero"
+msgstr ""
+
+#: extras/intertrading/intertrading.admin.inc:157
+msgid "Ticks must be numeric"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:37
+msgid "Server reports: "
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:157
+msgid "Problem saving transaction on server: @message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:158
+msgid "Unknown account & failed to create a new account on intertrading server"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:159
+msgid "Diagnostics from server: @message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:160
+msgid "Transaction field @fieldname is invalid: : @value"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:162
+msgid "Missing config field: @fieldname"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:163
+msgid "Field @fieldname should be @operator 0: @val"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:164
+msgid "Field @fieldname contains invalid characters"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:165
+msgid "Your Intertrading ratio (balance/volume) exceeds @num%: @balance / @volume"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:166
+msgid "Type error in field '@fieldname'. Should be a @type."
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:167
+msgid "Your exchange is exists, but is blocked on the intertrading network."
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:168
+msgid "Wrong key: @key"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:169
+msgid "Not enough data to authenticate"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:171
+msgid "Failed to connect with @server; returned: @message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:172
+msgid "Transaction would exceed remote client's intertrading limits by @quantity"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:173
+msgid "Transaction would exceed remote client's account limits by @quantity"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:174
+msgid "Misc validation error on remote client: @message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:175
+msgid "client not found: @server"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:176
+msgid "Failed to connect: @params"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:177
+msgid "Unknown mail on @client: @mail"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:178
+msgid "Unknown error code @code: @args"
+msgstr "Error de codi desconegut @code: @args"
+
+#: extras/intertrading/intertrading.inc:32;36;57 extras/intertrading/intertrading.module:136;201;574;652
+msgid "intertrading"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:32
+msgid "Site @site returned error @message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:36
+msgid "Unexpected result from @url: @result"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:57
+msgid "@message"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:147
+msgid "intertrading error"
+msgstr ""
+
+#: extras/intertrading/intertrading.inc:147
+msgid "!message"
+msgstr "!message"
+
+#: extras/intertrading/intertrading.variable.inc:10
+msgid "Intertrading server url"
+msgstr ""
+
+#: extras/intertrading/intertrading.variable.inc:11
+msgid "The url of the server. Contact the server administrator to change this"
+msgstr ""
+
+#: extras/intertrading/intertrading.variable.inc:18
+msgid "Ticks"
+msgstr ""
+
+#: extras/intertrading/intertrading.variable.inc:27
+msgid "Currency used for intertrading"
+msgstr ""
+
+#: extras/intertrading/intertrading.variable.inc:34
+msgid "The account on this exchange used for intertrading"
+msgstr ""
+
+#: extras/intertrading/intertrading.variable.inc:35
+msgid "Enter the account number"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:101
+msgid "access statement"
+msgstr "declaració d'accés"
+
+#: extras/intertrading/intertrading.module:102
+msgid "View the aggregating trading stats which show the activity of this exchange to the trading network."
+msgstr ""
+
+#: extras/intertrading/intertrading.module:105
+msgid "Intertrade"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:106
+msgid "Initiate transactions with other exchanges"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:156
+msgid "Geolocation"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:157
+msgid "The intertrading server would like to know where you are."
+msgstr ""
+
+#: extras/intertrading/intertrading.module:157
+msgid "To determine your coordinates, please visit !link"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:202
+msgid "You have an account on the intertrading server."
+msgstr ""
+
+#: extras/intertrading/intertrading.module:283
+msgid "Coordinates must be numeric"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:286
+msgid "Coordinates out of range: @val"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:306
+msgid "@varname not set. Configure intertrading at !link"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:326
+msgid "Which way will the transaction go?"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:358
+msgid "No receipts are possible at this time"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:363
+msgid "The most @name can receive is !amount"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:373
+msgid "No payments are possible at this time"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:378
+msgid "The most @name can pay is !amount"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:401
+msgid "Remote exchange"
+msgstr "Intercanvi remot"
+
+#: extras/intertrading/intertrading.module:402
+msgid "Not listed?"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:411
+msgid "Remote payer email address"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:411
+msgid "Remote payee email address"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:444
+msgid "Confirm"
+msgstr "Confirma"
+
+#: extras/intertrading/intertrading.module:500
+msgid "There was a problem saving the transaction on the remote site."
+msgstr ""
+
+#: extras/intertrading/intertrading.module:596
+msgid "No account"
+msgstr "Sense compte"
+
+#: extras/intertrading/intertrading.module:597
+msgid "Account blocked"
+msgstr "Compte bloquejat"
+
+#: extras/intertrading/intertrading.module:598
+msgid "Account active"
+msgstr "Compte actiu"
+
+#: extras/intertrading/intertrading.module:601
+msgid "@name account status is: @status"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:607
+msgid "@name account balance is !balance"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:609
+msgid "@name can trade between: @min & @max"
+msgstr "@name pot intercanviar entre: @min i @max"
+
+#: extras/intertrading/intertrading.module:613
+msgid "@name must trade above: @min"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:616
+msgid "@name must trade below: @max"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:619
+msgid "Transactions so far: @count"
+msgstr "Transaccions fins ara: @count"
+
+#: extras/intertrading/intertrading.module:674
+msgid "Remote payments must involve the intertrading account"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:680
+msgid "Payment involving intertrading account was excluded"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:136
+msgid "server passed wrong key, @key to this client. Actual key is @key1"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:201
+msgid "server accepted new key: @key"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:574
+msgid "@message: @transaction"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:652
+msgid "Uploaded @num transactions to intertrading server"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:15;83
+msgid "Trading network"
+msgstr "Xarxa d'Intercanvi"
+
+#: extras/intertrading/intertrading.module:16
+msgid "Display statistics about this exchange in the Community Forge network"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:33
+msgid "Remote transaction"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:34
+msgid "Trade with another exchange in the network"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:42;48
+msgid "Remote claim"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:43;49
+msgid "Request credit from another exchange"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:59
+msgid "Remote payment"
+msgstr "Pagament remot"
+
+#: extras/intertrading/intertrading.module:60
+msgid "Credit someone in another exchange"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:70
+msgid "Replicate transaction history to server"
+msgstr ""
+
+#: extras/intertrading/intertrading.module:84
+msgid "Credit clearing systems are by nature closed systems. But it is possible to make meta credit-clearing systems, composed of local systems, each trusting the the credit of the others. This is called 'intertrading', It widens the scope of your market, and it brings with it a new level of governance and accountability. "
+msgstr ""
+
+#: extras/intertrading/intertrading.install:5
+msgid "Anonymous users have been granted permission to see the stats. However this is not required to be part of the intertrading network"
+msgstr ""
+
+#: extras/intertrading/intertrading.info:0
+msgid "Intertrading client"
+msgstr ""
+
+#: extras/intertrading/intertrading.info:0
+msgid "Exchange with other mutual credit systems using a ClearingCentral 2 server. Contact Community Forge for details"
+msgstr ""
+
+#: extras/limits/balance_limits.tpl.php:11
+msgid "Balance:"
+msgstr ""
+
+#: extras/limits/balance_limits.tpl.php:13
+msgid "Min:"
+msgstr ""
+
+#: extras/limits/balance_limits.tpl.php:15
+msgid "Max:"
+msgstr ""
+
+#: extras/limits/trading_limits.tpl.php:11
+msgid "Spending limit:"
+msgstr ""
+
+#: extras/limits/trading_limits.tpl.php:13
+msgid "Receiving limit:"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:95
+msgid "Formula to calculate minimum limit"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:96;104
+msgid "@gross_in, @gross_out, @trades"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:103
+msgid "Formula to calculate maximum limit"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:121
+msgid "Formula does not evaluate to a number: @result"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:136
+msgid "Optional minimum balance"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:137
+msgid "Must be less than or equal to zero"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:146
+msgid "Optional maximum balance"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:147
+msgid "Must be greater than 0."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:164
+msgid "Limits must be numeric: @value"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:172
+msgid "Minimum balance must not be larger than 0"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:180
+msgid "Maximum balance must be larger than 0"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:193
+msgid "With great power comes great responsibility!"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:194
+msgid "The first rule of accounting is: no account should issue more credit than it can redeem."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:195
+msgid "Even fiat currencies can be run sustainably if they are used to pay tax."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:196
+msgid "Trust in the system can be increased by limiting the right to issue credit to trusted, known, productive actors in the economy, which may or not include the goverment!"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:197
+msgid "Transactions will be rejected which take accounts beyond these limits."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:198
+msgid "Choose which method to use, and configure it."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:200 extras/limits/mcapi_limits.module:291 extras/limits/mcapi_limits.info:0 extras/limits/views/mcapi_limits.views.inc:9
+msgid "Balance limits"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:209
+msgid "Method"
+msgstr "Mètode"
+
+#: extras/limits/mcapi_limits.inc:210
+msgid "How will the limits be determined?"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:226
+msgid "Balance limits to not apply to this currency type."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:230
+msgid "Personal limits"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:231
+msgid "Settings on the user profiles override these general limits."
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:237
+msgid "Skip balance limit check"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:238
+msgid "Especially useful for mass transactions and automated transactions"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:243
+msgid "for transactions of type 'auto'"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:244
+msgid "for transactions of type 'mass'"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:245
+msgid "for transactions created by user 1"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:246
+msgid "for transactions created by the currency owner"
+msgstr ""
+
+#: extras/limits/mcapi_limits.inc:247
+msgid "for the reservoir account"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:75
+msgid "Skipped @currency balance limit check because you are user 1."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:78
+msgid "Skipped @currency balance limit check because you are the currency owner."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:81
+msgid "Skipped balance limit checks for automated transactions with @currency."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:84
+msgid "Skipped balance limit checks for @currency transactions involving the reservoir account."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:141
+msgid "Transaction would take @name !quant above the maximum balance of !max"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:150
+msgid "Transaction would take @name !quant below the minimum balance of !min"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:184
+msgid "No limits"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:185
+msgid "Everyone has the same limits, stated below"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:186
+msgid "Calculate the limits using an equation and tokens."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:218
+msgid "Personal balance limits, set manually"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:219
+msgid "These override any limits defined in the currency."
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:220
+msgid "Leave blank to inherit the values from the currency's settings"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:294
+msgid "Trading limits (How much the user can earn and spend)"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:313
+msgid "My limits"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:313
+msgid "@user's limits"
+msgstr ""
+
+#: extras/limits/mcapi_limits.module:353
+msgid "Block settings"
+msgstr "Paràmetres de bloc"
+
+#: extras/limits/mcapi_limits.info:0
+msgid "Keep your exchange currency on the rails by limiting the amount of credit / users can issue and hold."
+msgstr ""
+
+#: extras/limits/views/mcapi_limits.views.inc:11
+msgid "The trading limits for a user in a currency or currencies"
+msgstr ""
+
+#: extras/signatures/pending_signatures.tpl.php:19
+msgid "Awaiting signature"
+msgstr ""
+
+#: extras/signatures/pending_signatures.tpl.php:26
+msgid "Signed"
+msgstr ""
+
+#: extras/signatures/pending_signatures.tpl.php:43 extras/signatures/mcapi_signatures.module:90
+msgid "Pending"
+msgstr "Pendent"
+
+#: extras/signatures/pending_signatures.tpl.php:45
+msgid "Signed by"
+msgstr "Signat per"
+
+#: extras/signatures/pending_signatures.tpl.php:45
+msgid "Awaiting Signatures"
+msgstr "Signatures pendents"
+
+#: extras/signatures/mcapi_signatures.inc:61;110
+msgid "Sign all"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:162
+msgid "Transaction @serial is signed off"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:168
+msgid "Transaction #@serial is already signed by @name"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:222
+msgid "Both participants must sign"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:223
+msgid "Logged in user signs automatically"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:228
+msgid "Counter-signers"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:229
+msgid "Choose one or more users"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:238
+msgid "Send 'pending' notification"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:239
+msgid "Use the email template on this page to notify all signatories"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:249
+msgid "Signature notification"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:251
+msgid "Compose the email notifying signatories that a transaction needs their attention."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:252
+msgid "Use the tokens provided."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:253
+msgid "To notify users when a transaction is completed, use the action and triggers: !link"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:260
+msgid "Your signature required"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:333
+msgid "Are you sure you want to sign?"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:339
+msgid "Undo pending transactions"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:340
+msgid "Are you sure you want to cancel this pending transaction?"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.inc:348
+msgid "Are you sure you want to sign off this transaction?"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.variable.inc:9
+msgid "Transaction signature notification template"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.variable.inc:10
+msgid "A mail template (subject, body) for alerting users their signature is needed."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.variable.inc:18
+msgid "Signature settings for transaction type: @type"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.variable.inc:19
+msgid "Specifies who should sign and who should be notified for transactions of this type"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:22
+msgid "Require signatures for certain transaction types before they are cleared."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:91
+msgid "awaiting signatures before becoming 'finished'."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:144
+msgid "All pending transactions (per user)"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:147
+msgid "Signatures for user to sign"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:150
+msgid "User is waiting for these signatures"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:164 extras/signatures/views/mcapi_signatures.views_default.inc:124;232
+msgid "Pending transactions"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:170
+msgid "Awaiting my signature"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:176
+msgid "Awaiting another signature"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:217 extras/signatures/views/mcapi_signatures.views_default.inc:125
+msgid "Awaiting my signature..."
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:316
+msgid "Signatories to the transaction"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:317
+msgid "Signatories to the transaction who have not signed"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:231
+msgid "mcapi_signatures"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:231
+msgid "Some completed transactions still have signatures pending, please report to matslats: @serials"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:33 extras/signatures/views/mcapi_signatures.views.inc:8;11
+msgid "Signatures"
+msgstr "Signatures"
+
+#: extras/signatures/mcapi_signatures.module:34
+msgid "Require signatures before transactions enter pending state"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:41
+msgid "Sign all your transactions?"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.module:42
+msgid "Put your signature on all transactions which require it"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:7
+msgid "Transaction signed off"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:8
+msgid "The following transaction has been signed off: @token"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:12
+msgid "Your signature is required"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:13
+msgid "Your signature is required on @token"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:27
+msgid "Currencies should be reviewed to take account of transaction signing. !link"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:58
+msgid "the transaction to which this entry is attached"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:63
+msgid "the uid of the signatory"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.install:68
+msgid "whether it is awaiting a signature"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.info:0
+msgid "Transaction signing"
+msgstr ""
+
+#: extras/signatures/mcapi_signatures.info:0
+msgid "Use actions and triggers to require signatures before transactions move into pending state. Default assumes all active members will expire at the end of the year"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:12
+msgid "Signatures needed on pending transactions"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:28 extras/signatures/views/mcapi_signatures.views_default.inc:121
+msgid "Signatory"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:29
+msgid "The user's signature on a transaction"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:31
+msgid "Signatory to a transaction"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:35
+msgid "Current user is a signatory"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:36
+msgid "Show only transactions on which the current user is a signatory"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:40
+msgid "Passed user is a signatory"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:45
+msgid "Signatory user"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:52
+msgid "Signature needed"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views.inc:53
+msgid "Whether the signature is still needed"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:122;231
+msgid "Transaction #[serial]"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:123
+msgid "Sign"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:126
+msgid "logged in user must sign here"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:127
+msgid "My pending transactions"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:128
+msgid "signatures waiting for given user, or all signatures if no uid passed"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:129
+msgid "Other pending transactions"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:130
+msgid "I'm waiting for signatures"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:131
+msgid "Waiting for..."
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:132
+msgid "Pending transactions which I have already signed"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:133
+msgid "My signature needed"
+msgstr ""
+
+#: extras/signatures/views/mcapi_signatures.views_default.inc:134
+msgid "Anybody's signature needed"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:57
+msgid "Commodity"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:105
+msgid "Issuance"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:163
+msgid "Normal"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.class.php:166
+msgid "Overridden"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:24
+msgid "currency"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:25;27
+msgid "Currencies"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:26
+msgid "currencies"
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:43
+msgid "This action will permanently remove any customizations made to this currency."
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:44
+msgid "The currency has been reverted."
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:47
+msgid "This action will permanently remove the currency from your database."
+msgstr ""
+
+#: plugins/export_ui/mcapi_ui.inc:48
+msgid "The currency has been deleted."
+msgstr ""
+
+#: views/mcapi.views.inc:22
+msgid "Records of transactions between users"
+msgstr ""
+
+#: views/mcapi.views.inc:32
+msgid "Serial"
+msgstr ""
+
+#: views/mcapi.views.inc:34 views/mcapi_index_views.views.inc:33
+msgid "The serial number of the transaction and dependents"
+msgstr ""
+
+#: views/mcapi.views.inc:44;63
+msgid "The user who gave currency in the transaction."
+msgstr ""
+
+#: views/mcapi.views.inc:82
+msgid "Transactions move between states, until they are 'finished'."
+msgstr ""
+
+#: views/mcapi.views.inc:94 views/mcapi_index_views.views.inc:82
+msgid "Which form or module which created the transaction"
+msgstr ""
+
+#: views/mcapi.views.inc:105
+msgid "The user who first created the transaction."
+msgstr ""
+
+#: views/mcapi.views.inc:114
+msgid "The second the transaction was created."
+msgstr ""
+
+#: views/mcapi.views.inc:126 views/mcapi_index_views.views.inc:171
+msgid "Better to use the handler from date_views module"
+msgstr ""
+
+#: views/mcapi.views.inc:134 views/mcapi_index_views.views.inc:196
+msgid "What the user can do to the transaction"
+msgstr ""
+
+#: views/mcapi.views.inc:152
+msgid "Transaction statistic"
+msgstr ""
+
+#: views/mcapi.views.inc:154
+msgid "The balance, trading volume, or transaction count for each user"
+msgstr ""
+
+#: views/mcapi.views.inc:224
+msgid "Comma separated usernames"
+msgstr ""
+
+#: views/mcapi.views.inc:255
+msgid "Per currency access"
+msgstr ""
+
+#: views/mcapi.views.inc:256
+msgid "Visible to users with access to the (first) currency in the filter or contextual filter."
+msgstr ""
+
+#: views/mcapi.views_default.inc:180
+msgid "Serial number"
+msgstr ""
+
+#: views/mcapi.views_default.inc:183
+msgid "Value"
+msgstr "Valor"
+
+#: views/mcapi.views_default.inc:184
+msgid "Who paid whom"
+msgstr ""
+
+#: views/mcapi.views_default.inc:185
+msgid "[name] paid [name_1]"
+msgstr ""
+
+#: views/mcapi.views_default.inc:186
+msgid "Income & Expenditure"
+msgstr ""
+
+#: views/mcapi.views_default.inc:188 views/mcapi_index_views.views_default.inc:39
+msgid "No transactions"
+msgstr ""
+
+#: views/mcapi.views_default.inc:189
+msgid "Trade"
+msgstr ""
+
+#: views/mcapi.views_default.inc:190
+msgid "This year's transactions"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:10
+msgid "Transaction index"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:14;15
+msgid "Transaction totals"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:22
+msgid "The Unique database key of the transaction"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:43;59 views/mcapi_index_views.views_default.inc:285
+msgid "1st user"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:44
+msgid "The transactor, whose perspective we are looking from"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:63;77 views/mcapi_index_views.views_default.inc:286
+msgid "2nd user"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:64
+msgid "The transactee"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:92 views/mcapi_index_views.views_template.inc:69;600
+msgid "Income"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:93
+msgid "Number of units of currency incoming"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:99;114
+msgid "transactions above or below a certain value"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:107 views/mcapi_index_views.views_template.inc:142;601
+msgid "Expenditure"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:108
+msgid "Number of units of currency outgoing"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:122
+msgid "Change in balance"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:123
+msgid "Change in the users balance"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:136 views/mcapi_index_views.views_default.inc:282 views/mcapi_index_views.views_template.inc:596
+msgid "Volume"
+msgstr "Volum"
+
+#: views/mcapi_index_views.views.inc:137
+msgid "Absolute value of the trade"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:151
+msgid "Indexed running balance after each transaction. (1 database query per row)"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:158
+msgid "Created moment"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:159
+msgid "The moment the transaction was registered"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:181
+msgid "The currency ID"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:203
+msgid "Greco index"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:204
+msgid "System health metric designed by Tom Greco"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:236;247
+msgid "Date (!base_table)"
+msgstr "Data (!base_table)"
+
+#: views/mcapi_index_views.views.inc:237
+msgid "Filter any Views !base_table date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc). "
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:240;251
+msgid "Undated"
+msgstr "Sense data"
+
+#: views/mcapi_index_views.views.inc:248
+msgid "Filter any Views !base_table date field."
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:268 views/views_plugin_access_user_arg1.inc:17
+msgid "Arg 1 user"
+msgstr ""
+
+#: views/mcapi_index_views.views.inc:269
+msgid "Access will be granted only to users is on their own profile pages - user/%"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:125;290
+msgid "Statement"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:160;280 views/mcapi_index_views.views_template.inc:597;619
+msgid "Trades"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:166;281
+msgid "Active traders"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:278
+msgid "User's trading summary"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:279
+msgid "Trading analysis"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:283 views/mcapi_index_views.views_template.inc:595;616
+msgid "Promiscuity"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:284
+msgid "%1 summary"
+msgstr ""
+
+#: views/mcapi_index_views.views_default.inc:291
+msgid "Greco index [greco]"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:593
+msgid "Most trades"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:594
+msgid "User rankings"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:598
+msgid "Number of trades"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:599
+msgid "Incomes"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:602
+msgid "expenditures"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:603
+msgid "[volume] traded"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:604
+msgid "[name_1] trades"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:605
+msgid "[income] income"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:606
+msgid "[expenditure] spent"
+msgstr ""
+
+#: views/mcapi_index_views.views_template.inc:615
+msgid "Offset"
+msgstr "Desplaçament"
+
+#: views/mcapi_index_views.views_template.inc:622
+msgid "Running balance"
+msgstr ""
+
+#: views/views_handler_field_mcapi_users_totals.inc:31
+msgid "Aggregate"
+msgstr "Agrega"
+
+#: views/views_handler_field_mcapi_users_totals.inc:32
+msgid "How do you want to summarise the the transaction totals?"
+msgstr ""
+
+#: views/views_handler_field_mcapi_users_totals.inc:35
+msgid "Number of transactions"
+msgstr ""
+
+#: views/views_handler_field_mcapi_users_totals.inc:39
+msgid "Participation"
+msgstr ""
+
+#: views/views_handler_field_transaction.inc:28
+msgid "Link this field to the transaction"
+msgstr ""
+
+#: views/views_handler_filter_mcapi_currency.inc:28 views/views_handler_filter_mcapi_states.inc:50
+msgid "- Any -"
+msgstr "- Qualsevol -"
+
+#: views/views_handler_filter_mcapi_index_diff.inc:15
+msgid "None"
+msgstr "Cap"
+
+#: views/views_handler_filter_mcapi_index_diff.inc:16
+msgid "none"
+msgstr ""
+
+#: views/views_handler_filter_mcapi_index_diff.inc:22
+msgid "incoming"
+msgstr ""
+
+#: views/views_handler_filter_mcapi_index_diff.inc:28
+msgid "outgoing"
+msgstr ""
+
+#: views/views_handler_filter_mcapi_states.inc:61
+msgid "exposed"
+msgstr "exposat"
+
+#: views/views_plugin_access_currency.inc:36
+msgid "Currency access mode"
+msgstr ""
+
+#: views/views_plugin_access_currency.inc:37
+msgid "See the settings on each currency's page."
+msgstr ""
+
+#: views/views_plugin_access_currency.inc:40;41;42
+msgid "Users who have '@perm' for all shown currencies"
+msgstr ""
+
+#: views/views_plugin_access_currency.inc:71
+msgid "Membership"
+msgstr ""
+
+#: views/views_plugin_access_currency.inc:72
+msgid "User summary data"
+msgstr ""
+
+#: views/views_plugin_access_currency.inc:73
+msgid "System-wide summary data"
+msgstr ""
+
+#: views/mcapi_index_views.info:0
+msgid "Views for transactions"
+msgstr ""
+
+#: views/mcapi_index_views.info:0
+msgid "A transaction indexing system, exposed to views, including views and views templates"
+msgstr ""
+
+#: mcapi_signatures.inc:358 views/mcapi_signatures.views_default.inc:123
+msgid "Sign"
+msgstr ""
+
+#: mcapi_signatures.inc:359
+msgid "Sign a pending transaction"
+msgstr ""
+
+#: mcapi_signatures.inc:361
+msgid "Undo"
+msgstr ""
+
+#: mcapi_signatures.inc:364
+msgid "Sign off"
+msgstr ""
+
+#: mcapi_signatures.inc:365
+msgid "Sign a pending transaction on behalf of all signatories"
+msgstr ""
+

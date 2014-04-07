@@ -1,0 +1,17 @@
+; $Id:
+name = Balance History
+description = A google charts implementation showing the account balance over time
+package = Community Accounting
+core = 7.x
+
+files[] = views_handler_field_mcapi_balance_history.inc
+files[] = mcapi_balance_history.views.inc
+files[] = mcapi_balance_history.views_templates.inc
+dependencies[] = mcapi_index_views
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

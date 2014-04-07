@@ -1,0 +1,202 @@
+<?php
+//Id;
+drupal_load('module', 'mcapi_signatures');
+
+function mcapi_signatures_install() {
+  $t = get_t();
+  $mcapi_signed_off_notify_template = array(
+    'subject' =>  $t('Transaction signed off'),
+    'body' => $t('The following transaction has been signed off: @token', array('@token' => '[transaction:url]'))
+  );
+  variable_set('mcapi_signed_off_notify_template', $mcapi_signed_off_notify_template);
+  $mcapi_sign_notify_template = array(
+    'subject' =>  $t('Your signature is required'),
+    'body' => $t('Your signature is required on @token', array('@token' => '[transaction:url]'))
+  );
+  variable_set('mcapi_sign_notify_template', $mcapi_sign_notify_template);
+  //signatures
+  module_load_include('inc', 'mcapi_signatures');
+  foreach (_get_signable_transaction_types() as $type) {
+    _make_signable($type);
+  }
+}
+
+function _make_signable($type) {
+  watchdog('mcapi install', 'requiring signatures on transaction type @type', array('@type' => $type));
+  variable_set('mcapi_signatures_'.$type, array (
+    'participants' => 1,
+    'countersignatories' => array (),
+    'notify' => 1,
+  ));
+}
+
+function mcapi_signatures_enable() {
+  drupal_set_message(t(
+    "Currencies should be reviewed to take account of transaction signing. !link",
+    array('!link' => l('admin/accounting/currencies', 'admin/accounting/currencies'))
+  ));
+}
+/*
+ * implements hook_uninstall
+ */
+function mcapi_signatures_uninstall() {
+  drupal_load('module', 'mcapi_pending'); //loads the constants
+  if (module_exists('views')) {
+    $view = views_get_view('signatures');
+    if($view) {
+      views_delete_view($view);
+    }
+  }
+  //signatures
+  //TODO implement hook_variable
+  db_delete('variable')->condition('name', 'mcapi_signatures%', 'LIKE')->execute();
+}
+/**
+ * Implementation of hook_schema)().
+ * creates a table for storing signatures needed on pending transactions
+ */
+function mcapi_signatures_schema() {
+  $schema['mcapi_signatures'] = array(
+    'description' => 'signatories needed on pending transactions',
+    'fields' => array(
+      'serial' => array(
+        'description' => t('the transaction to which this entry is attached'),
+        'type' => 'varchar',
+        'length' => 16,
+      ),
+      'uid' => array(
+        'description' => t('the uid of the signatory'),
+        'type' => 'int',
+        'size' => 'normal',
+      ),
+      'pending' => array(
+        'description' => t('whether it is awaiting a signature'),
+        'type' => 'int',
+        'size' => 'small',
+        'is_null' => FALSE,
+        'default' => 0
+      )
+    ),
+    'primary key' => array('serial', 'uid')
+  );
+  return $schema;
+}
+
+function mcapi_signatures_update_dependencies() {
+  $dependencies = array(
+    'mcapi_signatures' => array(
+      7000 => array(
+        'mcapi' => 7003
+      )
+    )
+  );
+}
+
+/**
+ * update the signatures table
+ */
+function mcapi_signatures_update_7000() {
+  if (db_query("SHOW TABLES LIKE '{mc_unsigned}'")->fetch()) {
+    db_rename_table('mc_unsigned', 'mcapi_signatures');
+  }
+  $tables = mcapi_signatures_schema();
+  db_change_field('mcapi_signatures', 'nid', 'serial', $tables['mcapi_signatures']['fields']['serial']);
+  db_add_field('mcapi_signatures', 'pending', $tables['mcapi_signatures']['fields']['pending']);
+  db_query('UPDATE {mcapi_signatures} SET pending = 0 WHERE pending IS NULL');
+}
+
+/**
+ * update the signature data
+ */
+function mcapi_signatures_update_7001() {
+  $pending = db_query("SELECT xid, payer, payee, s.uid, s.serial
+    FROM {mcapi_signatures} s
+    JOIN {mcapi_transactions} t
+    ON t.xid = s.serial
+    WHERE t.state = :state
+    ORDER BY s.serial DESC", array(':state' => TRANSACTION_STATE_PENDING))->fetchAll();
+  db_truncate('mcapi_signatures')->execute();
+
+  foreach ($pending as $transaction) {
+    $values = array(
+      'serial' => $transaction->serial,
+      'uid' => $transaction->payer == $transaction->uid ? $transaction->payer : $transaction->payee,
+      'pending' => 1
+    );
+    db_insert('mcapi_signatures')->fields($values)->execute();
+    //make a new row for the user who already signed, to be consistent with future data
+    $values = array(
+      'serial' => $transaction->serial,
+      'uid' => $transaction->payer == $transaction->uid ? $transaction->payee : $transaction->payer,
+      'pending' => 0
+    );
+    db_insert('mcapi_signatures')->fields($values)->execute();
+  }
+  signature_integrity_check();
+}
+
+/**
+ * rename the signature blocks following the renaming of the views displays.
+ * update email templates
+ */
+function mcapi_signatures_update_7005() {
+  db_delete('block')
+    ->condition('delta', array('sig_blocks-my_sig_needed', 'sig_blocks-anybodys_sig_needed'))
+    ->execute();
+  db_query("UPDATE {block} SET delta = 'sig_blocks-my_sig_needed' WHERE delta = 'signature_blocks-block_1'");
+  db_query("UPDATE {block} SET delta = 'sig_blocks-anybodys_sig_needed' WHERE delta = 'signature_blocks-block_2'");
+
+  variable_del('mcapi_sign_notify_template');
+  variable_del('mcapi_signed_off_notify_template');
+  views_flush_caches();
+}
+
+/**
+ * update an array key in the signature settings
+ */
+function mcapi_signatures_update_7009() {
+  module_load_include('inc', 'mcapi_signatures');
+  foreach (_get_signable_transaction_types() as $type) {
+    $varname = 'mcapi_signatures_'.$type;
+    $var = variable_get('mcapi_signatures_'.$type, array());
+    if (empty($var)) continue;
+    $var['notify'] = $var['complete'];
+    unset($var['complete']);
+    variable_set($varname, $var);
+  }
+  variable_set('mcapi_sign_notify_template', array(
+    'subject' => mcapi_update_7000_tokens(variable_get('mc_signatures_notification_subject')),
+    'body' => mcapi_update_7000_tokens(variable_get('mc_signatures_notification_body')),
+  ));
+  variable_set('mcapi_signed_off_notify_template', array(
+    'subject' => mcapi_update_7000_tokens(variable_get('mc_signatures_signoff_subject')),
+    'body' => mcapi_update_7000_tokens(variable_get('mc_signatures_signoff_body')),
+  ));
+}
+
+
+/**
+ * delete d6 variable and check signature data integrity
+ */
+function mcapi_signatures_update_7010() {
+  variable_del('cc_pending_notification_template');
+  signature_integrity_check();
+}
+
+function signature_integrity_check() {
+  //set all pending transactions to completed
+  db_update('mcapi_transactions')->fields(array('state' => 1))->condition('state', TRANSACTION_STATE_PENDING)->execute();
+  //any transactions with pending signatures should be set back to pending state
+  $pending_serials = db_select('mcapi_signatures', 's')
+    ->fields('s', array('serial'))
+    ->condition('pending', 1)
+    ->execute()->fetchCol();
+  if (empty($pending_serials)) return;
+  db_update('mcapi_transactions')
+    ->fields(array('state' => TRANSACTION_STATE_PENDING))
+    ->condition('serial', $pending_serials)
+    ->execute();
+  //delete any signatures that don't have transactions
+  $serials = db_query("SELECT serial FROM {mcapi_transactions} WHERE state != 0")->fetchCol();
+  db_delete('mcapi_signatures')->condition('serial', $serials, 'NOT IN')->execute();
+}

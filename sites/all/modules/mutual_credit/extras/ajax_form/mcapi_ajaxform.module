@@ -1,0 +1,145 @@
+<?php
+
+/*
+ * This is a like a 1stparty form
+ * INTENDED TO BE ALTERED using hook_form_mcapi_ajaxform_alter()
+ * Don't forget to pass a default transaction
+ * call drupal_get_form('mcapi_ajaxform', $transaction);
+ */
+function mcapi_ajaxform($form, $form_state) {
+  $transaction = &$form_state['build_info']['args'][TRANSACTION_BUILD_INFO_ARG];
+  if (!$transaction) {
+  	throw new Exception('Transaction needed as first argument to mcapi_ajaxform');
+  }
+  if (!array_key_exists('step', $form_state)) {
+    $form_state['step'] = 1;
+  }
+  if ($form_state['step'] == 1) {
+    $form = transaction_form($form, $form_state);
+    //change the name of the button to prevent #id conflicts
+    //with any other submit buttons on the page
+    $form['buttons']['mcapisubmit'] = $form['buttons']['submit'];
+    unset($form['buttons']['submit']);
+    //sort out the first and second parties from the payer and payee
+    if ($transaction->payer == $GLOBALS['user']->uid) $direction = 'outgoing';
+    elseif($transaction->payee == $GLOBALS['user']->uid) $direction = 'incoming';
+    //if neither payee nor payer is the firstparty, we have to choose one direction as default
+    else $direction = 'outgoing';
+
+     $form['direction'] = array(
+      '#title' => 'Direction',
+      '#type' => 'radios',
+      '#options' => array('incoming' => t('Incoming'), 'outgoing' => t('Outgoing')),
+      '#default_value' => $direction
+    );
+    $form['firstperson'] = array(
+      '#type' => 'hidden',
+      '#value' => $GLOBALS['user']->uid,
+     );
+     $form['secondperson'] = array(
+      '#title' => 'Other person',
+      '#type' => 'user_chooser_few',
+      '#callback' => 'user_chooser_segment_perms',
+      '#args' => array('transact'),
+      '#exclude' => array(1),
+      '#default_value' => $direction == 'outgoing' ? $transaction->payee : $transaction->payer
+    );
+    //if (isset($form_state['build_info']['args'][1])) {
+      //must run after mcapi_ajaxform_validate_secondperson, so must be unshifted before!
+      array_unshift($form['#validate'], 'mcapi_ajaxform_validate');
+    //}
+    array_unshift($form['#validate'], 'mcapi_ajaxform_validate_secondperson');
+    unset($form['payer'], $form['payee']);
+  }
+  elseif ($form_state['step'] == 2) {
+    $transactions[] = entity_create('transaction', $form_state['storage']);
+    $form['preview'] = transaction_view($transactions, 'certificate');
+    $form['buttons']['mcapisubmit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Record'),//this mustn't be changed
+      '#id' => 'edit-mcapisubmit'
+    );
+    $form['#validate'] = array('mcapi_ajaxform_validate', 'transaction_form_validate');
+    $form['#submit'] = array('transaction_form_submit', 'mcapi_ajaxform_finished');
+    //otherwise the javascript in the page will be replacing to #mcapi-ajaxform
+    //but the newly loaded element is #mcapi-ajaxform--2
+  }
+
+  $form['buttons']['mcapisubmit']['#ajax'] = array(
+  	'callback' => 'mcapi_ajaxform',
+  	'wrapper' => 'mcapi-ajaxform',
+  	'method' => 'replace',
+  );
+  //both steps use the same ajax button
+  $form['buttons']['mcapisubmit']['#attributes']= array(
+    'class' => array('use-ajax'),
+    'onClick' => "this.disabled=true,this.form.submit();"
+  );
+  return $form;
+}
+
+function mcapi_ajaxform_form_mcapi_ajaxform_alter(&$form, &$form_state) {
+	$form['#id'] = str_replace('--2', '', $form['#id']);
+}
+
+
+/*
+ * Form validation callback
+ * manage the steps
+ */
+function mcapi_ajaxform_validate($form, &$form_state) {
+  if (!empty($form_state['clicked_button']['#submit']) && in_array('mcapi_transaction_undo_confirm_form', $form_state['clicked_button']['#submit'])) {
+    return;
+  }
+  if (form_get_errors()) {
+  	return;
+  }
+  if (array_key_exists('values', $form_state) && $form_state['step'] == 1) {
+    //advance the form to step 2
+    $form_state['storage'] = $form_state['values'];
+    $form_state['rebuild'] = TRUE;
+    $form_state['step']++;
+  }
+  else {
+    $form_state['values'] = $form_state['storage'] + $form_state['values'];
+  }
+}
+
+/*
+ * Form validation callback
+ * set the payer and payee from the 2ndpeson and direction
+ */
+function mcapi_ajaxform_validate_secondperson($form, &$form_state) {
+  $values = &$form_state['values'];
+  if (empty($values['secondperson'])) {//this is a rare situation, in which the user_chooser removed the value
+    form_set_error('secondperson', t('Who was it with?'));
+  }
+  if ($values['direction'] == 'incoming') {
+    $values['payer'] = $values['secondperson'];
+    $values['payee'] = $values['firstperson'];
+  }
+  elseif ($values['direction'] == 'outgoing') {
+    $values['payer'] = $values['firstperson'];
+    $values['payee'] = $values['secondperson'];
+  }
+}
+
+function mcapi_ajaxform_finished($form, &$form_state) {
+  $transaction = transaction_load($form_state['serial']);
+  $output = $transaction ?
+    transaction_view($transaction, 'certificate') :
+    array('#markup'=>'failed to save transaction');
+  ajax_deliver($output);
+  exit();
+}
+
+
+/**
+ * Implements ctools hook_ctools_plugin_directory().
+ */
+function mcapi_ajaxform_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/content_types';//directory
+  }
+}
+

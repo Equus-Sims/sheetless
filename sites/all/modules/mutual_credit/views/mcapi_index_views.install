@@ -1,0 +1,81 @@
+<?php
+
+
+/*
+ * implements hook_requirements
+ * tests that the transaction controller is default. i.e. using drupal
+ */
+function mcapi_index_views_requirements() {
+  $controller = variable_get('mcapi_controller', 'mcapi');
+  $requirements['transaction_controller'] = array(
+    'title' => 'Transaction controller',
+    'value' => 'mcapi_index_views module only works with controller: '.$controller,
+    'severity' => $controller == 'mcapi' ? REQUIREMENT_INFO : REQUIREMENT_ERROR,
+  );
+  return $requirements;
+}
+/*
+ * implements hook_enable
+ */
+function mcapi_index_views_enable() {
+  db_query("DROP VIEW IF EXISTS {mcapi_index}");
+  db_query("CREATE ALGORITHM = UNDEFINED VIEW  {mcapi_index} AS
+      SELECT
+          t.xid,
+          t.serial,
+          t.payer AS uid1,
+          t.payee AS uid2,
+          t.type,
+          0 AS income,
+          w.worth_quantity AS expenditure,
+          - w.worth_quantity AS diff,
+          w.worth_quantity AS volume,
+          w.worth_currcode AS currcode,
+          t.created
+        FROM {mcapi_transactions} t
+        RIGHT JOIN {field_data_worth} w ON t.xid = w.entity_id
+        WHERE state > 0
+    UNION
+      SELECT
+          t.xid,
+          t.serial,
+          t.payee AS uid1,
+          t.payer AS uid2,
+          t.type,
+          w.worth_quantity AS income,
+          0 AS expenditure,
+          w.worth_quantity AS diff,
+          w.worth_quantity AS volume,
+          w.worth_currcode AS currcode,
+          t.created
+        FROM {mcapi_transactions} t
+        RIGHT JOIN {field_data_worth} w ON t.xid = w.entity_id
+        WHERE state > 0"
+  );
+}
+
+/*
+ * implements hook_uninstall
+ */
+function mcapi_index_views_uninstall() {
+  $views = db_query("SELECT name from {views_view} WHERE base_table = 'mcapi_index'")->fetchCol();
+  foreach ($views as $viewname) {
+    $view = views_get_view($viewname);
+    views_delete_view($view);
+  }
+  db_query("DROP VIEW IF EXISTS {mcapi_index}");
+}
+
+
+/**
+ * update function to rebuild the mysql index view
+ */
+function mcapi_index_views_update_7003() {
+  variable_set('mcapi_greco_period', 90);
+}
+/**
+ * drop greco index table
+ */
+function mcapi_index_views_update_7004() {
+  db_query("DROP TABLE IF EXISTS {mcapi_greco_indices}");
+}

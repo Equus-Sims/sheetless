@@ -1,0 +1,122 @@
+<?php
+
+function bank_slave_menu() {
+  $items['admin/accounting/bank'] = array(
+    'title' => 'Mirror bank account',
+    'description' => 'Settings for mirroring your org bank account',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bank_slave_settings'),
+    'access arguments' => array('configure all currencies'),
+    'weight' => 6
+  );
+  //tidy up all the forms
+  //if (count(variable_get('mcapi_bank_slave_uids')) > 1 || count(variable_get('mcapi_bank_slave_currcodes')) > 1) {
+    $items['bank'] = array(
+      'title' => 'Log banking transactions',
+      'description' => 'Forms for logging',
+      'page callback' => 'system_admin_menu_block_page',
+      'access arguments' => array('log bank transactions'),
+      'file' => 'system.admin.inc',
+      'file path' => drupal_get_path('module', 'system')
+    );
+  //}
+  return $items;
+}
+/*
+ * implements mcapi hook_mcapi_info_drupal_permissions
+ */
+function bank_slave_mcapi_info_drupal_permissions() {
+  return array(
+    'log banking transactions' => array(
+      'title' => t('Log bank transactions'),
+      'description' => t("Create transactions involving the designated bank accounts"),
+    )
+  );
+}
+
+/*
+ * menu callback
+ */
+function bank_slave_settings($form, $form_state) {
+  $form['mcapi_bank_slave_uids'] = array(
+    '#title' => t('Accounts to be used for mirroring'),
+    '#description' => t('Each listed account represents all the different currency accounts in one bank.'),
+    '#type' => 'user_chooser_few',
+    '#callback' => 'user_chooser_segment_perms',
+    '#args' => array('transact'),
+    '#multiple' => TRUE,
+    '#default_value' => variable_get('mcapi_bank_slave_uids', array()),
+  );
+
+  $currencies = currencies_load();
+  foreach(currencies_filter('commodity') as $currcode => $currency) {
+    $options[$currcode] = $currency->human_name;
+  }
+
+  $form['mcapi_bank_slave_currcodes'] = array(
+    '#title' => t('Banking currencies'),
+    '#description' => t('Choose at least one from these commodity currencies'),
+    '#type' => 'checkboxes',
+    '#multiple' => TRUE,
+    '#options' => $options,
+    '#default_value' => variable_get('mcapi_bank_slave_currcodes', array()),
+    '#required' => TRUE
+  );
+  return system_settings_form($form);
+}
+
+
+/*
+ * implements mcapi hook_info_types
+ * actually these types are declared by the forms module because there is a form for each
+ */
+/*
+function bank_slave_mcapi_info_types() {
+  return array('bank_income', 'bank_outgoings');
+}
+ */
+
+/*
+ * implements hook_accounting_validate
+ * ensures that the the intertrading account isn't included inadvertently in any transactions
+ */
+function bank_slave_accounting_validate($cluster) {
+  foreach ($cluster as $key => $transaction) {
+    if (substr($transaction->type, 0, 5) == 'bank_') {
+      if (!array_intersect(variable_get('mcapi_bank_slave_uids'), array($transaction->payer, $transaction->payee))) {
+        throw new Exception(t('Bank payments must involve a designated bank account'));
+      }
+      foreach (field_get_items('transaction', $transaction, 'worth') as $item) {
+        if (currency_load($item['currcode'])->issuance != 'commodity') {
+          throw new Exception(t('Banks can only use commodity currencies'));
+        }
+      }
+    }
+    //ensure normal transactions, and mass transaction don't accidentally include the bank account
+    elseif($intersection = array_intersect(variable_get('mcapi_bank_slave_uids'), array($transaction->payer, $transaction->payee))) {
+      unset($cluster[$key]);
+      drupal_set_message(t('Payment involving bank account @num was excluded', array('@num' => current($intersection))), 'warning', FALSE);
+      return;
+    }
+  }
+}
+
+
+/*
+ * Implements ctools hook_ctools_plugin_api
+ */
+function bank_slave_ctools_plugin_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'bank_slave'),
+  );
+}
+/*
+ * Implements views hook_views_api
+ */
+function bank_slave_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'bank_slave'),
+  );
+}

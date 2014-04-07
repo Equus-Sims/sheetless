@@ -1,0 +1,374 @@
+<?php
+// $Id:
+
+
+
+/**
+ * implements hook_menu
+ */
+function mcapi_command_menu() {
+  $items['admin/accounting/command'] = array(
+    'title' => 'Command syntax',
+    'description' => 'Useful for SMS and twitter interfaces',
+    'page callback' => 'mcapi_command',
+    'access arguments' => array('configure all currencies'),
+    'weight' => 5
+  );
+  return $items;
+}
+/*
+ * implements hook_perm
+ */
+function mcapi_command_mcapi_info_drupal_permissions() {
+  return array(
+    'transact via sms' => array(
+      'title' => t('Transact via sms'),
+      'description' => t("Register new transactions over SMS"),
+    )
+  );
+}
+
+/*
+ * implements hook_perm
+ */
+function mcapi_command_mcapi_info_types() {
+  return array('command');
+}
+
+function mcapi_command(){
+  return array(
+    drupal_get_form('mcapi_command_input'),
+    drupal_get_form('mcapi_command_settings_form'),
+  );
+}
+function mcapi_command_settings_form() {
+  module_load_include('inc', 'mcapi');
+  $tokens = array('[transaction:payer] OR [transaction:payee]', '[transaction:quantity]', '[transaction:description]');
+
+  $form['requests'] = array(
+    '#title' => t('Incoming messages from phones'),
+    '#description' => t('Define the form of the text messages.') .' '.
+      t("Try to include variations and get feedback from your users as to what works.") .' '.
+      t("Use the following tokens:") .' '.
+      theme('item_list', array('items' => $tokens)) .' ',
+    '#type' => 'fieldset',
+    '#weight' => -2
+  );
+  //these variable names double up as the callback functions
+  $form['requests']['mcapi_command_strings'] = array(
+    '#title' => t('Expressions for recording a transfer'),
+    '#description' => implode(' ', array(
+        t('One per line.'),
+        t('Case insensitive.'),
+        t('Example: pay johnsmith 14 for gardening'),
+    )),
+    '#type' => 'textarea',
+    '#rows' => 3,
+    '#element_validate' => array('mcapi_validate_commands_syntax'),
+    '#default_value' => variable_get('mcapi_command_strings', ''),
+  );
+
+  $currencies = currencies_load();
+  $form['mcapi_commands_currcode'] =  currency_picker_element(array_keys($currencies), variable_get('mcapi_commands_currcode', 0));
+  $form['mcapi_commands_currcode']['#description'] = t('Currently the commands will only work with one currency, in order to keep the user interface simple.');
+
+  $form['responses'] = array(
+    '#title' => t('Responses'),
+    '#type' => 'fieldset',
+    '#weight' => -2
+  );
+  $form['responses']['mcapi_command_response_success'] = array(
+    '#title' => t('Response for a successful exchange'),
+    '#description' => t("Leave blank for no response, or put [inherit] to show default messages"),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('mcapi_command_response_success', ''),
+    '#weight' => -1
+  );
+  $form['responses']['mcapi_command_syntax_error'] = array(
+    '#title' => t('Error response'),
+    '#description' => t("Response in case the incoming message cannot be parsed"),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('mcapi_command_syntax_error', ''),
+    '#weight' => 0
+  );
+  $form['responses']['mcapi_command_twitter_response'] = array(
+    '#title' => t('Twitter success response'),
+    '#description' => t("Assumes the tweeter is following this system's twitter account.") .' '.t('Leave blank for no response'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('mcapi_command_twitter_response', ''),
+    '#weight' => 0
+  );
+  if (module_exists('twitter')) {
+    //option for sending a return tweet: mcapi_command_twitter_response
+  }
+  return system_settings_form($form);
+}
+/*
+ * element validate callback
+ * ensures that command syntax contains the critical tokens
+ */
+function mcapi_validate_commands_syntax(&$element, &$form_state) {
+  $templates = explode("\n", $element['#value']);
+  foreach($templates as $template) {
+    //check it has quantity in it
+    if (strpos($template, '[transaction:quantity]') === FALSE) {
+      form_error($element, t("Each expression should include '@token' : @expression", array('@expression'=> $template, '@token' => '[transaction:quantity]')));
+    }
+    $payer = strpos($template, '[transaction:payer]');
+    $payee = strpos($template, '[transaction:payee]');
+    //of $payer and $payee, one should be FALSE and one should be an integer
+    $integer = $payer == FALSE ? $payee : $payer;
+    if (!is_integer($integer)) {
+      form_error($element, t("'@template' should include EITHER [transaction:payee] OR [transaction:payer]", array('@template'=> $template)));
+    }
+  }
+}
+
+/*
+ *
+ */
+function mcapi_command_input() {
+  $form['command'] = array(
+    '#title' => t('Command line interface'),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+  );
+  $form['command']['sender'] = array(
+    '#title' => t('Sender'),
+    '#description' => t('Any user of currency @currname', array('@currname' => variable_get('mcapi_commands_currcode', 'credunit'))),
+    '#type' => 'user_chooser_few',
+    '#callback' => 'user_chooser_segment_perms',//because I haven't built a per-currency callback yet
+    '#args' => array('transact'),
+    '#required' => FALSE,
+    '#default_value' => $GLOBALS['user']->uid
+  );
+  $form['command']['input'] = array(
+    '#title' => t('Command'),
+    '#description' => t('Test your commands here, no more than 160 characters.') .' '. t('E.g. pay admin 14 for cleaning'),
+    '#type' => 'textfield',
+    '#maxlength' => 160,
+    '#required' => TRUE
+  );
+  $form['command']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send'),
+    '#weight' => 1
+  );
+  return $form;
+}
+
+function mcapi_command_input_submit($form, $form_state) {
+  try {
+    drupal_set_message('TESTING ONLY: '. $form_state['values']['input'], 'status', FALSE);
+    $response = process_mcapi_command(
+      $form_state['values']['input'],
+      user_load($form_state['values']['sender']),
+      FALSE
+    );
+  }
+  catch (Exception $e) {
+    drupal_set_message($e->getMessage(), 'warning');
+    return;
+  }
+  drupal_set_message($response);
+}
+/*
+ * returns a message
+ */
+function process_mcapi_command($message, $sender_account = NULL, $really = FALSE) {
+  if (!$sender_account) $sender_account = user_load($GLOBALS['user']->uid);
+  $transaction = mcapi_command_execute($message, $sender_account);
+  //this has no idea whether the transaction is pending.
+  if ($really) {
+    return t('Transaction created.').' '.t('Your current balance is @num', array(
+      '@num' => transaction_totals($sender_account->uid, variable_get('mcapi_commands_currcode'))->balance
+    ));
+  }
+  else {
+    return t('Transaction passed validation.');
+  }
+}
+
+/*
+ * create the transaction from the command, and return it
+ */
+function mcapi_command_execute($message, $sender_account, $really = FALSE) {
+  $props = mcapi_parse_command($message);//would throw an error
+  if (!$props) return;
+
+  $props['currcode'] = variable_get('mcapi_commands_currcode');
+  $props['creator'] = $sender_account->uid;
+  //need to parse the user IDs, and substitute the payer or payee
+  //assume that either payer or payee is in the string
+
+  if (array_key_exists('payer', $props)) {
+    $props['payee'] = $sender_account->uid;
+    $props['payer'] = mcapi_command_get_uid($props['payer']);
+  }
+  else {
+    $props['payer'] = $sender_account->uid;
+    $props['payee'] = mcapi_command_get_uid($props['payee']);
+  }
+
+  $transaction = entity_create('transaction', $props);
+  transaction_cluster_create($transaction, $really);//thrown errors will be caught elsewhere
+  //if we are still here, that means the transaction was created
+  return $transaction;
+}
+
+function mcapi_parse_command($message) {
+  $translations = array(
+    '[transaction:quantity]' => '([0-9.]+)',
+    '[transaction:payer]' => '(.*)',
+    '[transaction:payee]' => '(.*)',
+    '[transaction:description]' => '(.*)',
+  );
+  $most_matches = array();
+  foreach (explode("\n", variable_get('mcapi_command_strings', '')) as $expression) {
+    $expression = trim($expression); //get the linebreak off it yuk
+    $pattern = '/'.strtr($expression, $translations) .'/i';
+
+    preg_match($pattern, $message, $matches);
+
+    if (count($matches) > count($most_matches)) {
+      $most_matches = $matches;
+      $longest_matching_expression = $expression;
+    }
+  }
+  if (!isset($longest_matching_expression)) throw new Exception(variable_get('mcapi_sms_syntax_error', ''));
+
+  array_shift($most_matches);//remove the first which was the matched expression
+
+  //find all the tokens in the expression
+  preg_match_all("/\[[^ ]*\]/", $longest_matching_expression, $tokens);
+  foreach ($tokens[0] as $token) {
+    //we want the exes from a token like '[transaction:xxxxx]'
+    $pseudotokens[] = substr($token, 13, -1);
+  }
+
+  //now the extracted tokens line up with the matches from before
+  if (count($tokens[0]) == count($most_matches)) {
+    return array_combine($pseudotokens, $most_matches);
+  }
+  elseif ($most_matches) {
+
+  }
+  else return array();//probably wasn't even supposed to match, so fail gracefully
+}
+
+/*
+ * check that the parsed trader is actually a user who is permitted to trade
+ * this is similar to a function in user_chooser
+ * $string should be a uid, username or email
+ */
+function mcapi_command_get_uid($string) {
+  $query = db_select('users', 'u')->fields('u', array('uid'))->condition('status', 1);
+  $or = db_or();
+  //this references the settings in the user_chooser module
+  foreach (variable_get('user_chooser_matching', array('u.uid', 'u.name', 'u.mail')) as $field) {
+    $or->condition($field, $string);
+  }
+  $query->condition($or);
+  $uid = $query->execute()->fetchField();
+  if (!$uid) {
+    throw new Exception(t('Unknown user: @string', array('@string' => $string)));
+  }
+  elseif (!currency_access('membership', variable_get('mcapi_commands_currcode', user_load($uid)))) {
+    throw new Exception(t('@user may not use %currency', array(
+      '@user' => $string,
+      '%currency' => currency_load(variable_get('mcapi_commands_currcode'))->human_name
+    )));
+  }
+  else return $uid;
+}
+
+
+/*
+ * implementation of hook 'sms_incoming'
+ * $op = 'pre process', 'process', 'post process'
+ * sms_send($number, $message, $options = array());
+ * sms_incoming($number, $message, $options = array());
+ */
+function mcapi_command_sms_incoming($op, $number, $message) {
+  if ($op != 'process') return;
+  try {
+    $sender_uid = sms_user_get_uid($number);
+    if (!$sender_uid) {
+      throw new Exception('Your number is not registered at @sitename', array('@sitename' => variable_get('site_name', '')));
+    }
+    $sender = user_load($sender_uid);
+    $transaction = mcapi_command_execute($message, $sender, TRUE);
+    if (!$transaction) {
+      throw new Exception(variable_get('mcapi_command_syntax_error'));
+    }
+  }
+  catch (Exception $e) {
+     sms_send($number, $e->getmessage());
+  }
+
+  $langcode = user_preferred_language($sender)->language;
+  if ($transaction->state == TRANSACTION_STATE_COMPLETED) {
+    $response = t(
+      "Transaction created. Your new balance is @num",
+      array('@num' => transaction_totals($sender_account->uid, variable_get('mcapi_commands_currcode'))->balance),
+      array('langcode' => $langcode)
+    );
+  }
+  else {
+    $states = mcapi_get_states();
+    $response = t(
+      "Transaction created into state '@state'",
+      array('@state' => $states[$transaction->state]),
+      array('langcode' => $langcode)
+    );
+  }
+  sms_send($number, $response);
+
+}
+
+/*
+ * implements hook_twitter_status_save().
+ * parse the tweet as it is saved
+ * this module does NOT ISSUE COMMANDS OR RESPONSES via twitter
+ * likely to be fired on cron
+ */
+function mcapi_command_twitter_status_save($status) {
+  $message = $status->text;
+  //convert (the first) twitter id to a username, because the command expects usernames
+  preg_match('/@[^ ]*/', $message, $matches);
+  if (count($matches) > 1) {
+    $otherusername = twitter_account_load(trim($matches[0], '@,.;:!'))->name;
+    //so the tweet mentions another user known to this
+    $message = str_replace($otherusername, $matches[1], $message);
+  }
+
+  //could use a variable instead of transaction completed.
+  $response = t('Transaction completed');
+
+
+  try {
+    $uid = db_query("SELECT uid FROM twitter_account WHERE twitter_uid = ".$status->user->id)->fetchfield();
+
+    $transaction = mcapi_command_execute($message, user_load($uid), TRUE);
+    if (!$transaction) return;//that means there was a syntax error.
+  }
+  catch (Exception $e) {
+    if ($e->getMessage() != variable_get('mcapi_command_syntax_error', '')) {
+      //we don't publish syntax error messages, but we do log non-syntax error message
+      watchdog('mcapi command', 'Failed to execute twitter command: @message', array('@message' => "$status->text :". $e->getMessage()));
+      $response = $e->getMessage();
+    }
+  }
+  if (variable_get('mcapi_command_twitter_response', 0)) {
+    mcapi_twitter_respond($twitter_uid, $response, $status->id);
+  }
+}
+
+//replaces twitter_set_status because that function has no way to REPLY, even though the API supports it
+function mcapi_twitter_respond($twitter_uid, $response, $original_id) {
+    $twitter_uid = 1;//assumes that account 1 has a twitter account and is connected.
+  $twitter = twitter_connect($twitter_uid);
+  $params['status'] = $response;
+  $params['in_reply_to_status_id'] = $twitter->id;
+  $values = $this->call('statuses/update', $params, 'POST');
+}

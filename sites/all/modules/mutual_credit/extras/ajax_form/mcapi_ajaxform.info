@@ -1,0 +1,16 @@
+; $Id:
+name = Ajax transaction forms
+description = Experimental helper module for 1stparty ajax transaction forms. Does nothing by itself
+package = Community Accounting
+core = 7.x
+
+dependencies[] = mcapi
+
+files[] = plugins/content_types/ajaxpay/ajaxpay.inc
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

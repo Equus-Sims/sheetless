@@ -1,0 +1,18 @@
+
+#pending-signatures{float:right;}
+
+div.pending-bgstamp{
+   margin: 0px 0 0 0px;
+   position: relative;
+   font-family:arial, helvetica;
+   font-size:50pt;
+   font-weight:bold;
+   color: transparent;
+   text-shadow: 0 0 2px rgba(0,0,0,0.07);
+   -webkit-transform: rotate(-25deg);
+   -moz-transform: rotate(-25deg);
+   -ms-transform: rotate(-25deg);
+   -o-transform: rotate(-25deg);
+   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=8);
+   top:1em;
+}

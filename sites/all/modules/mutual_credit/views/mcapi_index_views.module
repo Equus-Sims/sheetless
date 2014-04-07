@@ -1,0 +1,142 @@
+<?php
+//$Id
+
+define('GRECO_SAMPLE_PERIOD_DAYS', '90');
+/*
+ * Having created a mysql view and exposed it to views, this .module file handles the greco index
+ */
+
+
+/*
+ * Implements views hook_views_api
+ */
+function mcapi_index_views_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'mcapi_index_views'),
+  );
+}
+
+//views access control callback
+function views_plugin_access_user_arg_check() {
+  return $GLOBALS['user']->uid == arg(1) || user_access('manage all transactions');
+}
+
+/*
+ * callback to give times and balances
+ * $mode can be either
+ *   diagonal, square, or the number of points required after sampling
+ */
+function get_balance_history($account, $currcodes = array(), $mode = 'diagonal', $since = NULL) {
+  db_query("SET @csum := 0");
+  if (empty($currcodes)) {
+    $currencies = currencies_load();
+    $currcodes = array_keys($currencies);
+  }
+    //check access. Either it has to be the current user, or reduce the currcodes down
+  foreach ($currcodes as $key => $currcode) {
+    if ($account->uid == $GLOBALS['user']->uid) continue;
+    if (!currency_access('trader_data', $currcode)) unset($currcodes[$key]);
+  }
+  if (empty($currcodes)) return array();
+
+  foreach ($currcodes as $currcode) {
+    $histories[$currcode][$account->created] = 0;
+  }
+
+  //then retrieve the WHOLE transaction history
+  //I wish there was a better way to do this. Unless a filter has been applied, we want all the transaction in all currencies ever
+  //not only the currencies currently permitted. And we want to do as much with the SQL as possible (in case of long lists)
+  $all_balances = db_query(//currcode = :currcode AND
+    "SELECT currcode, created, (@csum := @csum + diff) as balance
+    FROM {mcapi_index}
+    WHERE uid1 = $account->uid
+    ORDER BY currcode, created"
+  )->fetchAll();
+  //process the points into the right format
+  foreach ($all_balances as $point) {
+    $histories [$point->currcode][$point->created] = $point->balance;
+  }
+  foreach ($histories as $currcode => &$history) {
+    if (count($history) > 1) {
+      //make a straight line until now
+      $histories[$currcode][REQUEST_TIME] = end($history);
+    }
+    //remove any currencies that weren't used
+    else unset($histories[$currcode]);
+  }
+
+  return $histories;
+}
+
+/**
+ * Implementation of hook_backup_migrate_profiles_alter().
+ * backup migrate module breaks with the mysql view
+ */
+function mcapi_index_views_backup_migrate_profiles_alter(&$profiles) {
+  foreach ($profiles as $name => $profile) {
+    $profile->filters['destinations']['db']['exclude_tables']['mcapi_index'] = 'mcapi_index';
+  }
+  drupal_set_message("Disable and re-enable the 'Views for transactions' module on the destination system to restore the 'mcapi_index_views' database view");
+}
+
+/*
+ * implements hook_cron
+ * Greco says:
+ * Dividing the sum of all the debit balances by the average daily sales gives us the sales performance ratio for the system.
+ */
+function mcapi_index_views_cron() {
+  currencies_load();
+  $currencies = currencies_filter(CURRENCY_TYPE_EXCHANGE);
+  if ($currencies) {
+    foreach ($currencies as $currcode => $currency) {
+      if ($currency->issuance != CURRENCY_TYPE_EXCHANGE) continue;
+      $sum_of_all_debit_balances = 0;
+      //get the sum of all debit balances of all accounts in this currency
+      //get a list of all the users
+      $callback = strtok($currency->access['membership'], ':');
+      $args = array(strtok(':'));
+      $uids = user_chooser_segment($callback, $args, array('#allow_blocked' => TRUE));
+      foreach ($uids as $uid) {
+        $balance = transaction_totals($uid, $currcode)->balance;
+        if ($balance > 0) {
+          $sum_of_all_debit_balances += $balance;
+        }
+      }
+      //now get the average daily sales
+      $since = strtotime(-GRECO_SAMPLE_PERIOD_DAYS .' days');
+      $total_daily_sales = db_query(
+        "SELECT SUM(income) FROM {mcapi_index} WHERE created > :time AND currcode = :currcode",
+        array(
+          ':time' => $since,
+          ':currcode' => $currcode
+        )
+      )->fetchfield();
+      $average_daily_sales = round($total_daily_sales / GRECO_SAMPLE_PERIOD_DAYS);
+
+      if ($average_daily_sales) {
+        $indicator = round($sum_of_all_debit_balances / $average_daily_sales, 1);
+      }
+      else {
+        $indicator = NULL;
+      }
+      $data[$currcode] = $indicator;
+    }
+    if ($data) variable_set('mcapi_greco_system_health', $data);
+  }
+}
+
+function mcapi_views_ensure_currcode($field_query_handler, &$alias_name) {
+  if (strlen($alias_name)) return;
+  //check for the presence of a currcode field.
+  //we can't add it using additional_fields, because it gets wasted by the groupby
+  if (is_object($field_query_handler) && property_exists($field_query_handler, 'fields')) {
+    foreach ($field_query_handler->fields as $alias => $field) {
+      if ($field['field'] == 'currcode') {
+        $alias_name = $alias;
+        return;
+      }
+    }
+  }
+  $alias_name = $field_query_handler->add_field('mcapi_index', 'currcode', 'currcode_alias');
+}

@@ -1,0 +1,16 @@
+; $Id:
+name = Import transactions
+description = Paste a csv to import initial user balances or a whole transaction history.
+package = Community Accounting
+core = 7.x
+configure = admin/accounting/import
+
+dependencies[] = mcapi
+php = 5.3
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

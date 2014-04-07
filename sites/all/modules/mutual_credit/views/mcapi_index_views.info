@@ -1,0 +1,31 @@
+; $Id:
+name = Views for transactions
+description = A transaction indexing system, exposed to views, including views and views templates
+package = Community Accounting
+core = "7.x"
+
+dependencies[] = mcapi
+dependencies[] = views
+dependencies[] = date
+dependencies[] = date_views
+
+files[] = mcapi_index_views.install
+files[] = mcapi_index_views.views.inc
+files[] = mcapi_index_views.views_default.inc
+files[] = mcapi_index_views.views_template.inc
+files[] = views_handler_field_mcapi_index_balance.inc
+files[] = views_handler_field_mcapi_index_currcode.inc
+files[] = views_handler_field_mcapi_index_greco.inc
+files[] = views_handler_field_mcapi_index_quantity.inc
+files[] = views_handler_filter_mcapi_index_diff.inc
+files[] = views_handler_filter_mcapi_index_traded.inc
+files[] = views_handler_sort_mcapi_users_balance.inc
+files[] = views_plugin_access_user_arg1.inc
+files[] = views_plugin_access_currency.inc
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

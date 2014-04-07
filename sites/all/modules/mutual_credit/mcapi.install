@@ -1,0 +1,1146 @@
+<?php
+// $Id: mcapi.install,v 1.1.2.4 2010/12/15 22:04:03 matslats Exp $
+
+/**
+ * @file
+ * Install, update and uninstall functions for the transactions module.
+ */
+/*
+ * implements hook_requirements
+ * really sorry but I couldn't get entity tokens to work properly with the worth field
+ */
+function mcapi_requirements($phase) {
+  if ($phase != 'update') {
+    // Ensure translations don't break at install time
+    $t = get_t();
+    if (module_exists('entity_token')) {
+      return array('mcapi' => array(
+        'title' => $t('Community Accounting'),
+        'value' => $t("'Entity tokens' module has a longstanding issue and will only render the worth field as separate properties, currcode, and quantity"),
+        'severity' => REQUIREMENT_WARNING,
+      ));
+    }
+  }
+  return array();
+}
+
+/**
+ * Implements hook_install().
+ */
+function mcapi_install() {
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('transact'));
+  drupal_set_message(t("For ease of setup, authenticated user has been granted 'transact' permission."));
+
+  _mcapi_module_weights();
+
+  if (module_exists('text')) {
+    _allow_text_on_transaction();
+  }
+  //this variable is deleted when the first transaction is erased
+  variable_set('change_undo_mode', TRUE);
+  //import the translations before building the fields
+  mcapi_update_6999();
+  mcapi_check_fields();
+
+  variable_set('mcapi_controller_delete_mode', MCAPI_CURRENCY_UNDO_ERASE);
+
+  //create a new user if only user 1 exists.
+  if (db_query("SELECT count(uid) FROM {users}")->fetchField() < 2) {
+    $account = user_save(NULL, array(
+      'name' => 'demo',
+      'mail' => 'demo@'.$_SERVER['SERVER_NAME'],
+      'pass' => 'demo'
+    ));
+    drupal_set_message(t(
+      "A new user was created for trading. uid: :uid name: demo, pass: demo",
+      array(':uid' => $account->uid, ':delete' => l('Delete', 'user/'.$account->uid.'/delete'))
+    ));
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ * Remove any tables or variables that the module sets.
+ */
+function mcapi_uninstall() {
+  //delete all the views this module declared
+  if (module_exists('views')) {
+    $view_ids = db_query("SELECT vid FROM {views_view} WHERE tag = 'mcapi'");
+    while ($vid = $view_ids->fetchField()) {
+      db_delete('views_view')
+      ->condition('vid', $vid)
+      ->execute();
+      db_delete('views_display')
+      ->condition('vid', $vid)
+      ->execute();
+    }
+  }
+
+  //truncate the tables containing field_api data
+  //db_query('TRUNCATE table {field_data_worth}');
+  //db_query('TRUNCATE table {field_revision_worth}');
+
+  //need to detatch the worth field before the module will uninstall
+
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mcapi_%'");
+  variable_del('currency_default');
+  cache_clear_all('currencies', 'cache');
+}
+
+/**
+ * Implements hook_enable
+ */
+function mcapi_enable() {
+  global $language;
+
+  cache_clear_all("entity_info:".$language->language, 'cache');
+  //this seems to have been omitted from core...
+  currencies_load();
+}
+
+function mcapi_disable() {
+  cache_clear_all('currencies', 'cache');
+}
+
+/**
+ * Implements of hook_schema)()
+ */
+function mcapi_schema() {
+  $numeric = array(
+    'type' => 'numeric',
+    'size' => 'normal',
+    'precision' => 8,
+    'scale' => 2
+  );
+  $schema['mcapi_transactions'] = array(
+    'description' => 'currency transactions between users',
+    'fields' => array(
+      'xid' => array(
+        'description' => 'the unique transaction ID',
+        'type' => 'serial',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'serial' => array(
+        'description' => 'serial number (integer)',
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => FALSE,
+      ),
+      'payer' => array(
+        'description' => 'the user id of the payer',
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+      ),
+      'payee' => array(
+        'description' => 'the user id of the payee',
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+      ),
+      //quantity is done, perhaps controversially, but the field API
+      'type' => array(
+        'description' => 'The type of transaction, types are provided by modules',
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'state' => array(
+        'description' => "completed, pending, disputed, etc",
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'data' => array(
+        'description' => 'nonessential info not fitting into existing fields',
+        'type' => 'text',
+        'size' => 'small',
+        'serialize' => TRUE,
+      ),
+      'creator' => array(
+        'description' => 'the user id of the creator',
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => "Unixtime that the transaction was recorded",
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('xid'),
+    'foreign keys' => array(
+      'payer' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid')
+      ),
+      'payee' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid')
+      )
+    )
+  );
+
+  $schema['mcapi_currencies'] = array(
+    'description' => 'metadata for currencies, in addition to name and title',
+    'fields' => array(
+      'currcode' => array(
+        'description' => 'the unique currency ID',
+        'type' => 'varchar',
+        'length' => '12',
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'description' => 'A serialized array of options for this display',
+        'serialize' => TRUE,
+        'serialized default' => 'a:0:{}',
+      ),
+    ),
+    'primary key' => array('currcode'),
+    'export' => array(
+      'key' => 'currcode',
+      'key name' => t('Universal currency code (8 chars, immutable)'),
+      'primary key' => 'currcode',
+      'identifier' => 'mcapicurrency',
+      'api' => array(
+        'owner' => 'mcapicurrencies',
+        'api' => 'mcapicurrencies_default',
+        'minimum_version' => 3,
+        'current_version' => 3,
+      ),
+      'default hook' => 'mcapicurrencies_default',
+      //'load all callback' => 'currencies_ctools_load_all',
+      //'object' => 'stdClass', //not sure that this is the best way... see ctools_export_new_object
+      'admin_title' => 'currcode', //this converts the form field into machine_name I think
+      'bulk export' => TRUE,
+    )
+  );
+  $schema['mcapi_submitted'] = array(
+    'description' => 'submitted form_build_ids, cleared periodically',
+    'fields' => array(
+      'form_build_id' => array(
+        'description' => 'the unique form build ID',
+        'type' => 'varchar',
+        'length' => '49',
+        'not null' => TRUE,
+      ),
+      'time' => array(
+        'description' => "Unixtime that the form was submitted",
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      )
+    ),
+    'unique keys' => array(
+      'name' => array('form_build_id')
+    )
+  );
+  return $schema;
+}
+
+function mcapi_check_fields() {
+  module_load_install('field');
+  field_associate_fields('mcapi');//sets field_config definition to active
+  $field = current(_update_7000_field_read_fields(array('module' => 'mcapi'), 'field_name'));
+  list($default_field, $default_instance) = _define_worth();
+  if (empty($field)) {
+    _update_7000_field_create_field($default_field);
+  }
+  else field_update_field($default_field);
+  // Create the instance if needed.
+  if (!field_read_instance('transaction', 'worth', 'transaction', array('include_inactive' => TRUE))) {
+    _update_7000_field_create_instance($default_field, $default_instance);
+  }
+  else field_update_instance($default_instance);
+}
+
+function _define_worth() {
+  $field = array(
+    'field_name' => 'worth',
+    'type' => 'worth_field',
+    'module' => 'mcapi',
+    'entity_types' => array('transaction', 'node', 'user'),
+    'cardinality' => 1,
+  );
+  $instance = array(
+    'field_name' => $field['field_name'],
+    'description' => '',
+    'label' => t('Worth'),
+    'entity_type' => 'transaction',
+    'bundle' => 'transaction',
+    'settings' => array(),
+    'required' => TRUE,
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'worth_field',
+        'weight' => 0,
+        'module' => 'mcapi'
+      ),
+    ),
+    'widget' => array(
+      'type' => 'worths_widget',
+      'module' => 'mcapi',
+      'settings' => array(),
+      'weight' => 5,
+    )
+  );
+  return array($field, $instance);
+}
+
+function _mcapi_module_weights() {
+  //here we set all the module weights together
+  //the main module must be heavier than contact module, because it needs to modify after contact_form_alter
+  //could all these be done in one query?
+  $weights = array(
+    -1 => array('mcapi'),//before ctools
+    1 => array('mcapi_forms', 'mcapi_limits', 'intertrading', 'bank_slave'),
+    2 => array('mcapi_signatures', 'mcapi_command'),
+    3 => array('mcapi_index_views')
+  );
+  foreach ($weights as $weight => $modules) {
+    db_update('system')->fields(array('weight' => $weight))->condition('name', $modules)->execute();
+  }
+  cache_clear_all('*', 'cache_bootstrap', TRUE);
+}
+
+/* this feature has been commented out entirely for now
+function mcapi_controller_options_form_ajax($form, $form_state) {
+  $form['master_slave']['mcapi_db_read']['#options'] = array_filter($form_state['values']['mcapi_db_write']);
+  return $form;
+}
+ *
+ */
+
+function mcapi_modules_enabled($modules) {
+  if (in_array('text', $modules)) {
+    _allow_text_on_transaction();
+  }
+}
+
+function _allow_text_on_transaction() {
+  $data = unserialize(db_query("SELECT data from {field_config} where field_name = 'body'")->fetchField());
+  if (is_array($data['entity_types']) && !in_array('transaction', $data['entity_types'])) {
+    $data['entity_types'][] = 'transaction';
+    $data_col = serialize($data);
+    db_update('field_config')->fields(array('data' => $data_col))->condition('field_name', 'body')->execute();
+  }
+}
+
+/**
+ * Implements hook_field_schema().
+ */
+function mcapi_field_schema($field) {
+  if ($field['type'] == 'worth_field') {
+    return array(
+      'columns' => array(
+        'currcode' => array(
+          'description' => 'The currency ID',
+          'type' => 'varchar',
+          'length' => '8',
+        ),
+        'quantity' => array(
+          'description' => 'Price',
+          'type' => 'numeric',
+          'size' => 'normal',
+          'precision' => 8,
+          'scale' => 2,
+          'not null' => TRUE,
+          'default' => 0
+        )
+      )
+    );
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function mcapi_update_dependencies() {
+  $dependencies = array(
+    'mcapi' => array(
+      '7000' => array(//needs the text module already installed.
+        'system' => 7027,
+        'filter' => 7000,
+        'token' => 7000,
+      ),
+      '7001' => array(
+        'system' => 7034
+      ),
+    ),
+    'system' => array(
+      //profile module changes the name of the tables which we need to work with
+      //sometimes hook_menu is called before profile_update_7001 and it breaks
+      '7001' => array(
+        'profile' => 7001
+      ),
+    )
+  );
+  return $dependencies;
+}
+/*
+ * import po files BEFORE running mcapi updates
+ */
+function mcapi_update_6999() {
+  $languages = language_list('enabled');
+  unset($languages[1]['en']);
+  if (!count($languages[1])) return;
+  require_once(DRUPAL_ROOT . '/includes/locale.inc');
+  $language_list = join('|', array_keys($languages[1]));
+  foreach (file_scan_directory(drupal_get_path('module', 'mcapi'), "/(^|\.)($language_list)\.po$/") as $po_file) {
+    drupal_set_message('importing transactions for Community Accounting.');
+    _locale_import_read_po(
+      'db-store',
+      $po_file,
+      LOCALE_IMPORT_OVERWRITE,
+      $language_list,
+      'default'
+    );
+    drupal_set_message('Imported strings from '.$po_file->uri);
+  }
+  module_enable(array('ctools'));
+}
+
+/**
+ * create new tables and enable new modules
+ */
+function mcapi_update_7000() {
+  $tables = mcapi_schema();
+  if(!db_query("SHOW TABLES LIKE 'mcapi_currencies'")->fetchfield()) {
+    db_create_table('mcapi_currencies', $tables['mcapi_currencies']);
+  }
+  if(!db_query("SHOW TABLES LIKE 'mcapi_transactions'")->fetchfield()) {
+    db_create_table('mcapi_transactions', $tables['mcapi_transactions']);
+  }
+  module_enable(array('mcapi_limits', 'accountant_ui', 'mcapi_forms', 'user_chooser'), TRUE);
+  drupal_set_message('Installed Community Accounting extra modules');
+  drupal_static_reset('system_rebuild_module_data');
+
+  //replace the old module with the new, so as to retain the version number, and keeping it installed
+  db_delete('system')->condition('name', 'mcapi_signatures')->execute();
+  db_update('system')
+    ->fields(array(
+        'name' => 'mcapi_signatures',
+        'filename' => drupal_get_path('module', 'mcapi_signatures').'/mcapi_signatures.info'
+    ))
+    ->condition('name', 'mc_signatures')
+    ->execute();  //rename and update the table
+  //however I think the module doesn't update itself until the dependency tree is rebuilt
+}
+
+/**
+ * copy the currency definitions into the new variable, or the new table
+ */
+function mcapi_update_7001() {
+  module_load_include('mcapicurrencies_default.inc', 'mcapi');
+  module_load_include('inc', 'mcapi', 'currencies');
+  drupal_load('module', 'mcapi');//for the constants
+  //make the tables declared in this module
+
+  //first of all we need to tweak the currency objects, which used to be nodes and now are ctools objects.
+  $old_currencies = db_query("SELECT * FROM {mc_currencies} c LEFT JOIN {node} n ON c.nid = n.nid ORDER BY c.nid")->fetchAllAssoc('nid');
+  $first_cur = TRUE;
+  foreach ($old_currencies as $nid => $old_currency) {
+    //get the default currency for this module, and populate with the old default currency
+    $currcode = $first_cur ? 'credunit' : strtolower(str_replace(' ', '_', substr($old_currency->title, 0, 8)));
+    $first_cur = FALSE;
+    foreach (unserialize($old_currency->data) as $key => $val) {
+      $old_currency->$key = $val;
+    }
+    $currcodes[$nid] = $currcode;//use this later
+    $currency->info['currcode'] = $currcode;
+    $currency->human_name = $old_currency->title;
+    $currency->uid = $old_currency->uid;
+    $currency->display = array(
+      'format' => str_replace(array('[', ']', '@icon'), array('@', '', ''), $old_currency->symbol),
+      'divisions' => $old_currency->divisions ? CURRENCY_DIVISION_MODE_CUSTOM : $old_currency->sub,
+      'divisions_setting' => trim($old_currency->divisions),
+      'zero' => ''
+    );
+    //there are 3 possible modes for old limits callbacks - none, user or global
+    //we're going to assume for upgrading, that user limits was enabled, since there's no way of knowing
+    $callback = 'limits_global';
+    $currency->limits['limits_callback'] = $callback;
+    $currency->limits[$callback]['min'] = $old_currency->min;
+    $currency->limits[$callback]['max'] = $old_currency->max;
+    $currency->limits['personal'] = TRUE;
+    $currency->transaction_view_access[-1] = drupal_map_assoc(array( //-1 defined as TRANSACTION_STATE_PENDING
+      'transaction_access_callback_signatory',
+      'transaction_access_callback_perm_manage_all'
+    ));
+    //update the users' balance limits
+    $uids = db_select('users', 'u')->fields('u', array('uid'))->execute()->fetchCol();
+    $accounts = user_load_multiple($uids);
+    foreach ($accounts as $account) {
+      if (isset($account->mc_limits[$old_currency->nid])) {
+        $edit['limits_personal'][$currcode] = $account->mc_limits[$old_currency->nid];
+        user_save($account, $edit);
+      }
+    }
+    drupal_set_message('Cleaned user profiles from old balance limits');
+    $row = array(
+      'currcode' => $currcode,
+      'data' => $currency
+    );
+    drupal_write_record('mcapi_currencies', $row);
+  }
+
+  db_query("DELETE FROM {node_type} WHERE module = 'mcapi'");
+  $instances = field_info_instances('node', 'exchange');
+  foreach ($instances as $instance) {
+    foreach (array('data', 'revision') as $x) {
+      $table_name = 'field_'. $x .'_'. $instance['field_name'];
+      db_query("UPDATE {$table_name} SET entity_type = 'transaction', bundle = 'transaction' WHERE bundle = 'exchange'");
+    }
+  }
+  db_query("UPDATE {field_config_instance} SET entity_type = 'transaction', bundle = 'transaction'
+    WHERE entity_type = 'node' AND bundle = 'exchange'");
+  drupal_set_message(t('@num currencies have been upgraded', array('@num' => count($old_currencies))));
+  variable_set('mcapi_currcode_update', $currcodes);
+}
+
+/**
+ * create the new 'worth' field and attach it to the transaction entity
+ */
+function mcapi_update_7002() {
+  create_transaction_description_field();
+  //field_delete_instance(field_info_instance('transaction', 'body', 'transaction'));
+
+  //we also need to update any taxonomy terms
+  foreach (db_query("SELECT field_name FROM {field_config} WHERE field_name != 'taxonomyextra'")->fetchCol() as $fieldname) {
+    db_query("UPDATE {field_data_$fieldname} SET entity_type = 'transaction', bundle = 'transaction' WHERE entity_type = 'node' AND bundle = 'exchange'");
+    db_query("UPDATE {field_revision_$fieldname} SET entity_type = 'transaction', bundle = 'transaction' WHERE entity_type = 'node' AND bundle = 'exchange'");
+  }
+
+  //update the field definitions
+  db_query("DELETE FROM {field_config_instance} WHERE entity_type = 'node' AND bundle = 'currency'");
+
+  //sort out the field definitions
+  db_query("UPDATE {field_config_instance}
+    SET entity_type = 'transaction', bundle = 'transaction'
+    WHERE entity_type = 'node' AND bundle = 'exchange'"
+  );
+
+  //cleanup
+  variable_del('mc_tabs_css');
+}
+//this can be called separately by config modules in ther hook_install
+function create_transaction_description_field() {
+  module_load_install('field');
+  mcapi_check_fields();
+  $fieldname = 'transaction_description';
+  //add the description field, which was intrinsic in v2
+  $field = current(_update_7000_field_read_fields(array('field_name' => $fieldname)));
+  if (!$field) {
+    $field = array(
+      'entity_types' => array(
+        'transaction',
+      ),
+      'settings' => array(
+        'max_length' => 255
+      ),
+      'field_name' => $fieldname,
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'summary' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'transaction' => array(
+          'transaction',
+        ),
+      ),
+    );
+    _update_7000_field_create_field($field);
+  }
+  if (!field_info_instance('transaction', $fieldname, 'transaction')) {
+    $instance = array(
+      'field_name' => $fieldname,
+      'label' => t('Description'),
+      'description' => '',
+      'entity_type' => 'transaction',
+      'bundle' => 'transaction',
+      'settings' => array(),
+      'required' => TRUE,
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+      ),
+      'widget' => array(
+        'weight' => '3',
+        'type' => 'text_textfield',
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '1'
+        )
+      )
+    );
+    _update_7000_field_create_instance($field, $instance);
+  }
+  variable_set('transaction_description_field', $fieldname);
+}
+
+/**
+ * convert the exchange nodes to transaction entities
+ */
+function mcapi_update_7003(&$sandbox) {
+  //this uses the batchAPI and its fine, but it should have been done using the $sandbox passed variable
+  drupal_load('module', 'mcapi');//for the TRANSACTION_STATE_* definitions
+  module_load_install('field_sql_storage');//for the field saving function
+  if (!isset($sandbox['progress'])) {
+    // Initialize batch update information.
+    $sandbox['progress'] = 0;
+    $sandbox['last_nid'] = db_query("SELECT MAX(nid) FROM {mc_exchanges}")->fetchField();
+  }
+  $limit = 100;
+  $nids = db_query_range("SELECT nid FROM {mc_exchanges} WHERE nid > :nid ORDER BY nid ASC", 0, $limit, array(':nid' => $sandbox['progress']))->fetchCol();
+  if (count($nids)) {
+    $sandbox['progress'] = mcapi_upgrade_transactions($nids);
+    // Indicate our current progress to the batch update system. If there's no
+    // max value then there's nothing to update and we're finished.
+    $sandbox['#finished'] = $sandbox['progress'] ==  $sandbox['last_nid'];
+  }
+  else $sandbox['#finished'] = 1;
+
+  if (!empty($sandbox['#finished']) && $sandbox['#finished'] == 1) {
+    mcapi_upgrade_transactions_finished();
+    db_drop_table('mc_currencies');
+    db_drop_table('mc_cache');
+    //db_drop_table('mc_exchanges');
+  }
+}
+
+//batch callback
+function mcapi_upgrade_transactions($nids) {
+  $currcodes = variable_get('mcapi_currcode_update', array('credunit'));
+  $controller = entity_get_controller('transaction');
+  $states = array(
+    -1 => TRANSACTION_STATE_UNDONE,
+    0 => TRANSACTION_STATE_FINISHED,
+    1 => -1 //use the integer value in case signatures module is not present
+  );
+  $keys = array_keys($nids);
+  drupal_set_message(t(
+    'Upgrading @count transaction nodes from nid @first to nid @last',
+    array('@count' => count($nids), '@first' => min($nids), '@last' => max($nids))
+  ));
+  $types = array(
+    'outgoing signed' => '1stparty',
+    'incoming signed' => '1stparty',
+    'outgoing direct' => '1stparty',
+    'incoming direct' => '1stparty',
+    'onetomany' => 'mass',
+    'onetoall' => 'mass',
+    'manytoone' => 'mass',
+    'alltoone' => 'mass',
+  );
+  //convert each old transaction into a transaction object
+  $transactions = db_query("SELECT * FROM {mc_exchanges} x
+    INNER JOIN {node} n on n.nid = x.nid
+    LEFT JOIN {node_revision} v on n.vid = v.vid
+    WHERE n.nid IN (:nids) ORDER BY n.nid ASC", array(':nids' => $nids)
+  )->fetchAllAssoc('nid');
+  while (list($xid, $old) = each($transactions)) {
+    //bypasses the transaction controller
+    $transaction = (object)array(
+      'xid' => $xid,
+      'serial' => $controller->next_serial(),
+      'payer' => $old->payer_uid,
+      'payee' => $old->payee_uid,
+      'state' => $states[$old->state],
+      'created' => $old->created,
+      'creator' => $old->uid,
+      'type' => isset($types[$old->exchange_type]) ? $types[$old->exchange_type] : '3rdparty',
+      'data' => array(),
+      'worth' => array(
+        LANGUAGE_NONE => array(
+          0 => array(
+            'quantity' => $old->quantity,
+            'currcode' => array_key_exists($old->cid, $currcodes) ? $currcodes[$old->cid] : 'credunit'
+          )
+        )
+      ),
+      'description_field' => array(
+        LANGUAGE_NONE => array(
+          0 => array(
+            'value' => $old->title
+          )
+        )
+      )
+    );
+    drupal_write_record('mcapi_transactions', $transaction);
+    _update_7000_field_sql_storage_write('transaction', 'transaction',  $xid,  $xid, 'worth', $transaction->worth);
+    _update_7000_field_sql_storage_write('transaction', 'transaction', $xid, $xid, 'transaction_description', $transaction->description_field);
+  }
+  return end($nids);
+}
+
+function mcapi_upgrade_transactions_finished() {
+  $nids = db_query("SELECT n.nid FROM {mc_exchanges} x INNER JOIN {node} n on n.nid = x.nid WHERE x.state != -1")->fetchCol();
+  $xids = db_query("SELECT xid FROM {mcapi_transactions}")->fetchCol();
+  if (count($nids) == count($xids)) {
+    drupal_set_message(count($xids) .' transactions upgraded');
+    node_delete_multiple($nids);
+    variable_del('mcapi_currcode_update');
+  }
+  else {
+    throw new DrupalUpdateException('There was a problem upgrading the following transactions: '.implode(', ', array_diff($nids, $xids)), 'error');
+  }
+}
+/*
+ * implements hook_user_presave
+ * we can use this hook in the module upgrade because it's not used anywhere else in the module
+ */
+function mcapi_user_presave(&$edit, $account, $category) {
+  unset($edit['mc_limits'], $edit['mc_notification_throttle']);
+}
+
+
+
+/**
+ * attempts to make blocks equivalent between d6 and d7
+ */
+function mcapi_update_7004() {
+  db_query("DELETE FROM {menu_links} WHERE link_path like 'exchange%'");
+  db_query("UPDATE {block} SET pages = REPLACE(pages, 'exchange', 'transaction')");
+  db_query("UPDATE {block} SET module = 'mcapi_forms' WHERE module = 'mcapi_webforms'");
+  //work with the default webforms
+  db_query("UPDATE {block} SET delta = '3rdparty' WHERE delta = 'mc_webform_3rdparty_form'");
+  db_query("UPDATE {block} SET delta = '1stparty' WHERE delta = 'start_exchange'");
+
+  //blocks from the mc_display view, user_rankings
+  db_query("UPDATE {block} SET module = 'views', delta = 'user_rankings-block_promiscuity' WHERE delta = 'user_rankings-block_1'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'user_rankings-block_volumes' WHERE delta = 'user_rankings-block_2'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'user_rankings-block_trades' WHERE delta = 'user_rankings-block_3'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'user_rankings-block_incomes' WHERE delta = 'user_rankings-block_4'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'user_rankings-block_expenditures' WHERE delta = 'user_rankings-block_5'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'running_balance-block_run_bal' WHERE delta = 'mc_balance_history'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'running_balance-block_user_sum' WHERE delta = 'balance_ometer'");
+  db_query("UPDATE {block} SET module = 'views', delta = 'transactions-who_paid_whom' WHERE delta = 'mc_exchanges_all-block_1'");//who gave to whom?
+  db_query("UPDATE {block} SET module = 'views', delta = 'mcapi_pending-my_pending' WHERE delta = 'mc_exchanges_pending-block_1'");//I must sign
+  db_query("UPDATE {block} SET module = 'views', delta = 'mcapi_pending-user_pending' WHERE delta = 'mc_exchanges_pending-block_2'");//user must sign
+
+  db_query("DELETE FROM {views_display} WHERE id = 'who_paid_whom'");
+  db_query("UPDATE {block} SET delta = 'who_gave_what' WHERE delta = 'who_paid_whom' ");
+
+  db_delete('block')->condition('delta', 'mc_balances')->execute();
+  db_delete('block')->condition('delta', 'balance_limits')->execute();
+  db_update('block')
+    ->fields(array('module' => 'mcapi_limits'))
+    ->condition('delta', 'balance_limits')->execute();
+  db_update('block')
+    ->fields(array('module' => 'webforms'))
+    ->condition('delta', '%c_webform%')->execute();
+
+  db_delete('block')->condition('delta', array(
+    'mc_exchanges_all-block_2',//description field is no longer part of this module
+    'mc_exchanges_pending-block_3',//statement is no longer available in a block
+    'mc_statement' //statement is no longer available in a block
+  ))->execute();
+}
+
+/**
+ * updates the permissions from D6
+ */
+function mcapi_update_7005() {
+  $map = array(
+    'exchange' => 'transact',
+    'edit all exchanges' => 'manage all exchanges',
+    'configure currencies' => 'configure all currencies',
+  );
+  foreach ($map as $from => $to) {
+    if (!db_query("SELECT TRUE FROM {role_permission} WHERE permission = :to", array(':to' => $to))) {
+      db_query("UPDATE {role_permission} SET permission = :to WHERE permission = :from", array(':from' => $from, ':to' => $to));
+    }
+  }
+  db_query("DELETE FROM {role_permission} WHERE permission IN ('view all exchanges', 'edit own finished exchanges', 'view all balances')");
+}
+
+/**
+ * update the transaction notification handling
+ */
+function mcapi_update_7006() {
+  //set up the action which notifies for completed transactions
+  include_once('includes/actions.inc');
+  module_load_include('inc', 'mcapi');
+  module_load_include('admin.inc', 'mcapi');
+  $form = mcapi_transaction_mail_action_form();
+  //special exception for mail_all_signatories_action
+  if (isset($form['mail'])) $form = $form['mail'];
+  //this is tricky but we're getting the default values out of the action form
+  foreach (element_children($form) as $fieldname) {
+    if (isset($form[$fieldname]['#default_value'])) {
+      $params[$fieldname] = $form[$fieldname]['#default_value'];
+    }
+  }
+  $params['transaction_types'] = array('1stparty', '3rdparty');
+  $aid = actions_save('mcapi_transaction_mail_action', 'transaction', $params, t('Notify transactees'));
+  module_enable(array('trigger'));
+  // Borrowed from trigger_assign_form_submit
+  db_insert('trigger_assignments')->fields(
+    array(
+      'hook' => 'transaction_update',
+      'aid' => $aid,
+      'weight' => 0,
+    )
+  )->execute();
+
+  variable_del('mc_notification_subject');
+  variable_del('mc_notification_body');
+}
+
+/**
+ * Cleanup
+ */
+function mcapi_update_7009() {
+  //in case the following doesn't work properly
+  db_query("DELETE FROM {field_config_instance} WHERE bundle IN ('comment_node_currency', 'comment_node_exchange')");
+  //customised menu items need to be renamed
+  db_query("UPDATE {menu_links} SET link_path = 'transactions' WHERE link_path = 'exchanges'");
+  db_query("DELETE FROM {menu_links} WHERE link_path LIKE 'exchange%'");
+  db_delete('menu_links')->condition('link_path', array('statement', 'node/add/currency', 'exchange_stats'))->execute();
+  db_query("DELETE FROM {menu_links} WHERE link_path LIKE 'admin/mc%'");
+
+  variable_del('mc_subtypes');
+  variable_del('mc_live_stats');
+  db_query("DELETE FROM {variable} WHERE name LIKE '%exchange'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mc_stats%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mc_notif%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mc_webform%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mc_sig%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mc_trader%'");
+
+  if (module_exists('block')) {
+    db_delete('block_role')->condition('module', 'mc_%', 'LIKE')->execute();
+    db_delete('block_role')->condition('delta', 'cc_%', 'LIKE')->execute();
+    db_delete('block_role')->condition('delta', 'pending_exchanges%', 'LIKE')->execute();
+    db_delete('block_role')->condition('module', 'transactions')->execute();
+  }
+
+  if (!db_query("SHOW TABLES LIKE 'mcapi_submitted'")->fetchField()) {
+    $tables = mcapi_schema();
+    db_create_table('mcapi_submitted', $tables['mcapi_submitted']);
+  }
+}
+
+function mcapi_update_7000_tokens($string) {
+  $d6tokens = array('!username', '!site', '!uri', '!date', '!login_url', '!creator', '!exchange_uri', '!summary', '!sign_link');
+  $d7tokens = array('[transaction:creator]', '[site:name]', '[transaction:url]', '[transaction:created]', '[site:login-url]', '[transaction:creator]', '[transaction:url]', '[transaction:summary]', '[transaction:url]');
+  return str_replace($d6tokens, $d7tokens, $string);
+}
+
+/**
+ * Convert a transaction access callback which was superfluous
+ */
+function mcapi_update_7010() {
+  module_enable(array('entity'));
+  currencies_load();
+  $currencies = currencies_load();
+  foreach ($currencies as $currcode => $currency) {
+    if (!isset($currency->transaction_access)) continue;
+    foreach ($currency->transaction_access as $state => $callbacks) {
+      if (@$callbacks['transaction_view_access_participants']) {
+        $callbacks['transaction_access_callback_payer'] = 'transaction_access_callback_payer';
+        $callbacks['transaction_access_callback_payee'] = 'transaction_access_callback_payee';
+      }
+      unset ($callbacks['transaction_view_access_participants']);
+      $currency->transaction_view_access[$state] = array_filter($callbacks);
+    }
+    db_update('mcapi_currencies')
+      ->fields(array('data' => serialize($currency)))
+      ->condition('currcode', $currcode)
+      ->execute();
+  }
+  cache_clear_all('currencies', 'cache');
+}
+
+/**
+ * clear up a relic which was putting the 'Transactions fieldAPI' link at the top of the management menu
+ * + other variables from v2s and v1
+ */
+function mcapi_update_7013() {
+  db_query("DELETE FROM {variable} WHERE name LIKE '%c_signatures_signoff%'");
+  variable_del('cc_balancing_account_num');
+  variable_del('cc_default_currency');
+  variable_del('cc_description_min_words');
+  variable_del('mc_description_min_words');
+  variable_del('cc_pending_notification_template');
+  variable_del('cc_select_user_orderby');
+  variable_del('cc_select_user_show');
+  variable_del('cc_stats_periods');
+  variable_del('cc_trader_autocomplete');
+  variable_del('cc_trader_selector');
+  variable_del('cc_transaction_qualities');
+  variable_del('mc_trader_autocomplete');
+  variable_del('mc_trader_selector');
+  variable_del('mc_webform_destination');
+  variable_del('mc_webform_special_theme');
+  variable_del('mc_webform_sure');
+  variable_del('mc_notification_footer');
+  variable_del('mc_notification_option');
+  variable_del('mc_notification_throttle_default');
+  variable_del('mc_stats_exclude');
+  db_delete("menu_links")->condition('plid', 0)->condition('link_path', 'admin/accounting/fields')->execute();
+  db_delete('system')->condition('status', 0)->condition('name', 'cc_%', 'LIKE')->execute();
+  //looks like this might not have been set earlier on some cases
+  cache_clear_all(NULL, 'cache_bootstrap');
+}
+/**
+ * update email tokens from transaction:uri to transaction:url
+ * some variables but also some action settings
+ */
+function mcapi_update_7014() {
+  $actions = db_query("SELECT aid, parameters FROM {actions} WHERE callback = 'mcapi_transaction_mail_action'")->fetchAllKeyed();
+  foreach ($actions as $aid => $params) {
+    $params = unserialize($params);
+    $params['body'] = str_replace('transaction:uri', 'transaction:url', $params['body']);
+    db_update('actions')
+      ->fields(array('parameters' => serialize($params)))
+      ->condition('aid', $aid)
+      ->execute();
+  }
+}
+
+/**
+ * refresh currencies whose internal format has changed - again
+ */
+function mcapi_update_7015() {
+  _mcapi_module_weights();
+  $datas = db_select('mcapi_currencies', 'c')->fields('c', array('currcode', 'data'))->execute()->fetchAllKeyed(0);
+  foreach ($datas as $currcode => $data) {
+    $currency = unserialize($data);
+    if (!property_exists($currency, 'transaction_operation_access') || empty($currency->transaction_operation_access)) {
+      $currency->transaction_operation_access = array('transaction_access_callback_perm_transact');
+    }
+    if (property_exists($currency, 'transaction_access')) {
+      foreach ((array)$currency->transaction_access as $state => $callbacks) {
+        $currency->transaction_view_access[$state] = array_filter($currency->transaction_access[$state]);
+      }
+      drupal_set_message("transaction_view_access settings are lost for each currency", 'warning');
+    }
+    db_update('mcapi_currencies')->fields(array('data' => serialize($currency)))->condition('currcode', $currcode)->execute();
+  }
+
+  drupal_set_message('Resave all your transaction forms, paying attention to default transaction field values: '.l('admin/accounting/forms', 'admin/accounting/forms'));
+
+  cache_clear_all('*', 'cache_token', TRUE);
+  cache_clear_all('currencies', 'cache');
+}
+
+/**
+ * alter transaction state constant.
+ * Update the name of the saved action.
+ * Update the field cardinality, which went astray.
+ * Update the worth table to take zero values.
+ * Ensure the transaction worth instance definition is correct.
+ */
+function mcapi_update_7016() {
+  db_query("UPDATE {mcapi_transactions} SET state = 0 WHERE state = 2");
+  if ($aid = db_select('actions', 'a')->fields('a', array('aid'))->condition('callback', 'mcapi_supplementary_transaction_action')->execute()->fetchfield()) {
+    db_update('actions')->fields(array('callback' => 'mcapi_dependent_transaction_action'))->condition('callback', 'mcapi_supplementary_transaction_action')->execute();
+    drupal_set_message('Check and resave this transaction action: !link', array('!link' => l('mcapi_supplementary_transaction_action', 'admin/config/system/actions/configure/'.$aid)));
+  }
+  variable_get('mcapi_mixed_transactions', TRUE);
+
+  $field = field_read_field('worth');
+  $currencies = currencies_load();
+  if (count($currencies)) {
+    $field['cardinality'] = variable_get('mcapi_mixed_transactions', TRUE) ? count($currencies) : 1;
+  }
+  field_update_field($field);
+
+  $instance = field_read_instance('transaction', 'worth', 'transaction', array('include_inactive' => TRUE));
+  $instance['widget']['type'] = 'worths_widget';
+  $instance['widget']['module'] = 'mcapi';
+  $instance['default_value'] = array(
+    0 => array(
+      'currcode' => '',
+      'quantity' => 0
+    )
+  );
+  field_update_instance($instance);
+}
+/**
+ * retrospectively change the machine_name of the default currency
+ * remove the actions from d6
+ */
+function mcapi_update_7017() {
+  db_delete('actions')
+    ->condition('callback', array("transactions_email_starter_action", 'transactions_email_completer_action'))
+    ->execute();
+  mcapi_check_fields();
+  //need to rewrite in lots of places. first the currencies table itself
+  db_update('mcapi_currencies')->fields(array('currcode' => 'credunit'))->condition('currcode', 'def_drup')->execute();
+  //We can only do this kind of direct replacement inside serialized arrays, when the number of chars is the same
+  db_query("UPDATE {mcapi_currencies} SET data = REPLACE(data, 'def_drup', 'credunit')");
+
+  //next in the field api, get the instances, the fields and hence the table and column names
+  $fields = field_read_fields(array('type' => 'worth_field'));
+  foreach (array_keys($fields) as $field_name) {
+    $data = 'field_data_'.$field_name;
+    $revision = 'field_revision_'.$field_name;
+    $column = $field_name.'_currcode';
+    db_update($data)->fields(array($column => 'credunit'))->condition($column, 'def_drup')->execute();
+    db_update($revision)->fields(array($column => 'credunit'))->condition($column, 'def_drup')->execute();
+  }
+  if (module_exists('mcapi_forms')) {
+    db_query("UPDATE {mcapi_forms} SET data = REPLACE(data, 'def_drup', 'credunit')");
+  }
+  db_query("UPDATE {users} SET data = REPLACE(data, 'def_drup', 'credunit')");
+  db_query("UPDATE {variable} SET value = REPLACE(value, 'def_drup', 'credunit')");
+  db_query("UPDATE {views_display} SET display_options = REPLACE(display_options, 'def_drup', 'credunit')");
+
+  //rename these block settings variables
+  foreach (array('block_balances', 'block_balance_limits', 'block_balance_ometer', 'block_trading_limits', 'block_user_pending') as $varname) {
+    db_query('UPDATE {variable} SET name = :name WHERE name = :varname', array(':name' => 'mcapi'.$varname, ':varname' => $varname));
+  }
+}
+/**
+ * Update the structure of the currency definition
+ * Use more token like syntax for the display
+ */
+function mcapi_update_7019() {
+  $greco = array();
+  $datas = db_select('mcapi_currencies', 'c')->fields('c', array('currcode', 'data'))->execute()->fetchAllKeyed(0);
+  foreach ($datas as $currcode => $data) {
+    $currency = unserialize($data);
+    if (!property_exists($currency, 'access')) {
+      if (property_exists($currency, 'currency_access')) {
+        $currency->access['membership'] = 'user_chooser_segment_perms:'. $currency->currency_access['user_aggregated_view'];
+        $currency->access['trader_data'] = 'user_chooser_segment_perms:'. $currency->currency_access['user_aggregated_view'];
+        $currency->access['system_data'] = 'user_chooser_segment_perms:'. $currency->currency_access['currency_aggregated_view'];
+      }
+      else {
+        $currency->access['membership'] = 'user_chooser_segment_perms:transact' ;
+        $currency->access['trader_data'] = 'user_chooser_segment_perms:transact';
+        $currency->access['system_data'] = 'user_chooser_segment_perms:transact';
+      }
+    }
+    if (property_exists($currency, 'transaction_view_access')) {
+      $currency->view_transaction_states = $currency->transaction_view_access;
+    }
+    if (property_exists($currency, 'transaction_operation_access')) {
+      $currency->access_operations = $currency->transaction_operation_access;
+    }
+    $currency->display['delimiter'] = strpos($currency->display['format'], '.') ? '.' : ':';
+    str_replace($currency->display['delimiter'], '', $currency->display['format']);
+    $replacements = array('@integer' => '[quantity]', '@subdivision' => '', '@minus' => '');
+    $currency->display['format'] = strtr($currency->display['format'], $replacements);
+    //save with all the old values intact!
+    db_update('mcapi_currencies')->fields(array('data' => serialize($currency)))->condition('currcode', $currcode)->execute();
+    $greco[$currcode] = 0;
+  }
+  variable_set('mcapi_greco_system_health', $greco);
+  cache_clear_all('currencies', 'cache');
+}
+/**
+ * Update the structure of the currency definition
+ * set the default issuance
+ */
+function mcapi_update_7020() {
+  module_enable(array('mcapi_index_views'));
+  field_cache_clear();
+  $datas = db_select('mcapi_currencies', 'c')->fields('c', array('currcode', 'data'))->execute()->fetchAllKeyed(0);
+  foreach ($datas as $currcode => $data) {
+    $currency = unserialize($data);
+    if (property_exists($currency, 'issuance')) continue;
+    $currency->issuance = 'acknowledgement';
+    db_update('mcapi_currencies')->fields(array('data' => serialize($currency)))->condition('currcode', $currcode)->execute();
+  }
+  cache_clear_all('currencies', 'cache');
+}
+
+/**
+ * redefine the worth field, without the description
+ */
+function mcapi_update_7021() {
+  list($field, $instance) = _define_worth();
+  field_update_instance($instance);
+}
+
+/**
+ * Ensure that transaction created moments are unique, so they don't screw with running balances.
+ */
+function mcapi_update_7022() {
+  $ts = db_query("SELECT xid, created FROM {mcapi_transactions} ORDER BY created ASC")->fetchAllKeyed(0);
+  $newest = 0;
+  foreach ($ts as $xid => $created) {
+    if ($created > $newest) {
+      $newest = $created;
+    }
+    else {
+      $next = $newest + 1;
+      db_query("UPDATE {mcapi_transactions} SET created = $next WHERE xid = $xid AND created = $created");
+      $newest = $next;
+    }
+  }
+}
+/**
+ * adjust mcapi_sentence variable, which wasn't being translated
+ */
+function mcapi_update_7023() {
+  if (variable_get('mcapi_sentence') == '[transaction:payer] paid [transaction:payee] [transaction:worth] [transaction:links]') {
+    variable_del('mcapi_sentence');
+  }
+}
+/**
+ * API change: trigger 'transaction_state' becomes 'transaction_update'.
+ * Correct and filter operation permissions for each currency.
+ * rename block settings variables.
+ */
+function mcapi_update_7024() {
+  if (db_query("SHOW TABLES LIKE '{trigger_assignments}'")->fetch()) {
+    db_update('trigger_assignments')
+     ->fields(array('hook' => 'transaction_update'))
+     ->condition('hook', 'transaction_state')
+     ->execute();
+  }
+  db_query("UPDATE {actions} SET type = 'transactions' WHERE type = 'transaction'");
+
+  $actions = db_query("SELECT aid, parameters FROM {actions} WHERE callback = 'mcapi_transaction_mail_action'")->fetchAllKeyed();
+  foreach ($actions as $aid => $action) {
+    $info = unserialize($action);
+    $info['state'] = TRANSACTION_STATE_FINISHED;
+    db_update('actions')
+      ->condition('aid', $aid)
+      ->fields(array('parameters' => serialize($info)))
+      ->execute();
+  }
+  cache_clear_all('currencies', 'cache');
+  //change the names of the block settings variables - this was a bug
+  if (!module_exists('block')) return;
+  $deltas = db_query("SELECT delta FROM {block} WHERE module LIKE 'mcap%'")->fetchcol();
+  foreach ($deltas as $delta) {
+    $oldvar = 'block_'.$delta;
+    $newvar = 'mcapiblock_'.$delta;
+    //if the old exists, set the new to the old
+    if (!is_null($oldval = variable_get($oldvar, NULL)) && is_null($newval = variable_get($newvar, NULL))) {
+      $variable_set($newvar, $oldval);
+    }
+    variable_del($oldvar);
+  }
+}

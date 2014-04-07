@@ -1,0 +1,27 @@
+; $Id:
+name = Forms and form builder UI
+description = Exportable transaction form builder
+package = Community Accounting
+core = 7.x
+configure = admin/accounting/forms
+
+files[] = mcapi_forms.inc
+files[] = mcapi_forms.admin.inc
+files[] = mcapi_forms.i18n.inc
+files[] = mcapi_forms.tokens.inc
+files[] = mcapi_forms.mcapiforms_default.inc
+files[] = plugins/export_ui/mcapi_forms_ui.inc
+files[] = plugins/export_ui/mcapi_forms_ui.class.php
+
+dependencies[] = mcapi
+dependencies[] = system (> 7.13)
+
+
+version = "7.x-3.0-rc6"
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

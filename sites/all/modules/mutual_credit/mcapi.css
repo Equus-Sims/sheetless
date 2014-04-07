@@ -1,0 +1,66 @@
+
+/*div.sentence, */
+div.worth-widget div.form-item {
+  display: inline
+}
+div.sentence .link {
+  padding: 0 0 0 1em;
+}
+#dependent-transactions {
+  border: medium solid grey;
+  text-align: center;
+  clear:both;
+}
+div.transaction.certificate {
+  padding: 0 3em 1em 3em;
+  text-align: center;
+}
+div.transaction.certificate span.quantity {
+  font-size: 250%;
+  line-height: 1.1em;
+}
+div.transaction.certificate .field,
+div.transaction.certificate .field-items,
+div.transaction.certificate .field-item,
+div.transaction.certificate .field-label {
+  display: inline;
+}
+div.transaction.state-0{
+  opacity: 0.5;
+}
+
+.vertical-tabs .form-type-textfield input {
+  width: inherit;
+}
+
+div.worth-widget {
+  margin-bottom: 5px;
+}
+
+.transaction-totals .balance {
+  font-size: 2em;
+}
+
+tr.ctools-export-ui-disabled td {
+  color: #aaa;
+}
+
+div.block input#edit-transaction-description-und-0-value {
+  width: 100%;
+}
+ul.transaction-operations{
+  display:inline;
+}
+div.transaction.certificate ul.transaction-operations{
+  display: block;
+  list-style: none;
+  text-align: center;
+  margin-top: 1em;
+}
+
+ul.transaction-operations li{
+  display: inline;
+}
+ul.transaction-operations li a{
+  text-decoration: none;
+}

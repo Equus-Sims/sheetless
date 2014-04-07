@@ -1,0 +1,14 @@
+; $Id: mc_sms.info,v 1.1.2.1 2010/12/06 13:19:46 hutch Exp $
+name = Bank Slave
+description = Increase your organisation's transparency: designate an account as a bank account, and track all transactions in that account & publish the accounts.
+package = Community Accounting
+core = "7.x"
+dependencies[] = mcapi_forms
+
+
+; Information added by Drupal.org packaging script on 2014-04-05
+version = "7.x-3.4"
+core = "7.x"
+project = "mutual_credit"
+datestamp = "1396709054"
+

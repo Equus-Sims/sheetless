@@ -1,0 +1,121 @@
+<?php
+
+/*
+ * implements hook_block_info
+ */
+function mcapi_balance_history_block_info() {
+  return array(
+    'balance_history' => array(
+      'info' => t('Balance over time. ')
+    )
+  );
+}
+
+/*
+ * implements hook_block_view
+ */
+function mcapi_balance_history_block_view($delta) {
+  module_load_include('inc', 'mcapi');
+  if ($settings = _mcapiblock_settings($delta, 'trader_data')) {
+    return array(
+      'subject' => t('Balance over time'),
+      'content' => array(
+        '#theme' => 'balance_history',
+        '#account' => $settings['account'],
+        '#histories' => get_balance_history($settings['account'], $settings['currcodes']),
+        '#width' => array_key_exists('width', $settings) ? $settings['width'] : 250,
+      )
+    );
+  }
+}
+
+function mcapi_balance_history_help($path, $args) {
+  if ($args[5] == 'balance_history') {
+    return t("This data perspective is most valuable for exchange currencies, in which users' balances should stay within range of zero.");
+  }
+}
+
+/*
+ * Implements hook_block_configure
+ */
+function mcapi_balance_history_block_configure($delta) {
+  module_load_include('inc', 'mcapi');
+  $settings = _mcapiblock_settings($delta, 'trader_data');
+  $form['width'] = array(
+    '#title' => t('Width in pixels'),
+    '#type' => 'textfield',
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#default_value' => array_key_exists('width', $settings) ? $settings['width'] : 250,
+    '#max_size' => 4,
+    '#required' => TRUE
+  );
+  return mcapi_block_configure($delta, $form);
+}
+
+/*
+ * implements hook_theme
+ */
+function mcapi_balance_history_theme() {
+  return array(
+    'balance_history' => array(
+      'template' => 'balance_history',
+      'variables' => array(
+        'account' => NULL,
+        'histories' => array(),
+        'width' => 250,
+        'height' => 0,
+        'resample' => 'simple'
+        //also curvetype is added by template_process_balance_history
+      )
+    )
+  );
+}
+
+//modify the history points for aesthetic reasons, or to save resources
+function template_process_balance_history(&$vars) {
+  $vars['curvetype'] = 'none';
+  if (!$vars['height']) $vars['height'] = intval(5*$vars['width']/4);
+  foreach ($vars['histories'] as $currcode => &$history) {
+    $point_count = count($history);
+    if ($point_count < $vars['width'] / 3) {//step method, for a small number of points
+      $times = $values = array();
+      //make two values for each one in the keys and values
+      foreach ($history as $time => $bal) {
+        $times[] = $time;
+        $times[] = $time+1;
+        $values[] = $bal;
+        $values[] = $bal;
+      }
+      //now slide the arrays against each other
+      array_pop($values);
+      array_shift($times);
+      $history = array_combine($times, $values);
+    }
+    elseif ($point_count > $vars['width']) {//decimate the array, for a large number of points
+
+      //we can assume that $max_size(1 point per pixes) is smaller than $count
+      $ratio = $vars['width'] / $point_count;
+      //how to turn this into a fraction involving 1?
+      $reciprocal = 1/$ratio;
+      $factor = intval($reciprocal + 1);
+      //now iterate through the array taking 1 out of every $factor values
+      $i = 0;
+      foreach($history as $key => $value) {
+        if ($i % $factor != 0) unset($history[$key]);
+        $i++;
+      }
+      $vars['curvetype'] = 'function';
+    }
+  }
+}
+
+
+/*
+ * Implements views hook_views_api
+*/
+function mcapi_balance_history_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'mcapi_balance_history'),
+  );
+}

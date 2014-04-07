@@ -1,0 +1,27 @@
+<?php
+
+/*
+ * implements hook_install
+ */
+function bank_slave_install() {
+  //also set the signature notifications variable for the new transaction_type
+  //again, might not be necessary
+  if (module_exists('mcapi_signatures')) {
+    variable_set('mcapi_signatures_expenses', array(
+      'participants' => 0,
+      'countersignatories' => array(),
+      'notify' => 0
+    ));
+  }
+
+
+  //ensure the escrow currency is enabled
+  $stati = variable_get('default_mcapi_currencies', array());
+  unset($stati['escrow']);
+  variable_set('default_mcapi_currencies', $stati);
+  cache_clear_all('currencies', 'cache');
+  
+}
+
+
+

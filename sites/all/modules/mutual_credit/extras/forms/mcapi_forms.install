@@ -1,0 +1,128 @@
+<?php
+/*
+ * implements hook_forms_enable
+ */
+function mcapi_forms_enable() {
+  mcapiforms_setup_filter();
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function mcapi_forms_schema() {
+  $schema['mcapi_forms'] = array(
+    'description' => 'Ctools table for mcapi forms',
+    'fields' => array(
+      'name' => array(
+        'description' => 'The unique, machine readable name of the form.',
+        'type'        => 'varchar',
+        'length'      => 63,
+        'not null'    => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Form is enabled.',
+        'type'        => 'int',
+        'length'      => 2,
+        'not null'    => TRUE,
+        'default'     => 1
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'description' => 'A serialized array of options for this display',
+        'serialize' => TRUE,
+        'serialized default' => 'a:0:{}',
+      ),
+    ),
+    'primary key' => array('name'),
+    'export' => array(
+      'key' => 'name',
+      'primary key' => 'name',
+      'identifier' => 'mcapiform',
+      'api' => array(
+        'owner' => 'mcapiforms',
+        'api' => 'mcapiforms_default',
+        'minimum_version' => 3,
+        'current_version' => 3,
+      ),
+      'default hook' => 'mcapiforms_default',
+      //'object' => 'stdClass', //not sure that this is the best way... see ctools_export_new_object
+      'admin_title' => 'name' //this converts the form field into machine_name I think
+    ),
+  );
+  return $schema;
+}
+
+function mcapi_forms_submit_once() {
+  $forms =  explode("\n", variable_get('submit_once_forms', 'submit_once_settings'));
+  $forms[] = 'mcapi_forms_form';
+  variable_set('submit_once_forms', implode("\n", array_unique($forms)));
+}
+
+/**
+ * adjustments to the table storing designed payment forms
+ */
+function mcapi_forms_update_7001() {
+  db_drop_field('mcapi_forms', 'path');
+  db_drop_field('mcapi_forms', 'xfid');
+}
+
+function mcapiforms_setup_filter() {
+  //make our own filter format and ensure it is localizable
+  $format = array(
+    'format' => MCAPIFORM_STRING_FORMAT,
+    'name' => t('Payment form'),
+    'weight' => 20,
+    'status' => 1,
+    'filters' => array(//use only core filters
+      'filter_autop' => array()
+    )
+  );
+  filter_format_save((object)$format);
+  //and set the permissions for using this filter to authenticated user
+
+
+  $formats = variable_get('i18n_string_allowed_formats', array(filter_fallback_format()));
+  $formats[] = MCAPIFORM_STRING_FORMAT;
+  variable_set('i18n_string_allowed_formats', array_unique($formats));
+
+
+  db_query(
+    "UPDATE {filter} SET status = 1 WHERE format = :format AND name = 'filter_autop'",
+    array(':format' => MCAPIFORM_STRING_FORMAT)
+  );
+  //ensure anyone who can edit the transaction form can use the filter
+  global $language;
+  cache_clear_all("filter_formats:{$language->language}", 'cache');
+  foreach (user_roles(TRUE, 'design transaction forms') as $rid => $rolename) {
+    user_role_grant_permissions($rid, array("use text format ".MCAPIFORM_STRING_FORMAT));
+  }
+  //and clear the br tags from the existing saved forms
+  $mcapiforms = db_select('mcapi_forms', 'f')->fields('f', array('name', 'data'))->execute()->fetchAllKeyed(0);
+  foreach ($mcapiforms as $name => $settings) {
+    $settings = unserialize($settings);
+    $settings['experience']['template'] = str_replace('<br />', '', $settings['experience']['template']);
+    db_query("UPDATE {mcapi_forms} SET data = :data where name = :name",
+      array(':data' => serialize($settings), ':name' => $name)
+    );
+  }
+  cache_clear_all('mcapi_forms', 'cache');
+}
+
+/**
+ * introduce or reset drupal filters to the designed payment forms
+ */
+function mcapi_forms_update_7003() {
+  mcapiforms_setup_filter();
+}
+/**
+ * adjust the worth values in all of the forms so the new script can process it
+ */
+function mcapi_forms_update_7004() {
+  foreach (db_select('mcapi_forms', 'f')->fields('f', array('name', 'data'))->execute()->fetchAllKeyed(0) as $name => $data) {
+    $form = unserialize($data);
+    foreach ($form['worth']['preset'] as $delta => $item) {
+      $form['worth']['preset'][$delta]['quantity'] = 0;
+    }
+    db_update('mcapi_forms')->fields(array('data' => serialize($form)))->condition('name', $name);
+  }
+}
