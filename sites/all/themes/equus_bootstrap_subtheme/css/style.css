@@ -6,3 +6,17 @@
 #navbar .logo img {
 	width: 30px;
 }
+
+div.comment {
+	padding: 10px 0px;
+	border-bottom: 1px solid black;
+}
+
+div.comment h3 {
+	display: none;
+}
+
+div.comment .user-picture {
+	float: left;
+	margin-right: 10px;
+}
