@@ -1,7 +1,163 @@
-/**
- * This file should get overwritten if Method 1 is used. If Method 2 is chosen,
- * remove this comment and start adding your styles to this file.
- */
+
+/* Primary Navigation */
+
+header.primary-nav{
+    background-color: #827d58;
+}
+
+header.primary-nav ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+}
+
+header.primary-nav ul li{
+    /* float: left; */
+    color: #e9eff3;
+    text-transform: uppercase;
+    font: 18px/80px 'Open Sans', sans-serif;
+    font-weight: 300;
+    padding: 0 16px;
+}
+
+header.primary-nav ul li:last-child{
+    padding-right: 0;
+}
+
+header.primary-nav ul li a{
+    color: #e9eff3;
+    text-transform: uppercase;
+    font: 18px/80px 'Open Sans', sans-serif;
+    font-weight: 300;
+    display: inline block;
+}
+
+header.primary-nav ul li a:hover{
+    text-decoration: none;
+    color: #b7b59c;
+}
+
+/* End Primary Navigation */
+
+
+
+/* Dropdown Menu */
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: top;
+    border-top: none;
+    border-right: none; /* removed blue dropdown arrow */
+    border-left: none; /* removed blue dropdown arrow */
+    content: ""
+}
+
+/* BEGIN BOOTSTRAP CODE */
+
+.dropdown {
+    position: relative
+}
+
+.dropdown-toggle:focus {
+    outline: 0
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box
+}
+
+.dropdown-menu.pull-right {
+    right: 0;
+    left: auto
+}
+
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333;
+    white-space: nowrap
+}
+
+/* .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5
+} */
+
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #428bca;
+    outline: 0
+}
+
+.dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:hover,
+.dropdown-menu>.disabled>a:focus {
+    color: #999
+}
+
+.dropdown-menu>.disabled>a:hover, .dropdown-menu>.disabled>a:focus {
+    text-decoration: none;
+    cursor: not-allowed;
+    background-color: transparent;
+    background-image: none;
+    filter: progid: DXImageTransform.Microsoft.gradient(enabled=false)
+}
+
+/* END BOOTSTRAP CODE */
+
+.nav>li>a:hover {
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.nav .open>a, .nav .open>a:hover, .nav .open>a:focus {
+	color: #353535;
+    background-color: transparent;
+    border: none;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+
+/* End Dropdown Menu */
+
+
+/* Janelle's Code */
 
 #navbar .logo img {
 	width: 30px;
@@ -20,3 +176,4 @@ div.comment .user-picture {
 	float: left;
 	margin-right: 10px;
 }
+
