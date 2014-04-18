@@ -12,12 +12,12 @@ function equus_banking_uninstall() {
 	}
 	node_delete_multiple($nodeids);
 	//dpm("uninstalling");
-	delete_custom_fields();
+	_equus_banking_delete_custom_fields();
 	node_type_delete($ournewtype);
 	field_purge_batch(500);
 }
 
-function delete_custom_fields() {
+function _equus_banking_delete_custom_fields() {
 	//dpm("deleting custom fields");
 	foreach (array_keys(_equus_banking_installed_fields()) as $field) {
 		//dpm("deleting field $field");
@@ -34,7 +34,7 @@ function delete_custom_fields() {
  */
 function equus_banking_install() {
 	node_types_rebuild();
-	add_custom_fields();
+	_equus_banking_add_custom_fields();
 }
 
 function _equus_banking_installed_fields() {
@@ -66,7 +66,7 @@ function _equus_banking_installed_instances() {
 	);
 }
 
-function add_custom_fields() {
+function _equus_banking_add_custom_fields() {
 	foreach (_equus_banking_installed_fields() as $field) {
 		field_create_field($field);
 	}
