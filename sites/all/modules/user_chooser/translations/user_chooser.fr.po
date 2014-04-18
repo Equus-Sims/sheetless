@@ -1,0 +1,101 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: user_chooser\n"
+"Language: fr\n"
+
+#: user_chooser.example.php:11;18;25
+msgid "Testfield: @type"
+msgstr "ChampTest : @type"
+
+#: user_chooser.example.php:32
+msgid "submit"
+msgstr "soumettre"
+
+#: uchoo.inc:21
+msgid "Please choose..."
+msgstr "Veuillez choisir..."
+
+#: uchoo.inc:38;94
+msgid "user ID"
+msgstr "identifiant de l'adhérent"
+
+#: uchoo.inc:39;95
+msgid "username"
+msgstr "nom de l'adhérent"
+
+#: uchoo.inc:40;96
+msgid "email"
+msgstr "email"
+
+#: uchoo.inc:45
+msgid "Accepts @types; comma separated"
+msgstr "Accepte  @types; séparés par une virgule"
+
+#: uchoo.inc:55
+msgid "No users available to widget type '@type' with param @params"
+msgstr "Aucun utilisateur disponible pour le composant de type '@type' paramétré avec @params"
+
+#: uchoo.inc:73
+msgid "Autocomplete threshhold"
+msgstr "Seuil de l'auto-remplissage"
+
+#: uchoo.inc:74
+msgid "Below this number of items, a select box is shown, above it, an autocomplete field"
+msgstr "En-dessous de ce nombre d'éléments, une boite de sélection apparait, au-dessus un champs auto-remplissant"
+
+#: uchoo.inc:82
+msgid "Display format"
+msgstr "Format d'affichage"
+
+#: uchoo.inc:83;208
+msgid "At least one of the following tokens must be used:"
+msgstr "Au minimum un des jetons suivants doit être utilisé:"
+
+#: uchoo.inc:90
+msgid "Fields to match against"
+msgstr "Les champs à assortir"
+
+#: uchoo.inc:91
+msgid "The autocomplete widget will get matches based on which fields?"
+msgstr "Le composant d'auto-remplissage va rechercher des correspondances basées sur quels champs?"
+
+#: uchoo.inc:91
+msgid "Only applies to permission role and conditions based widgets."
+msgstr "S'applique seulement aux permissions du rôle et aux composants de manière conditionnelle."
+
+#: uchoo.inc:120
+msgid "You can't put yourself in '@name'"
+msgstr "Vous ne pouvez pas vous mettre vous-mêmes en tant que '@name'"
+
+#: user_chooser.module:30
+msgid "User Chooser Settings"
+msgstr "Paramètres de l'utilitaire de choix de l'adhérent"
+
+#: user_chooser.info:0
+msgid "User chooser"
+msgstr "Utilitaire de choix de l'adhérent"
+
+#: user_chooser.info:0
+msgid "A configurable form element for selecting & validating users. See example.php for usage."
+msgstr "Un élément configurable du formulaire pour choisir et valider des utilisateurs. Référez-vous à  example.php."
+
+#: uchoo.inc:42
+msgid "Accepts @types, comma separated"
+msgstr "Accepte les @types, séparés par une virgule"
+
+#: uchoo.inc:110
+msgid "Unknown users: @users"
+msgstr "Adhérents inconnus: @users"
+
+#: uchoo.inc:133
+msgid "Disallowed users: @users"
+msgstr "Adhérents refusés: @users"
+
+#: uchoo.inc:179
+msgid "No roles selcted in user_chooser widget"
+msgstr "Aucun rôle sélectionné dans le widget user_chooser"
+

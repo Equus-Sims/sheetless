@@ -1,0 +1,16 @@
+; $Id:
+name = User chooser
+description = A configurable form element for selecting & validating users. See example.php for usage.
+core = 7.x
+
+files[] = user_chooser.module
+dependencies[] = token
+
+version = "7.x-1.2"
+
+; Information added by drupal.org packaging script on 2013-05-23
+version = "7.x-1.3"
+core = "7.x"
+project = "user_chooser"
+datestamp = "1369317850"
+
