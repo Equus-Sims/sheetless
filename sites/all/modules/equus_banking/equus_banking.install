@@ -44,7 +44,19 @@ function _equus_banking_installed_fields() {
 			'field_name' => 'equus_banking_amount',
 			'label' => $t('Transaction amount'),
 			'type' => 'number_integer'
-		)
+		),
+
+		'equus_banking_source' => array(
+			'field_name' => 'equus_banking_source',
+			'label' => $t('Source'),
+			'type' => 'entityreference',
+			'settings' => array(
+				'target_type' => 'node',
+				'handler_settings' => array(
+					'target_bundles' => array('organization')
+				)
+			)
+		)	
 	);
 }
 
@@ -62,6 +74,21 @@ function _equus_banking_installed_instances() {
 					'type' => 'number_integer'
 				)
 			)*/
+		),
+		'equus_banking_source' => array(
+			'field_name' => 'equus_banking_source',
+			'label' => $t('Source'),
+			'entity_type' => 'node',
+			'bundle' => 'organization',
+			'widget' => array(
+				'module' => 'entityreference',
+				'settings' => array(
+					'match_operator' => 'CONTAINS',
+					'path' => '',
+					'size' => '60'
+				),
+				'type' => 'entityreference_autocomplete'
+			)	
 		)
 	);
 }
