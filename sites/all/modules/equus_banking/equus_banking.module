@@ -1,0 +1,19 @@
+<?php 
+/**
+ * Implements hook_node_info()
+ */
+function equus_banking_node_info() {
+	return array(
+		'transaction' => array(
+			'name' => t('Transaction'),
+			'base' => 'transaction',
+			'description' => t('A financial transaction'),
+			'has_title' => TRUE,
+			'title_label' => t('Memo')
+		)
+	);
+}
+
+function transaction_form($node, $form_state) {
+	return node_content_form($node, $form_state);
+}
