@@ -65,8 +65,8 @@ function _equus_banking_installed_instances() {
 	return array(
 		'equus_banking_amount' => array(
 			'field_name' => 'equus_banking_amount',
-			'type' => 'number_integer',
-			'label' => $t('Transaction amount')
+			'label' => $t('Transaction amount'),
+			'type' => 'number_integer'
 			
 			/*'display' => array(
 				'example_node_list' => array(
