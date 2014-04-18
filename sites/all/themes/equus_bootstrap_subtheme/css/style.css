@@ -11,7 +11,17 @@ a {
     text-decoration: none
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Primary Nav */
+
+.navbar-btn {
+    margin-top: 20px;
+    margin-bottom: 20px
+}
 
 .container, .navbar-static-top .container, .navbar-fixed-top .container,
 .navbar-fixed-bottom .container {
@@ -20,11 +30,13 @@ a {
 
 .navbar.container {
     max-width: 100%;
+    margin-top: 0;
 }
 
 .navbar {
     /* Container Settings */
     min-height: 80px;
+    margin: 0;
     border: none;
     border-radius: 0;
     background-color: #827d58;
@@ -66,63 +78,51 @@ a {
 }
 
 .caret {
-    display: inline-block;
+    display: none;
     width: 0;
     height: 0;
-    vertical-align: top;
-    border-top: none;
-    border-right: none; /* removed blue dropdown arrow */
-    border-left: none; /* removed blue dropdown arrow */
-    content: "";
+    margin-left: 2px;
+    vertical-align: middle;
+    border: none;
 }
 
 /* End Primary Nav */
 
 
-
-/* Secondary Nav */
-
-ul.secondary {
-    float: left;
-}
-
-/* End Secondary Nav */
-
-
-
-/* Dropdown */
-
-.open>.dropdown-menu li {
-    display: inline-block;
-}
+ /*Genius Bit*/
 
 .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
-    font-size: 14px;
-    list-style: none;
-    /* dropdown styling */
+    background:#677;
+    width:100%;
+    text-align:right;
+    /* styling */
     background-color: #9c997b;
     opacity: 0.9;
     filter:alpha(opacity=90); /* For IE8 and earlier */
     border: none;
-    border-radius: none;
     box-shadow: none;
-    background-clip: padding-box;
+    border-radius: 0;
 }
 
+.nav>li {
+    position:static;
+}
+
+.dropdown-menu li{
+    padding:0 20px;
+    display:inline-block;
+}
+
+.dropdown-menu li:last-child{
+    padding-right:25px;
+}
+
+/*End Genius Bit*/
+
 .dropdown-menu li>a {
-    display: inline-block;
     padding: 3px 20px;
     clear: both;
-    font: 14px/20px 'Open Sans', Helvetica, sans-serif;
+    font: 14px/40px 'Open Sans', Helvetica, sans-serif;
     font-weight: 300;
     color: #f1eee6;
     white-space: nowrap;
@@ -132,11 +132,53 @@ ul.secondary {
     background: transparent;
 }
 
-/* End Dropdown */
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
+    color: #353535;
+    text-decoration: none;
+    background-color: transparent;
+    outline: 0
+}
 
 .page-header {
     display: none;
 }
 
+.nav-tabs {
+    display: none;
+}
+
 /* Carousel */
 
+div.carousel { 
+    margin: 0;
+    }
+
+.col-sm-12 {
+    padding: 0;
+}
+
+.carousel-control {
+    display: none;
+}
+
+ul.secondary {
+    float: left;
+}
+
+.navbar .logo {
+        margin-top: 10px;
+        padding-top: 20px;
+        padding-left: 25px;
+    }
+
+#node-41 {
+    margin: 100px; /* homepage welcome message */
+}
+
+.form-group {
+    padding: 25px;
+}
+
+div.form-type-textfield.form-item-title.form-item.form-group {
+    margin: 0 25px;
+}
