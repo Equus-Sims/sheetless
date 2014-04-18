@@ -4,3 +4,5 @@ package = Equus Sims
 core = 7.x
 files[] = equus_banking.install
 files[] = equus_banking.module
+dependencies[] = entityreference
+dependencies[] = equus_organizations
