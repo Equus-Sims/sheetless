@@ -1,0 +1,6 @@
+name = Equus Organizations
+description = A custom module for Equus-sims for creating and managing organizations.
+package = Equus Sims
+core = 7.x
+files[] = equus_organizations.install
+files[] = equus_organizations.module

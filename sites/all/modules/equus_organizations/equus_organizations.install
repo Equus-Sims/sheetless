@@ -1,0 +1,78 @@
+<?php
+/**
+ * Implements hook_uninstall().
+ */
+function equus_organizations_uninstall() {
+	$ournewtype = 'organization';
+	$sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+	$result = db_query($sql, array(':type' => $ournewtype));
+	$nodeids = array();
+	foreach ($result as $row) {
+		$nodeids[] = $row->nid;
+	}
+	node_delete_multiple($nodeids);
+	//dpm("uninstalling");
+	delete_custom_fields();
+	node_type_delete($ournewtype);
+	field_purge_batch(500);
+}
+
+function delete_custom_fields() {
+	//dpm("deleting custom fields");
+	foreach (array_keys(_equus_organizations_installed_fields()) as $field) {
+		//dpm("deleting field $field");
+		field_delete_field($field);
+	}
+	$instances = field_info_instances('node', 'organization');
+	foreach ($instances as $instance_name => $fieldinstance) {
+		field_delete_instances($fieldinstance);
+	}
+}
+
+/**
+ * Implements hook_install().
+ */
+function equus_organizations_install() {
+	node_types_rebuild();
+	add_custom_fields();
+}
+
+function _equus_organizations_installed_fields() {
+	$t = get_t();
+	return array(
+		'equus_organizations_mission' => array(
+			'field_name' => 'equus_organizations_mission',
+			'label' => $t('Mission Statement'),
+			'type' => 'text_long'
+		)
+	);
+}
+
+function _equus_organizations_installed_instances() {
+	$t = get_t();
+	return array(
+		'equus_organizations_mission' => array(
+			'field_name' => 'equus_organizations_mission',
+			'type' => 'text_long',
+			'label' => $t('Mission Statement')
+			
+			/*'display' => array(
+				'example_node_list' => array(
+					'label' => $t('Transaction amount'),
+					'type' => 'number_integer'
+				)
+			)*/
+		)
+	);
+}
+
+function add_custom_fields() {
+	foreach (_equus_organizations_installed_fields() as $field) {
+		field_create_field($field);
+	}
+	foreach (_equus_organizations_installed_instances() as $fieldinstance) {
+		$fieldinstance['entity_type'] = 'node';
+		$fieldinstance['bundle'] = 'organization';
+		field_create_instance($fieldinstance);
+	}
+}
