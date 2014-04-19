@@ -56,7 +56,19 @@ function _equus_banking_installed_fields() {
 					'target_bundles' => array('organization')
 				)
 			)
-		)	
+		),
+
+		'equus_banking_destination' => array(
+			'field_name' => 'equus_banking_destination',
+			'label' => $t('Destination'),
+			'type' => 'entityreference',
+			'settings' => array(
+				'target_type' => 'node',
+				'handler_settings' => array(
+					'target_bundles' => array('organization')
+				)
+			)
+		)
 	);
 }
 
@@ -75,9 +87,26 @@ function _equus_banking_installed_instances() {
 				)
 			)*/
 		),
+
 		'equus_banking_source' => array(
 			'field_name' => 'equus_banking_source',
 			'label' => $t('Source'),
+			'entity_type' => 'node',
+			'bundle' => 'organization',
+			'widget' => array(
+				'module' => 'entityreference',
+				'settings' => array(
+					'match_operator' => 'CONTAINS',
+					'path' => '',
+					'size' => '60'
+				),
+				'type' => 'entityreference_autocomplete'
+			)	
+		),
+
+		'equus_banking_destination' => array(
+			'field_name' => 'equus_banking_destination',
+			'label' => $t('Destination'),
 			'entity_type' => 'node',
 			'bundle' => 'organization',
 			'widget' => array(
