@@ -44,6 +44,15 @@ function _equus_organizations_installed_fields() {
 			'field_name' => 'equus_organizations_mission',
 			'label' => $t('Mission Statement'),
 			'type' => 'text_long'
+		),
+		'equus_organizations_users' => array(
+			'field_name' => 'equus_organizations_users',
+			'label' => $t('Owner(s) and Staff'),
+			'type' => 'entityreference',
+			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+			'settings' => array(
+				'target_type' => 'user'
+			)
 		)
 	);
 }
@@ -62,7 +71,21 @@ function _equus_organizations_installed_instances() {
 					'type' => 'number_integer'
 				)
 			)*/
-		)
+		),
+		'equus_organizations_users' => array(
+			'field_name' => 'equus_organizations_users',
+			'label' => $t('Owner(s) and Staff'),
+			'entity_type' => 'user',
+			'widget' => array(
+				'module' => 'entityreference',
+				'settings' => array(
+					'match_operator' => 'CONTAINS',
+					'path' => '',
+					'size' => '60'
+				),
+				'type' => 'entityreference_autocomplete'
+			)	
+		),
 	);
 }
 
