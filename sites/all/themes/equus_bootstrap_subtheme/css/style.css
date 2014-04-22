@@ -177,8 +177,54 @@ ul.secondary {
 
 .form-group {
     padding: 25px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-div.form-type-textfield.form-item-title.form-item.form-group {
-    margin: 0 25px;
+.panel {
+    margin: -10px 25px;
 }
+
+label {
+    display: inline-block;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+div.vertical-tabs-panes {
+    margin: 50px;
+    margin-top: 5px;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+.tabbable {
+    margin-bottom: -40px;
+}
+
+div.form-actions {
+    text-align: center;
+}
+
+#blog-node-form {
+    margin: 0;
+    padding: 0;
+}
+
+div.form-type-textfield {
+    margin: 10px 25px;
+}
+
+#edit-title {
+    margin: 0;
+}
+
+#edit-field-horse-breeder-value-wrapper {
+    margin: 0 -65px;
+}
+
