@@ -8,12 +8,11 @@ body {
 
 a {
     color: #ec9230;
-    text-decoration: none
+    text-decoration: none;
 }
 
 img {
     max-width: 100%;
-    height: auto;
 }
 
 /* Primary Nav */
@@ -147,6 +146,17 @@ img {
     display: none;
 }
 
+
+ul.secondary {
+    float: left;
+}
+
+.navbar .logo {
+        margin-top: 10px;
+        padding-top: 20px;
+        padding-left: 25px;
+    }
+
 /* Carousel */
 
 div.carousel { 
@@ -161,19 +171,13 @@ div.carousel {
     display: none;
 }
 
-ul.secondary {
-    float: left;
-}
-
-.navbar .logo {
-        margin-top: 10px;
-        padding-top: 20px;
-        padding-left: 25px;
-    }
+/* End Carousel */
 
 #node-41 {
     margin: 100px; /* homepage welcome message */
 }
+
+/* Forms */
 
 .form-group {
     padding: 25px;
@@ -227,4 +231,74 @@ div.form-type-textfield {
 #edit-field-horse-breeder-value-wrapper {
     margin: 0 -65px;
 }
+
+/* End Forms */
+
+
+/* Daily Digest */
+
+span.views-label {
+    display: none;
+}
+
+table.cols-3 {
+    margin: 0 50px;
+}
+
+.col-1, .col-first, .col-2, .col-3, .col-4, .col-last {
+    background-color: #fff;
+    padding: 0;
+}
+
+.views-view-grid {
+    border-collapse: separate; border-spacing: 5px;
+    padding: 0;
+}
+
+div.views-field-title {
+    padding-left: 30px;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+}
+
+div.views-field-title a {
+    color: #353535;
+    text-decoration: none;
+}
+
+div.views-field-created {
+    padding-left: 30px;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 300;
+}
+
+div.views-field-field-blog-category {
+    color: #ec9230;
+    text-decoration: none;
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-bottom: 10px;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 300;
+}
+
+div.views-field-body {
+    text-decoration: none;
+    padding: 10px 30px 30px 30px;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 300;
+}
+
 
