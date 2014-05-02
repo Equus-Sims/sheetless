@@ -251,7 +251,8 @@ table.cols-3 {
 }
 
 .views-view-grid {
-    border-collapse: separate; border-spacing: 5px;
+    border-collapse: separate; 
+    border-spacing: 8px;
     padding: 0;
 }
 
@@ -293,12 +294,16 @@ div.views-field-field-blog-category {
 
 div.views-field-body {
     text-decoration: none;
-    padding: 10px 30px 30px 30px;
+    padding: 10px 30px 50px 30px;
     text-align: left;
     margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
     font-weight: 300;
 }
+
+div.views-field-body p {
+    text-align: justify;
+    }
 
 
