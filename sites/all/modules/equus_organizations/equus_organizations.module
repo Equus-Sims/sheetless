@@ -10,6 +10,7 @@ function equus_organizations_node_info() {
 			'description' => t('An organization'),
 			'has_title' => TRUE,
 			'title_label' => t('Name')
+			
 		)
 	);
 }

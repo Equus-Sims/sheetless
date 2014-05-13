@@ -17,3 +17,35 @@ function equus_banking_node_info() {
 function transaction_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
+
+/**
+ * Return the ledger with all transactions.
+ */
+function equus_banking_retrieve_ledger() {
+	$ledger = array(
+
+	);
+
+	return $ledger;
+}
+
+/**
+ * Ledger must be ???
+ * Organization must be ???
+ */
+function equus_banking_balance($ledger, $organization) {
+	$balance = 0;
+
+
+
+	/*foreach($ledger as $trans) {
+		if ($user == $trans->source) {
+			$balance = $balance - $trans->amount;
+		}
+		if ($user == $trans->destination) {
+			$balance = $balance + $trans->amount;
+		}	
+	}*/
+
+	return $balance;
+}
