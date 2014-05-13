@@ -175,6 +175,10 @@ div.carousel {
     display: none;
 }
 
+.carousel img {
+    height: auto;
+}
+
 /* End Carousel */
 
 #node-41 {
@@ -311,6 +315,10 @@ div.views-field-body {
 div.views-field-body p {
     text-align: justify;
     }
+
+div.views-field-field-blog-cover-image img {
+    height: auto;
+}
 
 /* End Daily Digest */
 
