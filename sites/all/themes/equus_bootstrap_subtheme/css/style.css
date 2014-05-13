@@ -146,6 +146,10 @@ img {
     display: none;
 } */
 
+ul.tabs--primary.nav.nav-tabs {
+    display: none;
+}
+
 
 ul.secondary {
     float: left;
@@ -198,10 +202,12 @@ label {
     font-size: 16px;
 }
 
+/* Below removes important tabs for horse profile
+
 div.vertical-tabs-panes {
-    margin: 50px;
+    margin-top: 50px;
     margin-top: 5px;
-}
+} */
 
 .btn {
     margin-top: 10px;
