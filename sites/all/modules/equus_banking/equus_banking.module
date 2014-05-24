@@ -22,11 +22,17 @@ function transaction_form($node, $form_state) {
  * Return the ledger with all transactions.
  */
 function equus_banking_retrieve_ledger() {
-	$ledger = array(
 
-	);
-
-	return $ledger;
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'transaction')
+		->propertyCondition('status', 1)
+		->propertyOrderBy('created', 'DESC');
+	$result = $query->execute();
+	$nids = array_keys($result['node']);
+	$nodes = node_load_multiple($nids);
+	return $nodes;
 }
 
 /**
