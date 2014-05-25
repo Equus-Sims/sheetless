@@ -36,22 +36,22 @@ function equus_banking_retrieve_ledger() {
 }
 
 /**
- * Ledger must be ???
- * Organization must be ???
+ * Ledger must be return of function equus_banking_retrieve_ledger
+ * Organization must be node ID for an organization
  */
 function equus_banking_balance($ledger, $organization) {
 	$balance = 0;
 
 
 
-	/*foreach($ledger as $trans) {
-		if ($user == $trans->source) {
-			$balance = $balance - $trans->amount;
+	foreach($ledger as $trans) {
+		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
+			$balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
 		}
-		if ($user == $trans->destination) {
-			$balance = $balance + $trans->amount;
+		if ($organization == $trans->equus_banking_destination['und'][0]['target_id']) {
+			$balance = $balance + $trans->equus_banking_amount['und'][0]['value'];
 		}	
-	}*/
+	}
 
 	return $balance;
 }
