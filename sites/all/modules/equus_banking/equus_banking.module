@@ -14,6 +14,23 @@ function equus_banking_node_info() {
 	);
 }
 
+function equus_banking_create_transaction($memo, $source, $destination, $amount) {
+	global $user;
+	$values = array(
+		'type' => 'transaction',
+		'uid' => $user->uid,
+		'status' => 1,
+		'comment' => 0,
+		'promote' => 0,
+	);
+	$entity = entity_create('node', $values);
+	$ewrapper = entity_metadata_wrapper('node', $entity);
+	$ewrapper->title->set($memo);
+	$ewrapper->equus_banking_source->set(intval($source));
+	$ewrapper->equus_banking_destination->set(intval($destination));
+	$ewrapper->equus_banking_amount->set(intval($amount));
+	$ewrapper->save();
+}
 function transaction_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
