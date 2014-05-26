@@ -53,6 +53,11 @@ function _equus_organizations_installed_fields() {
 			'settings' => array(
 				'target_type' => 'user'
 			)
+		),
+		'equus_organizations_balance' => array(
+			'field_name' => 'equus_organizations_balance',
+			'label' => $t('Balance'),
+			'type' => 'number_integer'
 		)
 	);
 }
