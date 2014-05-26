@@ -31,6 +31,10 @@ function equus_banking_create_transaction($memo, $source, $destination, $amount)
 	$ewrapper->equus_banking_amount->set(intval($amount));
 	$ewrapper->save();
 }
+
+/**
+ * transaction_form is for debugging purposes only. TODO : Should be hidden or deleted before live.
+ */
 function transaction_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
