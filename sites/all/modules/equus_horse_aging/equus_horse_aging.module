@@ -1,0 +1,78 @@
+<?php 
+/**
+ * Implements hook_node_info()
+ */
+function equus_banking_node_info() {
+	return array(
+		'transaction' => array(
+			'name' => t('Transaction'),
+			'base' => 'transaction',
+			'description' => t('A financial transaction'),
+			'has_title' => TRUE,
+			'title_label' => t('Memo')
+		)
+	);
+}
+
+function equus_banking_create_transaction($memo, $source, $destination, $amount) {
+	global $user;
+	$values = array(
+		'type' => 'transaction',
+		'uid' => $user->uid,
+		'status' => 1,
+		'comment' => 0,
+		'promote' => 0,
+	);
+	$entity = entity_create('node', $values);
+	$ewrapper = entity_metadata_wrapper('node', $entity);
+	$ewrapper->title->set($memo);
+	$ewrapper->equus_banking_source->set(intval($source));
+	$ewrapper->equus_banking_destination->set(intval($destination));
+	$ewrapper->equus_banking_amount->set(intval($amount));
+	$ewrapper->save();
+}
+
+/**
+ * transaction_form is for debugging purposes only. TODO : Should be hidden or deleted before live.
+ */
+function transaction_form($node, $form_state) {
+	return node_content_form($node, $form_state);
+}
+
+/**
+ * Return the ledger with all transactions.
+ */
+function equus_banking_retrieve_ledger() {
+
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'transaction')
+		->propertyCondition('status', 1)
+		->propertyOrderBy('created', 'DESC');
+	$result = $query->execute();
+	$nids = array_keys($result['node']);
+	$nodes = node_load_multiple($nids);
+	return $nodes;
+}
+
+/**
+ * Ledger must be return of function equus_banking_retrieve_ledger
+ * Organization must be node ID for an organization
+ */
+function equus_banking_balance($ledger, $organization) {
+	$balance = 0;
+
+
+
+	foreach($ledger as $trans) {
+		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
+			$balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
+		}
+		if ($organization == $trans->equus_banking_destination['und'][0]['target_id']) {
+			$balance = $balance + $trans->equus_banking_amount['und'][0]['value'];
+		}	
+	}
+
+	return $balance;
+}
