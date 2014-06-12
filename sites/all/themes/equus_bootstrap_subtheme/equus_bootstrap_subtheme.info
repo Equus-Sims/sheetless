@@ -25,6 +25,7 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 
 stylesheets[all][] = css/style.css
+stylesheets[all][] = css/multiselect.css
 
 
 ; For information on choosing the desired method, please read the Drupal
@@ -38,6 +39,9 @@ stylesheets[all][] = css/style.css
 ; ;;;;;;;;;;;;;;;;;;;;;
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
+
+scripts[] = 'js/multiselect.js'
+
 ; 
 ; scripts[] = 'bootstrap/js/affix.js'
 ; scripts[] = 'bootstrap/js/alert.js'
@@ -54,7 +58,6 @@ stylesheets[all][] = css/style.css
 ;
 ; ; Disable BootstrapCDN if using Bootstrap source files in your sub-theme.
 ; settings[bootstrap_cdn] = ''
-
 
 ; ;-------------------------
 ; ; METHOD 2: Bootstrap CDN
