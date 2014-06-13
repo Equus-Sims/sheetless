@@ -1,6 +1,6 @@
 /* Multi-select Dropdown */
 
-.ui-multiselect { padding:2px 0 2px 4px; text-align:left; width: 280px !important; }
+.ui-multiselect { padding:2px 0 2px 4px; text-align:left; }
 .ui-multiselect span.ui-icon { float:right }
 .ui-multiselect-single .ui-multiselect-checkboxes input { position:absolute !important; top: auto !important; left:-9999px; }
 .ui-multiselect-single .ui-multiselect-checkboxes label { padding:5px !important }
@@ -13,15 +13,20 @@
 .ui-multiselect-header span.ui-icon { float:left }
 .ui-multiselect-header li.ui-multiselect-close { float:right; text-align:right; padding-right:0 }
 
-.ui-multiselect-menu { display:none; padding:3px; position:absolute; z-index:10000; text-align: left }
+.ui-multiselect-menu { display:none; padding:3px; position:absolute; z-index:10000; text-align: left; }
 .ui-multiselect-checkboxes { position:relative /* fixes bug in IE6/7 */; overflow-y:scroll }
 .ui-multiselect-checkboxes label { cursor:default; display:block; border:1px solid transparent; padding:3px 1px }
-.ui-multiselect-checkboxes label input { position:relative; top:-3px }
+.ui-multiselect-checkboxes label input { position:relative; top:-2px }
 .ui-multiselect-checkboxes li { clear:both; font-size:0.9em; padding-right:3px }
 .ui-multiselect-checkboxes li.ui-multiselect-optgroup-label { text-align:center; font-weight:bold; border-bottom:1px solid }
 .ui-multiselect-checkboxes li.ui-multiselect-optgroup-label a { display:block; padding:3px; margin:1px 0; text-decoration:none }
 
 .ui-multiselect-checkboxes label span { margin-left: 8px; }
+
+#views-exposed-form-daily-digest-page label[for='edit-field-blog-category-value'] { display: none; }
+#views-exposed-form-daily-digest-page .views-exposed-form #edit-field-blog-category-value-wrapper ~ .views-exposed-widget .form-submit,
+#views-exposed-form-daily-digest-page .views-exposed-form #edit-field-blog-category-value-wrapper ~ .views-exposed-widget .form-submit { margin-top: 0.6em; }
+#views-exposed-form-daily-digest-page #edit-field-blog-category-value-wrapper { margin-left: 2.3em; }
 
 /* remove label borders in IE6 because IE6 does not support transparency */
 * html .ui-multiselect-checkboxes label { border:none }
@@ -819,7 +824,7 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-family: inherit;
     font-size: 1.1em;
 }
 .ui-widget .ui-widget {
@@ -829,7 +834,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-family: inherit;
     font-size: 1em;
 }
 .ui-widget-content {
@@ -857,7 +862,7 @@ body .ui-tooltip {
 .ui-widget-header .ui-state-default {
     border: 1px solid #cccccc;
     background: #f6f6f6 url(images/ui-bg_glass_100_f6f6f6_1x400.png) 50% 50% repeat-x;
-    font-weight: bold;
+    font-weight: normal;
     color: #353535;
 }
 .ui-state-default a,
@@ -874,7 +879,7 @@ body .ui-tooltip {
 .ui-widget-header .ui-state-focus {
     border: 1px solid #aaa;
     background: #ccc url(images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;
-    font-weight: bold;
+    font-weight: normal;
     color: #353535;
 }
 .ui-state-hover a,
@@ -889,7 +894,7 @@ body .ui-tooltip {
 .ui-widget-header .ui-state-active {
     border: 1px solid #ccc;
     background: #ffffff url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
-    font-weight: bold;
+    font-weight: normal;
     color: #353535;
 }
 .ui-state-active a,

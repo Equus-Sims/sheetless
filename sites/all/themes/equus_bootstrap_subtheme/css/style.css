@@ -318,6 +318,7 @@ div.views-field-body p {
 
 div.views-field-field-blog-cover-image img {
     height: auto;
+    width: 100%;
 }
 
 /* End Daily Digest */

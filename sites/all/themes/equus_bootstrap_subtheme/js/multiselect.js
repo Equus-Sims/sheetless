@@ -719,6 +719,23 @@ $(document).ready(function() {
   $('select').multiselect({
     minWidth: 225
   });
+
+  var topOffset;
+  var offsetClick = 1;
+
+  
+  $('.ui-multiselect, .ui-multiselect span').click(function(){
+    if( offsetClick == 1 ) {
+      topOffset = parseInt($('.ui-multiselect-menu').css('top')) - 25 + 'px';
+      $('.ui-multiselect-menu').css('top', topOffset);
+      offsetClick = 2;
+      console.log(offsetClick);
+    };
+    $('.ui-multiselect-menu').css('top', topOffset);
+  });
+
+  $('.ui-multiselect, .ui-multiselect-menu').css('max-width', '280px').css('width', 'auto').css('min-width', '225px');
+
 });
 
 })(jQuery);
