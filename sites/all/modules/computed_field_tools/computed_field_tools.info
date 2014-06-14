@@ -1,0 +1,12 @@
+name = Computed Field Tools
+description = "Re-compute values in computed fields"
+package = Fields
+core = 7.x
+dependencies[] = computed_field
+
+; Information added by Drupal.org packaging script on 2014-03-24
+version = "7.x-1.0"
+core = "7.x"
+project = "computed_field_tools"
+datestamp = "1395655759"
+

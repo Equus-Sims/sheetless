@@ -1,0 +1,13 @@
+name = Computed Field
+description = Defines a field type that allows values to be "computed" via PHP code.
+core = 7.x
+dependencies[] = field
+package = Fields
+files[]=computed_field.install
+files[]=computed_field.module
+; Information added by  packaging script on 2013-12-03
+version = "7.x-1.0"
+core = "7.x"
+project = "computed_field"
+datestamp = "1386094705"
+
