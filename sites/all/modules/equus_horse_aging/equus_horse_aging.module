@@ -40,7 +40,7 @@ function equus_horse_aging_node_validate($node, $form, &$form_state) {
 
 	if (!isset($node->nid)) {
 		if ($node->field_horse_activation_status['und'][0]['value'] == 'Active') {
-			dpm("check for points - new horse");
+			//dpm("check for points - new horse");
 			equus_horse_aging_validate_hc_count($form['uid']['#value']);
 		} 
 	} else {
@@ -48,13 +48,13 @@ function equus_horse_aging_node_validate($node, $form, &$form_state) {
 		$new_value = $node->field_horse_activation_status['und'][0]['value'];
 
 		if ($original_value == 'Pending' && $new_value == 'Active') {
-			dpm("check for points - edit horse");
+			//dpm("check for points - edit horse");
 			equus_horse_aging_validate_hc_count($form['uid']['#value']);
 		}
 	}
 
-	dpm($node);
-	dpm($form);
+	//dpm($node);
+	//dpm($form);
 }
 
 function equus_horse_aging_spend_regular_hc($uid) {
