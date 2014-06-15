@@ -1,78 +1,76 @@
-<?php 
-/**
- * Implements hook_node_info()
- */
-function equus_banking_node_info() {
-	return array(
-		'transaction' => array(
-			'name' => t('Transaction'),
-			'base' => 'transaction',
-			'description' => t('A financial transaction'),
-			'has_title' => TRUE,
-			'title_label' => t('Memo')
-		)
-	);
+<?php
+
+define("EQUUS_HORSE_AGING_REGULAR_HC_TID",1);
+
+function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
+	$real_date = new DateTime($date['value']);
+
+	$year = $real_date->format("Y");
+	$month = $real_date->format("m");
+	$dob = mktime(0,0,0,$month,1,$year);
+
+	//$age = calc_age($dob,$age_up_year,$foal_multiplier,$adult_multiplier);
+	$age = 777;
+
+	$today = mktime(0,0,0);
+	$age_months = equus_horse_aging_calc_age_months($dob, $today);
+	dpm("age_months = $age_months");
+
+	$entity_field[0]['value'] = $age;
 }
 
-function equus_banking_create_transaction($memo, $source, $destination, $amount) {
-	global $user;
-	$values = array(
-		'type' => 'transaction',
-		'uid' => $user->uid,
-		'status' => 1,
-		'comment' => 0,
-		'promote' => 0,
-	);
-	$entity = entity_create('node', $values);
-	$ewrapper = entity_metadata_wrapper('node', $entity);
-	$ewrapper->title->set($memo);
-	$ewrapper->equus_banking_source->set(intval($source));
-	$ewrapper->equus_banking_destination->set(intval($destination));
-	$ewrapper->equus_banking_amount->set(intval($amount));
-	$ewrapper->save();
+function equus_horse_aging_validate_hc_count($uid) {
+	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSE_AGING_REGULAR_HC_TID);
+	if ($current_regular_HC < 1 ) {
+		form_set_error('field_horse_activation_status', 'You do not have enough regular horse credits to make this horse active.');
+	}
 }
 
-/**
- * transaction_form is for debugging purposes only. TODO : Should be hidden or deleted before live.
- */
-function transaction_form($node, $form_state) {
-	return node_content_form($node, $form_state);
-}
-
-/**
- * Return the ledger with all transactions.
- */
-function equus_banking_retrieve_ledger() {
-
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'transaction')
-		->propertyCondition('status', 1)
-		->propertyOrderBy('created', 'DESC');
-	$result = $query->execute();
-	$nids = array_keys($result['node']);
-	$nodes = node_load_multiple($nids);
-	return $nodes;
-}
-
-/**
- * Ledger must be return of function equus_banking_retrieve_ledger
- * Organization must be node ID for an organization
- */
-function equus_banking_balance($ledger, $organization) {
-	$balance = 0;
-
-
-
-	foreach($ledger as $trans) {
-		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
-			$balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
-		}
-		if ($organization == $trans->equus_banking_destination['und'][0]['target_id']) {
-			$balance = $balance + $trans->equus_banking_amount['und'][0]['value'];
-		}	
+function equus_horse_aging_node_validate($node, $form, &$form_state) {
+	if ($node->type != 'horse') {
+		return;
 	}
 
-	return $balance;
+	// check if new horse
+	//		if new check whether active is set
+	//			if yes check for points
+	// 		if not new check whether previous value is pending and new value is active
+	//			if yes check for points
+
+	if (!isset($node->nid)) {
+		if ($node->field_horse_activation_status['und'][0]['value'] == 'Active') {
+			dpm("check for points - new horse");
+			equus_horse_aging_validate_hc_count($form['uid']['#value']);
+		} 
+	} else {
+		$original_value = $form['#node']->field_horse_activation_status['und'][0]['value'];
+		$new_value = $node->field_horse_activation_status['und'][0]['value'];
+
+		if ($original_value == 'Pending' && $new_value == 'Active') {
+			dpm("check for points - edit horse");
+			equus_horse_aging_validate_hc_count($form['uid']['#value']);
+		}
+	}
+
+	dpm($node);
+	dpm($form);
 }
+
+function equus_horse_aging_spend_regular_hc($uid) {
+	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSE_AGING_REGULAR_HC_TID);
+	if ($current_regular_HC < 1 ) {
+		return false;
+	}
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => -1,
+		'tid' => EQUUS_HORSE_AGING_REGULAR_HC_TID
+	));
+	return true;
+}
+
+function equus_horse_aging_calc_age_months($dob, $today) {
+    return ($today - $dob)/(60*60*24*(365/12));
+}
+
