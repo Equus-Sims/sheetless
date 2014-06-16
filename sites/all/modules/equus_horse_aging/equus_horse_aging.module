@@ -2,24 +2,6 @@
 
 define("EQUUS_HORSE_AGING_REGULAR_HC_TID",1);
 
-function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
-	$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
-	$real_date = new DateTime($date['value']);
-
-	$year = $real_date->format("Y");
-	$month = $real_date->format("m");
-	$dob = mktime(0,0,0,$month,1,$year);
-
-	//$age = calc_age($dob,$age_up_year,$foal_multiplier,$adult_multiplier);
-	$age = 777;
-
-	$today = mktime(0,0,0);
-	$age_months = equus_horse_aging_calc_age_months($dob, $today);
-	dpm("age_months = $age_months");
-
-	$entity_field[0]['value'] = $age;
-}
-
 function equus_horse_aging_validate_hc_count($uid) {
 	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSE_AGING_REGULAR_HC_TID);
 	if ($current_regular_HC < 1 ) {
@@ -70,14 +52,38 @@ function equus_horse_aging_spend_regular_hc($uid) {
 	return true;
 }
 
-function equus_horse_aging_calc_age_months($dob, $today) {
-    return ($today - $dob)/(60*60*24*(365/12));
-}
-
 function equus_horse_aging_node_insert($node) {
 	//dpm('Janelle was here!');
-	if (equus_horse_aging_spend_regular_hc($node->uid) === false) {
+	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
+		return;
+	}
+
+	$status = equus_horse_aging_spend_regular_hc($node->uid);
+
+	if ($status === false) {
 		watchdog('equus_horse_aging', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
 	}
+}
+
+function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
+	$real_date = new DateTime($date['value']);
+
+	$year = $real_date->format("Y");
+	$month = $real_date->format("m");
+	$dob = mktime(0,0,0,$month,1,$year);
+
+	//$age = calc_age($dob,$age_up_year,$foal_multiplier,$adult_multiplier);
+	$age = 777;
+
+	$today = mktime(0,0,0);
+	$age_months = equus_horse_aging_calc_age_months($dob, $today);
+	dpm("age_months = $age_months");
+
+	$entity_field[0]['value'] = $age;
+}
+
+function equus_horse_aging_calc_age_months($dob, $today) {
+    return ($today - $dob)/(60*60*24*(365/12));
 }
 
