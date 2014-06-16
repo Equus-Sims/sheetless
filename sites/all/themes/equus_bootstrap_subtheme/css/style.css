@@ -238,8 +238,8 @@ div.form-type-textfield {
     margin: 0;
 }
 
-#edit-field-horse-breeder-value-wrapper {
-    margin: 0 -65px;
+.view-id-puppies .views-exposed-form .views-exposed-widget {
+    height: 90px;
 }
 
 /* End Forms */
@@ -316,7 +316,7 @@ div.views-field-body p {
     text-align: justify;
     }
 
-div.views-field-field-blog-cover-image img {
+div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
 }
