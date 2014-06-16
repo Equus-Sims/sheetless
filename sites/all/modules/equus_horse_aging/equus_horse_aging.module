@@ -74,3 +74,10 @@ function equus_horse_aging_calc_age_months($dob, $today) {
     return ($today - $dob)/(60*60*24*(365/12));
 }
 
+function equus_horse_aging_node_insert($node) {
+	//dpm('Janelle was here!');
+	if (equus_horse_aging_spend_regular_hc($node->uid) === false) {
+		watchdog('equus_horse_aging', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+	}
+}
+
