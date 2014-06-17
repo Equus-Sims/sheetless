@@ -397,7 +397,7 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 }
 
 .node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
-.node-type-organization div.field-name-equus-organizations-mission div.field-label {
+.node-type-organization #block-system-main div.field-label {
     background: #7F9B8C;
     padding: 10px 15px;
     color: #FFF;
