@@ -65,25 +65,75 @@ function equus_horse_aging_node_insert($node) {
 	}
 }
 
-function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+
+
+
+
+
+
+
+
+
+//function equus_horse_aging_transition_year($form) {
+	//$transition_year = $form['#node']->field_age_transition_year['und'][0]['value'];
+//}
+
+//function equus_horse_aging_foal_multiplier($form) {
+	//return 12/$form['#node']->field_foal_age_multiplier['und'][0]['value'];
+//}
+
+//function equus_horse_aging_adult_multiplier($form) {
+	//return 12/$form['#node']->field_adult_age_multiplier['und'][0]['value'];
+//}
+
+function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
 	$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
 	$real_date = new DateTime($date['value']);
 
 	$year = $real_date->format("Y");
 	$month = $real_date->format("m");
 	$dob = mktime(0,0,0,$month,1,$year);
-
-	//$age = calc_age($dob,$age_up_year,$foal_multiplier,$adult_multiplier);
-	$age = 777;
-
 	$today = mktime(0,0,0);
-	$age_months = equus_horse_aging_calc_age_months($dob, $today);
-	dpm("age_months = $age_months");
 
-	$entity_field[0]['value'] = $age;
+	$transition_year = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_age_transition_year')));
+	$foal_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_foal_age_multiplier')));
+	$adult_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_adult_age_multiplier')));
+
+	$age_months = ($today - $dob)/(60*60*24*(365/12));
+
+	$calc_rl_months_foal = $transition_year*(12/(12/$foal_multiplier));
+
+	$months_as_adult = $age_months - $calc_rl_months_foal;
+
+	$years_as_adult = ($months_as_adult/12.0)*(12/(12/$adult_multiplier));
+
+	$calc_age = $years_as_adult + $transition_year;
+
+	$entity_field[0]['value'] = $calc_age;
 }
 
-function equus_horse_aging_calc_age_months($dob, $today) {
-    return ($today - $dob)/(60*60*24*(365/12));
-}
+//function equus_horse_aging_calc_age_months($entity_type, $entity, $field) {
+	//$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
+	//$real_date = new DateTime($date['value']);
 
+	//$year = $real_date->format("Y");
+	//$month = $real_date->format("m");
+	//$dob = mktime(0,0,0,$month,1,$year);
+	//$today = mktime(0,0,0);
+
+    //return ($today - $dob)/(60*60*24*(365/12));
+//}
+
+//function equus_horse_aging_calc_rl_months_foal($form) {
+    //return equus_horse_aging_transition_year($form)*equus_horse_aging_foal_multiplier($form);
+//}
+
+//function equus_horse_aging_calc_years_as_adult($form) {
+	//$months_as_adult = equus_horse_aging_calc_age_months($dob,$today) - equus_horse_aging_calc_rl_months_foal($form);
+    //return ($months_as_adult/12.0)*equus_horse_aging_adult_multiplier($form);
+//}
+
+//function equus_horse_aging_calc_age($form) {
+	//$transition_year = $form['#node']->field_age_transition_year['und'][0]['value'];
+    //return equus_horse_aging_calc_years_as_adult($months_as_adult,$adult_multiplier) + $transition_year;
+//}
