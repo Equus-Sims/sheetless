@@ -12,7 +12,7 @@ function template_preprocess_views_bootstrap_tab_plugin_style(&$vars) {
   // Get tabs.
   if (isset($view->field[$tab_field])) {
     foreach ($vars['view']->result as $key => $field) {
-      $vars['tabs'][$key] = trim($view->field[$tab_field]->get_value($field));
+      $vars['tabs'][$key] = strip_tags($view->style_plugin->get_field($key, $tab_field));
     }
   }
 }

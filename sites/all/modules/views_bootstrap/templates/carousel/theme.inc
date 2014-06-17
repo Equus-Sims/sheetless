@@ -35,7 +35,7 @@ function template_preprocess_views_bootstrap_carousel_plugin_rows(&$vars) {
 
   foreach ($vars['options'] as $id => $field) {
     if (isset($view->field[$field])) {
-      $vars[$id] = $view->field[$field]->theme($vars['row']);
+      $vars[$id] = $view->style_plugin->get_field($view->row_index, $field);
     }
   }
 }

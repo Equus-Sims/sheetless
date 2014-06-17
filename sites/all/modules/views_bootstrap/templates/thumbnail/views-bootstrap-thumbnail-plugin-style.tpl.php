@@ -11,12 +11,34 @@
  */
 ?>
 
-<ul id="views-bootstrap-thumbnail-<?php print $id ?>" class="thumbnails <?php print $classes ?>">
-  <?php foreach ($rows as $key => $row): ?>
-    <li class="span<?php print $column_type ?>">
-      <div class="thumbnail">
-        <?php print $row ?>
-      </div>
-    </li>
-  <?php endforeach ?>
-</ul>
+<div id="views-bootstrap-thumbnail-<?php print $id ?>" class="<?php print $classes ?>">
+  <?php if ($options['alignment'] == 'horizontal'): ?>
+
+    <?php foreach ($items as $row): ?>
+      <ul class="thumbnails">
+        <?php foreach ($row['content'] as $column): ?>
+          <li class="span<?php print $column_type ?>">
+            <div class="thumbnail">
+              <?php print $column['content'] ?>
+            </div>
+          </li>
+        <?php endforeach ?>
+      </ul>
+    <?php endforeach ?>
+
+  <?php else: ?>
+
+    <ul class="thumbnails">
+      <?php foreach ($items as $column): ?>
+        <li class="span<?php print $column_type ?>">
+          <?php foreach ($column['content'] as $row): ?>
+            <div class="thumbnail">
+              <?php print $row['content'] ?>
+            </div>
+          <?php endforeach ?>
+        </li>
+      <?php endforeach ?>
+    </ul>
+
+  <?php endif ?>
+</div>

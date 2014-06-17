@@ -14,13 +14,30 @@
 ?>
 
 <div id="views-bootstrap-grid-<?php print $id ?>" class="<?php print $classes ?>">
-  <?php foreach ($columns as $column): ?>
+  <?php if ($options['alignment'] == 'horizontal'): ?>
+
+    <?php foreach ($items as $row): ?>
+      <div class="row-fluid">
+        <?php foreach ($row['content'] as $column): ?>
+          <div class="span<?php print $column_type ?>">
+            <?php print $column['content'] ?>
+          </div>
+        <?php endforeach ?>
+      </div>
+    <?php endforeach ?>
+
+  <?php else: ?>
+
     <div class="row-fluid">
-      <?php foreach ($column as $key => $row): ?>
+      <?php foreach ($items as $column): ?>
         <div class="span<?php print $column_type ?>">
-          <?php print $row ?>
+          <?php foreach ($column['content'] as $row): ?>
+            <?php print $row['content'] ?>
+          <?php endforeach ?>
         </div>
       <?php endforeach ?>
     </div>
-  <?php endforeach ?>
+
+  <?php endif ?>
 </div>
+
