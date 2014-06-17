@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Allows users to flag media file entities.
+ */
+
+/**
+ * Implements hook_flag_definitions().
+ */
+function flag_files_flag_definitions() {
+  return array(
+    'file' => array(
+      'title' => t('Files'),
+      'description' => t('Files store and display media content.'),
+      'handler' => 'flag_file',
+    ),
+  );
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function flag_files_page_alter(&$page) {
+  if (drupal_match_path(current_path(), 'file/*')) {
+    $file = menu_get_object('file', 1);
+    $links = flag_link('file', $file);
+    $page['content']['system_main']['flag_files'] = array(
+      '#theme' => 'links',
+      '#links' => $links,
+      '#attributes' => array('class' => array('links', 'inline')),
+    );
+  }
+}
