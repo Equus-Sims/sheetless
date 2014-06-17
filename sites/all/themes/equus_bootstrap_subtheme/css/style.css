@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300);
+
 body {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -38,7 +40,7 @@ img {
     margin: 0;
     border: none;
     border-radius: 0;
-    background-color: #827d58;
+    background-color: #7F9B8C;
     border: none;
 }
 
@@ -95,7 +97,7 @@ img {
     width:100%;
     text-align:right;
     /* styling */
-    background-color: #9c997b;
+    background-color: #A0B2A8;
     opacity: 0.9;
     filter:alpha(opacity=90); /* For IE8 and earlier */
     border: none;
@@ -324,3 +326,88 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 /* End Daily Digest */
 
 /* Horse Directory */
+
+/* Organization Page */
+
+.node-type-organization .region-content {
+    width: 75%;
+    margin: 6em auto 0;
+    position: relative;
+}
+
+.node-type-organization #block-system-main {
+    width: 30%;
+    display: inline-block;
+}
+
+.node-type-organization #block-system-main > div:first-child {
+    padding-right: 20px;
+}
+
+.node-type-organization #block-system-main div.field-items {
+    background: #FFFFFF;
+    padding: 20px 30px;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list {
+    background: #FFF;
+    font-family: 'Lato',Helvetica,Arial,sans-serif;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img {
+    width: 100%;
+    height: auto;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img,
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field:last-child {
+    padding-bottom: 10px;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field a {
+    color: #7F9B8C;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field + div.views-field {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-type {
+    text-transform: uppercase;
+    font-size: .9em;
+    letter-spacing: -.02em;
+}
+
+.node-type-organization #block-system-main div.field {
+    margin-bottom: 20px;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 {
+    width: 50%;
+    display: inline-block;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list h2:first-child {
+    color: #7D9B8F;
+    font-size: 1.3em;
+    font-family: 'Lato',Helvetica,Arial,sans-serif;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
+.node-type-organization div.field-name-equus-organizations-mission div.field-label {
+    background: #7F9B8C;
+    padding: 10px 15px;
+    color: #FFF;
+    font-size: 1.3em;
+    font-family: 'Lato',Helvetica,Arial,sans-serif;
+    font-weight: 100;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.node-type-organization #block-system-main, .node-type-organization #block-views-user-property-list-block-1 {
+    display: table-cell;
+}
