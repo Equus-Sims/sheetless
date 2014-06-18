@@ -101,8 +101,20 @@
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
-      print render($content);
+      //print render($content);
+      print render($content['equus_organizations_users']);
+      print render($content['equus_organizations_mission']);
     ?>
+
+      <div class='field'>
+          <div class="field-label">Stats</div>
+          <div class="field-items">
+            <div class="field-item">
+              [img here] <?php print l($bank_balance,$bank_transactions_path); ?><br />
+              <span class="label">Available Funds</span>
+            </div>
+          </div>
+      <div>
   </div>
 
   <?php print render($content['links']); ?>
