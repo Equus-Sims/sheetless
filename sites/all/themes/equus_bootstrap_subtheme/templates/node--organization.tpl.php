@@ -81,13 +81,7 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php
-    $ledger = equus_banking_retrieve_ledger();
-
-    //print_r($ledger);
-
-    print_r(equus_banking_balance($ledger, $node->nid));
-   ?>
+  
   <?php print $user_picture; ?>
 
   <?php print render($title_prefix); ?>
