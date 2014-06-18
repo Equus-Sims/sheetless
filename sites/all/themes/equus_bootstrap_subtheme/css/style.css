@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300);
 
 body {
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.428571429;
     color: #353535;
@@ -9,7 +9,8 @@ body {
 }
 
 a {
-    color: #ec9230;
+    /*OLD COLOR color: #ec9230;*/
+    color: #7F9B8C;
     text-decoration: none;
 }
 
@@ -278,7 +279,6 @@ div.views-field-title {
 }
 
 div.views-field-title a {
-    color: #353535;
     text-decoration: none;
 }
 
@@ -330,14 +330,20 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 /* Organization Page */
 
 .node-type-organization .region-content {
-    width: 75%;
+    width: 90%;
     margin: 6em auto 0;
     position: relative;
+    display: table;
+    max-width: 1000px;
 }
 
 .node-type-organization #block-system-main {
-    width: 30%;
-    display: inline-block;
+    width: 35%;
+    display: table-cell;
+}
+
+.node-type-organization #block-views-user-property-list-block-1 {
+    display: table-cell;
 }
 
 .node-type-organization #block-system-main > div:first-child {
@@ -364,10 +370,6 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     padding-bottom: 10px;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field a {
-    color: #7F9B8C;
-}
-
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field + div.views-field {
     padding-left: 15px;
     padding-right: 15px;
@@ -381,11 +383,6 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 
 .node-type-organization #block-system-main div.field {
     margin-bottom: 20px;
-}
-
-.node-type-organization #block-views-user-property-list-block-1 {
-    width: 50%;
-    display: inline-block;
 }
 
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list h2:first-child {
@@ -406,8 +403,4 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     font-weight: 100;
     margin-top: 0;
     margin-bottom: 0;
-}
-
-.node-type-organization #block-system-main, .node-type-organization #block-views-user-property-list-block-1 {
-    display: table-cell;
 }
