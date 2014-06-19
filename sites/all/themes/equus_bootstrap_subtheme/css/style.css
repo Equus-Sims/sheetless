@@ -327,9 +327,15 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 
 /* Horse Directory */
 
+/* User Profile */
+
+.page-user .block-views {
+    margin-bottom: 25px;
+}
+
 /* Organization Page */
 
-.node-type-organization .region-content {
+.node-type-organization .region-content, .page-user .region-content {
     width: 90%;
     margin: 6em auto 0;
     position: relative;
@@ -337,12 +343,12 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     max-width: 1000px;
 }
 
-.node-type-organization #block-system-main {
+.node-type-organization #block-system-main, .page-user #block-system-main {
     width: 35%;
     display: table-cell;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 {
+.node-type-organization #block-views-user-property-list-block-1,  {
     display: table-cell;
 }
 
@@ -355,7 +361,8 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     padding: 20px 30px;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list {
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list,
+.page-user .block-views {
     background: #FFF;
     font-family: 'Lato',Helvetica,Arial,sans-serif;
 }
@@ -366,7 +373,8 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 }
 
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img,
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field:last-child {
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field:last-child,
+.page-user .view-content .views-field:last-child {
     padding-bottom: 10px;
 }
 
@@ -394,7 +402,8 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 }
 
 .node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
-.node-type-organization #block-system-main div.field-label {
+.node-type-organization #block-system-main div.field-label,
+.page-user .block-views > h2 {
     background: #7F9B8C;
     padding: 10px 15px;
     color: #FFF;
