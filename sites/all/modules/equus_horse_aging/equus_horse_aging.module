@@ -99,17 +99,24 @@ function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $e
 	$foal_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_foal_age_multiplier')));
 	$adult_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_adult_age_multiplier')));
 
-	$age_months = ($today - $dob)/(60*60*24*(365/12));
+	$age_in_months = ($today - $dob)/(60*60*24*(365/12));
 
-	$calc_rl_months_foal = $transition_year*(12/(12/$foal_multiplier));
+	if ($age_in_months < 1) {
+		$entity_field[0]['value'] = 1;
+	} else {
 
-	$months_as_adult = $age_months - $calc_rl_months_foal;
+	$months_as_foal = $transition_year*($foal_multiplier);
 
-	$years_as_adult = ($months_as_adult/12.0)*(12/(12/$adult_multiplier));
+	$years_as_foal = $age_in_months/$foal_multiplier;
+
+	$months_as_adult = $age_in_months - $months_as_foal;
+
+	$years_as_adult = $months_as_adult / $adult_multiplier;
 
 	$calc_age = $years_as_adult + $transition_year;
 
 	$entity_field[0]['value'] = $calc_age;
+	}	
 }
 
 //function equus_horse_aging_calc_age_months($entity_type, $entity, $field) {
