@@ -111,7 +111,7 @@ function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $e
 
 	$months_as_adult = $age_in_months - $months_as_foal;
 
-	$years_as_adult = $months_as_adult / $adult_multiplier;
+	$years_as_adult = $age_in_months/$adult_multiplier;
 
 	$calc_age = $years_as_adult + $transition_year;
 
