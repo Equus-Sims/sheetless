@@ -35,5 +35,7 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
-  <?php print render($user_profile); ?>
+  <?php 
+  hide($user_profile['userpoints']);
+  print render($user_profile); ?>
 </div>
