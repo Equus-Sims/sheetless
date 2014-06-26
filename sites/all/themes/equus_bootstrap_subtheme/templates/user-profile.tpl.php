@@ -37,5 +37,26 @@
 <div class="profile"<?php print $attributes; ?>>
   <?php 
   hide($user_profile['userpoints']);
-  print render($user_profile); ?>
+
+  //print render($user_profile); ?>
+
+  <section class="">
+  <h1>About Me</h1>
+  <?php print render($user_profile['user_picture']);?><br />
+  <span><?php print format_username($elements['#account']);?></span><br />
+  <span><?php print render($user_profile['field_user_gender']);?></span>, <span>Age 26</span><br />
+  <p><?php print render($user_profile['field_user_biography']);?></p>
+  <div>
+  	<div>
+  	226
+  	</div>
+  	<div>
+  	102
+  	</div>
+  	<div>
+  	15
+  	</div>
+  </div>
+  </section>
+
 </div>
