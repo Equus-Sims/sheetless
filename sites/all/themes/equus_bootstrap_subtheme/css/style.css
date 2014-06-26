@@ -333,6 +333,14 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     margin-bottom: 25px;
 }
 
+.page-user .view-latest-blog-entry .views-row .field-content a[href$="blog"] {
+    color: #b7d3c5;
+    float: right;
+    margin-right: 20px;
+    position: relative;
+    top: -32px;
+}
+
 /* Organization Page */
 
 .node-type-organization .region-content, .page-user .region-content {
