@@ -23,3 +23,8 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 		$vars['bank_transactions_path'] = "organization/transactions/{$vars['node']->nid}";
 	}
 }
+
+function equus_bootstrap_subtheme_preprocess_user_profile(&$variables) {
+	$date = array_pop(field_get_items('user', $variables['elements']['#account'], 'field_user_dob'));
+	$variables['age'] = (new DateTime($date['value']))->diff(new DateTime())->y;
+}
