@@ -4,3 +4,4 @@ package = Equus Sims
 core = 7.x
 files[] = equus_organizations.install
 files[] = equus_organizations.module
+dependencies[] = equus_core
