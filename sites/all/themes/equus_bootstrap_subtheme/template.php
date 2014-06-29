@@ -24,6 +24,16 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 		$vars['bank_balance'] = money_format('%.0n',equus_banking_balance($ledger, $vars['node']->nid));
 		$vars['bank_transactions_path'] = "organization/transactions/{$vars['node']->nid}";
 	}
+
+	// set up render array for cover image
+	$image = field_get_items('node', $vars['node'], 'field_cover_image');
+    if (!empty($image)) {
+        $image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
+          'type' => 'image',
+          'settings' => array('image_style' => 'cover_image')
+        ));
+    }
+    $vars['cover_image'] = $image;
 }
 
 function equus_bootstrap_subtheme_get_assoc_org($uid) {
