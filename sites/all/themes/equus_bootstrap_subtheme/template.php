@@ -15,6 +15,8 @@ function _equus_bootstrap_subtheme_customize_comment_form(&$form) {
 }
 
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {
+	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
+
 	if ($vars['node']->type == "organization") {
 		$ledger = equus_banking_retrieve_ledger();
 
