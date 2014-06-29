@@ -34,6 +34,13 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
         ));
     }
     $vars['cover_image'] = $image;
+
+    if ($vars['node']->type == 'blog') {
+	    // set up render array for blog category
+	    $blog_category = field_view_field('node',$vars['node'],'field_blog_category');
+	    $blog_category['#label_display'] = 'hidden';
+	    $vars['blog_category'] = $blog_category;
+	}
 }
 
 function equus_bootstrap_subtheme_get_assoc_org($uid) {
