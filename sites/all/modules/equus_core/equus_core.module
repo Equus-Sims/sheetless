@@ -1,0 +1,11 @@
+<?php 
+/**
+ * Implements hook_entity_info_alter().
+ */
+
+function equus_core_entity_info_alter(&$entity_info) {
+	$entity_info['node']['view modes']['tiles'] = array(
+		'label' => t('Tiles'),
+		'custom settings' => TRUE,
+	);
+}
