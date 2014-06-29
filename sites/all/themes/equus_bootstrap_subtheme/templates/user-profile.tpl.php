@@ -58,5 +58,14 @@
   	</div>
   </div>
   </section>
-
+  <section>
+      <h1>Stats</h1>
+      <div class='field'>
+          <div class="icon">[img here]</div>
+          <div class="item">
+              <span class="value"><?php print $net_worth; ?></span><br />
+              <span class="label">Available Funds</span>
+          </div>
+      <div>
+  </section>
 </div>
