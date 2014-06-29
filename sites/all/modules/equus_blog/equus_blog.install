@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function equus_blog_install() {
+	$new_vocab = (object) array(
+		'name' => "Blog Categories",
+		'description' => "Categories for blogs",
+		'machine_name' => 'blog_categories'
+	);
+
+	taxonomy_vocabulary_save($new_vocab);
+
+	add_blog_tags_vocab();
+}
+
+function add_blog_tags_vocab() {
+	$new_vocab = (object) array(
+		'name' => "Blog Tags",
+		'description' => "Tags for blogs",
+		'machine_name' => 'blog_tags'
+	);
+
+	taxonomy_vocabulary_save($new_vocab);
+}
+
+/**
+ * Adds blog tag vocabulary
+ */
+function equus_blog_update_7100() {
+	add_blog_tags_vocab();
+}
