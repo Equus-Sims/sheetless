@@ -91,6 +91,6 @@
     <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
     <?php print $name; ?> on
     <?php print $submitted; ?>
-    <?php print render($teaser); ?>   
+    <?php print render($body_teaser); ?>   
   </div>
 </div>

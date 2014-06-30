@@ -82,7 +82,7 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-  <?php print $user_picture; ?>
+  <?php print render($cover_image); ?>
 
   <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
@@ -98,12 +98,18 @@
 
   <div class="content"<?php print $content_attributes; ?>>
     <?php
-      // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
-      print render($content);
     ?>
   </div>
+  <?php print render($blog_categories); ?>
+  <?php
+  if ($teaser) {
+  	print $body_teaser;
+  } else {
+  	print render($content['body']);
+  }
+  ?>
 
   <?php print render($content['links']); ?>
 
