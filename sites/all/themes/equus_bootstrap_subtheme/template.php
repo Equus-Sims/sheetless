@@ -45,7 +45,7 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['submitted'] = date("M j, Y", $vars['created']);
 
 	$body = field_get_items('node', $vars['node'], 'body');
-	$vars['teaser'] = text_summary($body[0]['value'], NULL, 300);
+	$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
 }
 
 function equus_bootstrap_subtheme_get_assoc_org($uid) {
