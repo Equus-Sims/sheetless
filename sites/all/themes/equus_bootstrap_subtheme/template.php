@@ -36,10 +36,10 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
     $vars['cover_image'] = $image;
 
     if ($vars['node']->type == 'blog') {
-	    // set up render array for blog category
-	    $blog_category = field_view_field('node',$vars['node'],'field_blog_category');
-	    $blog_category['#label_display'] = 'hidden';
-	    $vars['blog_category'] = $blog_category;
+	    // set up render array for blog categories
+	    $blog_categories = field_view_field('node',$vars['node'],'field_blog_categories');
+	    $blog_categories['#label_display'] = 'hidden';
+	    $vars['blog_categories'] = $blog_categories;
 	}
 }
 
