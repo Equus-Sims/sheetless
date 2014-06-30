@@ -364,7 +364,9 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 
 /* Organization Page */
 
-.node-type-organization .region-content, .page-user .region-content {
+.node-type-organization .region-content,
+.page-user .region-content,
+.page-organization .view-transactions {
     width: 90%;
     margin: 6em auto 0;
     position: relative;
@@ -443,4 +445,22 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     font-weight: 100;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+/* Bank */
+
+.page-organization .view-transactions table thead {
+    background: #E9F4EE;
+    color: #829E90;
+}
+
+.page-organization .view-transactions table td,
+.page-organization .view-transactions table th {
+    padding: 30px 25px;
+    border: 1px solid #DFDEE4;
+    font-weight: normal;
+}
+
+.page-organization .view-transactions table td {
+    background: #FFFFFF;
 }
