@@ -5,3 +5,4 @@ core = 7.x
 files[] = equus_horse_aging.install
 files[] = equus_horse_aging.module
 dependencies[] = entityreference
+dependencies[] = equus_core

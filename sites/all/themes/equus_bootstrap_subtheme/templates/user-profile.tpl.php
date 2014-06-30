@@ -44,7 +44,7 @@
   <h1>About Me</h1>
   <?php print render($user_profile['user_picture']);?><br />
   <span><?php print format_username($elements['#account']);?></span><br />
-  <span><?php print render($user_profile['field_user_gender']);?></span>, <span>Age 26</span><br />
+  <span><?php print render($user_profile['field_user_gender']);?></span>, <span>Age <?php print $age; ?></span><br />
   <p><?php print render($user_profile['field_user_biography']);?></p>
   <div>
   	<div>
@@ -58,5 +58,14 @@
   	</div>
   </div>
   </section>
-
+  <section>
+      <h1>Stats</h1>
+      <div class='field'>
+          <div class="icon">[img here]</div>
+          <div class="item">
+              <span class="value"><?php print $net_worth; ?></span><br />
+              <span class="label">Net Worth</span>
+          </div>
+      <div>
+  </section>
 </div>

@@ -8,6 +8,10 @@ body {
     background-color: #f1eee6;
 }
 
+h2 {
+    font-family: inherit;
+}
+
 a {
     /*OLD COLOR color: #ec9230;*/
     color: #7F9B8C;
@@ -269,8 +273,9 @@ table.cols-3 {
     padding: 0;
 }
 
-div.views-field-title {
-    padding: 0 30px;
+div.views-field-title,
+div.equus-tile h2 {
+    padding-left: 30px;
     text-align: left;
     margin: 10px auto;
     font-size: 16px;
