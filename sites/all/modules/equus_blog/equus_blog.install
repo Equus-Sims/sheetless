@@ -12,10 +12,12 @@ function equus_blog_install() {
 
 	taxonomy_vocabulary_save($new_vocab);
 
-	add_blog_tags_vocab();
+	equus_blog_add_blog_tags_vocab();
+
+	equus_blog_add_default_blog_categories();
 }
 
-function add_blog_tags_vocab() {
+function equus_blog_add_blog_tags_vocab() {
 	$new_vocab = (object) array(
 		'name' => "Blog Tags",
 		'description' => "Tags for blogs",
@@ -25,9 +27,54 @@ function add_blog_tags_vocab() {
 	taxonomy_vocabulary_save($new_vocab);
 }
 
+function equus_blog_add_default_blog_categories() {
+	$vocab = taxonomy_vocabulary_machine_name_load('blog_categories');
+	$term_names = array(
+		"CC Finds",
+		"Closed Roleplay",
+		"Educational",
+		"Feedback",
+		"Games",
+		"Help",
+		"How-To",
+		"Non-Sims",
+		"Open Roleplay",
+		"Stable News",
+		"Storytelling",
+		"Video",
+		"WCIF",
+		"WIP",
+		"18+",
+		"Other"	
+	);
+
+	foreach ($term_names as $term_name) {
+		$term = (object) array(
+			'name' => $term_name,
+			'vid' => $vocab->vid,
+		);
+		taxonomy_term_save($term);
+	}	
+}
+
 /**
  * Adds blog tag vocabulary
  */
 function equus_blog_update_7100() {
-	add_blog_tags_vocab();
+	equus_blog_add_blog_tags_vocab();
+}
+
+/**
+ * Adds default blog categories
+ */
+function equus_blog_update_7101(){
+	equus_blog_add_default_blog_categories();
+}
+
+function equus_blog_uninstall() {
+	$vocab = taxonomy_vocabulary_machine_name_load('blog_categories');
+	taxonomy_vocabulary_delete($vocab->vid);
+
+	$vocab = taxonomy_vocabulary_machine_name_load('blog_tags');
+	taxonomy_vocabulary_delete($vocab->vid);
 }
