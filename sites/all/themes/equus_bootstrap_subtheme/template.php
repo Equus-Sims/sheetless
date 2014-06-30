@@ -41,6 +41,11 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	    $blog_categories['#label_display'] = 'hidden';
 	    $vars['blog_categories'] = $blog_categories;
 	}
+
+	$vars['submitted'] = date("M j, Y", $vars['created']);
+
+	$body = field_get_items('node', $vars['node'], 'body');
+	$vars['teaser'] = text_summary($body[0]['value'], NULL, 300);
 }
 
 function equus_bootstrap_subtheme_get_assoc_org($uid) {
