@@ -56,6 +56,19 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
   $build['links']['node']['#links']['node_read_more'] = $link_read_more;*/
 }
 
+function equus_bootstrap_subtheme_preprocess_page(&$vars) {
+	$vars['foo'] = "foo not set";
+
+	if (isset($vars['node'])) {
+		// check if node type is one of the ones with special title
+		if ($vars['node']->type == "organization") {
+			$foo = "foo";
+			$vars['foo'] = $foo;
+		} 
+		// set variables for special title fields
+	}
+}
+
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
 
