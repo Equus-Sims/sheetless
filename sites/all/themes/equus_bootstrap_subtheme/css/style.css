@@ -251,20 +251,24 @@ div.form-type-textfield {
 
 /* End Forms */
 
+/* General Styling */
+
+.region-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 
 /* Daily Digest */
 
 span.views-label {
     display: none;
-} 
-
-table.cols-3 {
-    margin: 0 50px;
 }
 
-.col-1, .col-first, .col-2, .col-3, .col-4, .col-last {
+table.cols-3 tr > td {
     background-color: #fff;
     padding: 0;
+    vertical-align: top;
 }
 
 .views-view-grid {
@@ -322,7 +326,7 @@ div.views-field-body p {
     text-align: justify;
     }
 
-div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-image img {
+.region-content .view-content table .content > img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
 }
@@ -342,8 +346,7 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     height: 160px;
 }
 
-/* MY BLOG LINK */
-.page-user #block-views-latest-blog-entry-block .block-title a[href$="blog"] {
+.page-user #block-views-latest-blog-entry-block .block-title a[href$="blog"] /* MY BLOG LINK */ {
     color: #b7d3c5;
     float: right;
     margin-right: 20px;
