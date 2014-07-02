@@ -14,6 +14,19 @@ function _equus_bootstrap_subtheme_customize_comment_form(&$form) {
   return $form;
 }
 
+function equus_bootstrap_subtheme_preprocess_block(&$vars) {
+	$vars['full_content_name'] = "";
+	$vars['full_content_path'] = "";
+
+	if ($vars['block_html_id'] == 'block-views-latest-blog-entry-block') {
+		$url = explode('/',$_GET['q']);
+		$uid = $url[1];
+
+	    $vars['full_content_name'] = "My Blog";
+	    $vars['full_content_path'] = "user/$uid/blog";
+	}
+}
+
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
 
