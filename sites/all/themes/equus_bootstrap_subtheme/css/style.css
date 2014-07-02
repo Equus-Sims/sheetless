@@ -355,6 +355,7 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 .page-user #block-system-main .profile {
     margin: 0 20px;
     background: #FFF;
+    max-width: 310px;
 }
 
 .page-user #block-system-main .profile section > :nth-child(n+3)  {
