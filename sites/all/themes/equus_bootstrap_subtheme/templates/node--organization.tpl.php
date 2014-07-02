@@ -99,8 +99,8 @@
   <div class="content"<?php print $content_attributes; ?>>
     <?php
       // We hide the comments and links now so that we can render them later.
-      hide($content['comments']);
-      hide($content['links']);
+      //hide($content['comments']);
+      //hide($content['links']);
       //print render($content);
       print render($content['equus_organizations_users']);
       print render($content['equus_organizations_mission']);
