@@ -275,7 +275,6 @@ table.cols-3 {
 
 div.views-field-title,
 div.equus-tile h2 {
-    padding-left: 30px;
     text-align: left;
     margin: 10px auto;
     font-size: 16px;
@@ -343,13 +342,15 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     height: 160px;
 }
 
-.page-user .view-latest-blog-entry .views-row .field-content a[href$="blog"] {
+/* MY BLOG LINK */
+.page-user #block-views-latest-blog-entry-block .block-title a[href$="blog"] {
     color: #b7d3c5;
     float: right;
     margin-right: 20px;
     position: relative;
-    top: -30px;
+    top: 2px;
     text-transform: uppercase;
+    font-size: 0.75em;
 }
 
 .page-user #block-system-main .profile {
@@ -361,6 +362,10 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
 .page-user #block-system-main .profile section > :nth-child(n+3)  {
     padding: 0 20px;
     display: block;
+}
+
+.page-user .region-content section div.view-content > *:not(img) {
+    padding: 0 15px;
 }
 
 /* Organization Page */
@@ -405,8 +410,8 @@ div.views-field-field-blog-cover-image img, div.views-field-field-horse-cover-im
     height: auto;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img,
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field:last-child,
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image:not(*:empty) img,
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field:last-child:not(*:empty),
 .page-user .view-content .views-field:last-child {
     padding-bottom: 17px;
 }
