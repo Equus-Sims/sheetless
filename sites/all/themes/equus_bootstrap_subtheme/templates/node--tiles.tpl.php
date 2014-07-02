@@ -84,7 +84,6 @@
   <div class="content"<?php print $content_attributes; ?>>
     <?php print render($cover_image); ?>
 
-
     <?php if ($node->type == 'blog') print render($blog_categories); ?>
     <?php if ($node->type == 'horse') print render($content['field_breed']); ?>
     
