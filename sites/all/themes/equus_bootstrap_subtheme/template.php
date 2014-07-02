@@ -27,6 +27,35 @@ function equus_bootstrap_subtheme_preprocess_block(&$vars) {
 	}
 }
 
+function equus_bootstrap_subtheme_node_view_alter(&$build) {
+  // Remove the read more link
+  unset($build['links']['node']['#links']['node-readmore']);
+  unset($build['links']['blog']['#links']['blog_usernames_blog']);
+
+  // Add your own custom link
+  /*$build['links']['node']['#links']['example-mylink'] = array(
+    'title' => t('Test link'), 
+    'href' => 'foo', 
+    'html' => TRUE, 
+    'attributes' => array(
+      'title' => 'Test link',
+    ),
+  );*/
+
+  // Move read more link to first slot
+  /*$link_read_more = $build['links']['node']['#links']['node_read_more'];
+  unset($build['links']['node']['#links']['node_read_more']);
+  $links = $build['links']['node']['#links'];
+  $build['links']['node']['#links'] = array(
+    'node_read_more' => $link_read_more,
+  ) + $links;
+
+  // Move link to the last slot
+  $link_read_more = $build['links']['node']['#links']['node_read_more'];
+  unset($build['links']['node']['#links']['node_read_more']);
+  $build['links']['node']['#links']['node_read_more'] = $link_read_more;*/
+}
+
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
 
