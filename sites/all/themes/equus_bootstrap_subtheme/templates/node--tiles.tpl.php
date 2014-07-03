@@ -84,12 +84,14 @@
   <div class="content"<?php print $content_attributes; ?>>
     <?php print render($cover_image); ?>
 
-    <?php if ($node->type == 'blog') print render($blog_categories); ?>
-    <?php if ($node->type == 'horse') print render($content['field_breed']); ?>
-    
-    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-    <?php print $name; ?> on
-    <?php print $submitted; ?>
-    <?php print render($body_teaser); ?>   
+    <div class="content-info">
+	    <?php if ($node->type == 'blog') print render($blog_categories); ?>
+	    <?php if ($node->type == 'horse') print render($content['field_breed']); ?>
+	    
+	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+	    <?php print $name; ?> on
+	    <?php print $submitted; ?>
+	    <?php print render($body_teaser); ?>
+	</div>
   </div>
 </div>

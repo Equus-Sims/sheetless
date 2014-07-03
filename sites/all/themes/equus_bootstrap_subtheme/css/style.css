@@ -258,6 +258,9 @@ div.form-type-textfield {
     margin: 0 auto;
 }
 
+.front .region-content {
+    max-width: 100%;
+}
 
 /* Daily Digest */
 
@@ -268,6 +271,7 @@ span.views-label {
 table.cols-3 tr > td {
     background-color: #fff;
     padding: 0;
+    width: 33%;
     vertical-align: top;
 }
 
@@ -329,6 +333,10 @@ div.views-field-body p {
 .region-content .view-content table .content > img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
+}
+
+.region-content .view-content table .content > .content-info {
+    margin: 0 15px 15px;
 }
 
 /* End Daily Digest */
