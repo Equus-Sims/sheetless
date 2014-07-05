@@ -35,4 +35,36 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
+  <?php 
+  hide($user_profile['userpoints']);
+
+  //print render($user_profile); ?>
+
+  <section class="">
+  <?php print render($user_profile['user_picture']);?><br />
+  <span class="username"><?php print format_username($elements['#account']);?></span><br />
+  <span class="user-gender"><?php print $user_gender; ?></span>, <span>Age <?php print $age; ?></span><br />
+  <p><?php print $user_biography;?></p>
+  <div>
+  	<div>
+  	226
+  	</div>
+  	<div>
+  	102
+  	</div>
+  	<div>
+  	15
+  	</div>
+  </div>
+  </section>
+  <section>
+      <h1>Stats</h1>
+      <div class='field'>
+          <div class="icon">[img here]</div>
+          <div class="item">
+              <span class="value"><?php print $net_worth; ?></span><br />
+              <span class="label">Net Worth</span>
+          </div>
+      <div>
+  </section>
 </div>
