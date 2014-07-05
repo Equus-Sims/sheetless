@@ -145,7 +145,9 @@ function equus_bootstrap_subtheme_get_net_worth($uid) {
 }
 
 function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
-	$date = array_pop(field_get_items('user', $vars['elements']['#account'], 'field_user_dob'));
+	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_dob');
+	$date = array_pop($items);
+	
 	$dob = new DateTime($date['value']);
 	$interval = $dob->diff(new DateTime());
 	$vars['age'] = $interval->y;
