@@ -50,7 +50,7 @@
   	226
   	</div>
   	<div>
-  	102
+  	<?php print $gallery_count;?>
   	</div>
   	<div>
   	15
