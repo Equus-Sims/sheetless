@@ -1,5 +1,5 @@
 name = Equus Bootstrap Sub-theme
-description = A Bootstrap Sub-theme.
+description = A Bootstrap Sub-theme for Equus-sims
 core = 7.x
 base theme = bootstrap
 
