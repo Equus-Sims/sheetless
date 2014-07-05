@@ -1,0 +1,8 @@
+name = Equus Blog
+description = A custom module for Equus-sims blogs
+package = Equus Sims
+core = 7.x
+files[] = equus_core.install
+files[] = equus_core.module
+dependencies[] = equus_core
+dependencies[] = taxonomy
