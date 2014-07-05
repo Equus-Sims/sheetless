@@ -13,3 +13,35 @@ function equus_members_entity_info_alter(&$entity_info) {
 		'label' => t('Chibi About'),
 		'custom settings' => TRUE,
 	);
+}
+
+function equus_members_get_net_worth($uid) {
+	$ledger = equus_banking_retrieve_ledger();
+	$nids = equus_bootstrap_subtheme_get_assoc_org($uid);
+	
+	$total = array_reduce($nids, function($carry, $item) use (&$ledger) {
+		return $carry + equus_banking_balance($ledger, $item);
+	}, 0);
+
+	setlocale(LC_MONETARY, 'en_US');
+	return money_format('%.0n', $total);
+}
+
+function equus_members_preprocess_user_profile(&$vars) {
+	$vars['theme_hook_suggestions'][] = 'user_profile__' . $vars['elements']['#view_mode'];
+
+	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_dob');
+	$date = array_pop($items);
+	
+	$dob = new DateTime($date['value']);
+	$interval = $dob->diff(new DateTime());
+	$vars['age'] = $interval->y;
+	
+	$vars['net_worth'] = equus_members_get_net_worth($vars['elements']['#account']->uid);
+
+	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_gender');
+	$vars['user_gender'] = $items[0]['value'];
+
+	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_biography');
+	$vars['user_biography'] = $items[0]['value'];
+}	
