@@ -2,3 +2,17 @@
 /**
  * Implements hook_entity_info_alter().
  */
+
+function equus_members_entity_info_alter(&$entity_info) {
+	$entity_info['user']['view modes']['about'] = array(
+		'label' => t('About Me'),
+		'custom settings' => TRUE,
+	);
+}
+
+function equus_members_entity_info_alter(&$entity_info) {
+	$entity_info['user']['view modes']['chibi_about'] = array(
+		'label' => t('Chibi About'),
+		'custom settings' => TRUE,
+	);
+}
