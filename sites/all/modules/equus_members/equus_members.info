@@ -1,0 +1,7 @@
+name = Equus Core
+description = A custom module for Equus-sims for general purpose.
+package = Equus Sims
+core = 7.x
+files[] = equus_core.install
+files[] = equus_core.module
+dependencies[] = equus_core
