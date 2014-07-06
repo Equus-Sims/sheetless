@@ -73,15 +73,23 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
 }
 
 function equus_bootstrap_subtheme_preprocess_page(&$vars) {
-	$vars['foo'] = "foo not set";
+	 if (arg(0) == 'user') /*AND arg(2) == 'profile')*/ {
+	 	$uid = arg(1);
+	 	$user = user_load($uid);
+		$username = $user->name;
 
-	if (isset($vars['node'])) {
+		$vars['draw_sub_header'] = true;
+	 	$vars['equus_type'] = "Member";
+	 	$vars['creation_date'] = date("M j, Y", $user->created);
+	 } else if (isset($vars['node']) AND ($vars['node']->type != 'page')) {
+	 	$vars['draw_sub_header'] = true;
+		$vars['title'] = $vars['node']->title;
+		$vars['equus_type'] = $vars['node']->type;
+		$vars['creation_date'] = date("M j, Y", $vars['node']->created);
 		// check if node type is one of the ones with special title
-		if ($vars['node']->type == "organization") {
-			$foo = "foo";
-			$vars['foo'] = $foo;
-		} 
 		// set variables for special title fields
+	} else {
+		$vars['draw_sub_header'] = false;
 	}
 }
 
