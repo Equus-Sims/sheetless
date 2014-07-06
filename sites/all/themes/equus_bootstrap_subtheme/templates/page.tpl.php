@@ -152,7 +152,19 @@
       <?php if (!empty($action_links)): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
-      <?php print $foo; ?>
+      
+      <?php if ($draw_sub_header): ?>
+        <div class="equus-sub-header">
+          <h1><?php print $title; ?></h1>
+          <div>
+          <span class="equus-type"><?php print $equus_type; ?></span>
+          <span class="creation-date"><?php print $creation_date; ?></span>
+          </div>
+        </div>
+      <?php else: ?>
+        <h1><?php print $title; ?></h1>
+      <?php endif; ?>
+      
       <?php print render($page['content']); ?>
     </section>
 
