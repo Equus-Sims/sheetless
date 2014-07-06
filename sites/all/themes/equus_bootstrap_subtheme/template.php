@@ -156,25 +156,6 @@ function equus_bootstrap_subtheme_get_assoc_org($uid) {
 	return $nids;
 }
 
-function equus_bootstrap_subtheme_get_net_worth($uid) {
-	$ledger = equus_banking_retrieve_ledger();
-	$nids = equus_bootstrap_subtheme_get_assoc_org($uid);
-	
-	$total = array_reduce($nids, function($carry, $item) use (&$ledger) {
-		return $carry + equus_banking_balance($ledger, $item);
-	}, 0);
-
-	setlocale(LC_MONETARY, 'en_US');
-	return money_format('%.0n', $total);
-}
-
 function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
-	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_dob');
-	$date = array_pop($items);
 	
-	$dob = new DateTime($date['value']);
-	$interval = $dob->diff(new DateTime());
-	$vars['age'] = $interval->y;
-	
-	$vars['net_worth'] = equus_bootstrap_subtheme_get_net_worth($vars['elements']['#account']->uid);
 }
