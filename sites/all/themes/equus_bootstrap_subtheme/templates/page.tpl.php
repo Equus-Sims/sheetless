@@ -159,7 +159,9 @@
           <div>
           <span class="equus-type"><?php print $equus_type; ?></span>
           <span class="creation-date"><?php print $creation_date; ?></span>
+          <?php if ($message): ?>
           <span class="message"><?php print l("Message", $message); ?></span>
+          <?php endif; ?>
           </div>
         </div>
       <?php else: ?>

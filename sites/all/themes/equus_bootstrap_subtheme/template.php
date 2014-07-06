@@ -47,6 +47,9 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
   // Remove the read more link
   unset($build['links']['node']['#links']['node-readmore']);
   unset($build['links']['blog']['#links']['blog_usernames_blog']);
+  unset($build['links']['comment']['#links']['comment-add']);
+  unset($build['links']['flag']['#links']['flag-likes']);
+  unset($build['links']['flag']['#links']['flag-bookmarks']);
 
   // Add your own custom link
   /*$build['links']['node']['#links']['example-mylink'] = array(
@@ -128,6 +131,20 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	$body = field_get_items('node', $vars['node'], 'body');
 	$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
+}	
+
+function equus_bootstrap_subtheme_preprocess_flag(&$vars) {
+	$vars['link_text'] = "<3 ".equus_bootstrap_subtheme_get_like_count($vars['entity_id']);
+}
+
+function equus_bootstrap_subtheme_get_like_count($nid) {
+	$result = flag_get_counts('node', $nid);
+
+	if (isset($result['likes'])) {
+		return $result['likes'];
+	} else {
+		return 0;
+	}
 }
 
 function equus_bootstrap_subtheme_get_assoc_org($uid) {
