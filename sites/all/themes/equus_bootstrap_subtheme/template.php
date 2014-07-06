@@ -25,6 +25,22 @@ function equus_bootstrap_subtheme_preprocess_block(&$vars) {
 	    $vars['full_content_name'] = "My Blog";
 	    $vars['full_content_path'] = "user/$uid/blog";
 	}
+
+	if ($vars['block_html_id'] == 'block-views-newest-horse-view-block') {
+		$url = explode('/',$_GET['q']);
+		$uid = $url[1];
+
+	    $vars['full_content_name'] = "My Horses";
+	    $vars['full_content_path'] = "user/$uid/horses";
+	}
+
+	if ($vars['block_html_id'] == 'block-views-latest-gallery-image-block') {
+		$url = explode('/',$_GET['q']);
+		$uid = $url[1];
+
+	    $vars['full_content_name'] = "My Album";
+	    $vars['full_content_path'] = "user/$uid/gallery";
+	}
 }
 
 function equus_bootstrap_subtheme_node_view_alter(&$build) {
