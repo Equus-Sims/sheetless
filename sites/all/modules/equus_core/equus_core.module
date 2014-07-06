@@ -9,3 +9,39 @@ function equus_core_entity_info_alter(&$entity_info) {
 		'custom settings' => TRUE,
 	);
 }
+
+function equus_core_block_info() {
+	$blocks = array();
+
+	$blocks['stats'] = array(
+		'info' => t('Stats'),
+		'region' => 'sidebar_first',
+		'visibility' => BLOCK_VISIBILITY_LISTED,
+		'pages' => 'user/*/profile'
+	);
+	
+	return $blocks;
+}
+
+function equus_core_block_view($delta='') {
+	$block = array();
+
+	switch($delta) {
+		case 'stats':
+			$vars = array('stats' => array());
+			$block['title'] = "Stats";
+			$block['content'] = theme('equus_stats', $vars);
+			break;
+	}
+
+	return $block;
+}
+
+function equus_core_theme() {
+	return array(
+		'equus_stats' => array(
+			'variables' => array(),
+			'template' => 'equus_stats',
+		),
+	);
+}
