@@ -78,6 +78,9 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	 	$user = user_load($uid);
 		$username = $user->name;
 
+		$recipients = $user;
+		$vars['message'] = privatemsg_get_link($recipients);
+
 		$vars['draw_sub_header'] = true;
 	 	$vars['equus_type'] = "Member";
 	 	$vars['creation_date'] = date("M j, Y", $user->created);
