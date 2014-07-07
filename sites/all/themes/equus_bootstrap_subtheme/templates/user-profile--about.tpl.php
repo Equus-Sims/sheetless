@@ -53,7 +53,7 @@
   	<?php print $gallery_count;?>
   	</div>
   	<div>
-  	15
+  	<?php print $horse_count;?>
   	</div>
   </div>
   </section>
