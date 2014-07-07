@@ -35,7 +35,6 @@ function equus_members_gallery_image_count($uid) {
 		->propertyCondition('status', 1)
 		->propertyCondition('uid', $uid);
 	$result = $query->execute();
-	dpm($result);
 	return count($result['node']);
 }
 
