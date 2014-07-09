@@ -40,10 +40,11 @@
 
   //print render($user_profile); ?>
 
-  <section class="">
-  <?php print render($user_profile['user_picture']);?><br />
-  <span class="username"><?php print format_username($elements['#account']);?></span><br />
-  <span class="user-gender"><?php print $user_gender; ?></span>, <span>Age <?php print $age; ?></span><br />
+  <?php print render($user_profile['user_picture']);?>
+
+  <section class="profileinfo">
+  <div class="username"><?php print format_username($elements['#account']);?></div>
+  <div class="userinfo"><span class="user-gender"><?php print $user_gender; ?></span>, <span>Age <?php print $age; ?></span></div>
   <p><?php print $user_biography;?></p>
   <div>
   	<div>

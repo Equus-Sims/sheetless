@@ -345,8 +345,24 @@ div.views-field-body p {
 
 /* User Profile */
 
+.page-user #block-system-main {
+    display: none;
+}
+
 .page-user .block-views {
     margin-bottom: 25px;
+}
+
+.page-user .block-views > .view .views-row > * {
+    padding: 0 20px;
+}
+
+.page-user .block-views > .view .profile {
+    padding: 0;
+}
+
+.page-user .block-views > .view .profileinfo {
+    padding: 0 20px;
 }
 
 .page-user .profile .user-picture {
@@ -354,7 +370,7 @@ div.views-field-body p {
     height: 160px;
 }
 
-.page-user #block-views-latest-blog-entry-block .block-title a[href$="blog"] /* MY BLOG LINK */ {
+.page-user #block-views-latest-blog-entry-block .block-title .full_content_link a /* MY BLOG LINK */ {
     color: #b7d3c5;
     float: right;
     margin-right: 20px;
@@ -364,25 +380,93 @@ div.views-field-body p {
     font-size: 0.75em;
 }
 
-.page-user #block-system-main .profile {
-    margin: 0 20px;
+.page-user #block-views-about-me-block,
+.page-user #block-views-organizations-list-view-block,
+.page-user #block-equus-core-stats {
     background: #FFF;
     max-width: 310px;
 }
 
-.page-user #block-system-main .profile section > :nth-child(n+3)  {
-    padding: 0 20px;
-    display: block;
+.page-user .profile section > .user-picture {
+    padding: 0;
 }
 
-.page-user .region-content section div.view-content > *:not(img) {
+.page-user .well {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    max-width: 310px;
+    margin-top: 10em;
+}
+
+.page-user .row {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-user .equus-sub-header {
+    background: #C2BDAA;
+    width: 100%;
+    color: #FFFFFF;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 20px 0;
+}
+
+.page-user .equus-sub-header .equus-sub-header-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
     padding: 0 15px;
+}
+
+.page-user .equus-sub-header .equus-sub-header-container > * {
+    display: table-cell;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.page-user .equus-sub-header h1 {
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 5px 0;
+}
+
+.page-user .equus-sub-header .message {
+    
+    right: 20px;
+}
+
+.page-user .equus-sub-header .message a {
+    color: #EAE9E4;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background: #7F7262;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.page-user .equus-sub-header .message a:hover {
+    text-decoration: none;
+}
+
+/*.page-user .col-sm-3 {
+    width: 35%;
+}*/
+
+.page-user .col-sm-9 {
+    width: 65%;
+    margin-top: 10em;
 }
 
 /* Organization Page */
 
 .node-type-organization .region-content,
-.page-user .region-content,
 .page-organization .view-transactions {
     width: 90%;
     margin: 6em auto 0;
@@ -391,7 +475,7 @@ div.views-field-body p {
     max-width: 1000px;
 }
 
-.node-type-organization #block-system-main, .page-user #block-system-main {
+.node-type-organization #block-system-main {
     width: 35%;
     display: table-cell;
 }
@@ -452,7 +536,7 @@ div.views-field-body p {
 
 .node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
 .node-type-organization #block-system-main div.field-label,
-.page-user .block-views > h2,
+.page-user h2.block-title,
 .page-user #block-system-main .profile h1:first-child {
     background: #7F9B8C;
     padding: 10px 15px;

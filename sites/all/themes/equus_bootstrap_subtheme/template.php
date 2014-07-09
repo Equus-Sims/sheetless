@@ -97,6 +97,17 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	} else {
 		$vars['draw_sub_header'] = false;
 	}
+
+	//Render correct column widths
+	if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+		$variables['content_column_class'] = ' class="col-sm-6"';
+	}
+	elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
+		$variables['content_column_class'] = ' class="col-sm-8"';
+	}
+	else {
+		$variables['content_column_class'] = ' class="col-sm-12"';
+	}
 }
 
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {

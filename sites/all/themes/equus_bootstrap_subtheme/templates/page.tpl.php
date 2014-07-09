@@ -123,10 +123,29 @@
     <?php print render($page['header']); ?>
   </header> <!-- /#page-header -->
 
+  <?php if ($draw_sub_header): ?>
+      <div class="equus-sub-header">
+        <div class="equus-sub-header-container">
+          <div>
+            <h1><?php print $title; ?></h1>
+            <span class="equus-type"><?php print $equus_type; ?></span>
+            <span class="creation-date"><?php print $creation_date; ?></span>
+          </div>
+          <div class="equus-sub-header-container-buttons">
+            <?php if ($message): ?>
+              <span class="message"><?php print l("Message", $message); ?></span>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    <?php else: ?>
+      <h1><?php print $title; ?></h1>
+    <?php endif; ?>
+
   <div class="row">
 
     <?php if (!empty($page['sidebar_first'])): ?>
-      <aside class="col-sm-3" role="complementary">
+      <aside class="col-sm-4" role="complementary">
         <?php print render($page['sidebar_first']); ?>
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>
@@ -151,21 +170,6 @@
       <?php endif; ?>
       <?php if (!empty($action_links)): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
-      
-      <?php if ($draw_sub_header): ?>
-        <div class="equus-sub-header">
-          <h1><?php print $title; ?></h1>
-          <div>
-          <span class="equus-type"><?php print $equus_type; ?></span>
-          <span class="creation-date"><?php print $creation_date; ?></span>
-          <?php if ($message): ?>
-          <span class="message"><?php print l("Message", $message); ?></span>
-          <?php endif; ?>
-          </div>
-        </div>
-      <?php else: ?>
-        <h1><?php print $title; ?></h1>
       <?php endif; ?>
       
       <?php print render($page['content']); ?>
