@@ -76,8 +76,9 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
 }
 
 function equus_bootstrap_subtheme_preprocess_page(&$vars) {
-	 if (arg(0) == 'user') /*&& arg(2) == 'profile')*/ {
-	 	$uid = arg(1);
+	 $alias = drupal_get_path_alias();
+	 if (arg(0,$alias) == 'user' && arg(2,$alias) == 'profile') {
+	 	$uid = arg(1,$alias);
 	 	$user = user_load($uid);
 		$username = $user->name;
 
