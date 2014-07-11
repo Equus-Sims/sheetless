@@ -343,7 +343,23 @@ div.views-field-body p {
 
 /* Horse Directory */
 
-/* User Profile */
+/**** User Profile ****/
+
+/* general styles */
+
+/*.page-user .col-sm-3 {
+    width: 35%;
+}*/
+
+.page-user .col-sm-9 {
+    width: 65%;
+    margin-top: 10em;
+}
+
+.page-user .row /*page width and center*/ {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
 .page-user #block-system-main {
     display: none;
@@ -351,59 +367,24 @@ div.views-field-body p {
 
 .page-user .block-views {
     margin-bottom: 25px;
+    padding-bottom: 20px;
 }
 
-.page-user .block-views > .view .views-row > * {
+.page-user .block-views > .view .views-row > *,
+.page-user .block-views > .view .node-teaser .node-content,
+.page-user .block-views > .view .node-teaser .content {
     padding: 0 20px;
 }
 
-.page-user .block-views > .view .profile {
+.page-user .block-views > .view .profile,
+.page-user .block-views > .view .node-teaser {
     padding: 0;
 }
 
-.page-user .block-views > .view .profileinfo {
-    padding: 0 20px;
-}
+/* END general styles */
 
-.page-user .profile .user-picture {
-    overflow: hidden;
-    height: 160px;
-}
 
-.page-user #block-views-latest-blog-entry-block .block-title .full_content_link a /* MY BLOG LINK */ {
-    color: #b7d3c5;
-    float: right;
-    margin-right: 20px;
-    position: relative;
-    top: 2px;
-    text-transform: uppercase;
-    font-size: 0.75em;
-}
-
-.page-user #block-views-about-me-block,
-.page-user #block-views-organizations-list-view-block,
-.page-user #block-equus-core-stats {
-    background: #FFF;
-    max-width: 310px;
-}
-
-.page-user .profile section > .user-picture {
-    padding: 0;
-}
-
-.page-user .well {
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    max-width: 310px;
-    margin-top: 10em;
-}
-
-.page-user .row {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+/* top user bar */
 
 .page-user .equus-sub-header {
     background: #C2BDAA;
@@ -436,7 +417,6 @@ div.views-field-body p {
 }
 
 .page-user .equus-sub-header .message {
-    
     right: 20px;
 }
 
@@ -454,17 +434,95 @@ div.views-field-body p {
 .page-user .equus-sub-header .message a:hover {
     text-decoration: none;
 }
+/* END top user bar */
 
-/*.page-user .col-sm-3 {
-    width: 35%;
-}*/
 
-.page-user .col-sm-9 {
-    width: 65%;
+/* sidebar */
+
+.page-user .well {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    max-width: 310px;
     margin-top: 10em;
 }
 
-/* Organization Page */
+.page-user .profile .user-picture {
+    overflow: hidden;
+    height: 160px;
+}
+
+.page-user .profileinfo .profileinfo-userdata {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.page-user .profileinfo .username {
+    color: #7F9B8C;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.page-user .profileinfo .userinfo {
+    text-transform: uppercase;
+}
+
+.page-user .profileinfo-extralinks div {
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+}
+
+.page-user .profileinfo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #DEDFE4;
+}
+
+/* END sidebar */
+
+
+/* right side content */
+
+.page-user .block-views > .view .node-teaser img:first-child {
+    width: 100%;
+    height: auto;
+}
+
+.page-user .block-views .block-title .full_content_link a /* MY BLOG LINK */ {
+    color: #b7d3c5;
+    float: right;
+    margin-right: 15px;
+    position: relative;
+    top: 2px;
+    text-transform: uppercase;
+    font-size: 0.75em;
+}
+
+.page-user .block-views > .view .node-content > p {
+    margin-bottom: 10px;
+}
+/* END right side content */
+
+
+/* blog links */
+
+.page-user .block-views > .view .node-links {
+    border-top: 1px solid #DEDFE4;
+    padding-top: 20px;
+}
+
+.page-user .block-views > .view .node-links > * {
+    margin: 5px 10px;
+}
+
+.page-user .block-views > .view .node-links > *:first-child {
+    margin-left: 0;
+}
+
+/* END blog links */
+
+/**** Organization Page ****/
 
 .node-type-organization .region-content,
 .page-organization .view-transactions {
@@ -480,8 +538,8 @@ div.views-field-body p {
     display: table-cell;
 }
 
-.node-type-organization #block-views-user-property-list-block-1,  {
-    display: table-cell;
+.node-type-organization .view {
+    padding-bottom: 20px;
 }
 
 .node-type-organization #block-system-main > div:first-child {
@@ -493,10 +551,15 @@ div.views-field-body p {
     padding: 20px 30px;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list,
-.page-user .block-views {
+.node-type-organization .block,
+.node-type-organization .block .view,
+.page-user .block {
     background: #FFF;
     font-family: 'Lato',Helvetica,Arial,sans-serif;
+}
+
+.node-type-organization .region-content > .block {
+    background: none;
 }
 
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img,

@@ -110,26 +110,28 @@
   } else {
   	print render($content['body']);
   }
-  ?></br>
+  ?>
 
+</div>
+
+</div>
+
+<div class="node-links">
   <?php print render($content['links']); ?>
 
   <?php //dpm($content); ?>
   <?php print flag_create_link("likes", $node->nid); ?>
   <?php print l($comment_count, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments')); ?>
   <?php
-	if (!empty($node->field_blog_tags)) {
-	  foreach($node->field_blog_tags['und'] as $tag) {
-	  	$term = taxonomy_term_load($tag['tid']);
-	    if ($term->vocabulary_machine_name == 'blog_tags') {
-	      print l($term->name, "blog-tags/{$term->name}");
-	    }
-	  }
-	}
-	?>
+  if (!empty($node->field_blog_tags)) {
+    foreach($node->field_blog_tags['und'] as $tag) {
+      $term = taxonomy_term_load($tag['tid']);
+      if ($term->vocabulary_machine_name == 'blog_tags') {
+        print l($term->name, "blog-tags/{$term->name}");
+      }
+    }
+  }
+  ?>
 
   <?php print render($content['comments']); ?>
-
-</div>
-
 </div>

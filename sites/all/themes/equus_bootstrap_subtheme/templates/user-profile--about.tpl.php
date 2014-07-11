@@ -43,19 +43,21 @@
   <?php print render($user_profile['user_picture']);?>
 
   <section class="profileinfo">
-  <div class="username"><?php print format_username($elements['#account']);?></div>
-  <div class="userinfo"><span class="user-gender"><?php print $user_gender; ?></span>, <span>Age <?php print $age; ?></span></div>
-  <p><?php print $user_biography;?></p>
-  <div>
-  	<div>
-  	226
-  	</div>
-  	<div>
-  	<?php print $gallery_count;?>
-  	</div>
-  	<div>
-  	<?php print $horse_count;?>
-  	</div>
+    <div class="profileinfo-userdata">
+    <div class="username"><?php print format_username($elements['#account']);?></div>
+    <div class="userinfo"><span class="user-gender"><?php print $user_gender; ?></span>, <span>Age <?php print $age; ?></span></div>
   </div>
+  <p class="profileinfo-biography"><?php print $user_biography;?></p>
   </section>
+  <div class="profileinfo-extralinks">
+    <div>
+      226
+    </div>
+    <div>
+      <?php print $gallery_count;?>
+    </div>
+    <div>
+      <?php print $horse_count;?>
+    </div>
+  </div>
 </div>
