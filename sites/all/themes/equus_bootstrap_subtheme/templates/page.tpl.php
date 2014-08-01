@@ -132,7 +132,7 @@
             <span class="creation-date"><?php print $creation_date; ?></span>
           </div>
           <div class="equus-sub-header-container-buttons">
-            <?php if ($message): ?>
+            <?php if (isset($message)): ?>
               <span class="message"><?php print l("Message", $message); ?></span>
             <?php endif; ?>
           </div>
