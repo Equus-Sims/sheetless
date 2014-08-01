@@ -106,13 +106,14 @@ function calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multipli
 
 	$age_in_months = ($today - $dob)/(60*60*24*(365/12));
 
-	if ($age_in_months < 1) {
-		return 1;
-	}
-
 	$months_as_foal = $transition_year*($foal_multiplier);
 
 	$years_as_foal = $age_in_months/$foal_multiplier;
+
+	if ($years_as_foal < 1) {
+		$calc_age = "< 1";
+		return $calc_age;
+	} else {
 
 	$months_as_adult = $age_in_months - $months_as_foal;
 
@@ -120,7 +121,8 @@ function calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multipli
 
 	$calc_age = $years_as_adult + $transition_year;
 
-	return $calc_age;
+	return floor($calc_age);
+	}
 }
 
 //function equus_horse_aging_calc_age_months($entity_type, $entity, $field) {
