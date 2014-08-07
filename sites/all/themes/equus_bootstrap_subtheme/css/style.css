@@ -539,7 +539,7 @@ div.views-field-body p {
 
 /* right side content */
 
-.page-user .block-views > .view .node-teaser img:first-child {
+.page-user .block-views > .view .node-teaser > img:first-child {
     width: 100%;
     height: auto;
 }
@@ -579,16 +579,12 @@ div.views-field-body p {
     margin-left: 0;
 }
 
-.node-links > *:before {
+.node-links > .comments:before, .node-links > .tags:before {
     font-family: icons;
     color: #666666;
     font-size: 1.3em;
     vertical-align: sub;
     margin-right: 5px;
-}
-
-.node-links .flag-likes:before {
-    content: '\e609';
 }
 
 .node-links .comments:before {
