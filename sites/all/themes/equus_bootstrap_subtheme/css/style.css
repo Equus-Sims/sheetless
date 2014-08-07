@@ -1,5 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300);
 
+@font-face {
+    font-family: icons;
+    src: url('../icons/icons.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -281,7 +288,6 @@ table.cols-3 tr > td {
     padding: 0;
 }
 
-div.views-field-title,
 div.equus-tile h2 {
     text-align: left;
     margin: 10px auto;
@@ -434,6 +440,15 @@ div.views-field-body p {
 .page-user .equus-sub-header .message a:hover {
     text-decoration: none;
 }
+
+.page-user .equus-sub-header .equus-type {
+    color: #7E7161;
+    border-right: 1px solid #908977;
+    text-transform: uppercase;
+    margin-right: 8px;
+    padding-right: 8px;
+}
+
 /* END top user bar */
 
 
@@ -468,15 +483,55 @@ div.views-field-body p {
     text-transform: uppercase;
 }
 
+.page-user .profileinfo-extralinks {
+    margin-top: 20px;
+}
+
 .page-user .profileinfo-extralinks div {
     display: inline-block;
     width: 32%;
     text-align: center;
+    border-right: 1px solid #DEDFE4;
+}
+
+.page-user .profileinfo-extralinks div:last-child {
+    border-right: none;
+}
+
+.page-user .profileinfo-extralinks div:before {
+    font-size: 2em;
+    font-family: 'icons';
+    color: #676767;
+    display: block;
+}
+
+.page-user .profileinfo-extralinks div.favs:before { 
+    content: '\e609';
+}
+
+.page-user .profileinfo-extralinks div.pics:before {
+    content: '\e60a';
+}
+
+.page-user .profileinfo-extralinks div.horse:before {
+    content: '\e608';
 }
 
 .page-user .profileinfo {
     padding: 0 20px 20px;
     border-bottom: 1px solid #DEDFE4;
+}
+
+.page-user .view-organizations-list-view .view-content > .views-row {
+    margin-top: 10px;
+}
+
+.page-user div.views-field-title {
+    font-size: 16px;
+}
+
+.page-user .view-content .views-field:last-child {
+    font-size: .9em;
 }
 
 /* END sidebar */
@@ -499,8 +554,12 @@ div.views-field-body p {
     font-size: 0.75em;
 }
 
+.page-user .block-views > .view .node-blog .node-content h2 {
+    font-size: 1.4em;
+}
+
 .page-user .block-views > .view .node-content > p {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 /* END right side content */
 
@@ -518,6 +577,26 @@ div.views-field-body p {
 
 .page-user .block-views > .view .node-links > *:first-child {
     margin-left: 0;
+}
+
+.node-links > *:before {
+    font-family: icons;
+    color: #666666;
+    font-size: 1.3em;
+    vertical-align: sub;
+    margin-right: 5px;
+}
+
+.node-links .flag-likes:before {
+    content: '\e609';
+}
+
+.node-links .comments:before {
+    content: '\e605';
+}
+
+.node-links .tags:before {
+    content: '\e602';
 }
 
 /* END blog links */

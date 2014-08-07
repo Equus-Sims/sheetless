@@ -50,13 +50,13 @@
   <p class="profileinfo-biography"><?php print $user_biography;?></p>
   </section>
   <div class="profileinfo-extralinks">
-    <div>
+    <div class="favs">
       226
     </div>
-    <div>
+    <div class="pics">
       <?php print $gallery_count;?>
     </div>
-    <div>
+    <div class="horse">
       <?php print $horse_count;?>
     </div>
   </div>
