@@ -122,13 +122,15 @@
   <?php //dpm($content); ?>
   <?php print flag_create_link("likes", $node->nid); ?>
   <?php
-    print '<span class="comments">'; 
-    print l($comment_count, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments'));
+    print '<span class="comments">';
+    $link_body = "<span class='icon'></span><span class='count'>$comment_count</span>";
+    print l($link_body, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments', 'html' => TRUE));
     print '</span>'
   ?>
   <?php
   if (!empty($node->field_blog_tags)) {
     print '<span class="tags">';
+    print '<span class="icon"></span>';
     foreach($node->field_blog_tags['und'] as $tag) {
       $term = taxonomy_term_load($tag['tid']);
       if ($term->vocabulary_machine_name == 'blog_tags') {

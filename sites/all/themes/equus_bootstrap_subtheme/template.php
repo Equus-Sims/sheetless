@@ -146,7 +146,7 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 }	
 
 function equus_bootstrap_subtheme_preprocess_flag(&$vars) {
-	$vars['link_text'] = equus_bootstrap_subtheme_get_like_count($vars['entity_id']);
+	$vars['link_text'] = "<span class='icon {$vars['status']}'></span><span class='count'>".equus_bootstrap_subtheme_get_like_count($vars['entity_id'])."</span>";
 }
 
 function equus_bootstrap_subtheme_get_like_count($nid) {
