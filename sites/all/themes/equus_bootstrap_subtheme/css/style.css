@@ -299,7 +299,7 @@ div.form-type-textfield {
 
 /* General Styling */
 
-.region-content {
+.region-content, .view-daily-digest {
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -373,15 +373,72 @@ div.views-field-body {
 
 div.views-field-body p {
     text-align: justify;
-    }
+}
 
-.region-content .view-content table .content > img, div.views-field-field-horse-cover-image img {
+.view-daily-digest table .content-info a {
+    color: #BA5237;
+}
+
+.view-daily-digest table .content-info a[href*='blog-categories'] {
+    text-transform: uppercase;
+    font-size: .9em;
+}
+
+.view-daily-digest table .content h2 {
+    font-size: 1.2em;
+    margin-bottom: 0;
+}
+
+.view-daily-digest table .content h2 a {
+    color: #353535;
+}
+
+.view-daily-digest table .content > img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
 }
 
-.region-content .view-content table .content > .content-info {
-    margin: 0 15px 15px;
+.view-daily-digest table .content > .content-info {
+    margin: 15px;
+}
+
+.view-daily-digest table .content > img {
+    height: auto;
+    width: 100%;
+}
+
+.view-daily-digest table .content-info > p {
+    margin: 10px 0;
+}
+
+.view-daily-digest table .content-info .post-info {
+    font-size: .9em;
+}
+
+.view-daily-digest table .tags {
+    bottom: 0;
+    display: inline-block;
+    font-size: 0.8em;
+    margin: 0 0 15px 15px;
+    position: absolute;
+}
+
+.view-daily-digest table .post-footer {
+    height: 40px;
+}
+
+.view-daily-digest table .post-footer .footer-link {
+    width: 40px;
+    height: 40px;
+    background: #BC5238;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.view-daily-digest table tr td {
+    position: relative;
 }
 
 /* End Daily Digest */

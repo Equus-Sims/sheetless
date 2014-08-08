@@ -89,9 +89,26 @@
 	    <?php if ($node->type == 'horse') print render($content['field_breed']); ?>
 	    
 	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-	    <?php print $name; ?> on
-	    <?php print $submitted; ?>
+	    <div class="post-info">
+	    	<?php print $name; ?> on <?php print $submitted; ?>
+	    </div>
 	    <?php print render($body_teaser); ?>
 	</div>
   </div>
+  <div class="post-footer">
+		<?php
+		  if (!empty($node->field_blog_tags)) {
+		    print '<span class="tags">';
+		    print '<span class="icon"></span>';
+		    foreach($node->field_blog_tags['und'] as $tag) {
+		      $term = taxonomy_term_load($tag['tid']);
+		      if ($term->vocabulary_machine_name == 'blog_tags') {
+		        print l($term->name, "blog-tags/{$term->name}").' ';
+		      }
+		    };
+		    print '</span>';
+		  }
+		?>
+		<a href="<?php print $node_url; ?>" class="footer-link"></a>
+	</div>
 </div>
