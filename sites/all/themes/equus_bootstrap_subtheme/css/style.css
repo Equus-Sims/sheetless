@@ -323,7 +323,7 @@ table.cols-3 tr > td {
 
 .views-view-grid {
     border-collapse: separate; 
-    border-spacing: 8px;
+    border-spacing: 18px;
     padding: 0;
 }
 
@@ -428,13 +428,31 @@ div.views-field-body p {
 }
 
 .view-daily-digest table .post-footer .footer-link {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.view-daily-digest table .post-footer .footer-link > a {
     width: 40px;
     height: 40px;
     background: #BC5238;
     display: inline-block;
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    vertical-align: bottom;
+}
+
+.view-daily-digest table .post-footer .footer-link .flag-likes {
+    font-size: .8em;
+    margin-bottom: 15%;
+    display: inline-block;
+}
+
+.view-daily-digest table .post-footer .footer-link .flag-likes .icon {
+    color: #B9B9B9;
+}
+
+.view-daily-digest table .post-footer .footer-link .flag-likes .count {
+    display: none;
 }
 
 .view-daily-digest table tr td {
