@@ -12,7 +12,7 @@ body {
     font-size: 14px;
     line-height: 1.428571429;
     color: #353535;
-    background-color: #f1eee6;
+    background-color: #F4F4F2;
 }
 
 h2 {
@@ -28,6 +28,45 @@ a {
 img {
     max-width: 100%;
 }
+
+/* Icons */
+
+.icon {
+    font-family: icons;
+    color: #666666;
+    font-size: 1.3em;
+    vertical-align: sub;
+    margin-right: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.flag-likes .icon.flagged:before {
+    content: '\e609';
+    color: #E86865;
+}
+
+.flag-likes .icon.unflagged:before {
+    content: '\e609';
+}
+
+.flag-likes .flag-throbber {
+    display: none;
+}
+
+.comments .icon:before {
+    content: '\e605';
+}
+
+.tags .icon:before {
+    content: '\e602';
+}
+
+.tags a {
+    text-decoration: underline;
+}
+
+/* END Icons */
 
 /* Primary Nav */
 
@@ -577,31 +616,6 @@ div.views-field-body p {
 
 .page-user .block-views > .view .node-links > *:first-child {
     margin-left: 0;
-}
-
-.node-links .icon {
-    font-family: icons;
-    color: #666666;
-    font-size: 1.3em;
-    vertical-align: sub;
-    margin-right: 5px;
-}
-
-.node-links .flag-likes .icon.flagged:before {
-    content: '\e609';
-    color: red;
-}
-
-.node-links .flag-likes .icon.unflagged:before {
-    content: '\e609';
-}
-
-.node-links .comments .icon:before {
-    content: '\e605';
-}
-
-.node-links .tags .icon:before {
-    content: '\e602';
 }
 
 /* END blog links */
