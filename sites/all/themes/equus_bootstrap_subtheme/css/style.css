@@ -423,6 +423,11 @@ div.views-field-body p {
     position: absolute;
 }
 
+.view-daily-digest table .tags a {
+    color: #9EA08B;
+    text-transform: uppercase;
+}
+
 .view-daily-digest table .post-footer {
     height: 40px;
 }
@@ -439,6 +444,16 @@ div.views-field-body p {
     background: #BC5238;
     display: inline-block;
     vertical-align: bottom;
+    color: #FFF;
+    font-size: 1.5em;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    line-height: 40px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.view-daily-digest table .post-footer .footer-link > a:hover {
+    text-decoration: none;
 }
 
 .view-daily-digest table .post-footer .footer-link .flag-likes {
