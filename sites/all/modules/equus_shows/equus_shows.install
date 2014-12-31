@@ -1,0 +1,173 @@
+<?php
+/**
+ * Implements hook_uninstall().
+ */
+function equus_shows_uninstall() {
+	$ournewtype = 'show';
+	$sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+	$result = db_query($sql, array(':type' => $ournewtype));
+	$nodeids = array();
+	foreach ($result as $row) {
+		$nodeids[] = $row->nid;
+	}
+	node_delete_multiple($nodeids);
+	//dpm("uninstalling");
+	_equus_shows_delete_custom_fields();
+	node_type_delete($ournewtype);
+	field_purge_batch(500);
+
+	relation_type_delete('is_entered_in');
+	// TODO: Eat chocolate?
+}
+
+function _equus_shows_delete_custom_fields() {
+	//dpm("deleting custom fields");
+	foreach (array("equus_shows_placement") as $field) {
+		//dpm("deleting field $field");
+		field_delete_field($field);
+	}
+	$instances = field_info_instances('node', 'show');
+	foreach ($instances as $instance_name => $fieldinstance) {
+		field_delete_instance($fieldinstance);
+	}
+}
+
+/**
+ * Implements hook_install().
+ */
+function equus_shows_install() {
+	node_types_rebuild();
+
+	_equus_shows_create_fields1();
+}
+
+function _equus_shows_create_fields1() {
+	// create relations
+	$relation_type = new stdClass();
+	$relation_type->disabled = FALSE;
+	$relation_type->api_version = 1;
+	$relation_type->relation_type = 'is_entered_in';
+	$relation_type->label = 'is entered in';
+	$relation_type->reverse_label = 'has entrant';
+	$relation_type->directional = 1;
+	$relation_type->transitive = 0;
+	$relation_type->r_unique = 0;
+	$relation_type->min_arity = 2;
+	$relation_type->max_arity = 2;
+	$relation_type->source_bundles = array(
+		0 => 'node:horse',
+	);
+	$relation_type->target_bundles = array(
+		0 => 'node:show',
+	);
+
+	$relation_type = relation_type_create($relation_type);
+	relation_type_save($relation_type);
+	
+	// add fields
+	$fields = array();
+
+	$fields['equus_shows_placement'] = array(
+		'field_name' => 'equus_shows_placement',
+		'label' => 'Placement',
+		'type' => 'number_integer',
+		'cardinality' => 1
+	);
+
+	foreach ($fields as $field) {
+		field_create_field($field);
+	}
+
+	$instances = array();
+
+	$instances['relation-is_entered_in-equus_shows_placement'] = array(
+		'bundle' => 'is_entered_in',
+		'default_value' => NULL,
+		'deleted' => 0,
+		'description' => '',
+		'display' => array(
+			'default' => array(
+				'label' => 'above',
+				'module' => 'number',
+				'settings' => array(
+					'decimal_separator' => '.',
+					'prefix_suffix' => TRUE,
+					'scale' => 0,
+					'thousand_separator' => ' ',
+				),
+				'type' => 'number_integer',
+				'weight' => 1,
+			),
+		),
+		'entity_type' => 'relation',
+		'field_name' => 'equus_shows_placement',
+		'label' => 'Placement',
+		'required' => 0,
+		'settings' => array(
+			'max' => '',
+			'min' => '',
+			'prefix' => '',
+			'suffix' => '',
+			'user_register_form' => FALSE,
+		),
+		'widget' => array(
+			'active' => 0,
+			'module' => 'number',
+			'settings' => array(),
+			'type' => 'number',
+			'weight' => 1,
+	    ),
+    );
+
+	foreach ($instances as $instance) {
+		field_create_instance($instance);
+	}
+}
+
+
+function _equus_shows_installed_fields() {
+	$t = get_t();
+	return array(
+		/*'equus_shows_entries' => array(
+			'field_name' => 'equus_shows_entries',
+			'label' => $t('Entries'),
+			'type' => 'entityreference',
+			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+			'settings' => array(
+				'target_type' => 'node'
+			)
+		)*/
+	);
+}
+
+function _equus_shows_installed_instances() {
+	$t = get_t();
+	return array(
+		/*'equus_shows_entries' => array(
+			'field_name' => 'equus_shows_entries',
+			'label' => $t('Entries'),
+			'entity_type' => 'horse',
+			'widget' => array(
+				'module' => 'entityreference',
+				'settings' => array(
+					'match_operator' => 'CONTAINS',
+					'path' => '',
+					'size' => '60'
+				),
+				'type' => 'entityreference_autocomplete'
+			)	
+		),*/
+	);
+}
+
+function _equus_shows_add_custom_fields() {
+	foreach (_equus_shows_installed_fields() as $field) {
+		field_create_field($field);
+	}
+
+	foreach (_equus_shows_installed_instances() as $fieldinstance) {
+		$fieldinstance['entity_type'] = 'node';
+		$fieldinstance['bundle'] = 'show';
+		field_create_instance($fieldinstance);
+	}
+}

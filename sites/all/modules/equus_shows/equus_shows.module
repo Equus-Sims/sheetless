@@ -1,0 +1,20 @@
+<?php 
+/**
+ * Implements hook_node_info()
+ */
+function equus_shows_node_info() {
+	return array(
+		'show' => array(
+			'name' => t('Show'),
+			'base' => 'show',
+			'description' => t('A show'),
+			'has_title' => TRUE,
+			'title_label' => t('Name')
+			
+		)
+	);
+}
+
+function show_form($node, $form_state) {
+	return node_content_form($node, $form_state);
+}

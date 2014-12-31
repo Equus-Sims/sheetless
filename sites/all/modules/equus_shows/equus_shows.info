@@ -1,0 +1,8 @@
+name = Equus Shows
+description = A custom module for Equus-sims for show system functionality.
+package = Equus Sims
+core = 7.x
+files[] = equus_shows.install
+files[] = equus_shows.module
+dependencies[] = equus_core
+dependencies[] = relation
