@@ -15,6 +15,254 @@ function equus_shows_node_info() {
 	);
 }
 
+function equus_shows_node_type_insert($node_type) {
+	if ($node_type->type == 'show') {
+
+	}
+}
+
 function show_form($node, $form_state) {
 	return node_content_form($node, $form_state);
+}
+
+function equus_shows_menu() {
+	$items = array();
+ 
+	$items['examples/enter-show'] = array( //this creates a URL that will call this form at "examples/form-example"
+		'title' => 'Enter Show', //page title
+		'description' => 'Enter a show.',
+		'page callback' => 'drupal_get_form', //this is the function that will be called when the page is accessed. 
+		// for a form, use drupal_get_form
+		'page arguments' => array('equus_shows_entry_form'), //put the name of the form here
+		'access callback' => TRUE
+	);
+
+	return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * This function tells drupal about our block.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_info/7
+ */
+function equus_shows_block_info() {
+	// Create an array that will hold our blocks
+	$blocks = array();
+
+	// Create a key in our $blocks array that
+	// defines our block. Note that the key in
+	// this array can be anything. For this
+	// tutorial, we use 'tellafriend_form'.
+	$blocks['equus_shows_entry_form'] = array(
+		// 'info' is what you will see when viewing the blocks admin page.
+		// Note that we use the t() (translate) function which lets drupal
+		// translate any text passed in if needed.
+		'info' => t('Enter Show'),
+		// 'cache' how this block will be cached
+		'cache' => DRUPAL_CACHE_GLOBAL,
+	);
+	$blocks['equus_shows_compute_form'] = array(
+		// 'info' is what you will see when viewing the blocks admin page.
+		// Note that we use the t() (translate) function which lets drupal
+		// translate any text passed in if needed.
+		'info' => t('Run Show'),
+		// 'cache' how this block will be cached
+		'cache' => DRUPAL_CACHE_GLOBAL,
+	);
+
+	// Note, if you wanted to define multiple blocks, you
+	// could simply define more blocks just like above.
+
+	// Finally, we return the $blocks array.
+	return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This function tells drupal how to define our block when viewed.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_view/7
+ */
+function equus_shows_block_view($delta = '') {
+	// Create an array that will be returned as our block
+	$block = array();
+	 
+	// Since hook_block_view is called for every block,
+	// Drupal passes in $delta (the key of the blocks defined
+	// in hook_block_info. In our case, we're checking for
+	// $delta to be 'tellafriend_form'.
+	switch($delta) {
+		case 'equus_shows_entry_form':
+			// Since this $delta matches our case, we'll define
+			// the subject and contents.
+			 
+			// 'subject' can be blank ('') or anything you wish to define.
+			$block['subject'] = t('Enter this show');
+			 
+			// 'content' are just that, the contents of the block.
+			// In our case, we will be showing a form.
+			// We use drupal_get_form() to return a drupal-built form.
+			// Note that the parameter passed to drupal_get_form is the name
+			// of the function we will build below to define our form.
+			// This can be any function name we define below.
+			$block['content'] = drupal_get_form('equus_shows_entry_form');
+			break;
+		case 'equus_shows_compute_form':
+			$block['subject'] = t('Run this show');
+			$block['content'] = drupal_get_form('equus_shows_compute_form');
+			break;
+	}
+	 
+	// Finally, we return the $block array.
+	return $block;
+}
+
+function equus_shows_entry_form($form, &$form_state) {
+	// find logged in user id
+	// EFQ for horses with that owner
+
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'horse')
+		->propertyCondition('status', 1)
+		->propertyCondition('uid', $GLOBALS['user']->uid)
+		->propertyOrderBy('created', 'DESC');
+	$result = $query->execute();
+	$nids = array_keys($result['node']);
+	$nodes = node_load_multiple($nids);
+
+	$horse_list = array();
+
+	foreach ($nodes as $node) {
+		$horse_list[$node->nid] = $node->title;
+	}
+
+	$form['horseid'] = array(
+		'#type' => 'select', //you can find a list of available types in the form api
+		'#title' => 'ID of horse to enter?',
+		'#multiple' => FALSE,
+		'#options' => $horse_list,
+		'#required' => TRUE, //make this field required
+	);
+
+	$form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit entry'),
+	);
+
+	return $form;
+}
+
+function equus_shows_entry_form_validate($form, &$form_state) {
+	$node = node_load($form_state['values']['horseid']);
+	if ($node == FALSE) {
+		form_set_error('horseid', t('Horse does not exist.'));
+	} else {
+		if ($node->type != 'horse') {
+			form_set_error('horseid', t('Entrant must be a horse.'));
+		}
+	}
+
+	$node = menu_get_object();
+	if ($node) {
+		// Use the node object.
+		if ($node->type != 'show') {
+			form_set_error('submit_button', t('You may only run shows.'));
+		} else {
+			$form_state['showid'] = $node->nid;
+		}
+	} else {
+		form_set_error('showid', t('Show does not exist.'));
+	}
+}
+
+function equus_shows_entry_form_submit($form, &$form_state) {
+	equus_shows_enter_show($form_state['showid'], $form_state['values']['horseid'], NULL);
+}
+
+function equus_shows_compute_form($form, &$form_state) {
+	$form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Run the show'),
+	);
+
+	return $form;
+}
+
+function equus_shows_compute_form_validate($form, &$form_state) {
+	if ($node = menu_get_object()) {
+		// Use the node object.
+		if ($node->type != 'show') {
+			form_set_error('submit_button', t('You may only run shows.'));
+		} else {
+			$form_state['showid'] = $node->nid;
+		}
+	} else {
+		form_set_error('showid', t('Show does not exist.'));
+	}
+}
+
+function equus_shows_compute_form_submit($form, &$form_state) {
+	equus_shows_run_show($form_state['showid']);
+}
+
+function equus_shows_enter_show($showid,$horseid,$data) {
+	$endpoints = array();
+	$endpoints[] = array('entity_type' => 'node', 'entity_id' => $horseid);
+	$endpoints[] = array('entity_type' => 'node', 'entity_id' => $showid);
+
+	$new_relation = relation_create('is_entered_in', $endpoints);
+
+	if ($rid = relation_save($new_relation)) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+function equus_shows_run_show($show_id) {
+	$query = relation_query('node',$show_id,1);
+	$results = $query->entityCondition('bundle', 'is_entered_in')->execute();
+
+	$rids = array_map(function($o) { return $o->rid; }, $results);
+
+	$places = range(1,count($rids));
+	shuffle($places);
+
+	$relations = relation_load_multiple($rids);
+
+	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
+	$horses = node_load_multiple($nids);
+
+
+
+	$placements = array();
+
+	foreach ($horses as $horse) {
+		$goodness = 0;
+		if ($horse->field_horse_goodness) {
+			$goodness = $horse->field_horse_goodness[LANGUAGE_NONE][0]['value'];
+		}
+		$placements[$horse->nid] = floatval(mt_rand(0,$goodness)) + floatval(mt_rand(0,10000)/10000.0);
+	}
+	arsort($placements);
+
+	$i = 1;
+	foreach ($placements as $key => $value) {
+		$placements[$key] = $i++;
+	}
+
+
+	foreach ($relations as $relation) {
+		$nid = $relation->endpoints[LANGUAGE_NONE][0]['entity_id'];
+
+		$relation->equus_shows_placement[LANGUAGE_NONE][0]['value'] = $placements[$nid];
+		relation_save($relation);
+	}
 }

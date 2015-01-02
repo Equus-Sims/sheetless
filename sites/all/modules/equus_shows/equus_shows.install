@@ -17,7 +17,6 @@ function equus_shows_uninstall() {
 	field_purge_batch(500);
 
 	relation_type_delete('is_entered_in');
-	// TODO: Eat chocolate?
 }
 
 function _equus_shows_delete_custom_fields() {
@@ -121,53 +120,5 @@ function _equus_shows_create_fields1() {
 
 	foreach ($instances as $instance) {
 		field_create_instance($instance);
-	}
-}
-
-
-function _equus_shows_installed_fields() {
-	$t = get_t();
-	return array(
-		/*'equus_shows_entries' => array(
-			'field_name' => 'equus_shows_entries',
-			'label' => $t('Entries'),
-			'type' => 'entityreference',
-			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-			'settings' => array(
-				'target_type' => 'node'
-			)
-		)*/
-	);
-}
-
-function _equus_shows_installed_instances() {
-	$t = get_t();
-	return array(
-		/*'equus_shows_entries' => array(
-			'field_name' => 'equus_shows_entries',
-			'label' => $t('Entries'),
-			'entity_type' => 'horse',
-			'widget' => array(
-				'module' => 'entityreference',
-				'settings' => array(
-					'match_operator' => 'CONTAINS',
-					'path' => '',
-					'size' => '60'
-				),
-				'type' => 'entityreference_autocomplete'
-			)	
-		),*/
-	);
-}
-
-function _equus_shows_add_custom_fields() {
-	foreach (_equus_shows_installed_fields() as $field) {
-		field_create_field($field);
-	}
-
-	foreach (_equus_shows_installed_instances() as $fieldinstance) {
-		$fieldinstance['entity_type'] = 'node';
-		$fieldinstance['bundle'] = 'show';
-		field_create_instance($fieldinstance);
 	}
 }
