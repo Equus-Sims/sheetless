@@ -3,104 +3,228 @@
  * Implements hook_uninstall().
  */
 function equus_organizations_uninstall() {
-	$ournewtype = 'organization';
-	$sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-	$result = db_query($sql, array(':type' => $ournewtype));
-	$nodeids = array();
-	foreach ($result as $row) {
-		$nodeids[] = $row->nid;
-	}
-	node_delete_multiple($nodeids);
-	//dpm("uninstalling");
-	_equus_organizations_delete_custom_fields();
-	node_type_delete($ournewtype);
-	field_purge_batch(500);
+    $ournewtype = 'organization';
+    $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+    $result = db_query($sql, array(':type' => $ournewtype));
+    $nodeids = array();
+    foreach ($result as $row) {
+        $nodeids[] = $row->nid;
+    }
+    node_delete_multiple($nodeids);
+    //dpm("uninstalling");
+    _equus_organizations_delete_custom_fields();
+    node_type_delete($ournewtype);
+    field_purge_batch(500);
+
+    $vocab = taxonomy_vocabulary_machine_name_load('organization_types');
+    taxonomy_vocabulary_delete($vocab->vid);
+}
+
+function _equus_organizations_add_org_types_vocab() {
+    $new_vocab = (object) array(
+        'name' => "Organization Types",
+        'description' => "Types for organizations",
+        'machine_name' => 'organization_types'
+    );
+
+    taxonomy_vocabulary_save($new_vocab);
 }
 
 function _equus_organizations_delete_custom_fields() {
-	//dpm("deleting custom fields");
-	foreach (array_keys(_equus_organizations_installed_fields()) as $field) {
-		//dpm("deleting field $field");
-		field_delete_field($field);
-	}
-	$instances = field_info_instances('node', 'organization');
-	foreach ($instances as $instance_name => $fieldinstance) {
-		field_delete_instances($fieldinstance);
-	}
+    foreach (array_keys(_equus_organizations_installed_fields()) as $field) {
+        field_delete_field($field);
+    }
+    foreach (array_keys(_equus_organizations_installed_fields_batch1()) as $field) {
+        field_delete_field($field);
+    }
+
+    $instances = field_info_instances('node', 'organization');
+    foreach ($instances as $instance_name => $fieldinstance) {
+        field_delete_instances($fieldinstance);
+    }
 }
 
 /**
  * Implements hook_install().
  */
 function equus_organizations_install() {
-	node_types_rebuild();
-	_equus_organizations_add_custom_fields();
+    node_types_rebuild();
+    _equus_organizations_add_custom_fields();
+
+    equus_organizations_update_7100();
 }
 
 function _equus_organizations_installed_fields() {
-	$t = get_t();
-	return array(
-		'equus_organizations_mission' => array(
-			'field_name' => 'equus_organizations_mission',
-			'label' => $t('Mission Statement'),
-			'type' => 'text_long'
-		),
-		'equus_organizations_users' => array(
-			'field_name' => 'equus_organizations_users',
-			'label' => $t('Owner(s) and Staff'),
-			'type' => 'entityreference',
-			'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-			'settings' => array(
-				'target_type' => 'user'
-			)
-		),
-		'equus_organizations_balance' => array(
-			'field_name' => 'equus_organizations_balance',
-			'label' => $t('Balance'),
-			'type' => 'number_integer'
-		)
-	);
+    $t = get_t();
+    return array(
+        'equus_organizations_mission' => array(
+            'field_name' => 'equus_organizations_mission',
+            'label' => $t('Mission Statement'),
+            'type' => 'text_long'
+        ),
+        'equus_organizations_users' => array(
+            'field_name' => 'equus_organizations_users',
+            'label' => $t('Owner(s) and Staff'),
+            'type' => 'entityreference',
+            'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+            'settings' => array(
+                'target_type' => 'user'
+            )
+        ),
+        'equus_organizations_balance' => array(
+            'field_name' => 'equus_organizations_balance',
+            'label' => $t('Balance'),
+            'type' => 'number_integer'
+        )
+    );
+}
+
+function _equus_organizations_installed_fields_batch1() {
+    $t = get_t();
+
+    $field_bases = array();
+
+    $field_bases['equus_organizations_type'] = array(
+        'active' => 1,
+        'cardinality' => 1,
+        'deleted' => 0,
+        'entity_types' => array(),
+        'field_name' => 'equus_organizations_type',
+        'field_permissions' => array(
+            'type' => 0,
+        ),
+        'foreign keys' => array(
+            'tid' => array(
+                'columns' => array(
+                    'tid' => 'tid',
+                ),
+                'table' => 'taxonomy_term_data',
+            ),
+        ),
+        'indexes' => array(
+            'tid' => array(
+                0 => 'tid',
+            ),
+        ),
+        'label' => $t('Organization Type'),
+        'locked' => 0,
+        'module' => 'taxonomy',
+        'settings' => array(
+            'allowed_values' => array(
+                0 => array(
+                    'vocabulary' => 'organization_types',
+                    'parent' => 0,
+                ),
+            ),
+        ),
+        'translatable' => 0,
+        'type' => 'taxonomy_term_reference',
+    );
+
+    return $field_bases;
+}
+
+function _equus_organizations_installed_instances_batch1() {
+    $t = get_t();
+
+    $field_instances = array();
+
+    $field_instances['node-organization-equus_organizations_type'] = array(
+        'bundle' => 'organization',
+        'default_value' => NULL,
+        'deleted' => 0,
+        'description' => '',
+        'display' => array(
+            'default' => array(
+                'label' => 'above',
+                'module' => 'taxonomy',
+                'settings' => array(),
+                'type' => 'taxonomy_term_reference_link',
+                'weight' => 3,
+            ),
+            'teaser' => array(
+                'label' => 'above',
+                'settings' => array(),
+                'type' => 'hidden',
+                'weight' => 0,
+            ),
+            'tiles' => array(
+                'label' => 'above',
+                'settings' => array(),
+                'type' => 'hidden',
+                'weight' => 0,
+            ),
+        ),
+        'entity_type' => 'node',
+        'field_name' => 'equus_organizations_type',
+        'label' => 'Organization Type',
+        'required' => 1,
+        'settings' => array(
+            'user_register_form' => FALSE,
+        ),
+        'widget' => array(
+            'active' => 1,
+            'module' => 'options',
+            'settings' => array(),
+            'type' => 'options_select',
+            'weight' => 34,
+        ),
+    );
+
+    return $field_instances;
 }
 
 function _equus_organizations_installed_instances() {
-	$t = get_t();
-	return array(
-		'equus_organizations_mission' => array(
-			'field_name' => 'equus_organizations_mission',
-			'type' => 'text_long',
-			'label' => $t('Mission Statement')
-			
-			/*'display' => array(
-				'example_node_list' => array(
-					'label' => $t('Transaction amount'),
-					'type' => 'number_integer'
-				)
-			)*/
-		),
-		'equus_organizations_users' => array(
-			'field_name' => 'equus_organizations_users',
-			'label' => $t('Owner(s) and Staff'),
-			'entity_type' => 'user',
-			'widget' => array(
-				'module' => 'entityreference',
-				'settings' => array(
-					'match_operator' => 'CONTAINS',
-					'path' => '',
-					'size' => '60'
-				),
-				'type' => 'entityreference_autocomplete'
-			)	
-		),
-	);
+    $t = get_t();
+    return array(
+        'equus_organizations_mission' => array(
+            'field_name' => 'equus_organizations_mission',
+            'type' => 'text_long',
+            'label' => $t('Mission Statement')
+            
+            /*'display' => array(
+                'example_node_list' => array(
+                    'label' => $t('Transaction amount'),
+                    'type' => 'number_integer'
+                )
+            )*/
+        ),
+        'equus_organizations_users' => array(
+            'field_name' => 'equus_organizations_users',
+            'label' => $t('Owner(s) and Staff'),
+            'entity_type' => 'user',
+            'widget' => array(
+                'module' => 'entityreference',
+                'settings' => array(
+                    'match_operator' => 'CONTAINS',
+                    'path' => '',
+                    'size' => '60'
+                ),
+                'type' => 'entityreference_autocomplete'
+            )   
+        ),
+    );
 }
 
 function _equus_organizations_add_custom_fields() {
-	foreach (_equus_organizations_installed_fields() as $field) {
-		field_create_field($field);
-	}
-	foreach (_equus_organizations_installed_instances() as $fieldinstance) {
-		$fieldinstance['entity_type'] = 'node';
-		$fieldinstance['bundle'] = 'organization';
-		field_create_instance($fieldinstance);
-	}
+    foreach (_equus_organizations_installed_fields() as $field) {
+        field_create_field($field);
+    }
+    foreach (_equus_organizations_installed_instances() as $fieldinstance) {
+        $fieldinstance['entity_type'] = 'node';
+        $fieldinstance['bundle'] = 'organization';
+        field_create_instance($fieldinstance);
+    }
+}
+
+function equus_organizations_update_7100() {
+    _equus_organizations_add_org_types_vocab();
+
+    foreach (_equus_organizations_installed_fields_batch1() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_equus_organizations_installed_instances_batch1() as $fieldinstance) {
+        field_create_instance($fieldinstance);
+    }
 }
