@@ -196,7 +196,6 @@ function transaction_form($node, $form_state) {
  * Return the ledger with all transactions.
  */
 function equus_banking_retrieve_ledger() {
-
 	$query = new EntityFieldQuery();
 	$query
 		->entityCondition('entity_type', 'node')
@@ -215,8 +214,6 @@ function equus_banking_retrieve_ledger() {
  */
 function equus_banking_balance($ledger, $organization) {
 	$balance = 0;
-
-
 
 	foreach($ledger as $trans) {
 		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
