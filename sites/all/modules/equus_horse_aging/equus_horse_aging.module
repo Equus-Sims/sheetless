@@ -87,15 +87,19 @@ function equus_horse_aging_node_insert($node) {
 //}
 
 function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
-	$date = array_pop(field_get_items($entity_type, $entity, 'field_horse_date_of_birth'));
+	$dob = field_get_items($entity_type, $entity, 'field_horse_date_of_birth');
+	$date = array_pop($dob);
 	$real_date = new DateTime($date['value']);
 
 	$year = $real_date->format("Y");
 	$month = $real_date->format("m");
 
-	$transition_year = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_age_transition_year')));
-	$foal_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_foal_age_multiplier')));
-	$adult_multiplier = array_pop(array_pop(field_get_items($entity_type, $entity, 'field_adult_age_multiplier')));
+	$field_age_transition_year = field_get_items($entity_type, $entity, 'field_age_transition_year');
+	$field_foal_age_multiplier = field_get_items($entity_type, $entity, 'field_foal_age_multiplier');
+	$field_adult_age_multiplier = field_get_items($entity_type, $entity, 'field_adult_age_multiplier');
+	$transition_year = array_pop(array_pop($field_age_transition_year));
+	$foal_multiplier = array_pop(array_pop($field_foal_age_multiplier));
+	$adult_multiplier = array_pop(array_pop($field_adult_age_multiplier));
 
 	$entity_field[0]['value'] = calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier);
 }
@@ -111,17 +115,15 @@ function calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multipli
 	$years_as_foal = $age_in_months/$foal_multiplier;
 
 	if ($years_as_foal < 1) {
-		$calc_age = "< 1";
-		return $calc_age;
+		return 0;
 	} else {
+		$months_as_adult = $age_in_months - $months_as_foal;
 
-	$months_as_adult = $age_in_months - $months_as_foal;
+		$years_as_adult = $months_as_adult/$adult_multiplier;
 
-	$years_as_adult = $months_as_adult/$adult_multiplier;
+		$calc_age = $years_as_adult + $transition_year;
 
-	$calc_age = $years_as_adult + $transition_year;
-
-	return floor($calc_age);
+		return floor($calc_age);
 	}
 }
 
