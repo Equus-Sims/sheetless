@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300,700,900);
 
 @font-face {
     font-family: icons;
@@ -12,7 +12,9 @@ body {
     font-size: 14px;
     line-height: 1.428571429;
     color: #353535;
-    background-color: #F4F4F2;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 h2 {
@@ -21,7 +23,7 @@ h2 {
 
 a {
     /*OLD COLOR color: #ec9230;*/
-    color: #7F9B8C;
+    color: #256E5A;
     text-decoration: none;
 }
 
@@ -91,7 +93,7 @@ img {
     margin: 0;
     border: none;
     border-radius: 0;
-    background-color: #7F9B8C;
+    background-color: #256E5A;
     border: none;
 }
 
@@ -199,9 +201,9 @@ img {
     display: none;
 } */
 
-ul.tabs--primary.nav.nav-tabs {
+/*ul.tabs--primary.nav.nav-tabs {
     display: none;
-}
+}*/
 
 
 ul.secondary {
@@ -516,6 +518,10 @@ div.views-field-body p {
     padding: 0;
 }
 
+.page-user ul.tabs--primary.nav {
+    display: none;
+}
+
 /* END general styles */
 
 
@@ -815,4 +821,42 @@ div.views-field-body p {
 
 .page-organization .view-transactions table td {
     background: #FFFFFF;
+}
+
+/* END Bank */
+
+
+
+/***** Blog Entries *****/
+.node-type-blog .equus-sub-header {
+    display: none;
+}
+.node-type-blog h1 {
+    font-family: inherit;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    color: #6E6E6E;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    margin-top: 18px;
+    font-size: 2em;
+}
+.node-type-blog .submitted {
+    color: #686868;
+    font-size: 1.1em;
+}
+.node-type-blog .field-name-field-blog-categories div > div {
+    display: inline-block;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+.node-type-blog .field-name-field-blog-categories div > a {
+    color: #8F7F4C;
+}
+.node-type-blog #node-blogimage {
+    margin: 15px 0;
+    display: block;
+}
+.node-type-blog .field-name-body p:nth-child(1) {
+    font-weight: bold;
 }
