@@ -6,3 +6,4 @@ files[] = equus_shows.install
 files[] = equus_shows.module
 dependencies[] = equus_core
 dependencies[] = relation
+dependencies[] = equus_banking
