@@ -217,6 +217,9 @@ function _equus_organizations_add_custom_fields() {
     }
 }
 
+/**
+ * Adds organization type vocabulary and fields
+ */
 function equus_organizations_update_7100() {
     _equus_organizations_add_org_types_vocab();
 
