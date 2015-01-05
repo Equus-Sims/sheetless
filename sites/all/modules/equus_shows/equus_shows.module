@@ -213,17 +213,66 @@ function equus_shows_compute_form_submit($form, &$form_state) {
 }
 
 function equus_shows_enter_show($showid,$horseid,$data) {
+	$entry_fee = 8;
+
+	$show = node_load($showid);
+	if (!$show) {
+		drupal_set_message(t('Show does not exist.'), 'error');
+		return false;
+	}
+
+	$horse = node_load($horseid);
+	if (!$horse) {
+		drupal_set_message(t('Horse does not exist.'), 'error');
+		return false;
+	}
+
+	$residence_id = $horse->field_horse_residence[LANGUAGE_NONE][0]['target_id'];
+
+	$residence = node_load($residence_id);
+	if (!$residence) {
+		drupal_set_message(t('Residence does not exist.'), 'error');
+		return false;
+	}
+
+	$source_id = $residence->field_property_ownership[LANGUAGE_NONE][0]['target_id'];
+
+	$source = node_load($source_id);
+	if (!$source_id) {
+		drupal_set_message(t('Source organization does not exist.'), 'error');
+		return false;
+	}
+
+	$ledger = equus_banking_retrieve_ledger();
+
+	$org_balance = equus_banking_balance($ledger, $source_id);
+
+	if ($org_balance < $entry_fee) {
+		drupal_set_message(t('You do not have enough money for this entry.'), 'error');
+		return false;
+	}
+
 	$endpoints = array();
 	$endpoints[] = array('entity_type' => 'node', 'entity_id' => $horseid);
 	$endpoints[] = array('entity_type' => 'node', 'entity_id' => $showid);
 
 	$new_relation = relation_create('is_entered_in', $endpoints);
 
-	if ($rid = relation_save($new_relation)) {
-		return TRUE;
-	} else {
-		return FALSE;
+	$rid = relation_save($new_relation);
+	if (!$rid) {
+		drupal_set_message(t('Relation create failed in equus_shows_enter_show.'), 'error');
+		return false;
 	}
+
+	$show_name = $show->title;
+
+	$horse_name = $horse->title;
+
+	$destination = $show->field_hosting_organization[LANGUAGE_NONE][0]['target_id'];
+
+	dpm($source);
+
+	equus_banking_create_transaction("Entry fee for $horse_name in $show_name.", $source_id, $destination, $entry_fee);
 }
 
 function _equus_shows_sum($carry, $item) {
