@@ -90,7 +90,7 @@
 	    
 	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
 	    <div class="post-info">
-	    	<?php print $name; ?> on <?php print $submitted; ?>
+	    	Posted by <?php print $name; ?> on <?php print $submitted; ?>
 	    </div>
 	    <?php print render($body_teaser); ?>
 	</div>

@@ -17,6 +17,15 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.main-container > h1 {
+    border-bottom: 1px solid #cccccc;
+    font-family: "Lato", 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 40px auto;
+    padding: 40px 0 15px;
+}
+
 h2 {
     font-family: inherit;
 }
@@ -62,10 +71,6 @@ img {
 
 .tags .icon:before {
     content: '\e602';
-}
-
-.tags a {
-    text-decoration: underline;
 }
 
 /* END Icons */
@@ -301,7 +306,7 @@ div.form-type-textfield {
 
 /* General Styling */
 
-.region-content, .view-daily-digest {
+.region-content, .view-daily-digest, div.main-container > h1 {
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -316,11 +321,24 @@ span.views-label {
     display: none;
 }
 
+.view-daily-digest table {
+    height: 100%;
+}
+
+.view-daily-digest table > tbody {
+    border-collapse: collapse;
+}
+
+.view-daily-digest table tr > td > div {
+    height: 100%;
+}
+
 table.cols-3 tr > td {
     background-color: #fff;
-    padding: 0;
+    padding: 0 0 30px;
     width: 33%;
     vertical-align: top;
+    height: 100%;
 }
 
 .views-view-grid {
@@ -377,22 +395,28 @@ div.views-field-body p {
     text-align: justify;
 }
 
-.view-daily-digest table .content-info a {
-    color: #BA5237;
+.view-daily-digest table .content-info .field-item {
+    display: inline-block;
 }
 
 .view-daily-digest table .content-info a[href*='blog-categories'] {
     text-transform: uppercase;
-    font-size: .9em;
+    color: #8F7F4C;
+    margin-right: 8px;
+}
+
+.view-daily-digest table .content {
+    display: inline-block;
 }
 
 .view-daily-digest table .content h2 {
     font-size: 1.2em;
     margin-bottom: 0;
+    font-weight: bold;
 }
 
 .view-daily-digest table .content h2 a {
-    color: #353535;
+    color: #6E6E6E;
 }
 
 .view-daily-digest table .content > img, div.views-field-field-horse-cover-image img {
@@ -400,13 +424,10 @@ div.views-field-body p {
     width: 100%;
 }
 
-.view-daily-digest table .content > .content-info {
-    margin: 15px;
-}
-
 .view-daily-digest table .content > img {
     height: auto;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .view-daily-digest table .content-info > p {
@@ -414,20 +435,16 @@ div.views-field-body p {
 }
 
 .view-daily-digest table .content-info .post-info {
-    font-size: .9em;
+    margin-bottom: 20px;
 }
 
 .view-daily-digest table .tags {
     bottom: 0;
     display: inline-block;
-    font-size: 0.8em;
-    margin: 0 0 15px 15px;
+    font-size: 0.9em;
+    margin: 0 0 9px 0;
     position: absolute;
-}
-
-.view-daily-digest table .tags a {
-    color: #9EA08B;
-    text-transform: uppercase;
+    max-width: 70%;
 }
 
 .view-daily-digest table .post-footer {
@@ -435,15 +452,15 @@ div.views-field-body p {
 }
 
 .view-daily-digest table .post-footer .footer-link {
+    bottom: 0;
     position: absolute;
     right: 0;
-    bottom: 0;
 }
 
 .view-daily-digest table .post-footer .footer-link > a {
     width: 40px;
     height: 40px;
-    background: #BC5238;
+    background: #8F7F4C;
     display: inline-block;
     vertical-align: bottom;
     color: #FFF;
@@ -831,7 +848,7 @@ div.views-field-body p {
 .node-type-blog .equus-sub-header {
     display: none;
 }
-.node-type-blog h1 {
+.node-type-blog h1, .node-type-blog .node-comments > #comments h3 {
     font-family: inherit;
     font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     color: #6E6E6E;
@@ -853,10 +870,30 @@ div.views-field-body p {
 .node-type-blog .field-name-field-blog-categories div > a {
     color: #8F7F4C;
 }
-.node-type-blog #node-blogimage {
-    margin: 15px 0;
+.node-type-blog #node-blogimage img {
+    margin: 30px auto;
     display: block;
 }
+
 .node-type-blog .field-name-body p:nth-child(1) {
     font-weight: bold;
+}
+
+.node-type-blog .node-content > .submitted {
+    margin-bottom: 30px;
+}
+
+.node-type-blog .node-links {
+    border-top: 1px solid #cccccc;
+    margin-top: 35px;
+    padding-top: 15px;
+}
+
+.node-type-blog .node-comments > #comments {
+
+}
+
+.node-type-blog .node-comments > #comments h2 {
+    font-size: 1em;
+    text-transform: uppercase;
 }
