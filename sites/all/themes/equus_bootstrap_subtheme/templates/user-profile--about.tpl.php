@@ -50,6 +50,7 @@
   <p class="profileinfo-biography"><?php print $user_biography;?></p>
   </section>
   <div class="profileinfo-extralinks">
+  <?php if (isset($user_profile_counters) && $user_profile_counters): ?>
     <div class="favs">
       226
     </div>
@@ -59,5 +60,6 @@
     <div class="horse">
       <?php print $horse_count;?>
     </div>
+  <?php endif; ?>
   </div>
 </div>
