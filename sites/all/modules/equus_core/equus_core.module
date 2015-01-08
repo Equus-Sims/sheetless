@@ -8,6 +8,11 @@ function equus_core_entity_info_alter(&$entity_info) {
 		'label' => t('Tiles'),
 		'custom settings' => TRUE,
 	);
+
+	$entity_info['node']['view modes']['thumbnail'] = array(
+		'label' => t('Thumbnails'),
+		'custom settings' => TRUE,
+	);
 }
 
 function equus_core_block_info() {
