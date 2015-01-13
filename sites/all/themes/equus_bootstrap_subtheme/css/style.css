@@ -457,7 +457,8 @@ div.views-field-body p {
     right: 0;
 }
 
-.view-daily-digest table .post-footer .footer-link > a {
+.view-daily-digest table .post-footer .footer-link > a,
+.node-type-blog aside .node-content > .footer-link > a {
     width: 40px;
     height: 40px;
     background: #8F7F4C;
@@ -469,6 +470,7 @@ div.views-field-body p {
     line-height: 40px;
     font-weight: bolder;
     text-align: center;
+    text-decoration: none;
 }
 
 .view-daily-digest table .post-footer .footer-link > a:hover {
@@ -845,8 +847,19 @@ div.views-field-body p {
 
 
 /***** Blog Entries *****/
+.node-type-blog .main-container aside {
+    width: 24%;
+}
+.node-type-blog .main-container div.row {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+/* Blog Entry Side */
 .node-type-blog .equus-sub-header {
     display: none;
+}
+.node-type-blog .node-blog {
+    margin: 19px 0 0;
 }
 .node-type-blog h1, .node-type-blog .node-comments > #comments h3 {
     font-family: inherit;
@@ -873,6 +886,8 @@ div.views-field-body p {
 .node-type-blog #node-blogimage img {
     margin: 30px auto;
     display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 .node-type-blog .field-name-body p:nth-child(1) {
@@ -888,7 +903,7 @@ div.views-field-body p {
     margin-top: 35px;
     padding-top: 15px;
 }
-
+/* Comments */
 .node-type-blog .node-comments > #comments {
 
 }
@@ -896,4 +911,50 @@ div.views-field-body p {
 .node-type-blog .node-comments > #comments h2 {
     font-size: 1em;
     text-transform: uppercase;
+}
+/* Sidebar */
+.node-type-blog aside > div {
+    background: none;
+    border: none;
+}
+.node-type-blog aside section:nth-child(2) {
+    margin-top: 20px;
+}
+.node-type-blog aside h2.block-title {
+    text-transform: uppercase;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+.node-type-blog aside .node-content > div.field-name-field-blog-categories {
+    display: none;
+}
+
+.node-type-blog aside .node-content > #node-blogimage img {
+    margin: 10px auto;
+}
+
+.node-type-blog aside .node-content > h2 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 10px 0 0;
+    text-transform: uppercase;
+}
+
+.node-type-blog aside .node-content > h2 a {
+    color: #6E6E6E;
+}
+
+.node-type-blog aside .node-content > .submitted {
+    font-size: .9em;
+}
+
+.node-type-blog aside .node-content > .tags,
+.node-type-blog aside .view-content .node-links,
+.node-type-blog aside .view-content .node-comments {
+    display: none;
+}
+
+.node-type-blog aside .node-content > .footer-link {
+    float: right;
 }

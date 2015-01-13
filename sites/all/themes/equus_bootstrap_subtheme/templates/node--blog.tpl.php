@@ -83,30 +83,59 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <div class="node-content">
-    <?php print render($blog_categories); ?>
 
-    <?php print render($title_prefix); ?>
-    <?php if (!$page): ?>
-      <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-    <?php elseif ($page): ?>
+    <?php if ($page): ?>
+
+      <?php print render($blog_categories);
+            print render($title_prefix); ?>
+
+      <?php print render($title_prefix); ?>
       <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
-    <?php endif; ?>
-    <?php print render($title_suffix); ?>
+      <?php print render($title_suffix); ?>
 
-  <?php if ($display_submitted): ?>
-    <div class="submitted">
-      <?php if ($name): ?>
-      <span class="author">Written by <?php print $name ?></span>
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($name): ?>
+          <span class="author">Written by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($submitted): ?>
+            <span class="date">on <?php print $submitted; ?></span>
+          <?php endif; ?>
+        </div>
       <?php endif; ?>
-      <?php if ($submitted): ?>
-        <span class="date">on <?php print $submitted; ?></span>
-      <?php endif; ?>
-    </div>
-  <?php endif; ?>
 
-  <?php if ($cover_image): ?>
-    <div id="node-blogimage"><?php print render($cover_image); ?></div>
-  <?php endif; ?>
+      <?php if ($cover_image): ?>
+        <div id="node-blogimage"><?php print render($cover_image); ?></div>
+      <?php endif; ?>
+
+    <? endif; ?>
+
+    <?php if (!$page): ?>
+
+      <?php if ($cover_image): ?>
+        <div id="node-blogimage"><?php print render($cover_image); ?></div>
+      <?php endif; ?>
+
+      <?php print render($title_prefix); ?>
+      <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+      <?php print render($title_suffix); ?>
+
+      <div class="footer-link">
+        <a href="<?php print $node_url; ?>">></a>
+      </div>
+
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($name): ?>
+          <span class="author">Written by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($submitted): ?>
+            <span class="date">on <?php print $submitted; ?></span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+    <? endif; ?>
 
   <?php
     if ($teaser) {
