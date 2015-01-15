@@ -1038,9 +1038,9 @@ function comment_links($comment, $node) {
   $links = array();
   if ($node->comment == COMMENT_NODE_OPEN) {
     if (user_access('administer comments') && user_access('post comments')) {
-      $links['comment-delete'] = array(
-        'title' => t('delete'),
-        'href' => "comment/$comment->cid/delete",
+      $links['comment-reply'] = array(
+        'title' => t('reply to comment'),
+        'href' => "comment/reply/$comment->nid/$comment->cid",
         'html' => TRUE,
       );
       $links['comment-edit'] = array(
@@ -1048,9 +1048,9 @@ function comment_links($comment, $node) {
         'href' => "comment/$comment->cid/edit",
         'html' => TRUE,
       );
-      $links['comment-reply'] = array(
-        'title' => t('reply'),
-        'href' => "comment/reply/$comment->nid/$comment->cid",
+      $links['comment-delete'] = array(
+        'title' => t('delete'),
+        'href' => "comment/$comment->cid/delete",
         'html' => TRUE,
       );
       if ($comment->status == COMMENT_NOT_PUBLISHED) {

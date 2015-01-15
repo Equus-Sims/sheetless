@@ -82,6 +82,14 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
+  <?php if (!$page): ?>
+
+    <?php if ($cover_image): ?>
+      <div class="node-blogimage"><?php print render($cover_image); ?></div>
+    <?php endif; ?>
+
+  <?php endif; ?>
+
   <div class="node-content">
 
     <?php if ($page): ?>
@@ -112,10 +120,6 @@
 
     <?php if (!$page): ?>
 
-      <?php if ($cover_image): ?>
-        <div id="node-blogimage"><?php print render($cover_image); ?></div>
-      <?php endif; ?>
-
       <?php print render($title_prefix); ?>
       <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
       <?php print render($title_suffix); ?>
@@ -145,19 +149,21 @@
     }
   ?>
 
-  <?php
-    if (!empty($node->field_blog_tags)) {
-      print '<span class="tags">';
-      print '<span class="icon"></span>';
-      foreach($node->field_blog_tags['und'] as $tag) {
-        $term = taxonomy_term_load($tag['tid']);
-        if ($term->vocabulary_machine_name == 'blog_tags') {
-          print l($term->name, "blog-tags/{$term->name}");
-        }
-      };
-      print '</span>';
-    }
-  ?>
+  <?php if(!$page): ?>
+    <?php
+      if (!empty($node->field_blog_tags)) {
+        print '<span class="tags">';
+        print '<span class="icon"></span>';
+        foreach($node->field_blog_tags['und'] as $tag) {
+          $term = taxonomy_term_load($tag['tid']);
+          if ($term->vocabulary_machine_name == 'blog_tags') {
+            print l($term->name, "blog-tags/{$term->name}");
+          }
+        };
+        print '</span>';
+      }
+    ?>
+  <? endif; ?>
 
   <div class="content"<?php print $content_attributes; ?>>
     <?php
