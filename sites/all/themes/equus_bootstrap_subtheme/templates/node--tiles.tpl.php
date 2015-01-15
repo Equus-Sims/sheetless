@@ -81,7 +81,7 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="equus-tile <?php print $classes; ?>"<?php print $attributes; ?>>
-  <div class="content"<?php print $content_attributes; ?>>
+  <div class="field-content"<?php print $content_attributes; ?>>
     <?php print render($cover_image); ?>
 
     <div class="content-info">
@@ -92,7 +92,11 @@
 	    <div class="post-info">
 	    	Posted by <?php print $name; ?> on <?php print $submitted; ?>
 	    </div>
-	    <?php print render($body_teaser); ?>
+	    <?php if (strlen($body_teaser) >= 150) {
+	    	print substr($body_teaser, 0, 150) . '...<a href="' . $node_url . '" class="link-readmore">read more</a>';
+	    } else {
+	    	print render($body_teaser);
+	    } ?>
 	</div>
   </div>
   <div class="post-footer">

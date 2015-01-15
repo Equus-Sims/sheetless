@@ -69,7 +69,7 @@
 
   <div class="comment-title-block">
     <?php print render($title_prefix); ?>
-      <h3<?php print $title_attributes; ?>>"<?php print $title ?>"</h3>
+      <h3<?php print $title_attributes; ?>>"<?php print $title ?><?php if(strlen($title) >= 25) { print '...'; } ?>"</h3>
     <?php print render($title_suffix); ?>
 
     <div class="submitted">

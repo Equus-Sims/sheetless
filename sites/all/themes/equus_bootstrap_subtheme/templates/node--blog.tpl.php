@@ -94,8 +94,7 @@
 
     <?php if ($page): ?>
 
-      <?php print render($blog_categories);
-            print render($title_prefix); ?>
+      <?php print render($blog_categories); ?>
 
       <?php print render($title_prefix); ?>
       <h1<?php print $title_attributes; ?>><?php print $title ?></h1>

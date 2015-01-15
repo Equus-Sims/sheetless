@@ -321,6 +321,26 @@ div.form-type-textfield {
     max-width: 100%;
 }
 
+table.cols-3 .field-content > a > img,
+table.cols-3 .field-content > img {
+    height: auto;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table h1.field-content,
+table .field-content h2 {
+    font-size: 1.2em;
+    font-family: inherit;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+table h1.field-content a,
+table .field-content h2 a {
+    color: #6E6E6E;
+}
+
 /* Daily Digest */
 
 span.views-label {
@@ -353,13 +373,13 @@ table.cols-3 tr > td {
     padding: 0;
 }
 
-div.equus-tile h2 {
+/*div.equus-tile h2 {
     text-align: left;
     margin: 10px auto;
     font-size: 16px;
     line-height: 22px;
     font-weight: 500;
-}
+}*/
 
 div.views-field-title a {
     text-decoration: none;
@@ -411,29 +431,13 @@ div.views-field-body p {
     margin-right: 8px;
 }
 
-.view-daily-digest table .content {
+.view-daily-digest table .field-content {
     display: inline-block;
 }
 
-.view-daily-digest table .content h2 {
-    font-size: 1.2em;
-    margin-bottom: 0;
-    font-weight: bold;
-}
-
-.view-daily-digest table .content h2 a {
-    color: #6E6E6E;
-}
-
-.view-daily-digest table .content > img, div.views-field-field-horse-cover-image img {
+.view-daily-digest table .field-content > img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
-}
-
-.view-daily-digest table .content > img {
-    height: auto;
-    width: 100%;
-    margin-bottom: 20px;
 }
 
 .view-daily-digest table .content-info > p {
@@ -442,6 +446,13 @@ div.views-field-body p {
 
 .view-daily-digest table .content-info .post-info {
     margin-bottom: 20px;
+}
+
+.link-readmore /* Read More Link */,
+.link-readmore:focus,
+.link-readmore:hover {
+    color: #8f7f4c;
+    text-transform: uppercase;
 }
 
 .view-daily-digest table .tags {
@@ -453,18 +464,19 @@ div.views-field-body p {
     max-width: 70%;
 }
 
-.view-daily-digest table .post-footer {
+.view-daily-digest table .post-footer,
+.page-stable table .post-footer {
     height: 40px;
 }
 
-.view-daily-digest table .post-footer .footer-link {
+.view-daily-digest table .post-footer .footer-link,
+.page-stable table .post-footer .footer-link {
     bottom: 0;
     position: absolute;
     right: 0;
 }
 
-.view-daily-digest table .post-footer .footer-link > a,
-.node-type-blog aside .node-content > .footer-link > a {
+.footer-link > a {
     width: 40px;
     height: 40px;
     background: #8F7F4C;
@@ -479,7 +491,7 @@ div.views-field-body p {
     text-decoration: none;
 }
 
-.view-daily-digest table .post-footer .footer-link > a:hover {
+.footer-link > a:hover {
     text-decoration: none;
 }
 
@@ -534,7 +546,7 @@ div.views-field-body p {
 
 .page-user .block-views > .view .views-row > *,
 .page-user .block-views > .view .node-teaser .node-content,
-.page-user .block-views > .view .node-teaser .content {
+.page-user .block-views > .view .node-teaser .field-content {
     padding: 0 20px;
 }
 
@@ -871,7 +883,7 @@ div.views-field-body p {
     text-transform: uppercase;
     margin-bottom: 0;
     margin-top: 18px;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 .node-type-blog .submitted {
     color: #686868;
@@ -905,7 +917,14 @@ div.views-field-body p {
     margin-top: 35px;
     padding-top: 15px;
 }
+/* Comment Box */
+#comment-form div > div {
+    padding: 0;
+}
 /* Comments */
+.comment > .field-content {
+    margin-bottom: 20px;
+}
 .comment > .comment-title-block {
     display: table-cell;
 }
@@ -935,13 +954,8 @@ div.views-field-body p {
     position: relative;
 }
 .comment > .links {
-    margin: 10px 0 10px 55px;
+    margin: 0 0 10px 55px;
     text-transform: uppercase;
-}
-/* Comment Box */
-#comment-form div > div {
-    margin: 0;
-    padding: 0;
 }
 
 /* Sidebar */
@@ -989,4 +1003,10 @@ div.views-field-body p {
 
 .node-type-blog aside .node-content > .footer-link {
     float: right;
+}
+
+
+/**** Horse Directory ****/
+.page-stable table.cols-3 h1.field-content {
+    margin-top: 0;
 }
