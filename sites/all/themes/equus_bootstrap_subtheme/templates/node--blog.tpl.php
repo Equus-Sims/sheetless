@@ -113,7 +113,7 @@
       <?php endif; ?>
 
       <?php if ($cover_image): ?>
-        <div id="node-blogimage"><?php print render($cover_image); ?></div>
+        <div class="node-blogimage"><?php print render($cover_image); ?></div>
       <?php endif; ?>
 
     <? endif; ?>
