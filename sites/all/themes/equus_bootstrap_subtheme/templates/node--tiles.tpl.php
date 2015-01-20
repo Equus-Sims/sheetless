@@ -85,18 +85,26 @@
     <?php print render($cover_image); ?>
 
     <div class="content-info">
-	    <?php if ($node->type == 'blog') print render($blog_categories); ?>
-	    <?php if ($node->type == 'horse') print render($content['field_breed']); ?>
+	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
 	    
 	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
 	    <div class="post-info">
-	    	Posted by <?php print $name; ?> on <?php print $submitted; ?>
+	    	<?php if ($node->type == 'blog') {
+	    		print 'Posted by ' . $name . ' on ' . $submitted;
+	    	} ?>
+	    	<?php if ($node->type == 'horse') {
+	    		print 'Owned by ' . $name;
+	    		print '<br><span class="horse-info">' . render($content['field_breed']) . ' ' . render($content['field_horse_gender']) . '</span>';
+	    	} ?>
 	    </div>
-	    <?php if (strlen($body_teaser) >= 150) {
-	    	print substr($body_teaser, 0, 150) . '...<a href="' . $node_url . '" class="link-readmore">read more</a>';
-	    } else {
-	    	print render($body_teaser);
-	    } ?>
+	    <?php if ($node->type == 'blog'): ?>
+	    	<?php if (strlen($body_teaser) >= 150) {
+		    	print substr($body_teaser, 0, 150) . '...<a href="' . $node_url . '" class="link-readmore">read more</a>';
+		    } else {
+		    	print render($body_teaser);
+		    } ?>
+	    <?php endif; ?>
+	    
 	</div>
   </div>
   <div class="post-footer">

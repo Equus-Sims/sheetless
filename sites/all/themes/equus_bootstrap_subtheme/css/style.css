@@ -266,10 +266,9 @@ div.carousel {
 
 label {
     display: inline-block;
-    text-transform: uppercase;
     margin-bottom: 5px;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1em;
 }
 
 /* Below removes important tabs for horse profile
@@ -297,7 +296,8 @@ div.form-actions {
 }
 
 div.form-type-textfield {
-    margin: 10px 25px;
+    margin: 0;
+    max-width: 82%;
 }
 
 #edit-title {
@@ -341,21 +341,61 @@ table .field-content h2 a {
     color: #6E6E6E;
 }
 
+/* Pagination Styling */
+.pagination > li > a, .pagination > li > span {
+    border: none;
+    background-color: none;
+    padding: 6px;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus,
+.pagination > .active.last > a,
+.pagination > .active.last > span,
+.pagination > .active.first > a,
+.pagination > .active.first > span {
+    background: none;
+    color: #6E6E6E;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    background: none;
+}
+
+.pagination > .next a,
+.pagination > .last a,
+.pagination > .prev a,
+.pagination > .first a {
+    text-transform: uppercase;
+    color: #8F7F4C;
+}
+
 /* Daily Digest */
 
 span.views-label {
     display: none;
 }
 
-.view-daily-digest table {
+.view-daily-digest table,
+.page-stable table {
     height: 100%;
+    width: 100%;
 }
 
-.view-daily-digest table > tbody {
+.view-daily-digest table > tbody,
+.page-stable table > tbody {
     border-collapse: collapse;
 }
 
-.view-daily-digest table tr > td > div {
+.view-daily-digest table tr > td > div,
+.page-stable table tr > td > div {
     height: 100%;
 }
 
@@ -421,30 +461,30 @@ div.views-field-body p {
     text-align: justify;
 }
 
-.view-daily-digest table .content-info .field-item {
+table .content-info .field-item {
     display: inline-block;
 }
 
-.view-daily-digest table .content-info a[href*='blog-categories'] {
+.view-daily-digest table .content-info .field-name-field-blog-categories a {
     text-transform: uppercase;
     color: #8F7F4C;
     margin-right: 8px;
 }
 
-.view-daily-digest table .field-content {
+table .field-content {
     display: inline-block;
 }
 
-.view-daily-digest table .field-content > img, div.views-field-field-horse-cover-image img {
+table .field-content > img, div.views-field-field-horse-cover-image img {
     height: auto;
     width: 100%;
 }
 
-.view-daily-digest table .content-info > p {
+table .content-info > p {
     margin: 10px 0;
 }
 
-.view-daily-digest table .content-info .post-info {
+table .content-info .post-info {
     margin-bottom: 20px;
 }
 
@@ -464,19 +504,17 @@ div.views-field-body p {
     max-width: 70%;
 }
 
-.view-daily-digest table .post-footer,
-.page-stable table .post-footer {
+.view-daily-digest table .post-footer {
     height: 40px;
 }
 
-.view-daily-digest table .post-footer .footer-link,
-.page-stable table .post-footer .footer-link {
+.post-footer .footer-link {
     bottom: 0;
     position: absolute;
     right: 0;
 }
 
-.footer-link > a {
+.post-footer .footer-link > a {
     width: 40px;
     height: 40px;
     background: #8F7F4C;
@@ -491,25 +529,26 @@ div.views-field-body p {
     text-decoration: none;
 }
 
-.footer-link > a:hover {
+table .post-footer .footer-link > a:hover {
     text-decoration: none;
 }
 
-.view-daily-digest table .post-footer .footer-link .flag-likes {
+table .post-footer .footer-link .flag-likes {
     font-size: .8em;
     margin-bottom: 15%;
     display: inline-block;
 }
 
-.view-daily-digest table .post-footer .footer-link .flag-likes .icon {
+table .post-footer .footer-link .flag-likes .icon {
     color: #B9B9B9;
 }
 
-.view-daily-digest table .post-footer .footer-link .flag-likes .count {
+table .post-footer .footer-link .flag-likes .count {
     display: none;
 }
 
-.view-daily-digest table tr td {
+.view-daily-digest table tr td,
+.page-stable table tr td {
     position: relative;
 }
 
@@ -561,6 +600,12 @@ div.views-field-body p {
 
 /* END general styles */
 
+
+/****** Filter Styles *****/
+
+.views-exposed-form .views-exposed-widget {
+    width: 50%;
+}
 
 /* top user bar */
 
@@ -1009,4 +1054,12 @@ div.views-field-body p {
 /**** Horse Directory ****/
 .page-stable table.cols-3 h1.field-content {
     margin-top: 0;
+}
+
+.page-stable table .content-info > h2 {
+    margin-top: 0;
+}
+
+.horse-info > div {
+    display: inline-block;
 }

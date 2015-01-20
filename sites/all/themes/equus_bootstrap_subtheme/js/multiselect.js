@@ -39,9 +39,10 @@ $.widget("ech.multiselect", {
 
   // default options
   options: {
-    header: false,
+    header: true,
     height: 175,
     minWidth: 225,
+    maxWidth: 350,
     classes: '',
     checkAllText: 'Check all',
     uncheckAllText: 'Uncheck all',
@@ -422,6 +423,10 @@ $.widget("ech.multiselect", {
       width = o.minWidth;
     }
 
+    if( /\d/.test(o.maxWidth) && width > o.maxWidth){
+      width = o.maxWidth;
+    }
+
     // set widths
     this.button.width( width );
   },
@@ -433,7 +438,7 @@ $.widget("ech.multiselect", {
         parseInt(m.css('padding-left'),10)-
         parseInt(m.css('padding-right'),10)-
         parseInt(m.css('border-right-width'),10)-
-        parseInt(m.css('border-left-width'),10);
+        parseInt(m.css('border-left-width'),10) + 8;
 
     m.width( width || this.button.outerWidth() );
   },
