@@ -65,9 +65,7 @@
     <span class="new"><?php print $new ?></span>
   <?php endif; ?>
 
-  <?php if (file_exists($picture)) {
-    print $picture;
-  }; ?>
+  <?php if ($picture) { print $picture; } ?>
 
   <div class="comment-title-block">
     <?php print render($title_prefix); ?>

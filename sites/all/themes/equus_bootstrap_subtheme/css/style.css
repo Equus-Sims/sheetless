@@ -58,6 +58,10 @@ div.main-container > h1 {
     display: inline-block;
 }
 
+.node-links a, .node-links a:hover, .node-links a:focus {
+    text-decoration: none;
+}
+
 .flag-likes .icon.flagged:before {
     content: '\e609';
     color: #E86865;
@@ -371,6 +375,13 @@ span.views-label {
     display: none;
 }
 
+.view-daily-digest div.view-content,
+.page-stable div.view-content {
+    max-width: 1035px;
+    position: relative;
+    left: -18px;
+}
+
 .view-daily-digest table,
 .page-stable table {
     height: 100%;
@@ -597,7 +608,7 @@ table .post-footer .footer-link .flag-likes .count {
 
 .views-exposed-form .views-exposed-widget {
     width: auto;
-    padding-top: 1em;
+    padding-top: .9em;
 }
 
 .form-type-select {
@@ -629,7 +640,7 @@ table .post-footer .footer-link .flag-likes .count {
     -moz-border-radius: 0;
     -o-border-radius: 0;
     -webkit-border-radius: 0;
-    padding: 10px 36px;
+    padding: 9px 30px;
     text-transform: uppercase;
     border: none;
     color: #FFF;
@@ -641,7 +652,7 @@ table .post-footer .footer-link .flag-likes .count {
 
 #filterBtn.views-submit-button > button {
     background: #8F7F4C;
-    width: 170px;
+    width: 157px;
 }
 
 .views-reset-button #edit-reset {
@@ -996,7 +1007,7 @@ table .post-footer .footer-link .flag-likes .count {
     font-weight: 900;
     text-transform: uppercase;
     margin-bottom: 0;
-    margin-top: 18px;
+    margin-top: 10px;
     font-size: 1.5em;
 }
 .node-type-blog .submitted {
@@ -1051,13 +1062,15 @@ table .post-footer .footer-link .flag-likes .count {
 .comment > .links a {
     text-decoration: none;
 }
-#comments h2 {
+.comment-wrapper h2 {
     font-size: 1em;
     text-transform: uppercase;
 }
 .comment > .user-picture {
     display: table-cell;
     padding-right: 15px;
+    position: relative;
+    top: 6px;
 }
 .comment > .user-picture img {
     width: 50px;
@@ -1068,8 +1081,16 @@ table .post-footer .footer-link .flag-likes .count {
     position: relative;
 }
 .comment > .links {
-    margin: 0 0 10px 55px;
+    margin: 10px 0 20px 55px;
     text-transform: uppercase;
+}
+
+.comment > .new {
+    background: #FF5B5B;
+    color: #FFF;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    display: block;
 }
 
 /* Sidebar */
