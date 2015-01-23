@@ -888,10 +888,8 @@ body .ui-tooltip {
     text-decoration: none;
 }
 .ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-    border: 1px solid #ccc;
-    background: #ffffff url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+.ui-widget-content .ui-state-active {
+    background: #DDDDDD url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
     font-weight: normal;
     color: #353535;
 }
@@ -1214,4 +1212,17 @@ body .ui-tooltip {
     opacity: .2;
     filter: Alpha(Opacity=20);
     border-radius: 5px;
+}
+
+.ui-multiselect-hasfilter ul { position:relative; top:2px }
+.ui-multiselect-filter { float:left; margin-right:10px; font-size:.9em }
+.ui-multiselect-filter input {
+        font-size:inherit;
+        margin-left:5px;
+        max-height:30px;
+        padding:5px;
+        border:1px
+        solid #DDD;
+        -webkit-appearance:textfield;
+        -webkit-box-sizing:content-box;
 }

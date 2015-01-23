@@ -253,13 +253,6 @@ div.carousel {
 
 /* Forms */
 
-.form-group {
-    padding: 25px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-}
-
 .panel {
     margin: -10px 25px;
 }
@@ -279,7 +272,7 @@ div.vertical-tabs-panes {
 } */
 
 .btn {
-    margin-top: 10px;
+    
 }
 
 .tabbable {
@@ -297,15 +290,10 @@ div.form-actions {
 
 div.form-type-textfield {
     margin: 0;
-    max-width: 82%;
 }
 
 #edit-title {
     margin: 0;
-}
-
-.view-id-puppies .views-exposed-form .views-exposed-widget {
-    height: 90px;
 }
 
 /* End Forms */
@@ -603,8 +591,89 @@ table .post-footer .footer-link .flag-likes .count {
 
 /****** Filter Styles *****/
 
+.views-exposed-form {
+    display: none;
+}
+
 .views-exposed-form .views-exposed-widget {
-    width: 50%;
+    width: auto;
+    padding-top: 1em;
+}
+
+.form-type-select {
+    padding: 10px 16px 10px 0;
+}
+
+.btn, .form-item input {
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    -webkit-border-radius: 0;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.views-exposed-widget.views-submit-button,
+.views-exposed-widget.views-reset-button,
+#filterBtn {
+    display: inline-block;
+    width: auto;
+    padding: 0 5px 0 0;
+}
+
+.views-submit-button > button {
+    background: #256E5A;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    -webkit-border-radius: 0;
+    padding: 10px 36px;
+    text-transform: uppercase;
+    border: none;
+    color: #FFF;
+}
+
+#filterBtn {
+    margin-top: 10px;
+}
+
+#filterBtn.views-submit-button > button {
+    background: #8F7F4C;
+    width: 170px;
+}
+
+.views-reset-button #edit-reset {
+    border: none;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.views-submit-button > button:hover,
+.views-submit-button > button:focus,
+.views-submit-button > button:active,
+.views-submit-button > button.active,
+.open .dropdown-toggle.btn-info {
+    background: #256e5a;
+    border: none;
+    color: #FFF;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+    background: #FFF;
+    border: none;
+}
+
+.btn:active, .btn.active {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 /* top user bar */
@@ -1062,4 +1131,16 @@ table .post-footer .footer-link .flag-likes .count {
 
 .horse-info > div {
     display: inline-block;
+}
+
+.page-stable .views-exposed-form .views-exposed-widget,
+.page-stable div.form-type-textfield,
+.page-node-edit .form-type-select {
+    width: 50%;
+    position: relative;
+}
+
+.page-stable .views-exposed-widget.views-submit-button,
+.page-stable .views-exposed-widget.views-reset-button {
+    width: auto;
 }

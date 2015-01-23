@@ -75,14 +75,7 @@
 ?>
 <script>
 
-  window.setTimeout(function() {
-
-    if ( jQuery('select').length > 0 ) {
-      jQuery('select').multiselect();
-      return false;
-    };
-
-  }, 100);
+  
 
 </script>
 <header id="navbar" role="navigation" class="<?php print $navbar_classes; ?>">

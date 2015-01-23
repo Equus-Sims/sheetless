@@ -82,7 +82,7 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="equus-tile <?php print $classes; ?>"<?php print $attributes; ?>>
   <div class="field-content"<?php print $content_attributes; ?>>
-    <?php print render($cover_image); ?>
+    <a href="<?php print $node_url; ?>"><?php print render($cover_image); ?></a>
 
     <div class="content-info">
 	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
