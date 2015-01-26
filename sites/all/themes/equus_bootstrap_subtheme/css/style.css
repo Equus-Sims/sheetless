@@ -49,7 +49,7 @@ div.main-container > h1 {
 /* Icons */
 
 .icon {
-    font-family: icons;
+    font-family: 'icons';
     color: #666666;
     font-size: 1.3em;
     vertical-align: sub;
@@ -73,6 +73,10 @@ div.main-container > h1 {
 
 .flag-likes .flag-throbber {
     display: none;
+}
+
+.footer-link .footer-readmore.icon:before {
+    content: '\e60b';
 }
 
 .comments .icon:before {
@@ -520,10 +524,8 @@ table .content-info .post-info {
     display: inline-block;
     vertical-align: bottom;
     color: #FFF;
-    font-size: 1.5em;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: .9em;
     line-height: 40px;
-    font-weight: bolder;
     text-align: center;
     text-decoration: none;
 }

@@ -123,7 +123,7 @@
 		?>
 		<div class="footer-link">
 			<?php print flag_create_link("likes", $node->nid); ?>
-			<a href="<?php print $node_url; ?>">></a>
+			<a class="icon footer-readmore" href="<?php print $node_url; ?>"></a>
 		</div>
 	</div>
 </div>
