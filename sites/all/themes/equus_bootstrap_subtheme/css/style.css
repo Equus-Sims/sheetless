@@ -992,9 +992,8 @@ table .post-footer .footer-link .flag-likes .count {
 
 
 /***** Blog Entries *****/
-.node-type-blog .main-container aside {
-    width: 24%;
-}
+
+
 /* Blog Entry Side */
 .node-type-blog .equus-sub-header {
     display: none;
@@ -1052,6 +1051,13 @@ table .post-footer .footer-link .flag-likes .count {
 .comment > .field-content {
     margin-bottom: 20px;
 }
+.comment-wrapper > div.comment:not(:first-of-type) {
+    border-top: 1px solid #eee;
+    padding-top: 26px;
+}
+.comment-wrapper > div.comment:first-of-type {
+    border-top: none;
+}
 .comment > .comment-title-block {
     display: table-cell;
 }
@@ -1083,20 +1089,41 @@ table .post-footer .footer-link .flag-likes .count {
     position: relative;
 }
 .comment > .links {
-    margin: 10px 0 20px 55px;
+    margin: 10px 0 26px;
     text-transform: uppercase;
+}
+
+.comment > .links > li:before {
+    color: #777;
+    font-family: "icons";
+    font-size: 1em;
+    margin-right: 5px;
+    vertical-align: bottom;
+}
+
+.comment > .links > .comment-edit:before {
+    content: '\e60c';
+}
+
+.comment > .links > .comment-delete:before {
+    content: '\e60d';
+}
+
+.comment-wrapper .indented {
+    margin-left: 55px;
 }
 
 .comment > .new {
-    background: #FF5B5B;
-    color: #FFF;
-    padding: 5px 10px;
-    text-transform: uppercase;
-    display: block;
+    color: red;
+    padding: 10px 0 0;
+    font-size: 80%;
+    font-weight: bold;
+    float: right;
+    text-transform: capitalize;
 }
 
 /* Sidebar */
-.node-type-blog aside > div {
+.node-type-blog aside, .node-type-blog aside > div {
     background: none;
     border: none;
 }
