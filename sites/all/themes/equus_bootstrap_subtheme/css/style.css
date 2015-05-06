@@ -226,9 +226,22 @@ ul.userDropdownMenu {
     position: absolute;
     width: auto;
     height: auto;
+    background: #23856E;
+    opacity: 1;
     border-radius: 2px !important;
     -moz-border-radius: 2px !important;
     -webkit-border-radius: 2px !important;
+}
+
+ul.userDropdownMenu:before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -5px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #23856E;
 }
 
 ul.userDropdownMenu li {
