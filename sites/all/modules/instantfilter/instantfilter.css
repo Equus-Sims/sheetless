@@ -1,20 +1,9 @@
-
-.form-type-instantfilter {
-  float: right;
-  width: 25em;
-  text-align: right;
-}
-.form-type-instantfilter + * {
-  clear: right;
-}
-
-.form-type-instantfilter .form-text {
-  width: 15em;
-}
-.form-type-instantfilter .form-submit {
-  margin: 0 0 0 1em;
-}
-
-html.js .form-type-instantfilter .form-submit {
+/**
+ * For anything you want to show on page load only when JS is enabled.
+ */
+.js-show {
   display: none;
+}
+.js .js-show {
+  display: block;
 }

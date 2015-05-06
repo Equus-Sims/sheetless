@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file accountmenu.install
+ * accountmenu module install/uninstall
+ */
+
+/**
+ * Implements hook_install.
+ */
+function accountmenu_install() {
+  $t = get_t();
+  db_query("INSERT INTO {menu_custom} (menu_name, title, description) VALUES (:name, :title, :description)", array(':name' => 'accountmenu', ':title' => $t('Account menu'), ':description' => $t('Account menu links.')));
+
+  include_once('accountmenu.module');
+  _accountmenu_setup_menu();
+
+  drupal_set_message($t('Account menu is installed, go to <a href="@help">help</a> for instructions.',
+    array(
+      '@help' => url('admin/help/accountmenu'),
+    )
+  ), 'status');
+}
+
+
+/**
+ * Implements hook_uninstall.
+ */
+function accountmenu_uninstall() {
+  variable_del('accountmenu_menu_name');
+
+  include_once('accountmenu.module');
+  _accountmenu_delete_menu();
+
+  db_query("DELETE FROM {menu_custom} WHERE menu_name = 'accountmenu'");
+}
