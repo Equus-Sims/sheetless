@@ -216,6 +216,29 @@ div.main-container > h1 {
     display: none;
 }
 
+/* User Dropdown Menu */
+
+li.userDropdownBtn {
+    position: relative;
+}
+
+ul.userDropdownMenu {
+    position: absolute;
+    width: auto;
+    height: auto;
+    border-radius: 2px !important;
+    -moz-border-radius: 2px !important;
+    -webkit-border-radius: 2px !important;
+}
+
+ul.userDropdownMenu li {
+    display: block;
+    text-align: left;
+}
+
+
+/* End User Dropdown Menu */
+
 /* .nav-tabs {
     display: none;
 } */

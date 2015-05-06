@@ -943,4 +943,21 @@ jQuery(window).load(function() {
 
   });
 
+  window.setTimeout(function() {
+
+    var menuBtn = $('nav li > a[href*="user/self"]');
+
+    if ( menuBtn.length > 0 ) {
+
+      menuBtn.next().addClass('userDropdownMenu');
+      menuBtn.parent('li').addClass('userDropdownBtn');
+
+      $(this).click(function() {
+        $(this).preventDefault;
+      });
+
+    };
+
+  },100);
+
 })(jQuery);
