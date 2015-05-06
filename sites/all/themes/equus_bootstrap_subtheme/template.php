@@ -107,6 +107,9 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
 		$variables['content_column_class'] = ' class="col-sm-8"';
 	}
+	elseif (!empty($variables['page']['sidebar_small'])) {
+		$variables['content_column_class'] = ' class="col-sm-9"';
+	}
 	else {
 		$variables['content_column_class'] = ' class="col-sm-12"';
 	}
