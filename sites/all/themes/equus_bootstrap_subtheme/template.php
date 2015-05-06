@@ -101,17 +101,17 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	}
 
 	//Render correct column widths
-	if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-		$variables['content_column_class'] = ' class="col-sm-6"';
+	if (!empty($vars['page']['sidebar_first']) && !empty($vars['page']['sidebar_second'])) {
+		$vars['content_column_class'] = ' class="col-sm-6"';
 	}
-	elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
-		$variables['content_column_class'] = ' class="col-sm-8"';
+	elseif (!empty($vars['page']['sidebar_first']) || !empty($vars['page']['sidebar_second'])) {
+		$vars['content_column_class'] = ' class="col-sm-8"';
 	}
-	elseif (!empty($variables['page']['sidebar_small'])) {
-		$variables['content_column_class'] = ' class="col-sm-9"';
+	elseif (!empty($vars['page']['sidebar_small'])) {
+		$vars['content_column_class'] = ' class="col-sm-9"';
 	}
 	else {
-		$variables['content_column_class'] = ' class="col-sm-12"';
+		$vars['content_column_class'] = ' class="col-sm-12"';
 	}
 }
 
