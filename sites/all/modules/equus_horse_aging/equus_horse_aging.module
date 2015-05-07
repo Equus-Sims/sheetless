@@ -65,15 +65,6 @@ function equus_horse_aging_node_insert($node) {
 	}
 }
 
-
-
-
-
-
-
-
-
-
 //function equus_horse_aging_transition_year($form) {
 	//$transition_year = $form['#node']->field_age_transition_year['und'][0]['value'];
 //}
