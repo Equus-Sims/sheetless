@@ -1230,3 +1230,49 @@ table .post-footer .footer-link .flag-likes .count {
 .page-stable .views-exposed-widget.views-reset-button {
     width: auto;
 }
+/* End Horse Directory */
+
+
+/* Footer */
+
+footer.footer {
+    background: #6D6D6D;
+    padding: 50px;
+}
+
+footer.footer > div.region-footer {
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+footer.footer div > section {
+    display: inline-block;
+}
+
+footer.footer div > section:not(:last-child) {
+    margin-right: 20%;
+}
+
+footer.footer div section > h2 {
+    color: #383737;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: bold;
+    display: inline-block;
+}
+
+footer.footer a,
+footer.footer a:hover,
+footer.footer a:visited,
+footer.footer a:active {
+    color: #bababa;
+    background: none;
+}
+
+footer.footer div section ul.menu a {
+    padding: 2px 0;
+    font-size: .95em;
+    font-weight: bold;
+}
+
+/* End Footer */
