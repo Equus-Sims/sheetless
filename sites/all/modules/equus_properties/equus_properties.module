@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Equus Properties feature.
+ */
+
+include_once 'equus_properties.features.inc';
