@@ -27,7 +27,7 @@ function equus_members_get_net_worth($uid) {
 	return money_format('%.0n', $total);
 }
 
-function equus_members_gallery_image_count($uid) {
+/*function equus_members_gallery_image_count($uid) {
 	$query = new EntityFieldQuery();
 	$query
 		->entityCondition('entity_type', 'node')
@@ -36,7 +36,7 @@ function equus_members_gallery_image_count($uid) {
 		->propertyCondition('uid', $uid);
 	$result = $query->execute();
 	return count($result['node']);
-}
+}*/
 
 function equus_members_horse_count($uid) {
 	$query = new EntityFieldQuery();
@@ -67,7 +67,7 @@ function equus_members_preprocess_user_profile(&$vars) {
 	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_biography');
 	$vars['user_biography'] = $items[0]['value'];
 
-	$vars['gallery_count'] = equus_members_gallery_image_count($vars['elements']['#account']->uid);
+	//$vars['gallery_count'] = equus_members_gallery_image_count($vars['elements']['#account']->uid);
 	$vars['horse_count'] = equus_members_horse_count($vars['elements']['#account']->uid);
 	//$vars['user_like_count'] = flag_get_user_flags('node'), $vars['elements']['#account']->uid);
 }
