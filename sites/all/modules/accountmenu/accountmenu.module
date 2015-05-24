@@ -216,11 +216,11 @@ function accountmenu_translated_menu_link_alter(&$item) {
     $item['title'] = t($item['link_title']);
   }
   elseif ($item['link_path'] == 'user/self') {
-    list($name, $realname) = _accountmenu_get_name_and_realname();
+    $token_list = _accountmenu_get_name_and_realname();
     // no check_plain() here because menu display will do it
     $item['options']['accountmenu_link_title'] = $item['link_title'];
     // Substitute the @name and @realname (internal) tokens.
-    $item['title'] = $item['link_title'] = t($item['link_title'], array('@name' => $name, '@realname' => $realname));
+    $item['title'] = $item['link_title'] = t($item['link_title'], $token_list);
   }
 }
 
@@ -235,8 +235,8 @@ function accountmenu_translated_menu_link_alter(&$item) {
  */
 function accountmenu_preprocess_block(&$vars) {
   if ('accountmenu' == $vars['block']->delta) {
-    list($name, $realname) = _accountmenu_get_name_and_realname();
-    $vars['block']->subject = t($vars['block']->subject, array('@name' => $name, '@realname' => $realname));
+    $token_list = _accountmenu_get_name_and_realname();
+    $vars['block']->subject = t($vars['block']->subject, $token_list);
   }
 }
 
@@ -252,7 +252,14 @@ function _accountmenu_get_name_and_realname() {
 
   // initialize elements [0] and [1], the second will be set to real name if the
   // realname module is installed
-  return array($user->name, format_username($user));
+  $result = array(
+    '@name' => (empty($user->name)) ? '' : $user->name,
+    '@realname' => format_username($user),
+  );
+
+  drupal_alter('accountmenu_name_realname', $result);
+
+  return $result;
 }
 
 /**
@@ -270,4 +277,3 @@ function accountmenu_form_alter(&$form, $form_state, $form_id) {
     $form['link_title']['#default_value'] = $form['options']['#value']['accountmenu_link_title'];
   }
 }
-

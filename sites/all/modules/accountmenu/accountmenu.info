@@ -4,8 +4,8 @@ core = 7.x
 dependencies[] = menu
 
 ; Information added by Drupal.org packaging script on 2014-05-31
-version = "7.x-1.0-alpha2"
+version = "7.x-1.0-alpha2+2-dev"
 core = "7.x"
 project = "accountmenu"
-datestamp = "1401545630"
+datestamp = "1401550128"
 
