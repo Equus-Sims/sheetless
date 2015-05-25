@@ -18,3 +18,32 @@ function equus_organizations_node_info() {
 function organization_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
+
+function equus_organizations_get_assoc_org($uid) {
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'organization')
+		->propertyCondition('status', 1)
+		->propertyCondition('uid', $uid);
+	$result = $query->execute();
+	$nid_owner = array();
+	if (count($result) > 0) {
+		$nid_owner = array_keys($result['node']);
+	} 
+
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'organization')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_co_owners', 'target_id', $uid);
+	$result = $query->execute();
+	$nid_co_owner = array();
+	if (count($result) > 0) {
+		$nid_co_owner = array_keys($result['node']);
+	} 
+
+	$nids = array_merge($nid_owner, $nid_co_owner);
+	return $nids;
+}

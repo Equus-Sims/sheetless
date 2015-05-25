@@ -163,35 +163,6 @@ function equus_bootstrap_subtheme_get_like_count($nid) {
 	}
 }
 
-function equus_bootstrap_subtheme_get_assoc_org($uid) {
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'organization')
-		->propertyCondition('status', 1)
-		->propertyCondition('uid', $uid);
-	$result = $query->execute();
-	$nid_owner = array();
-	if (count($result) > 0) {
-		$nid_owner = array_keys($result['node']);
-	} 
-
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'organization')
-		->propertyCondition('status', 1)
-		->fieldCondition('field_co_owners', 'target_id', $uid);
-	$result = $query->execute();
-	$nid_co_owner = array();
-	if (count($result) > 0) {
-		$nid_co_owner = array_keys($result['node']);
-	} 
-
-	$nids = array_merge($nid_owner, $nid_co_owner);
-	return $nids;
-}
-
 function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 	$alias = drupal_get_path_alias();
 	

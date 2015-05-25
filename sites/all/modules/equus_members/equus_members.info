@@ -6,3 +6,4 @@ files[] = equus_members.install
 files[] = equus_members.module
 dependencies[] = equus_core
 dependencies[] = equus_banking
+dependencies[] = equus_organizations
