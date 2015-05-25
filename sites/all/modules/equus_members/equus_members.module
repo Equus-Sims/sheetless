@@ -17,7 +17,7 @@ function equus_members_entity_info_alter(&$entity_info) {
 
 function equus_members_get_net_worth($uid) {
 	$ledger = equus_banking_retrieve_ledger();
-	$nids = equus_organizations_get_assoc_org($uid);
+	$nids = equus_organizations_get_assoc_orgs($uid);
 	
 	$total = array_reduce($nids, function($carry, $item) use (&$ledger) {
 		return $carry + equus_banking_balance($ledger, $item);

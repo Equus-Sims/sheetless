@@ -19,7 +19,7 @@ function organization_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
 
-function equus_organizations_get_assoc_org($uid) {
+function equus_organizations_get_assoc_orgs($uid) {
 	$query = new EntityFieldQuery();
 	$query
 		->entityCondition('entity_type', 'node')

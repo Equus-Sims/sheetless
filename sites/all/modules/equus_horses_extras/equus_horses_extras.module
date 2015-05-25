@@ -2,6 +2,10 @@
 
 define("EQUUS_HORSES_EXTRAS_REGULAR_HC_TID",1);
 
+/**
+ * Verifies that the user has at least 1 HC in order to activate a horse.
+ * @param $uid ID of the currently logged in user.
+ */
 function equus_horses_extras_validate_hc_count($uid) {
 	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
 	if ($current_regular_HC < 1 ) {
@@ -9,6 +13,12 @@ function equus_horses_extras_validate_hc_count($uid) {
 	}
 }
 
+/**
+ * Verifies that the currently logged in user is a member of the 
+ * organization that the property in question belongs to.
+ * @param $uid ID of the currently logged in user
+ * @param $nid ID of the property in question
+ */
 function equus_horses_extras_validate_residence_ownshp($uid, $nid) {
 	$organizations = equus_properties_get_user_assoc_properties($uid);
 
@@ -25,38 +35,42 @@ function equus_horses_extras_validate_residence_ownshp($uid, $nid) {
 		}
 	}
 	if (!$found) {
-		form_set_error('field_horse_residence', "You must be a member of the organization that owns the residence property.");
+		form_set_error('field_horse_residence', "You must be a member of the organization that owns the residence property to assign a horse to it.");
 	}
 }
 
+/**
+ * Performs validation on horse creation form elements.
+ * 
+ * Implements hook_node_validate
+ */
 function equus_horses_extras_node_validate($node, $form, &$form_state) {
 	if ($node->type != 'horse') {
 		return;
 	}
 
-	// Validate if user has enough horse credits to activate the horse
+	// Verify that user has enough horse credits to activate the horse
+	// TODO: Make this section its own function
 	// check if new horse
-	//		if new check whether active is set
-	//			if yes check for points
-	// 		if not new check whether previous value is pending and new value is active
-	//			if yes check for points
-
 	if (!isset($node->nid)) {
+		// if new check whether active is set
 		if ($node->field_horse_activation_status['und'][0]['value'] == 'Active') {
-			//dpm("check for points - new horse");
+			// if yes check for points
 			equus_horses_extras_validate_hc_count($form['uid']['#value']);
 		} 
 	} else {
+		// get activation status
 		$original_value = $form['#node']->field_horse_activation_status['und'][0]['value'];
 		$new_value = $node->field_horse_activation_status['und'][0]['value'];
 
+		// if not new check whether previous value is pending and new value is active
 		if ($original_value == 'Pending' && $new_value == 'Active') {
-			//dpm("check for points - edit horse");
+			// if yes check for points
 			equus_horses_extras_validate_hc_count($form['uid']['#value']);
 		}
 	}
 
-	// Validate that residence is owned by the currently logged in user
+	// Verify that residence/property is owned by the currently logged in user
 	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
 }
 
