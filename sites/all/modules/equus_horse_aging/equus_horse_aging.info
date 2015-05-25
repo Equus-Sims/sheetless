@@ -1,8 +1,0 @@
-name = Equus Horse Aging
-description = A custom module for Equus-sims to automate horse aging.
-package = Equus Sims
-core = 7.x
-files[] = equus_horse_aging.install
-files[] = equus_horse_aging.module
-dependencies[] = entityreference
-dependencies[] = equus_core

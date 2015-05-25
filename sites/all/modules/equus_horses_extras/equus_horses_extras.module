@@ -1,0 +1,129 @@
+<?php
+
+define("EQUUS_HORSES_EXTRAS_REGULAR_HC_TID",1);
+
+function equus_horses_extras_validate_hc_count($uid) {
+	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
+	if ($current_regular_HC < 1 ) {
+		form_set_error('field_horse_activation_status', 'You do not have enough regular horse credits to make this horse active.');
+	}
+}
+
+function equus_horses_extras_validate_residence_ownshp($uid, $nid) {
+	$organizations = equus_properties_get_user_assoc_properties($uid);
+
+	$found = FALSE;
+	foreach ($organizations as $properties) {
+		foreach ($properties as $propertyid => $property) {
+			if ($propertyid == $nid) {
+				$found = TRUE;
+				break;
+			}
+		}
+		if ($found) {
+			break;
+		}
+	}
+	if (!$found) {
+		form_set_error('field_horse_residence', "You must be a member of the organization that owns the residence property.");
+	}
+}
+
+function equus_horses_extras_node_validate($node, $form, &$form_state) {
+	if ($node->type != 'horse') {
+		return;
+	}
+
+	// Validate if user has enough horse credits to activate the horse
+	// check if new horse
+	//		if new check whether active is set
+	//			if yes check for points
+	// 		if not new check whether previous value is pending and new value is active
+	//			if yes check for points
+
+	if (!isset($node->nid)) {
+		if ($node->field_horse_activation_status['und'][0]['value'] == 'Active') {
+			//dpm("check for points - new horse");
+			equus_horses_extras_validate_hc_count($form['uid']['#value']);
+		} 
+	} else {
+		$original_value = $form['#node']->field_horse_activation_status['und'][0]['value'];
+		$new_value = $node->field_horse_activation_status['und'][0]['value'];
+
+		if ($original_value == 'Pending' && $new_value == 'Active') {
+			//dpm("check for points - edit horse");
+			equus_horses_extras_validate_hc_count($form['uid']['#value']);
+		}
+	}
+
+	// Validate that residence is owned by the currently logged in user
+	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
+}
+
+function equus_horses_extras_spend_regular_hc($uid) {
+	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
+	if ($current_regular_HC < 1 ) {
+		return false;
+	}
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => -1,
+		'tid' => EQUUS_HORSES_EXTRAS_REGULAR_HC_TID
+	));
+	return true;
+}
+
+function equus_horses_extras_node_insert($node) {
+	//dpm('Janelle was here!');
+	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
+		return;
+	}
+
+	$status = equus_horses_extras_spend_regular_hc($node->uid);
+
+	if ($status === false) {
+		watchdog('equus_horse_aging', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+	}
+}
+
+function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
+	$dob = field_get_items($entity_type, $entity, 'field_horse_date_of_birth');
+	$date = array_pop($dob);
+	$real_date = new DateTime($date['value']);
+
+	$year = $real_date->format("Y");
+	$month = $real_date->format("m");
+
+	$field_age_transition_year = field_get_items($entity_type, $entity, 'field_age_transition_year');
+	$field_foal_age_multiplier = field_get_items($entity_type, $entity, 'field_foal_age_multiplier');
+	$field_adult_age_multiplier = field_get_items($entity_type, $entity, 'field_adult_age_multiplier');
+
+	$transition_year = $field_age_transition_year[0]['value'];
+	$foal_multiplier = $field_foal_age_multiplier[0]['value'];
+	$adult_multiplier = $field_adult_age_multiplier[0]['value'];
+
+	$entity_field[0]['value'] = equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier);
+}
+
+function equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier) {
+	$dob = mktime(0,0,0,$month,1,$year);
+	$today = mktime(0,0,0);
+
+	$age_in_months = ($today - $dob)/(60*60*24*(365/12));
+
+	$months_as_foal = $transition_year*($foal_multiplier);
+
+	$years_as_foal = $age_in_months/$foal_multiplier;
+
+	if ($years_as_foal < 1) {
+		return 0;
+	} else {
+		$months_as_adult = $age_in_months - $months_as_foal;
+
+		$years_as_adult = $months_as_adult/$adult_multiplier;
+
+		$calc_age = $years_as_adult + $transition_year;
+
+		return floor($calc_age);
+	}
+}
