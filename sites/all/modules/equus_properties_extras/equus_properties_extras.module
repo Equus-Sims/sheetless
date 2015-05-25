@@ -1,0 +1,115 @@
+<?php 
+
+/**
+ * Displays an error message if the user has not created 
+ * an org and/or a property.
+ *
+ * Displays only those properties associated with an organization
+ * that the currently logged in user is a member of in the horse 
+ * residence field.
+ *
+ * Implements hook_form_alter for the horse creation form.
+ */
+function equus_properties_extras_form_horse_node_form_alter(&$form, $form_state) {
+
+	// get all organizations (and properties) associated with the currently logged in user
+	$organizations = equus_properties_get_user_assoc_properties($GLOBALS['user']->uid);
+
+	// if the user has no organizations, print an error
+	if (empty($organizations)) {
+		drupal_set_message('You need to create an organization and a property before you can create a horse.','error');
+	} else {
+		$empty = TRUE;
+
+		// if the user has no properties, print an error
+		foreach ($organizations as $property_list) {
+			if (!empty($property_list)) {
+				$empty = FALSE;
+				break;
+			}
+		}
+
+		if ($empty) {
+			drupal_set_message('You need to create a property before you can create a horse.','error');
+		}
+	}
+	
+	// pass the correct property options to the form for the horse residence field
+	$form['field_horse_residence']['und']['#options'] = $organizations;
+}
+
+/**
+ * Gets the user's associated properties
+ *
+ * The output is an array with keys being organization names and values
+ * being an array of associated properties. Each entry in the properties
+ * array has a property id as a key and the property name as a value.
+ * 
+ * Example Output:
+ *
+ * array(
+ *     'foo' => array(
+ * 			5 => 'a property owned by foo',
+ *          6 => 'another property owned by foo'    
+ *      ),
+ *      'bar' => array(
+ *          7 => 'a property owned by bar',
+ *          8 => 'another property owned by bar' 
+ *      )
+ * )
+ *
+ * @param $uid The ID of the user in question.
+ * @return An array with keys being organization names and values being an array of associated properties.
+ */
+function equus_properties_get_user_assoc_properties($uid) {
+	// get all organization IDs that the member is associated with
+	$orgIDs = equus_organizations_get_assoc_org($uid);
+
+	// get all the organization nodes from org IDs
+	$organizations = node_load_multiple($orgIDs);
+
+	// initialize array of properties
+	$properties = array();
+	foreach ($organizations as $organization) {
+		// set $properties[$organization->title] to an array
+		$properties[$organization->title] = array();
+
+		// get the property nodes associated with an org
+		$property_nodes = equus_properties_get_org_assoc_properties($organization->nid);
+		foreach ($property_nodes as $property) {
+			// fill properties array with key/value (ID/title) pairs for property nodes
+			$properties[$organization->title][$property->nid] = $property->title;
+		}
+	}	
+	return $properties;
+}
+
+/**
+ * Gets the properties associated with an organization.
+ *
+ * @param $nid The ID of the organization in question.
+ * @return An array of property nodes.
+ */
+function equus_properties_get_org_assoc_properties($nid) {
+	// query for all properties associated with an org
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'property')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_property_ownership', 'target_id', $nid);
+	$result = $query->execute();
+
+	// initialize array of property IDs
+	$propertyIDs = array();
+
+	// if a property exists, add it to the array
+	if (count($result) > 0) {
+		$propertyIDs = array_keys($result['node']);
+	}
+
+	// get all the property nodes from property IDs
+	$properties = node_load_multiple($propertyIDs);
+
+	return $properties;
+}

@@ -1,0 +1,10 @@
+name = Equus Properties Extras
+description = A custom module for Equus-sims for property extras.
+package = Equus Sims
+version = 7.x-1.0
+core = 7.x
+files[] = equus_properties_extras.install
+files[] = equus_properties_extras.module
+dependencies[] = equus_organizations
+dependencies[] = equus_properties
+;dependencies[] = equus_horses
