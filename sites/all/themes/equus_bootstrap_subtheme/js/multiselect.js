@@ -959,6 +959,10 @@ jQuery(window).load(function() {
 
     };
 
+    $('.navbar #block-search-form').click(function() {
+      $(this).animate({width: 'toggle'}, 350);
+    });
+
   },100);
 
 })(jQuery);

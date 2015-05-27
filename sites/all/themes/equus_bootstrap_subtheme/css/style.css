@@ -162,6 +162,17 @@ div.main-container > h1 {
 /* End Primary Nav */
 
 
+/* Nav Search Bar */
+
+.navbar #block-search-form {
+    margin: 33px 0;
+    width: 20px;
+    overflow: hidden;
+}
+
+/* End Nav Search Bar */
+
+
  /*Genius Bit*/
 
 .dropdown-menu {
@@ -1231,6 +1242,70 @@ table .post-footer .footer-link .flag-likes .count {
     width: auto;
 }
 /* End Horse Directory */
+
+
+/* Messages */
+
+#privatemsg-list div.container-inline {
+    background: #1F5E4D;
+    padding: 15px 30px;
+}
+
+#privatemsg-list div.container-inline div.form-type-select button,
+.page-messages div.ui-multiselect-menu {
+    width: 140px !important;
+}
+
+.page-messages div.ui-multiselect-menu ul {
+    height: auto !important;
+}
+
+.page-messages .ui-multiselect span.ui-icon {
+    margin-top: 8px;
+}
+
+.page-messages button.ui-multiselect {
+    padding: 4px 0px 2px 11px;
+}
+
+.page-messages .form-type-select {
+    padding: 0;
+    float: right;
+}
+
+.page-messages .form-group {
+    margin: 0;
+}
+
+.page-messages table.privatemsg-list th {
+    text-transform: uppercase;
+    font-weight: normal;
+    border-bottom: none;
+}
+
+.page-messages table.privatemsg-list thead {
+    background: #F5F5F5;
+}
+
+.page-messages table.privatemsg-list thead > tr > th img {
+    position: relative;
+    margin-top: -6px;
+}
+
+.page-messages .table > tbody > tr > td {
+    background: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.page-messages .privatemsg-list a,
+.page-messages .privatemsg-list a:hover,
+.page-messages .privatemsg-list a:visited,
+.page-messages .privatemsg-list a:active {
+    color: #6d6d6d;
+}
+
+/* End Messages */
 
 
 /* Footer */
