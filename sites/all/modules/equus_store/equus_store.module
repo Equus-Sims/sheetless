@@ -15,15 +15,18 @@ function equus_store_menu() {
 }
 
 function equus_store_form($form, &$form_state) {
-  
-	$form['quantity'] = array(
-		'#type' => 'textfield', //you can find a list of available types in the form api
-	    '#title' => 'Quantity',
-	    '#size' => 10,
-	    '#maxlength' => 10,
-	    '#required' => TRUE, //make this field required
-	    '#default_value' => 1, //make this field required 
-	);
+	$node_ID = arg(1);
+	$node = node_load($node_ID);
+  	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
+		$form['quantity'] = array(
+			'#type' => 'textfield', //you can find a list of available types in the form api
+		    '#title' => 'Quantity',
+		    '#size' => 10,
+		    '#maxlength' => 10,
+		    '#required' => TRUE, //make this field required
+		    '#default_value' => 1, //make this field required 
+		);
+	}
 
 	$form['submit_button'] = array(
 		'#type' => 'submit',
@@ -34,5 +37,32 @@ function equus_store_form($form, &$form_state) {
 }
 
 function equus_store_form_submit($form, &$form_state) {
-	dpm(arg(1));
+	$node_ID = arg(1);
+	$node = node_load($node_ID);
+	dpm($node);
+	dpm($form);
+	global $user;
+	if ($node->field_equus_sale_item_type['und'][0]['entity']->name == 'Horse Credit') {
+		equus_horses_extras_gain_regular_hc($user->uid, $form['quantity']['#value']);
+		if ($form['quantity']['#value'] == 1) {
+			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'];
+			equus_banking_create_transaction("Purchased 1 Horse Credit", $user->uid, $node->uid, $node->field_equus_sale_price_per_unit['und'][0]['value']);
+			drupal_set_message("You have purchased 1 Horse Credit from the Equus Store for {$total}");
+		} else if ($form['quantity']['#value'] > 1) {
+			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'] * $form['quantity']['#value'];
+			equus_banking_create_transaction("Purchased {$form['quantity']['#value']} Horse Credits", $user->uid, $node->uid, $node->field_equus_sale_price_per_unit['und'][0]['value']);
+			drupal_set_message("You have purchased {$form['quantity']['#value']} Horse Credits from the Equus Store for {$total}");
+		}
+	} else if ($node->field_equus_sale_item_type['und'][0]['entity']->name == 'Starter Pack') {
+		equus_horses_extras_gain_regular_hc($user->uid, 2);
+		if ($form['quantity']['#value'] == 1) {
+			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'];
+			equus_banking_create_transaction("Purchased 1 Horse Credit", $user->uid, $node->uid, $node->field_equus_sale_price_per_unit['und'][0]['value']);
+			drupal_set_message("You have purchased 1 Horse Credit from the Equus Store for {$total}");
+		} else if ($form['quantity']['#value'] > 1) {
+			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'] * $form['quantity']['#value'];
+			equus_banking_create_transaction("Purchased {$form['quantity']['#value']} Horse Credits", $user->uid, $node->uid, $node->field_equus_sale_price_per_unit['und'][0]['value']);
+			drupal_set_message("You have purchased {$form['quantity']['#value']} Horse Credits from the Equus Store for {$total}");
+		}
+	}
 }
