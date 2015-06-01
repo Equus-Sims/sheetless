@@ -101,7 +101,6 @@
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
-      dpm($node->field_equus_sale_quantity);
       if ($node->field_equus_sale_quantity['und'][0]['value'] == -1) {
           hide($content['field_equus_sale_quantity']);
       }
