@@ -130,6 +130,21 @@ function equus_horses_extras_gain_regular_hc($uid, $quantity) {
 	));
 }
 
+/**
+ * Adds some number of rare HCs to a user's account
+ * @param $uid ID of the user to give rare HC to.
+ * @param $quantity Number of rare HC to give a user.
+ */
+function equus_horses_extras_gain_rare_hc($uid, $quantity) {
+	$current_rare_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_RARE_HC_TID);
+
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => + $quantity,
+		'tid' => EQUUS_HORSES_EXTRAS_RARE_HC_TID
+	));
+}
+
 function equus_horses_extras_node_insert($node) {
 	//dpm('Janelle was here!');
 	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
