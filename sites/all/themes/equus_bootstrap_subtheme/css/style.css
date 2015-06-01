@@ -1354,6 +1354,55 @@ table .post-footer .footer-link .flag-likes .count {
 /* End Messages */
 
 
+/* Read Private Messages */
+
+div.privatemsg-message .user-picture img {
+    width: 64px;
+    height: 64px;
+    border-radius: 64px;
+    -moz-border-radius: 64px;
+    -webkit-border-radius: 64px;
+}
+
+div.privatemsg-message div.privatemsg-author-avatar {
+    width: 8%;
+}
+
+div.privatemsg-message div.privatemsg-message-column {
+    width: 90%;
+}
+
+div.privatemsg-message .privatemsg-author-name {
+    font-size: 18px;
+}
+
+div.privatemsg-message .privatemsg-message-date {
+    display: block;
+    font-size: 14px;
+    padding: 0;
+    color: #bababa;
+}
+
+div.privatemsg-message .privatemsg-message-information {
+    border-bottom: none;
+}
+
+div.privatemsg-message .privatemsg-message-actions a {
+    text-transform: uppercase;
+    color: #40b392;
+}
+
+div.privatemsg-message .privatemsg-message-actions a:hover {
+    color: #2f856c;
+}
+
+div.privatemsg-message .privatemsg-message-body {
+    margin-left: 0;
+}
+
+/* End Read Private Messages */
+
+
 /* Footer */
 
 footer.footer {
