@@ -55,9 +55,41 @@ function equus_organizations_get_assoc_orgs($uid) {
  * Verifies that the user has at least 1 Org Credit in order to create an organization.
  * @param $uid ID of the currently logged in user.
  */
-function equus_horses_extras_validate_org_credit_count($uid) {
+function equus_organizations_validate_org_credit_count($uid) {
 	$current_org_credit = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID);
 	if ($current_org_credit < 1 ) {
 		drupal_set_error('You do not have enough Organization Credits to create this organization. Please visit the Store to buy an Organization Credit.');
 	}
+}
+
+/**
+ * Adds some number of Org Credits to a user's account
+ * @param $uid ID of the user to give Org Credits to.
+ * @param $quantity Number of Org Credits to give a user.
+ */
+function equus_organizations_gain_org_credit($uid, $quantity) {
+	$current_org_credit = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID);
+
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => + $quantity,
+		'tid' => EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID
+	));
+}
+
+/**
+ * Detracts a regular HC from a user's account
+ * @param $uid ID of the user to detract a regular HC from.
+ */
+function equus_organizations_spend_org_credit($uid) {
+	$current_org_credit = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID);
+	if ($current_org_credit < 1 ) {
+		return false;
+	}
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => -1,
+		'tid' => EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID
+	));
+	return true;
 }
