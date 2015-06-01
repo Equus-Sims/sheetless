@@ -74,6 +74,10 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
 }
 
+/**
+ * Detracts a regular HC from a user's account
+ * @param $uid ID of the user to detract a regular HC from.
+ */
 function equus_horses_extras_spend_regular_hc($uid) {
 	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
 	if ($current_regular_HC < 1 ) {
