@@ -945,7 +945,11 @@ jQuery(window).load(function() {
 
   window.setTimeout(function() {
 
-    var menuBtn = $('nav li > a[href*="user/self"]');
+    var menuBtn = $('nav li > a[href*="user/self"]'),
+        searchBlock = $('.navbar #block-search-form'),
+        searchForm = $('.navbar form#search-block-form'),
+        searchBtn = '<div id="searchBtn"></div>',
+        searchWidth = 200;
 
     if ( menuBtn.length > 0 ) {
 
@@ -959,11 +963,15 @@ jQuery(window).load(function() {
 
     };
 
-    $('.navbar #block-search-form').click(function() {
+    searchForm.after(searchBtn);
+
+    $('.navbar #block-search-form div#searchBtn').click(function() {
       if( $(this).hasClass('opened') ) {
-        $(this).animate({'width': '-=150'}).removeClass('opened');
+        searchForm.animate({'width': '-=' + searchWidth});
+        $(this).removeClass('opened');
       } else {
-        $(this).animate({'width': '+=150'}).addClass('opened');
+        searchForm.animate({'width': '+=' + searchWidth});
+        $(this).addClass('opened');
       }
     });
 

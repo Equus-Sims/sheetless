@@ -166,8 +166,30 @@ div.main-container > h1 {
 
 .navbar #block-search-form {
     margin: 33px 0;
-    width: 20px;
     overflow: hidden;
+}
+
+.navbar #block-search-form form#search-block-form,
+.navbar #block-search-form #searchBtn {
+    display: inline-block;
+}
+
+.navbar #block-search-form form#search-block-form {
+    width: 0;
+    overflow: hidden;
+}
+
+.navbar #block-search-form #searchBtn {
+    position: relative;
+    top: -9px;
+    cursor: pointer;
+}
+
+.navbar #block-search-form #searchBtn:before {
+    content: '\e611';
+    color: #FFF;
+    position: relative;
+    margin-left: 15px;
 }
 
 /* End Nav Search Bar */
