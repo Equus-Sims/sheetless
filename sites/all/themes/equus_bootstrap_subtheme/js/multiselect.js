@@ -960,7 +960,11 @@ jQuery(window).load(function() {
     };
 
     $('.navbar #block-search-form').click(function() {
-      $(this).animate({width: 'toggle'}, 350);
+      if( $(this).hasClass('opened') ) {
+        $(this).animate({'width': '-=150'}).removeClass('opened');
+      } else {
+        $(this).animate({'width': '+=150'}).addClass('opened');
+      }
     });
 
   },100);

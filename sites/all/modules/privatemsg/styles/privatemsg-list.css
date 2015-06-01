@@ -3,7 +3,7 @@
 }
 
 .privatemsg-unread .privatemsg-list-subject .marker {
-  font-weight: lighter;
+  /*font-weight: lighter;*/
 }
 
 .privatemsg-list-count {

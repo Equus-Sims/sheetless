@@ -1305,6 +1305,30 @@ table .post-footer .footer-link .flag-likes .count {
     color: #6d6d6d;
 }
 
+.page-messages tr.privatemsg-unread span.marker {
+    color: #FFF;
+    background: #da4444;
+    text-transform: uppercase;
+    font-size: .7em;
+    font-weight: bold;
+    padding: 2px 8px;
+    margin-left: 15px;
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -o-border-radius: 7px;
+}
+
+.page-messages div[class*='tag-add'] {
+    float: right;
+}
+.page-messages div[class*='tag-add'] input[id^='edit-tag'] {
+    width: 200px;
+}
+.page-messages div[class*='tag-add'] span.input-group-addon {
+    width: 100px;
+}
+
 /* End Messages */
 
 
