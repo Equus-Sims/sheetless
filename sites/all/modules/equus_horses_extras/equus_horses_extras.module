@@ -2,7 +2,6 @@
 
 define("EQUUS_HORSES_EXTRAS_REGULAR_HC_TID",1);
 define("EQUUS_HORSES_EXTRAS_RARE_HC_TID",2);
-define("EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID",60);
 
 /**
  * Verifies that the user has at least 1 HC in order to activate a horse.
@@ -23,17 +22,6 @@ function equus_horses_extras_validate_rare_hc_count($uid) {
 	$current_rare_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_RARE_HC_TID);
 	if ($current_rare_HC < 1 ) {
 		form_set_error('field_horse_activation_status', 'You do not have enough Rare Horse Credits to make this horse active. Please visit the Store to buy a Rare Horse Credit.');
-	}
-}
-
-/**
- * Verifies that the user has at least 1 Org Credit in order to create an organization.
- * @param $uid ID of the currently logged in user.
- */
-function equus_horses_extras_validate_org_credit_count($uid) {
-	$current_org_credit = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID);
-	if ($current_org_credit < 1 ) {
-		drupal_set_error('You do not have enough Organization Credits to create this organization. Please visit the Store to buy an Organization Credit.');
 	}
 }
 
