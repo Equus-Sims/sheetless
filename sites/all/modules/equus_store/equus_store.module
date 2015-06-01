@@ -1,0 +1,38 @@
+<?php
+
+function equus_store_menu() {
+	$items = array();
+  
+	$items['examples/form-example'] = array( //this creates a URL that will call this form at "examples/form-example"
+	    'title' => 'Example Form', //page title
+	    'description' => 'A form to mess around with.',
+	    'page callback' => 'drupal_get_form', //this is the function that will be called when the page is accessed.  for a form, use drupal_get_form
+	    'page arguments' => array('equus_store_form'), //put the name of the form here
+	    'access callback' => TRUE
+	  );
+
+	return $items;
+}
+
+function equus_store_form($form, &$form_state) {
+  
+	$form['quantity'] = array(
+		'#type' => 'textfield', //you can find a list of available types in the form api
+	    '#title' => 'Quantity',
+	    '#size' => 10,
+	    '#maxlength' => 10,
+	    '#required' => TRUE, //make this field required
+	    '#default_value' => 1, //make this field required 
+	);
+
+	$form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Buy'),
+	);
+
+	return $form;
+}
+
+function equus_store_form_submit($form, &$form_state) {
+	dpm(arg(1));
+}

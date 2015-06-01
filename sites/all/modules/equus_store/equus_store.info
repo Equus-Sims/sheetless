@@ -1,0 +1,6 @@
+name = Equus Store
+description = A custom module for Equus-sims for selling stuff.
+package = Equus Sims
+core = 7.x
+files[] = equus_store.install
+files[] = equus_store.module

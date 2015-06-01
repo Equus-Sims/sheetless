@@ -80,50 +80,43 @@
  * @ingroup themeable
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="equus-tile <?php print $classes; ?>"<?php print $attributes; ?>>
-  <div class="field-content"<?php print $content_attributes; ?>>
-    <a href="<?php print $node_url; ?>"><?php print render($cover_image); ?></a>
+<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-    <div class="content-info">
-	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
-	    
-	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-	    <div class="post-info">
-	    	<?php if ($node->type == 'blog' || $node->type == 'equus_sale') {
-	    		print 'Posted by ' . $name . ' on ' . $submitted;
-	    	} ?>
-	    	<?php if ($node->type == 'horse') {
-	    		print 'Owned by ' . $name;
-	    		print '<br><span class="horse-info">' . render($content['field_breed']) . ' ' . render($content['field_horse_gender']) . '</span>';
-	    	} ?>
-	    </div>
-	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale'): ?>
-	    	<?php if (strlen($body_teaser) >= 150) {
-		    	print substr($body_teaser, 0, 150) . '...<a href="' . $node_url . '" class="link-readmore">read more</a>';
-		    } else {
-		    	print render($body_teaser);
-		    } ?>
-	    <?php endif; ?>
-	    
-	</div>
+  <?php print $user_picture; ?>
+
+  <?php print render($title_prefix); ?>
+  <?php if (!$page): ?>
+    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+  <?php endif; ?>
+  <?php print render($title_suffix); ?>
+
+  <?php if ($display_submitted): ?>
+    <div class="submitted">
+      <?php print $submitted; ?>
+    </div>
+  <?php endif; ?>
+
+  <div class="content"<?php print $content_attributes; ?>>
+    <?php
+      // We hide the comments and links now so that we can render them later.
+      hide($content['comments']);
+      hide($content['links']);
+      dpm($node->field_equus_sale_quantity);
+      if ($node->field_equus_sale_quantity['und'][0]['value'] == -1) {
+          hide($content['field_equus_sale_quantity']);
+      }
+      
+      print render($content);
+    ?>
   </div>
-  <div class="post-footer">
-		<?php
-		  if (!empty($node->field_blog_tags)) {
-		    print '<span class="tags">';
-		    print '<span class="icon"></span>';
-		    foreach($node->field_blog_tags['und'] as $tag) {
-		      $term = taxonomy_term_load($tag['tid']);
-		      if ($term->vocabulary_machine_name == 'blog_tags') {
-		        print l($term->name, "blog-tags/{$term->name}").' ';
-		      }
-		    };
-		    print '</span>';
-		  }
-		?>
-		<div class="footer-link">
-			<?php print flag_create_link("likes", $node->nid); ?>
-			<a class="icon footer-readmore" href="<?php print $node_url; ?>"></a>
-		</div>
-	</div>
+
+  <?php print render($content['links']); ?>
+
+  <?php print render($content['comments']); ?>
+
+  <?php
+    $form = drupal_get_form('equus_store_form');
+    print drupal_render($form); 
+  ?>
+
 </div>
