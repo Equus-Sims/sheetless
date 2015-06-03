@@ -3,5 +3,6 @@
   drupal_add_css(drupal_get_path('module', 'privatemsg').'/styles/privatemsg-recipients.css');
 ?>
 <div class="privatemsg-message-participants">
-  <?php print $participants; ?>
+  <span><a href="#privatemsg-new">Post New Reply</a></span>
+  <span class="participants"><?php print $participants; ?></span>
 </div>

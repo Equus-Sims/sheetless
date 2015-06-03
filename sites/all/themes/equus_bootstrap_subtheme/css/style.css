@@ -186,10 +186,11 @@ div.main-container > h1 {
 }
 
 .navbar #block-search-form #searchBtn:before {
-    content: '\e611';
+    font-family: 'icons';
+    content: '\e604';
     color: #FFF;
     position: relative;
-    margin-left: 15px;
+    margin-left: 10px;
 }
 
 /* End Nav Search Bar */
@@ -330,9 +331,9 @@ div.carousel {
 
 /* Forms */
 
-.panel {
+/*.panel {
     margin: -10px 25px;
-}
+}*/
 
 label {
     display: inline-block;
@@ -1273,8 +1274,7 @@ table .post-footer .footer-link .flag-likes .count {
     padding: 15px 30px;
 }
 
-#privatemsg-list div.container-inline div.form-type-select button,
-.page-messages div.ui-multiselect-menu {
+#privatemsg-list div.container-inline div.form-type-select button {
     width: 140px !important;
 }
 
@@ -1327,7 +1327,8 @@ table .post-footer .footer-link .flag-likes .count {
     color: #6d6d6d;
 }
 
-.page-messages tr.privatemsg-unread span.marker {
+.page-messages tr.privatemsg-unread span.marker,
+div.privatemsg-message .privatemsg-message-new {
     color: #FFF;
     background: #da4444;
     text-transform: uppercase;
@@ -1339,6 +1340,7 @@ table .post-footer .footer-link .flag-likes .count {
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
     -o-border-radius: 7px;
+    float: none;
 }
 
 .page-messages div[class*='tag-add'] {
@@ -1356,6 +1358,23 @@ table .post-footer .footer-link .flag-likes .count {
 
 /* Read Private Messages */
 
+.page-messages .privatemsg-message-participants {
+    background: #1F5E4D;
+    color: #FFF;
+    font-weight: bold;  
+    padding: 25px 40px;
+    border-bottom: 0;
+}
+
+.page-messages .privatemsg-message-participants a,
+.page-messages .privatemsg-message-participants a:hover {
+    color: #FFF;
+}
+
+.page-messages .privatemsg-message-participants .participants {
+    float: right;
+}
+
 div.privatemsg-message .user-picture img {
     width: 64px;
     height: 64px;
@@ -1364,11 +1383,11 @@ div.privatemsg-message .user-picture img {
     -webkit-border-radius: 64px;
 }
 
-div.privatemsg-message div.privatemsg-author-avatar {
+div.privatemsg-message .privatemsg-author-avatar {
     width: 8%;
 }
 
-div.privatemsg-message div.privatemsg-message-column {
+div.privatemsg-message .privatemsg-message-column {
     width: 90%;
 }
 
@@ -1376,8 +1395,12 @@ div.privatemsg-message .privatemsg-author-name {
     font-size: 18px;
 }
 
+div.privatemsg-message .privatemsg-message-new {
+    vertical-align: text-top;
+    margin-left: 0;
+}
+
 div.privatemsg-message .privatemsg-message-date {
-    display: block;
     font-size: 14px;
     padding: 0;
     color: #bababa;
@@ -1385,6 +1408,12 @@ div.privatemsg-message .privatemsg-message-date {
 
 div.privatemsg-message .privatemsg-message-information {
     border-bottom: none;
+}
+
+div.privatemsg-message .privatemsg-message-actions {
+    display: inline-block;
+    float: right;
+    font-size: .85em;
 }
 
 div.privatemsg-message .privatemsg-message-actions a {
@@ -1396,8 +1425,23 @@ div.privatemsg-message .privatemsg-message-actions a:hover {
     color: #2f856c;
 }
 
+div.privatemsg-message {
+    padding: 30px 40px 30px 0;
+    border-bottom: 1px solid #bababa;
+}
+
 div.privatemsg-message .privatemsg-message-body {
     margin-left: 0;
+    text-align: justify;
+}
+
+.page-messages button#edit-submit {
+    background: #8F7F4C;
+    border: none;
+    text-transform: uppercase;
+    color: #FFF;
+    font-size: .85em;
+    padding: 10px 30px;
 }
 
 /* End Read Private Messages */

@@ -42,6 +42,7 @@ $.widget("ech.multiselect", {
     header: true,
     height: 175,
     minWidth: 225,
+    maxWidth: 450,
     classes: '',
     checkAllText: 'Check all',
     uncheckAllText: 'Uncheck all',
@@ -109,6 +110,7 @@ $.widget("ech.multiselect", {
     // some addl. logic for single selects
     if( !o.multiple ){
       menu.addClass('ui-multiselect-single');
+      this._setMenuWidth();
     }
   },
 
@@ -422,7 +424,7 @@ $.widget("ech.multiselect", {
       width = o.minWidth;
     }
 
-    if( /\d/.test(o.maxWidth) && width > o.maxWidth){
+    if( /\d/.test(o.minWidth) && width > o.maxWidth){
       width = o.maxWidth;
     }
 
@@ -433,11 +435,11 @@ $.widget("ech.multiselect", {
   // set menu width
   _setMenuWidth: function(){
     var m = this.menu,
-      width = this.button.outerWidth()-
-        parseInt(m.css('padding-left'),10)-
-        parseInt(m.css('padding-right'),10)-
-        parseInt(m.css('border-right-width'),10)-
-        parseInt(m.css('border-left-width'),10) - 5;
+        width = this.button.outerWidth();
+
+        if( !(this.menu.hasClass('ui-multiselect-single')) ) {
+          width -= 13;
+        }
 
     m.width( width || this.button.outerWidth() );
   },
@@ -973,6 +975,14 @@ jQuery(window).load(function() {
         searchForm.animate({'width': '+=' + searchWidth});
         $(this).addClass('opened');
       }
+    });
+
+    /* Transition to anchor tag */
+    $('a[href*="#"]').click(function(event){
+      $('html, body').animate({
+          scrollTop: $( $.attr(this, 'href') ).offset().top
+      }, 500);
+      event.preventDefault();
     });
 
   },100);

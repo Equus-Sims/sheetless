@@ -11,14 +11,15 @@ print $anchors; ?>
     <?php print $author_picture; ?>
   </div>
   <div class="privatemsg-message-column">
-    <?php if (isset($new)): ?>
-      <span class="new privatemsg-message-new"><?php print $new ?></span>
-    <?php endif ?>
       <div class="privatemsg-message-information">
-        <span class="privatemsg-author-name"><?php print $author_name_link; ?></span> <span class="privatemsg-message-date"><?php print $message_timestamp; ?></span>
+        <span class="privatemsg-author-name"><?php print $author_name_link; ?></span>
+        <?php if (isset($new)): ?>
+          <span class="new privatemsg-message-new"><?php print $new ?></span>
+        <?php endif ?>
         <?php if (isset($message_actions)): ?>
           <?php print $message_actions ?>
         <?php endif ?>
+        <div class="privatemsg-message-date"><?php print $message_timestamp; ?></div>
       </div>
     <div class="privatemsg-message-body">
       <?php print $message_body; ?>
