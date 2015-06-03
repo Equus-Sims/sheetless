@@ -68,7 +68,7 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 		// if new check whether active is set
 		if ($node->field_horse_activation_status['und'][0]['value'] == 'Active') {
 			// if yes check for points
-			equus_horses_extras_validate_hc_count($form['uid']['#value']);
+			equus_horses_extras_validate_regular_hc_count($form['uid']['#value']);
 		} 
 	} else {
 		// get activation status
@@ -78,7 +78,7 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 		// if not new check whether previous value is pending and new value is active
 		if ($original_value == 'Pending' && $new_value == 'Active') {
 			// if yes check for points
-			equus_horses_extras_validate_hc_count($form['uid']['#value']);
+			equus_horses_extras_validate_regular_hc_count($form['uid']['#value']);
 		}
 	}
 
