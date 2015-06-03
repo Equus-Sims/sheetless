@@ -187,7 +187,8 @@ div.main-container > h1 {
 
 .navbar #block-search-form #searchBtn:before {
     font-family: 'icons';
-    content: '\e604';
+    font-size: 1em;
+    content: '\e611';
     color: #FFF;
     position: relative;
     margin-left: 10px;
@@ -260,11 +261,8 @@ ul.userDropdownMenu {
     position: absolute;
     width: auto;
     height: auto;
-    background: #23856E;
+    background: #FFF;
     opacity: 1;
-    border-radius: 2px !important;
-    -moz-border-radius: 2px !important;
-    -webkit-border-radius: 2px !important;
 }
 
 ul.userDropdownMenu:before {
@@ -275,14 +273,75 @@ ul.userDropdownMenu:before {
     top: -5px;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 5px solid #23856E;
+    border-bottom: 5px solid #FFF;
 }
 
 ul.userDropdownMenu li {
     display: block;
     text-align: left;
+    border-bottom: 1px solid #d2d2d2;
 }
 
+ul.userDropdownMenu li:last-child {
+    border-bottom: none;
+}
+
+ul.userDropdownMenu li > a {
+    padding: 3px 20px 3px 10px;
+}
+
+ul.userDropdownMenu li > a,
+ul.userDropdownMenu li {
+    color: #6d6d6d;
+    text-transform: none;
+}
+
+ul.userDropdownMenu li > a:hover,
+ul.userDropdownMenu li > a:active {
+    color: #bababa;
+}
+
+ul.userDropdownMenu li:last-child {
+    background: #1f5e4c;
+    border-bottom-left-radius: 2px !important;
+    border-bottom-right-radius: 2px !important;
+    -moz-border-bottom-left-radius: 2px !important;
+    -moz-border-bottom-right-radius: 2px !important;
+    -webkit-border-bottom-left-radius: 2px !important;
+    -webkit-border-bottom-right-radius: 2px !important;
+}
+
+ul.userDropdownMenu li:last-child:hover {
+    background: #2f856c;
+}
+
+ul.userDropdownMenu li:last-child > a {
+    color: #FFF;
+}
+
+ul.userDropdownMenu li > a:before {
+    margin-right: 10px;
+    font-family: 'icons';
+    font-size: 2.5em;
+    vertical-align: middle;
+    line-height: 1em;
+}
+
+ul.userDropdownMenu li > a[href$='dashboard']:before {
+    content: '\e60e';
+}
+
+ul.userDropdownMenu li > a[href$='self']:before {
+    content: '\e612';
+}
+
+ul.userDropdownMenu li > a[href$='edit']:before {
+    content: '\e611';
+}
+
+ul.userDropdownMenu li > a[href$='logout']:before {
+    content: '\e610';
+}
 
 /* End User Dropdown Menu */
 
@@ -981,7 +1040,7 @@ table .post-footer .footer-link .flag-likes .count {
 
 .node-type-organization .block,
 .node-type-organization .block .view,
-.page-user .block {
+.page-user .main-container .block {
     background: #FFF;
     font-family: 'Lato',Helvetica,Arial,sans-serif;
 }
@@ -1027,7 +1086,7 @@ table .post-footer .footer-link .flag-likes .count {
 
 .node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
 .node-type-organization #block-system-main div.field-label,
-.page-user h2.block-title,
+.page-user .main-container h2.block-title,
 .page-user #block-system-main .profile h1:first-child {
     background: #7F9B8C;
     padding: 10px 15px;
@@ -1442,6 +1501,12 @@ div.privatemsg-message .privatemsg-message-body {
     color: #FFF;
     font-size: .85em;
     padding: 10px 30px;
+}
+
+.page-messages a#edit-cancel {
+    margin-left: 15px;
+    color: #333;
+    font-style: italic;
 }
 
 /* End Read Private Messages */
