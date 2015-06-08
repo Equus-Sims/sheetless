@@ -1,0 +1,76 @@
+{
+	"horses": [
+	    {
+	        "type": "Horse",
+	        "id": 1,
+	        "name":"Foo",
+		    "stats": {
+		        "action": 5,
+	            "balance": 8,
+	            "impulsion": 11,
+	            "responsiveness": 7,
+	            "rhythm": 10,
+	            "suppleness": 6
+		    }
+	    },
+	    {
+	        "type": "Horse",
+	        "id": 2,
+	        "name": "Bar",
+	        "stats": {
+		        "action": 5,
+	            "balance": 8,
+	            "impulsion": 11,
+	            "responsiveness": 7,
+	            "rhythm": 10,
+	            "suppleness": 6
+		    }
+	    },
+	    {
+	        "type": "Horse",
+	        "id": 3,
+	        "name": "Baz",
+	        "stats": {
+		        "action": 5,
+	            "balance": 8,
+	            "impulsion": 11,
+	            "responsiveness": 7,
+	            "rhythm": 10,
+	            "suppleness": 6
+		    }
+	    }
+	],
+    "judges": [
+        {
+            "type": "Judge",
+            "id": 1,
+            "name":"Bob",
+            "stat_preferences": {
+                "action": -2,
+                "rhythm": 2
+            }
+        },
+        {
+            "type": "Judge",
+            "id": 2,
+            "name":"Alice",
+            "stat_preferences": {
+                "action": 4,
+                "rhythm": -4
+            }
+        }
+    ],
+    "discipline": 
+    	{
+	        "type": "Gaited Dressage",
+	        "id": 1,
+	        "stats": {
+	            "action": 15,
+	            "balance": 30,
+	            "impulsion": 20,
+	            "responsiveness": 15,
+	            "rhythm": 20,
+	            "suppleness": 20
+	        }
+        }
+}
