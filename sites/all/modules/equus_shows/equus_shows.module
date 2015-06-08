@@ -209,6 +209,7 @@ function equus_shows_compute_form_validate($form, &$form_state) {
 }
 
 function equus_shows_compute_form_submit($form, &$form_state) {
+	// dpm($form);
 	equus_shows_run_show($form_state['showid']);
 }
 
@@ -270,7 +271,7 @@ function equus_shows_enter_show($showid,$horseid,$data) {
 
 	$destination = $show->field_hosting_organization[LANGUAGE_NONE][0]['target_id'];
 
-	dpm($source);
+	//dpm($source);
 
 	equus_banking_create_transaction("Entry fee for $horse_name in $show_name.", $source_id, $destination, $entry_fee);
 }
