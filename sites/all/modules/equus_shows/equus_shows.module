@@ -282,7 +282,136 @@ function _equus_shows_sum($carry, $item) {
 }
 
 function equus_shows_run_show($show_id) {
-	$query = relation_query('node',$show_id,1);
+	$show = node_load($show_id);
+
+	dpm($show);
+
+	// build array of stuff
+	$raw_data = new stdClass();
+	$raw_data->horses = [];
+	$raw_data->judges = [];
+	$raw_data->discipline = new stdClass();
+
+	// fill in judges
+	$newjudge = new stdClass();
+	$newjudge->type = "Judge";
+	$newjudge->id = 1;
+	$newjudge->name = "Impartial Judge";
+	$newjudge->stat_preferences = new stdClass();
+	$raw_data->judges[] = $newjudge;
+
+	// fill in discipline
+	$raw_data->discipline->type = $show->field_discipline['und'][0]['taxonomy_term']->name;
+	$raw_data->discipline->id = $show->field_discipline['und'][0]['tid'];
+
+	// get the id of the field collection item
+	$disc_stat_weights = $show->field_discipline['und'][0]['taxonomy_term']->field_disc_stat_weight['und'];
+	// dpm($disc_stat_weights[0]['value']);
+
+	// make a new anonymous object
+	$raw_data->discipline->stats = new stdClass();
+
+	// get the stat and stat weight values for the discipline
+	for ($i = 0; $i < count($disc_stat_weights); $i++) {
+		// load the field collection item from the id
+		$stats = field_collection_item_load($disc_stat_weights[$i]['value']);
+
+		// dpm($field_collection_item);
+
+		$stat = $stats->field_stat['und'][0]['value'];
+
+		// dpm($stat);
+		
+		$stat_weight = $stats->field_stat_weight['und'][0]['value'];
+
+		$raw_data->discipline->stats->$stat = $stat_weight;
+
+		// dpm($stat_weight);
+		
+	}
+
+	// fill in the horses
+	// relation_query($entity_type, entity_id, r_index)
+	// $entity_type = The entity type of one of the endpoints
+	// $entity_id = The entity id of one of the endpoints. Can also be an array of entity IDs.
+	// $r_index = The index of the search entity in the relation to be found (0 = source, 1 = target)
+	$query = relation_query('node', $show_id, 1);
+	$results = $query->entityCondition('bundle', 'is_entered_in')->execute();
+
+	$rids = array_map(function($o) { return $o->rid; }, $results);
+
+	$places = range(1,count($rids));
+	shuffle($places);
+
+	$relations = relation_load_multiple($rids);
+
+	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
+	$horses = node_load_multiple($nids);
+
+	dpm($horses);
+
+	// fill in horses
+	
+
+	// get horse info
+	foreach ($horses as $horse) {
+		$newhorse = new stdClass();
+		$newhorse->type = "Horse";
+		$newhorse->id = $horse->nid;
+		$newhorse->name = $horse->title;
+		$newhorse->stats = new stdClass();
+
+		// get horse stats
+		$stats = $horse->field_horse_stats['und'];
+		dpm($stats);
+		foreach ($stats as $stat) {
+			$field_collection_item = field_collection_item_load($stat['value']);
+			
+			dpm($field_collection_item);
+
+			$stat_value = $field_collection_item->field_stat['und'][0]['value'];
+			
+			$stat_weight = $field_collection_item->field_horse_stat_value['und'][0]['value'];
+
+			$newhorse->stats->$stat_value = $stat_weight;
+		}
+		$raw_data->horses[] = $newhorse;
+		
+	}
+	
+
+	// entity field query for the horses in this show
+	/*foreach (horses from above as horseid) {
+		$newhorse = new stdClass();
+
+		$h = node_load($horseid);
+
+		$newhorse->id = $h->nid();
+		$newhorse->name = $h->title();
+		$newhorse->stats = new stdClass();
+		foreach( "stat field" as $item)
+			// $item here is that field collection
+			$name = $item->field_stat['und'][0]['value'];
+			$value = get field_horse_stat_value
+
+			$newhorse->stats->$name = $value;
+
+		$raw_data->horses[] = $newhorse;
+	}*/
+
+	dpm(json_encode($raw_data,JSON_PRETTY_PRINT));
+
+	// instantiate a show with array from above
+	//$new_show = new Show($raw_data);
+
+    // actually run the show
+    //$output = $new_show->run_the_show();
+
+    // stuff the results into drupal and/or wherever
+   // dpm($output);
+
+
+	/*$query = relation_query('node',$show_id,1);
 	$results = $query->entityCondition('bundle', 'is_entered_in')->execute();
 
 	$rids = array_map(function($o) { return $o->rid; }, $results);
@@ -333,5 +462,5 @@ function equus_shows_run_show($show_id) {
 
 		$relation->equus_shows_placement[LANGUAGE_NONE][0]['value'] = $placements[$nid];
 		relation_save($relation);
-	}
+	}*/
 }
