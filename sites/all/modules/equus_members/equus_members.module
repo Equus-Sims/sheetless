@@ -48,6 +48,8 @@ function equus_members_horse_count($uid) {
 	$result = $query->execute();
 	if ($result != NULL) {
 		return count($result['node']);
+	} else {
+		return 0;
 	}
 }
 
