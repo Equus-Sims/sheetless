@@ -1,4 +1,5 @@
 <?php 
+require("equus_shows_show.inc");
 /**
  * Implements hook_node_info()
  */
@@ -378,89 +379,31 @@ function equus_shows_run_show($show_id) {
 		$raw_data->horses[] = $newhorse;
 		
 	}
-	
-
-	// entity field query for the horses in this show
-	/*foreach (horses from above as horseid) {
-		$newhorse = new stdClass();
-
-		$h = node_load($horseid);
-
-		$newhorse->id = $h->nid();
-		$newhorse->name = $h->title();
-		$newhorse->stats = new stdClass();
-		foreach( "stat field" as $item)
-			// $item here is that field collection
-			$name = $item->field_stat['und'][0]['value'];
-			$value = get field_horse_stat_value
-
-			$newhorse->stats->$name = $value;
-
-		$raw_data->horses[] = $newhorse;
-	}*/
 
 	dpm(json_encode($raw_data,JSON_PRETTY_PRINT));
 
 	// instantiate a show with array from above
-	//$new_show = new Show($raw_data);
+	$new_show = new equus_shows_show($raw_data);
 
     // actually run the show
-    //$output = $new_show->run_the_show();
+    $output = $new_show->run_the_show();
 
     // stuff the results into drupal and/or wherever
-   // dpm($output);
+    dpm($output);
+    dpm(json_encode($output,JSON_PRETTY_PRINT));
 
-
-	/*$query = relation_query('node',$show_id,1);
-	$results = $query->entityCondition('bundle', 'is_entered_in')->execute();
-
-	$rids = array_map(function($o) { return $o->rid; }, $results);
-
-	$places = range(1,count($rids));
-	shuffle($places);
-
-	$relations = relation_load_multiple($rids);
-
-	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
-	$horses = node_load_multiple($nids);
-
-	$show = node_load($show_id);
-	$show_discipline = $show->field_discipline[LANGUAGE_NONE][0]['taxonomy_term'];
-	$associated_stats = $show_discipline->field_associated_stats[LANGUAGE_NONE];
-	//dpm($associated_stats);
-
-	$placements = array();
-
-	foreach ($horses as $horse) {
-		$stats = array();
-
-		foreach ($associated_stats as $stat) {
-			$stat = $stat['value'];
-			$stat_name = "field_{$stat}_stat";
-			$considered_stat = 0;
-			if ($horse->{$stat_name}) {
-				$considered_stat = $horse->{$stat_name}[LANGUAGE_NONE][0]['value'];
-			} 
-			$stats[] = $considered_stat;
-		}
-		//dpm($stats);
-		$sum = array_reduce($stats, "_equus_shows_sum");
-		$placements[$horse->nid] = floatval(mt_rand(0,$sum)) + floatval(mt_rand(0,10000)/10000.0);
+    // construct a map of nids to indexes in $output so we can look up
+    // values in $output later
+    $nid_to_output = [];
+    $i = 0;
+	foreach ($output as $value) {
+		$nid_to_output[$value->id] = $i++;
 	}
-	arsort($placements);
-
-	$i = 1;
-	foreach ($placements as $key => $value) {
-		$placements[$key] = $i++;
-	}
-
-	
-
 
 	foreach ($relations as $relation) {
 		$nid = $relation->endpoints[LANGUAGE_NONE][0]['entity_id'];
 
-		$relation->equus_shows_placement[LANGUAGE_NONE][0]['value'] = $placements[$nid];
+		$relation->equus_shows_placement[LANGUAGE_NONE][0]['value'] = $output[$nid_to_output[$nid]]->placement;
 		relation_save($relation);
-	}*/
+	}
 }
