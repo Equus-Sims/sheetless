@@ -54,9 +54,6 @@
     <div class="favs">
       226
     </div>
-    <div class="pics">
-      <?php print $gallery_count;?>
-    </div>
     <div class="horse">
       <?php print $horse_count;?>
     </div>
