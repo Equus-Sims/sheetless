@@ -977,13 +977,61 @@ jQuery(window).load(function() {
       }
     });
 
-    /* Transition to anchor tag */
+    // Transition to anchor tag
     $('a[href*="#"]').click(function(event){
       $('html, body').animate({
           scrollTop: $( $.attr(this, 'href') ).offset().top
       }, 500);
       event.preventDefault();
     });
+
+    // Tabs scroll with page
+
+    var tabsContainerTop = $('div.tabbable.tabs-left').offset().top,
+        tabs = $('div.tabbable.tabs-left > ul'),
+        heightCheck = function() {
+          if (parseInt(tabs.css('height')) < parseInt($('div.tabbable.tabs-left > div').css('height')) ) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        scrollListener = function () {
+          $(window).scroll(function() {
+            if ( parseInt(tabs.css('height')) < parseInt($('div.tabbable.tabs-left > div').css('height')) && tabsContainerTop < $(window).scrollTop() ) {
+              tabs.css('top', $(window).scrollTop() - tabsContainerTop + 40 + 'px' );
+            } else {
+              tabs.css('top', '0px');
+            }
+          });
+        };
+
+    //Check to see if tabs exist
+    if ( tabs.length > 0 ) {
+
+      //Set tabs to position relative
+      tabs.css('position', 'relative');
+
+      //On click, move page back up to the top and check to see if scroll needed
+      tabs.click(function() {
+        $('html, body').animate({
+          scrollTop: $('div.tabbable.tabs-left > div').offset().top - 50
+        }, 500, function () {
+            if ( heightCheck() ) {
+            scrollListener();
+          } else {
+            
+          }
+        });
+        
+      });
+
+      //On page-load check to see if tab needs to be moved down
+      if ( heightCheck() ) {
+        scrollListener();
+      }
+
+    }
 
   },100);
 

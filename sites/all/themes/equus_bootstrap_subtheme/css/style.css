@@ -200,16 +200,14 @@ div.main-container > h1 {
  /*Genius Bit*/
 
 .dropdown-menu {
-    background:#677;
+    background:#FFF;
     width:100%;
-    text-align:right;
-    /* styling */
-    background-color: #A0B2A8;
     opacity: 0.9;
     filter:alpha(opacity=90); /* For IE8 and earlier */
-    border: none;
+    border: 1px solid #CCC;
     box-shadow: none;
     border-radius: 0;
+    color: #555;
 }
 
 .nav>li {
@@ -230,9 +228,9 @@ div.main-container > h1 {
 .dropdown-menu li>a {
     padding: 3px 20px;
     clear: both;
+    color: #555;
     font: 14px/40px 'Open Sans', Helvetica, sans-serif;
     font-weight: 300;
-    color: #f1eee6;
     white-space: nowrap;
 }
 
@@ -244,7 +242,7 @@ div.main-container > h1 {
     color: #353535;
     text-decoration: none;
     background-color: transparent;
-    outline: 0
+    outline: 0;
 }
 
 .page-header {
@@ -255,6 +253,18 @@ div.main-container > h1 {
 
 li.userDropdownBtn {
     position: relative;
+}
+
+li.userDropdownBtn > a:after {
+    content: '';
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #F1EEE6;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin-top: -2px;
+    margin-left: 7px;
 }
 
 ul.userDropdownMenu {
@@ -1510,6 +1520,44 @@ div.privatemsg-message .privatemsg-message-body {
 }
 
 /* End Read Private Messages */
+
+
+/* Horse Creation Page */
+
+div.tabbable.tabs-left > ul {
+    transition: top .1s ease;
+    -webkit-transition: top .1s ease;
+    -moz-transition: top .1s eas;
+    -o-transition: top .1s e;
+}
+
+
+/* Sending a New Private Message */
+
+form#privatemsg-new > div > div > label {
+    display: inline-block;
+    background: #1F5E4C;
+    height: 40px;
+    width: 12%;
+    padding: 10px 30px 10px 30px;
+    color: #FFF;
+    font-weight: bold;
+    float: left;
+}
+
+form#privatemsg-new input {
+    height: 40px;
+    border-left: none;
+}
+
+form#privatemsg-new .form-type-textfield,
+form#privatemsg-new .text-format-wrapper {
+    margin-bottom: 20px;
+}
+
+
+
+/* End Sending a New Private Message */
 
 
 /* Footer */
