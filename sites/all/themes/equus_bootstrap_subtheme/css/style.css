@@ -1525,10 +1525,10 @@ div.privatemsg-message .privatemsg-message-body {
 /* Horse Creation Page */
 
 div.tabbable.tabs-left > ul {
-    transition: top .1s ease;
-    -webkit-transition: top .1s ease;
-    -moz-transition: top .1s eas;
-    -o-transition: top .1s e;
+    transition: top .3s ease-out;
+    -webkit-transition: top .3s ease-out;
+    -moz-transition: top .3s ease-out;
+    -o-transition: top .3s ease-out;
 }
 
 

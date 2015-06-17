@@ -989,21 +989,17 @@ jQuery(window).load(function() {
 
     var tabsContainerTop = $('div.tabbable.tabs-left').offset().top,
         tabs = $('div.tabbable.tabs-left > ul'),
-        heightCheck = function() {
-          if (parseInt(tabs.css('height')) < parseInt($('div.tabbable.tabs-left > div').css('height')) ) {
-            return true;
+        tabsDiv = $('div.tabbable.tabs-left > div'),
+        tabsHeight = tabs.height(),
+        tabsWidth = tabs.width(),
+        scrollListener = function() {
+          if ( Math.round(tabs.offset().top) >= Math.round(tabsDiv.height() - tabsHeight) && ($(window).scrollTop() > tabs.offset().top) ) {
+            tabs.css('top', tabsDiv.height() - tabsHeight + 'px');
+          } else if ( tabsContainerTop <= $(window).scrollTop() ) {
+            tabs.css('top', $(window).scrollTop() - tabsContainerTop + 40 + 'px' );
           } else {
-            return false;
-          }
-        },
-        scrollListener = function () {
-          $(window).scroll(function() {
-            if ( parseInt(tabs.css('height')) < parseInt($('div.tabbable.tabs-left > div').css('height')) && tabsContainerTop < $(window).scrollTop() ) {
-              tabs.css('top', $(window).scrollTop() - tabsContainerTop + 40 + 'px' );
-            } else {
-              tabs.css('top', '0px');
-            }
-          });
+            tabs.css('top', 0)
+          };
         };
 
     //Check to see if tabs exist
@@ -1012,24 +1008,21 @@ jQuery(window).load(function() {
       //Set tabs to position relative
       tabs.css('position', 'relative');
 
-      //On click, move page back up to the top and check to see if scroll needed
-      tabs.click(function() {
-        $('html, body').animate({
-          scrollTop: $('div.tabbable.tabs-left > div').offset().top - 50
-        }, 500, function () {
-            if ( heightCheck() ) {
-            scrollListener();
-          } else {
-            
-          }
-        });
-        
+      //On Scroll, Resize, Load
+      $(window).on('scroll resize load', function() {
+        if ( tabsHeight <= tabsDiv.height() ) {
+          scrollListener();
+        };
       });
 
-      //On page-load check to see if tab needs to be moved down
-      if ( heightCheck() ) {
-        scrollListener();
-      }
+      //On Click
+      $('div.tabbable.tabs-left > ul a').click(function(){
+        $('html, body').animate({
+            scrollTop: tabsContainerTop - 50
+        }, 200, function() {
+          scrollListener();
+        });
+      });
 
     }
 
