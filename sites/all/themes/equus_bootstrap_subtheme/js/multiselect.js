@@ -987,7 +987,10 @@ jQuery(window).load(function() {
 
     // Tabs scroll with page
 
-    var tabsContainerTop = $('div.tabbable.tabs-left').offset().top,
+    //Check to see if tabs exist
+    if ( $('div.tabbable.tabs-left > ul').length > 0 ) {
+
+      var tabsContainerTop = $('div.tabbable.tabs-left').offset().top,
         tabs = $('div.tabbable.tabs-left > ul'),
         tabsDiv = $('div.tabbable.tabs-left > div'),
         tabsHeight = tabs.height(),
@@ -1001,9 +1004,6 @@ jQuery(window).load(function() {
             tabs.css('top', 0)
           };
         };
-
-    //Check to see if tabs exist
-    if ( tabs.length > 0 ) {
 
       //Set tabs to position relative
       tabs.css('position', 'relative');
@@ -1024,7 +1024,14 @@ jQuery(window).load(function() {
         });
       });
 
+      scrollListener();
+
     }
+
+    $('form#user-login input.form-control').each(function() {
+      $(this).attr('placeholder', $(this).prev('label').text()).css('margin-top', '20px');
+      $(this).prev('label').css('display', 'none');
+    });
 
   },100);
 

@@ -89,6 +89,41 @@ div.main-container > h1 {
 
 /* END Icons */
 
+/* Login Page */
+
+form#user-login {
+    max-width: 300px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+form#user-login button[type='submit'] {
+    width: 100%;
+    padding: 10px 0;
+    color: #FFF;
+    font-weight: bold;
+    background: #1f5e4c;
+    text-transform: uppercase;
+    border: none;
+}
+
+form#user-login input:focus {
+    border: 1px solid #40b392;
+}
+
+form#user-login ::-webkit-input-placeholder {
+    color: #353535;
+}
+form#user-login :-moz-placeholder {
+    color: #353535;
+}
+form#user-login ::-moz-placeholder {
+    color: #353535;
+}
+form#user-login :-ms-input-placeholder {
+    color: #353535;
+}
+
 /* Primary Nav */
 
 .navbar-btn {
@@ -420,10 +455,6 @@ div.vertical-tabs-panes {
 
 .btn {
     
-}
-
-.tabbable {
-    margin-bottom: -40px;
 }
 
 div.form-actions {
