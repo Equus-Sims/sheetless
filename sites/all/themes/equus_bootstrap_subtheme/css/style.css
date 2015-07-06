@@ -1368,6 +1368,41 @@ table .post-footer .footer-link .flag-likes .count {
 /* End Horse Directory */
 
 
+/* News Page */
+
+.view-news-page .node-teaser {
+    margin-bottom: 80px;
+}
+
+.view-news-page .node-teaser > h2 {
+    width: 24%;
+    display: inline-block;
+    margin-right: 6%;
+    font-weight: 800;
+    vertical-align: top;
+}
+
+.view-news-page .node-teaser > h2 a {
+    color: #6d6d6d;
+    font-size: 32px;
+    text-transform: uppercase;
+}
+
+.view-news-page .node-teaser > div.content {
+    width: 69%;
+    display: inline-block;
+}
+
+.view-news-page .node-teaser > h2,
+.view-news-page .node-teaser > div.content {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+/* End News Page */
+
+
 /* Messages */
 
 #privatemsg-list div.container-inline {
