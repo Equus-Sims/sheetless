@@ -960,7 +960,7 @@ jQuery(window).load(function() {
       $('head').append('<style>ul.userDropdownMenu:before { left: ' + $('ul.userDropdownMenu').outerWidth() / 2 + 'px; }</style>');
 
       $(this).click(function() {
-        $(this).preventDefault;
+        preventDefault;
       });
 
     };
