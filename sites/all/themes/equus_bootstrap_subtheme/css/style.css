@@ -36,6 +36,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    color: #256E5A;
+}
+
 img {
     max-width: 100%;
 }
@@ -1374,18 +1378,28 @@ table .post-footer .footer-link .flag-likes .count {
     margin-bottom: 80px;
 }
 
-.view-news-page .node-teaser > h2 {
+.view-news-page .node-teaser > div.newsHeadline {
     width: 24%;
     display: inline-block;
     margin-right: 6%;
-    font-weight: 800;
     vertical-align: top;
 }
 
-.view-news-page .node-teaser > h2 a {
+.view-news-page .node-teaser > div.newsHeadline h2 a {
     color: #6d6d6d;
-    font-size: 32px;
+    font-size: 1.2em;
+    font-weight: 800;
     text-transform: uppercase;
+}
+
+.view-news-page .node-teaser a:hover {
+    text-decoration: none;
+}
+
+.view-news-page .node-teaser > div.newsHeadline .postDate {
+    font-size: 16px;
+    font-style: italic;
+    color: #aaa;
 }
 
 .view-news-page .node-teaser > div.content {
@@ -1393,11 +1407,25 @@ table .post-footer .footer-link .flag-likes .count {
     display: inline-block;
 }
 
-.view-news-page .node-teaser > h2,
+.view-news-page .node-teaser > div.content > div {
+    margin-bottom: 20px;
+}
+
+.view-news-page .node-teaser > div.newsHeadline h2,
 .view-news-page .node-teaser > div.content {
     border-top: 1px solid #ccc;
     padding-top: 20px;
     margin-top: 10px;
+}
+
+.view-news-page .node-teaser > div.content .newsReadMore {
+    display: inline-block;
+    background: #8e7f4c;
+    padding: 10px 35px;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: .9em;
 }
 
 /* End News Page */

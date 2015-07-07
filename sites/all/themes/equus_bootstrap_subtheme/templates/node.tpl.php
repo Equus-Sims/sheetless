@@ -86,8 +86,13 @@
 
   <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
+  <?php if ($teaser && $node->type == 'news') { echo '<div class="newsHeadline">'; } ?>
     <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+    <?php if ($teaser && $node->type == 'news'): ?>
+      <p class="postDate">Posted on <?php print $submitted; ?></p>
+    <?php endif; ?>
   <?php endif; ?>
+  <?php if ($teaser && $node->type == 'news') { echo '</div>'; } ?>
   <?php print render($title_suffix); ?>
 
   <?php if ($display_submitted): ?>
@@ -103,6 +108,7 @@
       hide($content['links']);
       print render($content);
     ?>
+    <?php if ($teaser && $node->type == 'news') { echo '<a href="' . $node_url . '" class="newsReadMore">read more</a>'; } ?>
   </div>
 
   <?php print render($content['links']); ?>
