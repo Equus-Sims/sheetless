@@ -52,7 +52,8 @@ div.main-container > h1 {
 
 /* Icons */
 
-.icon {
+.icon,
+.menu-name-menu-about-links-menu li a:after {
     font-family: 'icons';
     color: #666666;
     font-size: 1.3em;
@@ -79,7 +80,8 @@ div.main-container > h1 {
     display: none;
 }
 
-.footer-link .footer-readmore.icon:before {
+.footer-link .footer-readmore.icon:before,
+.menu-name-menu-about-links-menu li a:after {
     content: '\e60b';
 }
 
@@ -526,6 +528,21 @@ table .field-content h2 a {
     font-size: .9em;
 }
 
+/* Brown 'Read More' Button with Arrow */
+.post-footer .footer-link > a,
+.menu-name-menu-about-links-menu li > a:after {
+    width: 40px;
+    height: 40px;
+    background: #8F7F4C;
+    display: inline-block;
+    vertical-align: bottom;
+    color: #FFF;
+    font-size: .9em;
+    line-height: 40px;
+    text-align: center;
+    text-decoration: none;
+}
+
 /* Pagination Styling */
 .pagination > li > a, .pagination > li > span {
     border: none;
@@ -704,19 +721,6 @@ table .content-info .post-info {
     bottom: 0;
     position: absolute;
     right: 0;
-}
-
-.post-footer .footer-link > a {
-    width: 40px;
-    height: 40px;
-    background: #8F7F4C;
-    display: inline-block;
-    vertical-align: bottom;
-    color: #FFF;
-    font-size: .9em;
-    line-height: 40px;
-    text-align: center;
-    text-decoration: none;
 }
 
 table .post-footer .footer-link > a:hover {
@@ -1388,9 +1392,9 @@ table .post-footer .footer-link .flag-likes .count {
 
 /* About Page */
 
-#block-views-about-introduction-block-block {
-    text-align: center;
-    margin: 0 17%;
+#block-views-about-introduction-block-block,
+.menu-name-menu-about-links-menu {
+    margin: 0 17% 80px;
 }
 
 #block-views-about-introduction-block-block > .block-title {
@@ -1415,6 +1419,33 @@ table .post-footer .footer-link .flag-likes .count {
 .aboutBlock .view-content .views-field-body p {
     font-size: 1.3em;
     line-height: 1.3em;
+}
+
+.menu-name-menu-about-links-menu li {
+    border-top: 1px solid #d2d2d2;
+}
+
+.menu-name-menu-about-links-menu li:last-child {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.menu-name-menu-about-links-menu li > a {
+    font-size: 2em;
+    color: #6d6d6d;
+    font-weight: bold;
+    padding: 20px 10%;
+}
+
+.menu-name-menu-about-links-menu li > a:hover {
+    text-decoration: none;
+    background: none;
+}
+
+.menu-name-menu-about-links-menu li > a:after {
+    font-size: .5em;
+    vertical-align: middle;
+    float: right;
+    font-weight: normal;
 }
 
 /* End About Page *?
