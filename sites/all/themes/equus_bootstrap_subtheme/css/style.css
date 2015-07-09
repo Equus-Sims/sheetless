@@ -515,6 +515,17 @@ table .field-content h2 a {
     color: #6E6E6E;
 }
 
+/* Brown 'Read More' Button */
+.moreBtn > a {
+    display: inline-block;
+    background: #8e7f4c;
+    padding: 10px 35px;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: .9em;
+}
+
 /* Pagination Styling */
 .pagination > li > a, .pagination > li > span {
     border: none;
@@ -1375,6 +1386,40 @@ table .post-footer .footer-link .flag-likes .count {
 /* End Horse Directory */
 
 
+/* About Page */
+
+#block-views-about-introduction-block-block {
+    text-align: center;
+    margin: 0 17%;
+}
+
+#block-views-about-introduction-block-block > .block-title {
+    text-transform: uppercase;
+    width: 50%;
+    margin: 50px auto 30px;
+    font-size: 2em;
+}
+
+.aboutBlock .view-content .views-field,
+.aboutBlock .view-content .views-field-body p {
+    text-align: center;
+}
+
+.aboutBlock .view-content .views-label {
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    color: #bababa;
+    font-weight: 600;
+}
+
+.aboutBlock .view-content .views-field-body p {
+    font-size: 1.3em;
+    line-height: 1.3em;
+}
+
+/* End About Page *?
+
+
 /* News Page */
 
 .view-news-page .node-teaser {
@@ -1419,16 +1464,6 @@ table .post-footer .footer-link .flag-likes .count {
     border-top: 1px solid #ccc;
     padding-top: 20px;
     margin-top: 10px;
-}
-
-.view-news-page .node-teaser > div.content .newsReadMore {
-    display: inline-block;
-    background: #8e7f4c;
-    padding: 10px 35px;
-    color: #FFF;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: .9em;
 }
 
 /* End News Page */
@@ -1620,16 +1655,6 @@ div.privatemsg-message .privatemsg-message-body {
 /* End Read Private Messages */
 
 
-/* Horse Creation Page */
-
-div.tabbable.tabs-left > ul {
-    transition: top .3s ease-out;
-    -webkit-transition: top .3s ease-out;
-    -moz-transition: top .3s ease-out;
-    -o-transition: top .3s ease-out;
-}
-
-
 /* Sending a New Private Message */
 
 form#privatemsg-new > div > div > label {
@@ -1653,8 +1678,19 @@ form#privatemsg-new .text-format-wrapper {
 }
 
 
-
 /* End Sending a New Private Message */
+
+
+/* Horse Creation Page */
+
+div.tabbable.tabs-left > ul {
+    transition: top .3s ease-out;
+    -webkit-transition: top .3s ease-out;
+    -moz-transition: top .3s ease-out;
+    -o-transition: top .3s ease-out;
+}
+
+/* End Horse Creation Page */
 
 
 /* Footer */

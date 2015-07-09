@@ -108,7 +108,7 @@
       hide($content['links']);
       print render($content);
     ?>
-    <?php if ($teaser && $node->type == 'news') { echo '<a href="' . $node_url . '" class="newsReadMore">read more</a>'; } ?>
+    <?php if ($teaser && $node->type == 'news') { echo '<span class="moreBtn"><a href="' . $node_url . '">read more</a></span>'; } ?>
   </div>
 
   <?php print render($content['links']); ?>
