@@ -1436,7 +1436,8 @@ table .post-footer .footer-link .flag-likes .count {
     padding: 20px 10%;
 }
 
-.menu-name-menu-about-links-menu li > a:hover {
+.menu-name-menu-about-links-menu li > a:hover,
+.menu-name-menu-about-links-menu li > a:active {
     text-decoration: none;
     background: none;
 }
