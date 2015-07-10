@@ -561,14 +561,14 @@ div.privatemsg-message .user-picture img,
     padding-left: 0;
     text-transform: uppercase;
     font-size: 1.1em;
-    border-bottom: 1px solid #d2d2d2;
+    margin-bottom: 0;
 }
 
 .quicktabs-tabs li {
     margin-right: 20px;
 }
 
-ul.quicktabs-tabs, .quicktabs-tabs a {
+ul.quicktabs-tabs a {
     padding-bottom: 10px;
 }
 
@@ -581,8 +581,15 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     border-bottom: 2px solid none;
 }
 
-.quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktabs-tabs a:active {
+.quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktabs-tabs a:active,
+.quicktabs-tabs li.active a {
+    display: inline-block;
     border-bottom: 2px solid #40B392;
+}
+
+.quicktabs_main {
+    background: #fafafa;
+    border-top: 1px solid #d2d2d2;
 }
 
 /* END Tabs Styling
@@ -626,35 +633,31 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 
 /* Daily Digest */
 
-.view-daily-digest span.views-label {
+table.cols-3 span.views-label {
     display: none;
 }
 
-.view-daily-digest div.view-content,
-.page-stable div.view-content {
+table.cols-3 div.view-content {
     max-width: 1035px;
     position: relative;
     left: -18px;
 }
 
-.view-daily-digest table,
-.page-stable table {
+table.cols-3 table {
     height: 100%;
     width: 100%;
 }
 
-.view-daily-digest table > tbody,
-.page-stable table > tbody {
+table.cols-3 > tbody {
     border-collapse: collapse;
 }
 
-.view-daily-digest table tr > td > div,
-.page-stable table tr > td > div {
+table.cols-3 tr > td > div {
     height: 100%;
+    display: table;
 }
 
 table.cols-3 tr > td {
-    background-color: #fff;
     padding: 0 0 30px;
     width: 33%;
     vertical-align: top;
@@ -719,7 +722,7 @@ table .content-info .field-item {
     display: inline-block;
 }
 
-.view-daily-digest table .content-info .field-name-field-blog-categories a {
+table.cols-3 .content-info .field-name-field-blog-categories a {
     text-transform: uppercase;
     color: #8F7F4C;
     margin-right: 8px;
@@ -749,7 +752,7 @@ table .content-info .post-info {
     text-transform: uppercase;
 }
 
-.view-daily-digest table .tags {
+table.cols-3 .tags {
     bottom: 0;
     display: inline-block;
     font-size: 0.9em;
@@ -758,7 +761,7 @@ table .content-info .post-info {
     max-width: 70%;
 }
 
-.view-daily-digest table .post-footer {
+table.cols-3 .post-footer {
     height: 40px;
 }
 
@@ -786,7 +789,7 @@ table .post-footer .footer-link .flag-likes .count {
     display: none;
 }
 
-.view-daily-digest table tr td,
+table.cols-3 tr td,
 .page-stable table tr td {
     position: relative;
 }
@@ -796,9 +799,12 @@ table .post-footer .footer-link .flag-likes .count {
 
 /**** User Profile ****/
 
-.page-user .col-sm-9 {
-    width: 65%;
-    margin-top: 10em;
+.page-user .main-container {
+    padding: 0;
+}
+
+.page-user .row, .page-user .region-content {
+    max-width: 100%;
 }
 
 /*.page-user .row /*page width and center {
@@ -813,6 +819,22 @@ table .post-footer .footer-link .flag-likes .count {
 .page-user .block-views {
     margin-bottom: 25px;
     padding-bottom: 20px;
+}
+
+.page-user #block-views-user-profile-hero-image-block {
+    margin: 0;
+    padding: 0;
+}
+
+.page-user .main-container > h1 {
+    display: none;
+}
+
+.page-user .view-user-profile-avatar > .view-content,
+.page-user #quicktabs-container-quicktabs_user_profile .quicktabs-tabpage,
+.page-user .quicktabs-tabs {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .page-user .view-user-profile-avatar .views-field,
@@ -861,6 +883,7 @@ table .post-footer .footer-link .flag-likes .count {
 
 .page-user #block-views-profile-about-block-block {
     width: 18%;
+    color: #6d6d6d;
 }
 
 .page-user #block-views-user-profile-bio-block {
@@ -1667,6 +1690,7 @@ div.tabbable.tabs-left > ul {
 footer.footer {
     background: #6D6D6D;
     padding: 50px;
+    margin-top: 0;
 }
 
 footer.footer > div.region-footer {
@@ -1682,7 +1706,7 @@ footer.footer div > section:not(:last-child) {
     margin-right: 20%;
 }
 
-footer.footer div section > h2 {
+footer.footer div section > h2.block-title {
     color: #383737;
     text-transform: uppercase;
     font-size: 1em;
