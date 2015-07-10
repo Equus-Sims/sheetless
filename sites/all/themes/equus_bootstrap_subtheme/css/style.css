@@ -560,14 +560,14 @@ div.privatemsg-message .user-picture img,
     padding-left: 0;
     text-transform: uppercase;
     font-size: 1.1em;
-    border-bottom: 1px solid #d2d2d2;
+    margin-bottom: 0;
 }
 
 .quicktabs-tabs li {
     margin-right: 20px;
 }
 
-ul.quicktabs-tabs, .quicktabs-tabs a {
+ul.quicktabs-tabs a {
     padding-bottom: 10px;
 }
 
@@ -582,7 +582,13 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 
 .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktabs-tabs a:active,
 .quicktabs-tabs li.active a {
+    display: inline-block;
     border-bottom: 2px solid #40B392;
+}
+
+.quicktabs_main {
+    background: #fafafa;
+    border-top: 1px solid #d2d2d2;
 }
 
 /* END Tabs Styling
@@ -647,7 +653,6 @@ table.cols-3 > tbody {
 
 table.cols-3 tr > td > div {
     height: 100%;
-    width: 100%;
     display: table;
 }
 
@@ -716,7 +721,7 @@ table .content-info .field-item {
     display: inline-block;
 }
 
-table.cols-3 table .content-info .field-name-field-blog-categories a {
+table.cols-3 .content-info .field-name-field-blog-categories a {
     text-transform: uppercase;
     color: #8F7F4C;
     margin-right: 8px;
@@ -793,9 +798,12 @@ table.cols-3 tr td,
 
 /**** User Profile ****/
 
-.page-user .col-sm-9 {
-    width: 65%;
-    margin-top: 10em;
+.page-user .main-container {
+    padding: 0;
+}
+
+.page-user .row, .page-user .region-content {
+    max-width: 100%;
 }
 
 /*.page-user .row /*page width and center {
@@ -810,6 +818,17 @@ table.cols-3 tr td,
 .page-user .block-views {
     margin-bottom: 25px;
     padding-bottom: 20px;
+}
+
+.page-user .main-container > h1 {
+    max-width: 100%;
+}
+
+.page-user .view-user-profile-avatar > .view-content,
+.page-user #quicktabs-container-quicktabs_user_profile .quicktabs-tabpage,
+.page-user .quicktabs-tabs {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .page-user .view-user-profile-avatar .views-field,
@@ -1665,6 +1684,7 @@ div.tabbable.tabs-left > ul {
 footer.footer {
     background: #6D6D6D;
     padding: 50px;
+    margin-top: 0;
 }
 
 footer.footer > div.region-footer {
