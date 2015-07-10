@@ -86,7 +86,6 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 		$recipients = $user;
 		$vars['message'] = privatemsg_get_link($recipients);
 
-		$vars['draw_sub_header'] = true;
 	 	$vars['equus_type'] = "Member";
 	 	$vars['creation_date'] = date("M j, Y", $user->created);
 	 } else if (isset($vars['node']) AND ($vars['node']->type != 'page')) {
