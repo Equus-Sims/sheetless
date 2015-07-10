@@ -128,7 +128,7 @@
     <?php print render($page['header']); ?>
   </header> <!-- /#page-header -->
 
-  <?php if ($draw_sub_header): ?>
+  <?php if (isset($draw_sub_header) && $draw_sub_header): ?>
       <div class="equus-sub-header">
         <div class="equus-sub-header-container">
           <div>
@@ -190,6 +190,9 @@
       <?php endif; ?>
       
       <?php print render($page['content']); ?>
+      <?php if (!empty($page['content_bottom'])): ?>
+        <?php print render($page['content_bottom']); ?>
+      <?php endif; ?>
     </section>
 
   </div>

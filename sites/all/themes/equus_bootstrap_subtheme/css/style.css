@@ -545,7 +545,8 @@ table .field-content h2 a {
 
 /* Rounded User Images */
 div.privatemsg-message .user-picture img,
-.roundImg img {
+.roundImg img,
+.user-sub-header .title img {
     width: 64px;
     height: 64px;
     border-radius: 64px;

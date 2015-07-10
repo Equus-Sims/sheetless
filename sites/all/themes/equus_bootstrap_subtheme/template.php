@@ -164,7 +164,10 @@ function equus_bootstrap_subtheme_get_like_count($nid) {
 
 function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 	$alias = drupal_get_path_alias();
-	
+
+	$u = user_load(arg(1,$alias));
+
+	$vars['foo'] = print_r($u->picture->uri, true);
 	if (arg(0,$alias) == 'user' && arg(2,$alias) == 'profile') {
 		$vars['user_profile_counters'] = true;
 	} else {

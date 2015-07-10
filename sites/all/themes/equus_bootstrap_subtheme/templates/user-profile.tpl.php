@@ -35,4 +35,11 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
+	<div class="user-sub-header">
+		<div class="title">
+			<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $foo));?>
+		</div>
+		<div class="stats">
+		</div>
+	</div>
 </div>
