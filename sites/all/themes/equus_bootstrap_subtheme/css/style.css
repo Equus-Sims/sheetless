@@ -820,8 +820,13 @@ table.cols-3 tr td,
     padding-bottom: 20px;
 }
 
+.page-user #block-views-user-profile-hero-image-block {
+    margin: 0;
+    padding: 0;
+}
+
 .page-user .main-container > h1 {
-    max-width: 100%;
+    display: none;
 }
 
 .page-user .view-user-profile-avatar > .view-content,
