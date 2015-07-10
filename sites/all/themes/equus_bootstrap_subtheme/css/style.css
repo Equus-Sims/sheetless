@@ -543,6 +543,50 @@ table .field-content h2 a {
     text-decoration: none;
 }
 
+/* Rounded User Images */
+div.privatemsg-message .user-picture img,
+.roundImg img {
+    width: 64px;
+    height: 64px;
+    border-radius: 64px;
+    -moz-border-radius: 64px;
+    -webkit-border-radius: 64px;
+}
+
+
+/* Quick Tabs Styling */
+
+.quicktabs-tabs {
+    padding-left: 0;
+    text-transform: uppercase;
+    font-size: 1.1em;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.quicktabs-tabs li {
+    margin-right: 20px;
+}
+
+ul.quicktabs-tabs, .quicktabs-tabs a {
+    padding-bottom: 10px;
+}
+
+ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktabs-tabs a:active {
+    color: #6d6d6d;
+    text-decoration: none;
+}
+
+.quicktabs-tabs a {
+    border-bottom: 2px solid none;
+}
+
+.quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktabs-tabs a:active {
+    border-bottom: 2px solid #40B392;
+}
+
+/* END Tabs Styling
+
+
 /* Pagination Styling */
 .pagination > li > a, .pagination > li > span {
     border: none;
@@ -581,7 +625,7 @@ table .field-content h2 a {
 
 /* Daily Digest */
 
-span.views-label {
+.view-daily-digest span.views-label {
     display: none;
 }
 
@@ -748,15 +792,8 @@ table .post-footer .footer-link .flag-likes .count {
 
 /* End Daily Digest */
 
-/* Horse Directory */
 
 /**** User Profile ****/
-
-/* general styles */
-
-/*.page-user .col-sm-3 {
-    width: 35%;
-}*/
 
 .page-user .col-sm-9 {
     width: 65%;
@@ -777,7 +814,7 @@ table .post-footer .footer-link .flag-likes .count {
     padding-bottom: 20px;
 }
 
-.page-user .block-views > .view .views-row > *,
+.page-user .view-user-profile-avatar .views-field,
 .page-user .block-views > .view .node-teaser .node-content,
 .page-user .block-views > .view .node-teaser .field-content {
     padding: 0 20px;
@@ -792,8 +829,58 @@ table .post-footer .footer-link .flag-likes .count {
     display: none;
 }
 
-/* END general styles */
+.page-user .view-user-profile-avatar {
+    border-bottom: 1px solid #d2d2d2;
+    padding: 20px 0;
+}
 
+.page-user .view-user-profile-avatar .views-field {
+    display: inline-block;
+}
+
+.page-user .view-user-profile-avatar .views-field-name {
+    padding-left: 0;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.page-user .view-user-profile-avatar .views-field-name a,
+.page-user .view-user-profile-avatar .views-field-name a:hover
+.page-user .view-user-profile-avatar .views-field-name a:active
+.page-user .view-user-profile-avatar .views-field-name a:focus {
+    color: #6d6d6d;
+    text-decoration: none;
+}
+
+.page-user #block-views-user-profile-bio-block,
+.page-user #block-views-profile-about-block-block {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.page-user #block-views-profile-about-block-block {
+    width: 18%;
+}
+
+.page-user #block-views-user-profile-bio-block {
+    width: 81%;
+}
+
+.page-user h2.block-title {
+    font-size: 1.1em;
+    text-transform: uppercase;
+    color: #ab995d;
+    margin-bottom: 20px;
+}
+
+.page-user .view-profile-about-block span.views-label {
+    color: #999;
+    margin-right: 10px;
+}
+
+.page-user .view-profile-about-block span.field-content {
+    font-weight: bold;
+}
 
 /****** Filter Styles *****/
 
@@ -882,7 +969,7 @@ table .post-footer .footer-link .flag-likes .count {
     -webkit-box-shadow: none;
 }
 
-/* top user bar */
+/* top user bar
 
 .page-user .equus-sub-header {
     background: #C2BDAA;
@@ -941,137 +1028,8 @@ table .post-footer .footer-link .flag-likes .count {
     padding-right: 8px;
 }
 
-/* END top user bar */
+ END top user bar */
 
-
-/* sidebar */
-
-.page-user .well {
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    max-width: 310px;
-    margin-top: 10em;
-}
-
-.page-user .profile .user-picture {
-    overflow: hidden;
-    height: 160px;
-}
-
-.page-user .profileinfo .profileinfo-userdata {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.page-user .profileinfo .username {
-    color: #7F9B8C;
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-.page-user .profileinfo .userinfo {
-    text-transform: uppercase;
-}
-
-.page-user .profileinfo-extralinks {
-    margin-top: 20px;
-}
-
-.page-user .profileinfo-extralinks div {
-    display: inline-block;
-    width: 32%;
-    text-align: center;
-    border-right: 1px solid #DEDFE4;
-}
-
-.page-user .profileinfo-extralinks div:last-child {
-    border-right: none;
-}
-
-.page-user .profileinfo-extralinks div:before {
-    font-size: 2em;
-    font-family: 'icons';
-    color: #676767;
-    display: block;
-}
-
-.page-user .profileinfo-extralinks div.favs:before { 
-    content: '\e609';
-}
-
-.page-user .profileinfo-extralinks div.pics:before {
-    content: '\e60a';
-}
-
-.page-user .profileinfo-extralinks div.horse:before {
-    content: '\e608';
-}
-
-.page-user .profileinfo {
-    padding: 0 20px 20px;
-    border-bottom: 1px solid #DEDFE4;
-}
-
-.page-user .view-organizations-list-view .view-content > .views-row {
-    margin-top: 10px;
-}
-
-.page-user div.views-field-title {
-    font-size: 16px;
-}
-
-.page-user .view-content .views-field:last-child {
-    font-size: .9em;
-}
-
-/* END sidebar */
-
-
-/* right side content */
-
-.page-user .block-views > .view .node-teaser .node-blogimage img:first-child {
-    width: 100%;
-    height: auto;
-}
-
-.page-user .block-views .block-title .full_content_link a /* MY BLOG LINK */ {
-    color: #b7d3c5;
-    float: right;
-    margin-right: 15px;
-    position: relative;
-    top: 2px;
-    text-transform: uppercase;
-    font-size: 0.75em;
-}
-
-.page-user .block-views > .view .node-blog .node-content h2 {
-    font-size: 1.4em;
-}
-
-.page-user .block-views > .view .node-content > p {
-    margin-bottom: 20px;
-}
-/* END right side content */
-
-
-/* blog links */
-
-.page-user .block-views > .view .node-links {
-    border-top: 1px solid #DEDFE4;
-    padding-top: 20px;
-}
-
-.page-user .block-views > .view .node-links > * {
-    margin: 5px 10px;
-}
-
-.page-user .block-views > .view .node-links > *:first-child {
-    margin-left: 0;
-}
-
-/* END blog links */
 
 /**** Organization Page ****/
 
@@ -1144,20 +1102,6 @@ table .post-footer .footer-link .flag-likes .count {
     color: #7D9B8F;
     font-size: 1.3em;
     font-family: 'Lato',Helvetica,Arial,sans-serif;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.node-type-organization #block-views-user-property-list-block-1 > h2:first-child,
-.node-type-organization #block-system-main div.field-label,
-.page-user .main-container h2.block-title,
-.page-user #block-system-main .profile h1:first-child {
-    background: #7F9B8C;
-    padding: 10px 15px;
-    color: #FFF;
-    font-size: 1.3em;
-    font-family: 'Lato',Helvetica,Arial,sans-serif;
-    font-weight: 100;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -1607,14 +1551,6 @@ div.privatemsg-message .privatemsg-message-new {
 
 .page-messages .privatemsg-message-participants .participants {
     float: right;
-}
-
-div.privatemsg-message .user-picture img {
-    width: 64px;
-    height: 64px;
-    border-radius: 64px;
-    -moz-border-radius: 64px;
-    -webkit-border-radius: 64px;
 }
 
 div.privatemsg-message .privatemsg-author-avatar {
