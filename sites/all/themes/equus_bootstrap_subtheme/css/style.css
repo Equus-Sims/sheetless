@@ -533,6 +533,7 @@ table .field-content h2 a {
 .menu-name-menu-about-links-menu li > a:after {
     width: 40px;
     height: 40px;
+    margin-right: 0;
     background: #8F7F4C;
     display: inline-block;
     vertical-align: bottom;
@@ -545,8 +546,7 @@ table .field-content h2 a {
 
 /* Rounded User Images */
 div.privatemsg-message .user-picture img,
-.roundImg img,
-.user-sub-header .title img {
+.roundImg img {
     width: 64px;
     height: 64px;
     border-radius: 64px;
@@ -654,6 +654,7 @@ table.cols-3 > tbody {
 
 table.cols-3 tr > td > div {
     height: 100%;
+    width: 100%;
     display: table;
 }
 
@@ -830,11 +831,17 @@ table.cols-3 tr td,
     display: none;
 }
 
-.page-user .view-user-profile-avatar > .view-content,
+.page-user .user-sub-header > .user-sub-header-block,
+.page-user .user-profile-content,
 .page-user #quicktabs-container-quicktabs_user_profile .quicktabs-tabpage,
 .page-user .quicktabs-tabs {
     max-width: 1000px;
     margin: 0 auto;
+}
+
+.page-user .user-sub-header,
+.page-user .user-profile-content {
+    margin-bottom: 90px;
 }
 
 .page-user .view-user-profile-avatar .views-field,
@@ -852,37 +859,30 @@ table.cols-3 tr td,
     display: none;
 }
 
-.page-user .view-user-profile-avatar {
+.page-user .roundImg {
+    margin-right: 15px;
+}
+
+.page-user .user-sub-header .title,
+.page-user .user-sub-header .stats {
+    width: 49%;
+    display: inline-block;
+}
+
+.page-user .user-sub-header {
     border-bottom: 1px solid #d2d2d2;
     padding: 20px 0;
 }
 
-.page-user .view-user-profile-avatar .views-field {
-    display: inline-block;
-}
-
-.user-sub-header {
-    min-height: 64px;
-}
-
-.user-sub-header .stats {
-    float: right;
-}
-
-.user-sub-header .title img {
-    float: left;
-    margin-right: 20px;
-}
-
-.user-sub-header .title h1,
-.page-user .view-user-profile-avatar .views-field-name {
+.page-user .user-sub-header .title h1 {
     padding-left: 0;
     font-size: 1.3em;
     font-weight: bold;
     margin-bottom: 0px;
+    display: inline-block;
 }
 
-.user-sub-header .title h1,
+.page-user .user-sub-header .title h1,
 .page-user .view-user-profile-avatar .views-field-name a,
 .page-user .view-user-profile-avatar .views-field-name a:hover
 .page-user .view-user-profile-avatar .views-field-name a:active
@@ -891,34 +891,60 @@ table.cols-3 tr td,
     text-decoration: none;
 }
 
-.page-user #block-views-user-profile-bio-block,
-.page-user #block-views-profile-about-block-block {
+.page-user .title .user-role,
+.page-user .stats {
+    color: #bababa;
+}
+
+.page-user .stats {
+    text-align: right;
+}
+
+.page-user .stats .profile-label {
+    margin-right: 10px;
+}
+
+.page-user .stats .profile-value {
+    font-weight: bold;
+    color: #6d6d6d;
+}
+
+.page-user .stats .profile-value:not(:last-child) {
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid #d2d2d2;
+}
+
+.page-user .user-profile-content-about,
+.page-user .user-profile-content-bio {
     display: inline-block;
     vertical-align: top;
 }
 
-.page-user #block-views-profile-about-block-block {
-    width: 18%;
+.page-user .user-profile-content-about {
+    width: 21%;
+    margin-right: 3%;
     color: #6d6d6d;
 }
 
-.page-user #block-views-user-profile-bio-block {
-    width: 81%;
+.page-user .user-profile-content-bio {
+    width: 75%;
 }
 
-.page-user h2.block-title {
+.page-user .user-profile-content h2.content-header {
     font-size: 1.1em;
     text-transform: uppercase;
     color: #ab995d;
     margin-bottom: 20px;
+    margin-top: 0;
 }
 
-.page-user .view-profile-about-block span.views-label {
+.page-user .user-profile-content-about span.profile-label {
     color: #999;
     margin-right: 10px;
 }
 
-.page-user .view-profile-about-block span.field-content {
+.page-user .user-profile-content-about span.profile-value {
     font-weight: bold;
 }
 

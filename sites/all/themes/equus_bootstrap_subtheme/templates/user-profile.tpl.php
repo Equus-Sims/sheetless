@@ -36,35 +36,47 @@
 ?>
 <div class="profile"<?php print $attributes; ?>>
 	<div class="user-sub-header">
-		<div class="title">
-			<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $pic_path));?>
-			<h1><?php echo $realname; ?></h1>
-			<span class="user-role">Member</span>
-			<!--<span class="user-role"><?php echo $user_role; ?></span>-->
-		</div>
-		<div class="stats">
-			<span class="profile-label">Net Worth</span>
-			<span class="profile-value"><?php echo $user_net_worth; ?></span>
-			<span class="profile-label">Member Points</span>
-			<span class="profile-value">0</span>
-			<span class="profile-label">Achievements</span>
-			<span class="profile-value">0</span>
+		<div class="user-sub-header-block">
+			<div class="title">
+				<span class="roundImg">
+					<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $pic_path));?>
+				</span>
+				<h1><?php echo $realname; ?></h1>
+				<span class="user-role">Member</span>
+				<!--<span class="user-role"><?php echo $user_role; ?></span>-->
+			</div>
+			<div class="stats">
+				<span class="profile-label">Net Worth</span>
+				<span class="profile-value"><?php echo $user_net_worth; ?></span>
+				<span class="profile-label">Member Points</span>
+				<span class="profile-value">0</span>
+				<span class="profile-label">Achievements</span>
+				<span class="profile-value">0</span>
+			</div>
 		</div>
 	</div>
 	<div class="user-profile-content">
 		<div class="user-profile-content-about">
-			<span class="content-header">About Me</span>
-			<span class="profile-label">Gender</span>
-			<span class="profile-value"><?php echo ucfirst($user_gender); ?></span>
-			<span class="profile-label">Birthday</span>
-			<span class="profile-value"><?php echo $user_dob; ?></span>
-			<span class="profile-label">Age</span>
-			<span class="profile-value"><?php echo $user_age; ?> years old</span>
-			<span class="profile-label">Location</span>
-			<span class="profile-value"><?php echo $user_location; ?></span>
+			<h2 class="content-header">About Me</h2>
+			<div>
+				<span class="profile-label">Gender</span>
+				<span class="profile-value"><?php echo ucfirst($user_gender); ?></span>
+			</div>
+			<div>
+				<span class="profile-label">Birthday</span>
+				<span class="profile-value"><?php echo $user_dob; ?></span>
+			</div>
+			<div>
+				<span class="profile-label">Age</span>
+				<span class="profile-value"><?php echo $user_age; ?> years old</span>
+			</div>
+			<div>
+				<span class="profile-label">Location</span>
+				<span class="profile-value"><?php echo $user_location; ?></span>
+			</div>
 		</div>
 		<div class="user-profile-content-bio">
-			<span class="content-header">Biography</span>
+			<h2 class="content-header">Biography</h2>
 			<span class="profile-value">
 				<?php if (isset($user_biography)): ?>
 					<?php echo $user_biography; ?>
