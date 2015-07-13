@@ -1,0 +1,822 @@
+<?php
+
+define('USER_DASHBOARD_PERM_SET_DEFAULT', 'set default user_dashboard blocks');
+define('USER_DASHBOARD_PERM_VIEW_ALL',    "view all users' dashboards");
+
+/************************************************************************************
+ *                  DRUPAL HOOKS 
+ ***********************************************************************************/
+
+/**
+ * Implementation of hook_menu();
+ */
+function user_dashboard_menu() {
+  //shortcut to dashboard
+  $items['user/dashboard'] = array(
+    'title'             => 'Dashboard',
+    'description'       => 'View and customize your dashboard.',
+    'page callback'     => 'user_dashboard_page_redirect',
+    'access callback'   => '_user_dashboard_access',
+    'type'              => MENU_CALLBACK,
+  );
+  
+  //main dashboard page
+  $items['user/%user/dashboard'] = array(
+    'title'             => 'Dashboard',
+    'description'       => 'View and customize your dashboard.',
+    'page callback'     => 'user_dashboard_page',
+    'access callback'   => '_user_dashboard_access',
+    'access arguments'  => array(1),
+    'type'              => MENU_LOCAL_TASK,
+  );
+  
+  //block customization page
+  $items['user/%user/dashboard/customize'] = array(
+    'title'             => 'Customize dashboard',
+    'description'       => 'Customize your dashboard.',
+    'page callback'     => 'user_dashboard_page',
+    'page arguments'    => array(TRUE),
+    'access callback'   => '_user_dashboard_access',
+    'type'              => MENU_VISIBLE_IN_BREADCRUMB,
+  );
+  
+  //shows disabled blocks in the dashboard config
+  $items['user/%user/dashboard/drawer'] = array(
+    'page callback'     => 'user_dashboard_show_disabled',
+    'access callback'   => '_user_dashboard_access',
+    'access callback'   => '_user_dashboard_access',
+    'type'              => MENU_CALLBACK,
+  );
+
+  //configuration page
+   $items['admin/dashboard/user_dashboard/settings'] = array(
+    'title'             => 'User Dashboard Settings',
+    'description'       => 'Configure user dashboard settings.',
+    'page callback'     => 'drupal_get_form',
+    'page arguments'    => array('user_dashboard_settings'),
+    'access arguments'  => array('administer blocks'),
+    'type'              => MENU_VISIBLE_IN_BREADCRUMB,
+  );
+  
+  //ajax callback for when a block is placed into a region
+  $items['user/%user/dashboard/block-content/%/%'] = array(
+    'page callback'     => 'user_dashboard_show_block_content',
+    'page arguments'    => array(4, 5),
+    'access callback'   => '_user_dashboard_access',
+    'type'              => MENU_CALLBACK,
+  );
+
+  //ajax callback to update block contents
+  $items['user/%user/dashboard/update'] = array(
+    'page callback'     => 'user_dashboard_update',
+    'access callback'   => '_user_dashboard_access',
+    'type'              => MENU_CALLBACK,
+  );
+  
+  //ajax callback to set default blocks
+  $items['admin/dashboard/user_dashboard/set_default'] = array(
+    'page callback'     => 'user_dashboard_set_default',
+    'access arguments'  => array(USER_DASHBOARD_PERM_SET_DEFAULT),
+    'type'              => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_permission();
+ */
+function user_dashboard_permission() {
+  return array(
+    USER_DASHBOARD_PERM_SET_DEFAULT => array(
+      'title'       => t('Set default blocks'), 
+      'description' => t('Grants access to set default UserDashboard blocks.'),
+    ),
+    USER_DASHBOARD_PERM_VIEW_ALL => array(
+      'title'       => t("View all user's dashboards."),
+      'description' => t("Grants access to view all user's dashboards."),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_init
+ */
+function user_dashboard_init(){
+  drupal_add_css(drupal_get_path('module', 'user_dashboard').'/user_dashboard.css');
+}
+
+/**
+ * Implementation of hook_user_insert();
+ * 
+ * Sets default user dashboard blocks if they are defined.
+ */
+function user_dashboard_user_insert(&$edit, $account, $category) {
+  $default    = variable_get('user_dashboard_default_blocks', array());
+  $available  = variable_get('user_dashboard_available_blocks', array());
+  
+  if (!empty($default)) {
+    foreach ($default as $block) {
+      //make sure the block is still available
+      if (in_array($block->module . '_' . $block->delta, $available)) {
+        //make sure the block still actually exists
+        $data = db_select('block', 'b')
+              ->fields('b')
+              ->condition('theme',  $block->theme)
+              ->condition('module', $block->module)
+              ->condition('delta',  $block->delta)
+              ->execute()
+              ->fetchAssoc();
+              
+        if ($data) {
+          db_merge('user_dashboard_block')
+            ->key(array(
+              'module'  => $block->module,
+              'delta'   => $block->delta,
+              'theme'   => $block->theme,
+              'uid'     => $account->uid,
+            ))
+            ->fields(array(
+              'status'  => $block->status,
+              'weight'  => $block->weight,
+              'region'  => $block->region,
+              'pages'   => '',
+              'uid'     => $account->uid
+            ))
+            ->execute();
+        }        
+      }
+    }
+  }
+}
+ 
+/**
+ * Implementation of hook_theme();
+ */
+function user_dashboard_theme() {
+  return array(
+    'user_dashboard' => array(
+      'render element' => 'element',
+    ),
+    'user_dashboard_page' => array(
+      'render element' => 'element',
+    ),
+    'user_dashboard_region' => array(
+      'render element' => 'element',
+    ),
+    'user_dashboard_disabled_blocks' => array(
+      'variables' => array('blocks' => NULL),
+    ),
+    'user_dashboard_disabled_block' => array(
+      'variables' => array('block' => NULL),
+    ),
+    'user_dashboard_admin_display_form' => array(
+      // When building the form for configuring dashboard blocks, reuse the
+      // Block module's template for the main block configuration form.
+      'template' => 'block-admin-display-form',
+      'path' => drupal_get_path('module', 'block'),
+      'file' => 'block.admin.inc',
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_block_list_alter();
+ *
+ * Skip rendering dashboard blocks when not on the dashboard page itself. This
+ * prevents expensive dashboard blocks from causing performance issues on pages
+ * where they will never be displayed.
+ */
+function user_dashboard_block_list_alter(&$blocks) {
+  if (!_user_dashboard_visible()) {
+    foreach ($blocks as $key => $block) {
+      if (in_array($block->region, _user_dashboard_regions())) {
+        unset($blocks[$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter();
+ */
+function user_dashboard_form_block_admin_display_form_alter(&$form, &$form_state, $form_id) {
+  // Hide dashboard regions (and any blocks placed within them) from the block
+  // administration form and from the options list on that form. This
+  // function is called for both the dashboard block configuration form and the
+  // standard block configuration form so that both forms can share the same
+  // constructor. As a result the form_id must be checked.
+  if ($form_id != 'dashboard_admin_display_form') {
+    $dashboard_regions = _user_dashboard_region_descriptions();
+    $form['block_regions']['#value'] = array_diff_key($form['block_regions']['#value'], $dashboard_regions);
+    foreach (element_children($form['blocks']) as $i) {
+      $block = &$form['blocks'][$i];
+      if (isset($block['region']['#default_value']) && isset($dashboard_regions[$block['region']['#default_value']]) && $block['region']['#default_value'] != 'dashboard_inactive') {
+        $block['#access'] = FALSE;
+      }
+      elseif (isset($block['region']['#options'])) {
+        $block['region']['#options'] = array_diff_key($block['region']['#options'], $dashboard_regions);
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter();
+ */
+function user_dashboard_form_block_admin_configure_alter(&$form, &$form_state) {
+  global $theme_key;
+  drupal_theme_initialize();
+  // Hide the dashboard regions from the region select list on the block
+  // configuration form, for all themes except the current theme (since the
+  // other themes do not display the dashboard).
+  // @todo This assumes the current page is being displayed using the same
+  //   theme that the dashboard is displayed in.
+  $dashboard_regions = _user_dashboard_region_descriptions();
+  foreach (element_children($form['regions']) as $region_name) {
+    $region = &$form['regions'][$region_name];
+    if ($region_name != $theme_key && isset($region['#options'])) {
+      $region['#options'] = array_diff_key($region['#options'], $dashboard_regions);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter();
+ */
+function user_dashboard_form_block_add_block_form_alter(&$form, &$form_state) {
+  user_dashboard_form_block_admin_configure_alter($form, $form_state);
+}
+
+/**
+ * Implementation of hook_page_build();
+ *
+ * Display dashboard blocks in the main content region.
+ */
+function user_dashboard_page_build(&$page) {
+  if (_user_dashboard_visible()) {
+    $settings = array(
+      'user_dashboard' => array(
+        'set_default_blocks_access' => (int) user_access('set default user_dashboard blocks'),
+        'default_blocks_callback'   => url('admin/dashboard/user_dashboard/set_default'),
+      ),
+    );  
+
+    drupal_add_js($settings, array('type' => 'setting'));
+
+    //set weight = 1 to ensure that this gets added after the core dashboard's JS
+    drupal_add_js(drupal_get_path('module', 'user_dashboard') . '/js/user_dashboard.js', array('weight' => 1));
+	
+    global $theme_key, $user;  
+    $available_blocks = variable_get('user_dashboard_available_blocks', array());
+      
+    // Load user dashboard blocks
+    $query = db_select('user_dashboard_block', 'b');
+    $result = $query
+      ->fields('b')
+      ->condition('b.theme', $theme_key)
+      ->condition('b.status', 1)
+      ->condition('b.uid', (int) arg(1))
+      ->orderBy('b.region')
+      ->orderBy('b.weight')
+      ->orderBy('b.module')
+      ->addTag('block_load')
+      ->addTag('translatable')
+      ->execute();
+  
+    $block_info = $result->fetchAllAssoc('bid');
+    // Allow modules to modify the block list.
+    drupal_alter('block_list', $block_info);
+    
+    $user_blocks = array();
+    foreach ($block_info as $b) {
+      //ensure that this is still a valid block, otherwise remove it and alert the user
+      $data = db_select('block', 'b')
+              ->fields('b')
+              ->condition('theme',  $b->theme)
+              ->condition('module', $b->module)
+              ->condition('delta',  $b->delta)
+              ->execute()
+              ->fetchAssoc();
+      
+      if (!$data || !in_array($b->module . '_' . $b->delta, $available_blocks)) {
+        drupal_set_message(t('Block !delta provided by module !module is no longer available and has been removed from your dashboard.', array('!delta' => '<em>' . $b->delta . '</em>', '!module' => '<em>' . $b->module . '</em>')), 'warning');
+        
+        db_delete('user_dashboard_block')
+          ->condition('theme',  $b->theme)
+          ->condition('module', $b->module)
+          ->condition('delta',  $b->delta)
+          ->condition('uid',    $user->uid)
+          ->execute();
+      }
+      else {
+        $user_blocks[$b->region][$b->module . '_' . $b->delta] = $b;
+      }
+    }  
+
+    foreach ($user_blocks as $key => $r) {
+      if ($list = _block_render_blocks($r)) {
+        if (!isset($page[$key])) {
+          $page[$key] = array();
+        }
+        
+        $page[$key] += _block_get_renderable_array($list);
+      }    
+    }      
+
+    $block_info = array();
+
+    // Create a wrapper for the dashboard itself, then insert each dashboard
+    // region into it.
+    $page['content']['user_dashboard'] = array('#theme_wrappers' => array('user_dashboard'));
+    foreach (_user_dashboard_regions() as $region) {
+      // Insert regions even when they are empty, so that they will be
+      // displayed when the dashboard is being configured.
+      $page['content']['user_dashboard'][$region] = !empty($page[$region]) ? $page[$region] : array();
+      $page['content']['user_dashboard'][$region]['#dashboard_region'] = $region;
+      // Allow each dashboard region to be themed differently, or fall back on
+      // the generic theme wrapper function for dashboard regions.
+      $page['content']['user_dashboard'][$region]['#theme_wrappers'][] = array($region, 'user_dashboard_region');
+      
+      // Allow modules to alter the region
+      drupal_alter('user_dashboard_region', $page['content']['user_dashboard'][$region]);
+
+      unset($page[$region]);
+      $blocks_found = array();
+      foreach ($page['content']['user_dashboard'][$region] as $item) {
+        if (isset($item['#theme_wrappers']) && is_array($item['#theme_wrappers']) && in_array('block', $item['#theme_wrappers'])) {
+          // If this item is a block, ensure it has a subject.
+          if (empty($item['#block']->subject)) {
+            // Locally cache info data for the object for all blocks, in case
+            // we find a block similarly missing title from the same module.
+            if (!isset($block_info[$item['#block']->module])) {
+              $block_info[$item['#block']->module] = module_invoke($item['#block']->module, 'block_info');
+            }
+            $item['#block']->subject = $block_info[$item['#block']->module][$item['#block']->delta]['info'];
+          }
+          $blocks_found[$item['#block']->module . '_' . $item['#block']->delta] = TRUE;
+        }
+      }
+
+      // Find blocks which were not yet displayed on the page (were empty), and
+      // add placeholder items in their place for rendering.
+      $block_list = db_select('user_dashboard_block')
+        ->condition('theme', $theme_key)
+        ->condition('status', 1)
+        ->condition('region', $region)
+        ->condition('uid', (int) arg(1))
+        ->fields('user_dashboard_block')
+        ->orderBy('weight')
+        ->execute();
+      foreach ($block_list as $block) {
+        if (!isset($blocks_found[$block->module . '_' . $block->delta])) {
+          $block->enabled = $block->page_match = TRUE;
+          $block->content = array('#markup' => '<div class="dashboard-block-empty">(empty)</div>');
+          if (!isset($block_info[$block->module])) {
+            $block_info[$block->module] = module_invoke($block->module, 'block_info');
+          }
+          $block->subject = t('@title', array('@title' => $block_info[$block->module][$block->delta]['info']));
+          $block_render = array($block->module . '_' . $block->delta => $block);
+          $build = _block_get_renderable_array($block_render);
+          $page['content']['user_dashboard'][$block->region][] = $build;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_system_info_alter();
+ *
+ * Add regions to each theme to store the dashboard blocks.
+ */
+function user_dashboard_system_info_alter(&$info, $file, $type) {
+  if ($type == 'theme') {
+    // Add the dashboard regions (the "inactive" region should always appear
+    // last in the list, for usability reasons).
+    $info['regions'] += _user_dashboard_region_descriptions();
+    // Indicate that these regions are intended to be displayed whenever the
+    // dashboard is displayed in an overlay. This information is provided for
+    // any module that might need to use it, not just the core Overlay module.
+    $info['overlay_regions'] = !empty($info['overlay_regions']) ? array_merge($info['overlay_regions'], _user_dashboard_regions()) : _user_dashboard_regions();
+  }
+}
+
+/************************************************************************************
+ *                  MODULE HOOKS 
+ ***********************************************************************************/
+
+/**
+ * Implementation of hook_user_dashboard_regions();
+ */
+function user_dashboard_user_dashboard_regions() {
+  return array(
+    'user_dashboard_main'     => 'Dashboard (main)',
+    'user_dashboard_sidebar'  => 'Dashboard (sidebar)',
+    'user_dashboard_column1'  => 'Dashboard (column1)',
+    'user_dashboard_column2'  => 'Dashboard (column2)',
+    'user_dashboard_column3'  => 'Dashboard (column3)',
+    'user_dashboard_footer'   => 'Dashboard (footer)',
+  );
+}
+
+/************************************************************************************
+ *                  CALLBACKS 
+ ***********************************************************************************/
+
+ /**
+  * Shortcut to redirect users to their own dashboard.
+  */
+ function user_dashboard_page_redirect() {
+   global $user;
+   drupal_goto('user/' . $user->uid . '/dashboard');
+ }
+ 
+/**
+ * Dashboard page callback.
+ *
+ * @param $launch_customize
+ *   Whether to launch in customization mode right away. TRUE or FALSE.
+ */
+function user_dashboard_page($launch_customize = FALSE) {
+  $js_settings = array(
+    'dashboard' => array(
+      'drawer' => url('user/' . arg(1) . '/dashboard/drawer'),
+      'blockContent' => url('user/' . arg(1) . '/dashboard/block-content'),
+      'updatePath' => url('user/' . arg(1) . '/dashboard/update'),
+      'formToken' => drupal_get_token('user-dashboard-update'),
+      'launchCustomize' => $launch_customize,
+      'dashboard' => url('user/' . arg(1) . '/dashboard'),
+      'emptyBlockText' => t('(empty)'),
+      'emptyRegionTextInactive' => t('This dashboard region is empty. Click <em>Customize dashboard</em> to add blocks to it.'),
+      'emptyRegionTextActive' => t('DRAG HERE'),
+    ),
+  );
+  $build = array(
+    '#theme' => 'user_dashboard_page',
+    '#message' => t('To customize the dashboard page, move blocks to the dashboard regions on the <a href="@dashboard">Dashboard administration page</a>, or enable JavaScript on this page to use the drag-and-drop interface.', array('@dashboard' => url('admin/dashboard/configure'))),
+    '#access' => 1,
+    '#attached' => array(
+      'js' => array(
+        drupal_get_path('module', 'dashboard') . '/dashboard.js',
+        array('data' => $js_settings, 'type' => 'setting'),
+      ),
+      'library' => array(array('system', 'ui.sortable')),
+    ),
+  );
+  
+  return $build;
+}
+
+/**
+ * AJAX callback to show disabled blocks in the dashboard customization mode.
+ */
+function user_dashboard_show_disabled() {
+  global $theme_key;
+
+  $available = variable_get('user_dashboard_available_blocks', array());
+
+  $user_blocks = db_select('user_dashboard_block')
+    ->condition('theme', $theme_key)
+    ->condition('status', 1)
+    ->condition('uid', (int) arg(1))
+    ->fields('user_dashboard_block')
+    ->execute();
+  
+  $u_blocks = array();
+  
+  foreach ($user_blocks as $item) {
+    unset($available[$item->module . '_' . $item->delta]);
+  }
+
+  // Blocks are not necessarily initialized at this point.
+  $blocks = _block_rehash();
+
+  foreach ($blocks as $key => $block) {
+    $id = $block['module'] . '_' . $block['delta'];
+    if (!isset($available[$id]) || !$available[$id]) {
+      unset($blocks[$key]);
+    }
+  }
+
+  // Theme the output and end the page request.
+  print theme('user_dashboard_disabled_blocks', array('blocks' => $blocks));
+  drupal_exit();
+}
+
+/**
+ * Module settings page.
+ */
+function user_dashboard_settings() {
+  global $theme_key;
+   
+  drupal_theme_initialize();
+  module_load_include('inc', 'block', 'block.admin');
+  
+  $blocks = array();
+  foreach (block_admin_display_prepare_blocks($theme_key) as $block) {
+    $blocks[$block['module'] . '_' . $block['delta']] = $block['info'];
+  } 
+  $form = array();
+  
+  $form['user_dashboard_available_blocks'] = array(
+    '#default_value'  => variable_get('user_dashboard_available_blocks', array()),
+    '#description'    => t('Choose blocks that can be used on the user dashboard pages.'),
+    '#options'        => $blocks,
+    '#title'          => t('Available blocks'),
+    '#type'           => 'checkboxes',
+  );
+  
+  return system_settings_form($form);
+}
+
+/**
+ * AJAX callback for user/%user/dashboard/block-content/%/%
+ * 
+ * Displays the rendered contents of a specific block.
+ *
+ * @param $module
+ *   The block's module name.
+ * @param $delta
+ *   The block's delta.
+ */
+function user_dashboard_show_block_content($module, $delta) {
+  dashboard_show_block_content($module, $delta);
+}
+
+/**
+ * AJAX callback for user/%user/dashboard/update
+ *
+ * Set the new weight of each region according to the drag-and-drop order.
+ */
+function user_dashboard_update() {
+  drupal_theme_initialize();
+  global $theme_key;
+
+  // Check the form token to make sure we have a valid request.
+  if (!empty($_REQUEST['form_token']) && drupal_valid_token($_REQUEST['form_token'], 'user-dashboard-update')) {
+    parse_str($_REQUEST['regions'], $regions);
+
+    // Get a list of enabled modules with values that matches the block_string from the block id.
+    $module_list = module_list();
+    foreach($module_list as $module) {
+      $module_map[$module] = str_replace('_', '-', $module);
+    }
+    foreach ($regions as $region_name => $blocks) {
+      foreach ($blocks as $weight => $block_string) {
+        // Replaces any malformed module name containing more than one word
+        foreach($module_map as $module_name => $module) {
+          $block_string = str_replace($module, $module_name, $block_string);
+        }
+
+        // Parse the query string to determine the block's module and delta.
+        preg_match('/block-([^-]+)-(.+)/', $block_string, $matches);
+        $block = new stdClass();
+        $block->module = $matches[1];
+        $block->delta = $matches[2];
+        $block->region = $region_name;
+        $block->weight = $weight;
+        $block->status = 1;
+
+        if ($block->region !== 'disabled_blocks') {
+          // Certain block module/delta combinations (like from Views blocks) may come in with an incorrect
+          // delta, where '-' are used in place of '_', so we need to ensure we're getting the right delta
+          // by querying the {blocks} table
+          $delta_obj = db_query("SELECT delta FROM {block} WHERE module = '" . $block->module . "' AND REPLACE(REPLACE(delta, '-', ''), '_', '') = '" . preg_replace('/[-_]/', '', $block->delta) . "' LIMIT 1", array(
+            ':module' => $block->module, 
+            ':delta'  => preg_replace('/[-_]/', '', $block->delta)
+          ))->fetchObject();
+          
+          $block->delta = $delta_obj->delta;
+          
+          db_merge('user_dashboard_block')
+            ->key(array(
+              'module'  => $block->module,
+              'delta'   => $block->delta,
+              'theme'   => $theme_key,
+              'uid'     => (int) arg(1),
+            ))
+            ->fields(array(
+              'status'  => $block->status,
+              'weight'  => $block->weight,
+              'region'  => $block->region,
+              'pages'   => '',
+            ))
+            ->execute();
+        }
+        else {
+          db_delete('user_dashboard_block')
+            ->condition('uid', (int) arg(1))
+            ->condition('module', $block->module)
+            ->condition('delta', $block->delta)
+            ->execute();
+        }
+      }
+    }
+    drupal_set_message(t('The configuration options have been saved.'), 'status', FALSE);
+  }
+  drupal_exit();
+}
+
+/**
+ * AJAX callback for admin/dashboard/user_dashboard/set_default
+ * 
+ * Set the default blocks that will be initialized for new user registrations.
+ */
+function user_dashboard_set_default() {
+  // Check the form token to make sure we have a valid request.
+  if (!empty($_REQUEST['form_token']) && drupal_valid_token($_REQUEST['form_token'], 'user-dashboard-update')) {
+    $default_blocks = array();
+    
+    parse_str($_REQUEST['regions'], $regions);
+    foreach ($regions as $region_name => $blocks) {
+      foreach ($blocks as $weight => $block_string) {
+        // Parse the query string to determine the block's module and delta.
+        preg_match('/block-([^-]+)-(.+)/', $block_string, $matches);
+        $block = new stdClass();
+        $block->module  = $matches[1];
+        $block->delta   = $matches[2];
+        $block->region  = $region_name;
+        $block->weight  = $weight;
+        $block->status  = 1;
+        $block->theme   = variable_get('theme_default', 'garland');
+
+        if ($block->region !== 'disabled_blocks') {
+          // Certain block module/delta combinations (like from Views blocks) may come in with an incorrect
+          // delta, where '-' are used in place of '_', so we need to ensure we're getting the right delta
+          // by querying the {blocks} table
+          $delta_obj = db_query("SELECT delta FROM {block} WHERE module = '" . $block->module . "' AND REPLACE(REPLACE(delta, '-', ''), '_', '') = '" . preg_replace('/[-_]/', '', $block->delta) . "' LIMIT 1", array(
+            ':module' => $block->module, 
+            ':delta'  => preg_replace('/[-_]/', '', $block->delta)
+          ))->fetchObject();
+          
+          $block->delta = $delta_obj->delta;
+          
+          $default_blocks[] = $block;
+        }
+      }
+    }
+
+    variable_set('user_dashboard_default_blocks', $default_blocks);
+    
+    drupal_set_message(t('Default blocks have been set.'), 'status', FALSE);
+    
+    echo drupal_json_encode(array('messages' => theme('status_messages')));
+  }
+ 
+  drupal_exit();
+}
+
+/************************************************************************************
+ *                  THEMING 
+ ***********************************************************************************/
+
+/**
+ * Returns HTML for the entire dashboard.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - element: A render element containing the properties of the dashboard
+ *     region element, #dashboard_region and #children.
+ *
+ * @ingroup themeable
+ */
+function theme_user_dashboard($variables) {
+  extract($variables);
+  drupal_add_css(drupal_get_path('module', 'dashboard') . '/dashboard.css');
+  return '<div id="dashboard" class="clearfix user-dashboard">' . $element['#children'] . '</div>';
+}
+
+/**
+ * Returns HTML for the non-customizable part of the dashboard page.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - element: A render element containing a #message.
+ *
+ * @ingroup themeable
+ */
+function theme_user_dashboard_page($variables) {
+  // We only return a simple help message, since the actual content of the page
+  // will be populated via the dashboard regions in dashboard_page_build();
+  return '<div class="customize-dashboard js-hide">' . $variables['element']['#message'] . '</div>';
+}
+
+/**
+ * Returns HTML for a generic dashboard region.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - element: A render element containing the properties of the dashboard
+ *     region element, #dashboard_region and #children.
+ *
+ * @ingroup themeable
+ */
+function theme_user_dashboard_region($variables) {
+  extract($variables);
+
+  $output = '
+              <div id="' . $element['#dashboard_region'] . '" class="user-dashboard-region">
+                <div class="region clearfix">
+                  ' . $element['#children'] . '
+                </div>
+              </div>
+            ';
+
+  return $output;
+}
+
+/**
+ * Returns HTML for a set of disabled blocks, for display in dashboard customization mode.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - blocks: An array of block objects from _block_rehash();
+ *
+ * @ingroup themeable
+ */
+function theme_user_dashboard_disabled_blocks($variables) {
+  extract($variables);
+  $output = '<div class="canvas-content"><p>' . t('Drag and drop these blocks to the columns below. Changes are automatically saved. More options are available on the UserDashboard <a href="@dashboard-url">configuration page</a>.', array('@dashboard-url' => url('admin/dashboard/user_dashboard/settings'))) . '</p>';
+  $output .= '<div id="disabled-blocks"><div class="region disabled-blocks clearfix">';
+  foreach ($blocks as $block) {
+    $output .= theme('dashboard_disabled_block', array('block' => $block));
+  }
+  $output .= '<div class="clearfix"></div>';
+  $output .= '</div></div></div>';
+  return $output;
+}
+
+/**
+ * Returns HTML for a disabled block, for display in dashboard customization mode.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - block: A block object from _block_rehash();
+ *
+ * @ingroup themeable
+ */
+function theme_user_dashboard_disabled_block($variables) {
+  extract($variables);
+  $output = "";
+  if (isset($block)) {
+    $output .= '<div id="block-' . $block['module'] . '-' . $block['delta']
+    . '" class="disabled-block block block-' . $block['module'] . '-' . $block['delta']
+    . ' module-' . $block['module'] . ' delta-' . $block['delta'] . '">'
+    . '<h2>' . (!empty($block['title']) && $block['title'] != '<none>' ? check_plain($block['title']) : check_plain($block['info'])) . '</h2>'
+    . '<div class="content"></div>'
+    . '</div>';
+  }
+  return $output;
+}
+
+/************************************************************************************
+ *                  INTERNAL 
+ ***********************************************************************************/
+
+/**
+ * Checks whether the current user is allowed to access the dashboard.
+ * 
+ * @param - $account - the user account whose dashboard is being requested
+ */
+function _user_dashboard_access($account = NULL) {
+  global $user;
+  
+  if (is_null($account)) {
+    $account = $user;
+  }
+  
+  if (!$user->uid || ($account->uid != $user->uid && !user_access(USER_DASHBOARD_PERM_VIEW_ALL))) {
+    return FALSE;
+  }
+  
+  return TRUE;
+}
+
+/**
+ * Check if we are on the user dashboard page.
+ */
+function _user_dashboard_visible() {
+  return preg_match('/^user\/[0-9]{0,11}\/dashboard$/', implode('/', arg()));
+}
+
+/**
+ * Return an array of dashboard region names.
+ */
+function _user_dashboard_regions() {
+  $regions = &drupal_static(__FUNCTION__);
+  if (!isset($regions)) {
+    $regions = array_keys(_user_dashboard_region_descriptions());
+  }
+  return $regions;
+}
+
+/**
+ * Return an array of dashboard region descriptions, keyed by region name.
+ */
+function _user_dashboard_region_descriptions() {
+  $regions = module_invoke_all('user_dashboard_regions');
+  drupal_alter('user_dashboard_regions', $regions);
+  return $regions;
+}

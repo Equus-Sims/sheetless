@@ -1,0 +1,27 @@
+
+#dashboard .user-dashboard-region div.block h2{
+	background: #E0E0D8;
+}
+
+#dashboard .user-dashboard-region .block{
+	border: #CCC 1px solid;
+	clear: both;
+}
+
+#dashboard div#user_dashboard_main, #dashboard div#user_dashboard_column1 {
+	width: 65%;
+	margin-right: 1%;
+}
+
+#dashboard div#user_dashboard_sidebar, #dashboard div#user_dashboard_column2 {
+	width: 33%;
+}
+
+#dashboard div#user_dashboard_column3, #dashboard div#user_dashboard_footer {
+	width: 100%;
+}
+
+#dashboard div.user-dashboard-region {
+	float: left;
+	min-height: 1px;
+}

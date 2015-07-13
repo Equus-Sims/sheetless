@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * @file
+ * Installation file for UserDashboard. 
+ * 
+ * Handles installing/removing the module-specific database schema and variables.
+ */
+
+function user_dashboard_install() {
+  variable_set('user_dashboard_available_blocks', array());
+  variable_set('user_dashboard_default_blocks', array());
+}
+
+function user_dashboard_uninstall() {
+  variable_del('user_dashboard_available_blocks');
+  variable_del('user_dashboard_default_blocks');
+}
+
+/**
+ * Implementation of hook_schema();
+ */
+function user_dashboard_schema() {
+  $schema = array();  
+    
+  $schema['user_dashboard_block'] = array(
+    'description' => 'Stores block settings, such as region and visibility...;',
+    'fields' => array(
+      'bid' => array(
+        'description' => 'Primary Key: Unique block ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The module from which the block originates; for example, ’user’ for the Who’s Online block, and ’block’ for any custom blocks.',
+        'type' => 'varchar',
+        'length' => '64',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'delta' => array(
+        'description' => 'Unique ID for block within a module.',
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'default' => '0',
+      ),
+      'theme' => array(
+        'description' => 'The theme under which the block settings apply.',
+        'type' => 'varchar',
+        'length' => '64',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'status' => array(
+        'description' => 'Block enabled status. (1 = enabled, 0 = disabled)',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'weight' => array(
+        'description' => 'Block weight within region.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'region' => array(
+        'description' => 'Theme region within which the block is set.',
+        'type' => 'varchar',
+        'length' => '64',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'custom' => array(
+        'description' => 'Flag to indicate how users may control visibility of the block. (0 = Users cannot control, 1 = On by default, but can be hidden, 2 = Hidden by default, but can be shown)',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'visibility' => array(
+        'description' => 'Flag to indicate how to show blocks on pages. (0 = Show on all pages except listed pages, 1 = Show only on listed pages, 2 = Use custom PHP code to determine visibility)',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'pages' => array(
+        'description' => 'Contents of the "Pages" block; contains either a list of paths on which to include/exclude the block or PHP code, depending on "visibility" setting.',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'Custom title for the block. (Empty string will use block default title, <none> will remove the title, text will cause block to use specified title.)',
+        'type' => 'varchar',
+        'length' => '64',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'cache' => array(
+        'description' => 'Binary flag to indicate block cache mode. (-2: Custom cache, -1: Do not cache, 1: Cache per role, 2: Cache per user, 4: Cache per page, 8: Block cache global) See DRUPAL_CACHE_* constants in ../includes/common.inc for more detailed information.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'uid' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('bid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+    ),
+  );
+  
+  return $schema;
+}
