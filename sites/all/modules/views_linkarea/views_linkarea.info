@@ -1,0 +1,16 @@
+name = Views Link Area
+description = A Views 3 area plugin to allow links as headers and footers for views.
+package = Views
+core = 7.x
+dependencies[] = views
+
+files[] = views_linkarea.module
+files[] = views_linkarea.views.inc
+files[] = views_handler_area_link.inc
+
+; Information added by drupal.org packaging script on 2010-11-18
+version = "7.x-1.0"
+core = "7.x"
+project = "views_linkarea"
+datestamp = "1290111938"
+
