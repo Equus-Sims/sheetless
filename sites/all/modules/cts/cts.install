@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Schema definitions and installation hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function cts_schema() {
+  $schema = array();
+
+  $schema['cts'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The nid of the node the template is for.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of template suggestion (page, node).',
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'template' => array(
+        'description' => 'The user-entered name of the template.',
+        'type' => 'varchar',
+        'length' => '128',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('nid', 'type'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cts_uninstall() {
+  // Clear the page cache to prevent any custom templates from continuing to
+  // be used.
+  cache_clear_all('*', 'cache_page', TRUE);
+}

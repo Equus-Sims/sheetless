@@ -1,0 +1,210 @@
+<?php
+
+/**
+ * @file
+ * Custom Template Suggestions module.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function cts_permission() {
+  return array(
+    'use custom template suggestions' => array(
+      'title' => t('Use custom template suggestions'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cts_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['custom_template_suggestions'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Custom template suggestions'),
+    '#description' => t('Specify custom template suggestions for this node.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#access' => user_access('use custom template suggestions'),
+    '#weight' => 80,
+    '#tree' => TRUE,
+    '#group' => 'additional_settings',
+    '#tree' => TRUE,
+    '#attributes' => array(
+      'class' => array('node-custom-template-suggestions-form'),
+    ),
+  );
+
+  if (isset($form['#node']->nid) && $form['#node']->nid) {
+    $custom_templates = _cts_get_custom_templates($form['#node']);
+  }
+
+  $description = t('A custom node.tpl.php file for this node.');
+  $description .= ' ' . t('The syntax for the template name is node--custom--[YOUR-TEMPLATE-NAME].tpl.php');
+  $description .= ' ' . t('Underscores and spaces will be replaced with dashes.');
+
+  $form['custom_template_suggestions']['node'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Node template'),
+    '#description' => $description,
+    '#default_value' => isset($custom_templates['node']) ? $custom_templates['node'] : NULL,
+    '#size' => 64,
+    '#maxlength' => 128,
+  );
+
+  $description = t('A custom page.tpl.php file for this node.');
+  $description .= ' ' . t('The syntax for the template name is page--custom--[YOUR-TEMPLATE-NAME].tpl.php');
+  $description .= ' ' . t('Underscores and spaces will be replaced with dashes.');
+
+  $form['custom_template_suggestions']['page'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Page template'),
+    '#description' => $description,
+    '#default_value' => isset($custom_templates['page']) ? $custom_templates['page'] : NULL,
+    '#size' => 64,
+    '#maxlength' => 128,
+  );
+}
+
+/**
+ * Implements hook_node_load().
+ */
+function cts_node_load($nodes, $types) {
+  foreach ($nodes as $node) {
+    $node->custom_template_suggestions = _cts_get_custom_templates($node);
+  }
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function cts_node_delete($node) {
+  $cache_cleared = &drupal_static('cts_page_cache_cleared', FALSE);
+
+  // Remove any existing custom templates.
+  cts_delete_templates($node);
+
+  // The page cache only needs to be cleared once, not for every single
+  // node deletion.
+  if (!$cache_cleared) {
+    $cache_cleared = TRUE;
+    cache_clear_all('*', 'cache_page', TRUE);
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function cts_node_update($node) {
+  _cts_node_update_templates($node);
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function cts_node_insert($node) {
+  _cts_node_update_templates($node);
+}
+
+/**
+ * Implements template_preprocess_node().
+ */
+function cts_preprocess_node(&$variables) {
+  _cts_add_template_suggestions($variables, 'node');
+}
+
+/**
+ * Implements template_preprocess_page().
+ */
+function cts_preprocess_page(&$variables) {
+  _cts_add_template_suggestions($variables, 'page');
+}
+
+/**
+ * Adds custom template suggestions.
+ */
+function _cts_add_template_suggestions(&$variables, $type) {
+  if (isset($variables['node']->custom_template_suggestions[$type])) {
+    $template = $variables['node']->custom_template_suggestions[$type];
+    $variables['theme_hook_suggestions'][] = $type . '__custom__' . str_replace('-', '_', $template);
+  }
+}
+
+/**
+ * Saves node templates to the database.
+ */
+function _cts_node_update_templates($node) {
+  $cache_cleared = &drupal_static('cts_page_cache_cleared', FALSE);
+
+  if (isset($node->custom_template_suggestions)) {
+    $current_templates = _cts_get_custom_templates($node);
+    $templates_updated = FALSE;
+
+    foreach ($node->custom_template_suggestions as $type => $template) {
+      $template = str_replace(array('_', ' '), '-', check_plain($template));
+
+      // Template being added or updated.
+      if (!empty($template) && ((!isset($current_templates[$type])) || (isset($current_templates[$type]) && $current_templates[$type] != $template))) {
+        db_merge('cts')
+          ->key(array('nid' => $node->nid, 'type' => $type))
+          ->fields(array(
+            'nid' => $node->nid,
+            'type' => $type,
+            'template' => $template,
+          ))
+          ->execute();
+
+        $templates_updated = TRUE;
+      }
+      // Template being deleted.
+      elseif (isset($current_templates[$type]) && empty($template)) {
+        cts_delete_templates($node, array($type));
+        $templates_updated = TRUE;
+      }
+    }
+
+    // If templates have been added/updated or removed, we need to clear the
+    // page cache, but only once.
+    if ($templates_updated && !$cache_cleared) {
+      $cache_cleared = TRUE;
+      cache_clear_all('*', 'cache_page', TRUE);
+    }
+  }
+}
+
+/**
+ * Removes custom templates from the database.
+ */
+function cts_delete_templates($node, $template_types = array()) {
+  if (empty($template_types)) {
+    $template_types = array('page', 'node');
+  }
+
+  $query = db_delete('cts')
+    ->condition('nid', $node->nid);
+
+  $or = db_or();
+
+  foreach ($template_types as $type) {
+    $or->condition('type', $type);
+  }
+
+  $query->condition($or);
+  $query->execute();
+}
+
+/**
+ * Retrieves a list of custom templates for a node.
+ */
+function _cts_get_custom_templates($node) {
+  $templates = array();
+
+  $result = db_query('SELECT type, template FROM {cts} WHERE nid = :nid', array(':nid' => $node->nid));
+
+  foreach ($result as $row) {
+    $templates[$row->type] = $row->template;
+  }
+
+  return $templates;
+}

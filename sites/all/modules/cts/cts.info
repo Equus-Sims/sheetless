@@ -1,0 +1,10 @@
+name = Custom Template Suggestions
+description = Allows you to specify custom node and page templates on a per-node basis.
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2014-10-20
+version = "7.x-1.0"
+core = "7.x"
+project = "cts"
+datestamp = "1413828857"
+
