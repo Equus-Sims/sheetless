@@ -1026,7 +1026,7 @@ jQuery(window).load(function() {
 
       scrollListener();
 
-    }
+    };
 
     $('form#user-login input.form-control').each(function() {
       $(this).attr('placeholder', $(this).prev('label').text()).css('margin-top', '20px');

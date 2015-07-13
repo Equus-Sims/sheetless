@@ -41,9 +41,11 @@
 				<span class="roundImg">
 					<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $pic_path));?>
 				</span>
-				<h1><?php echo $realname; ?></h1>
-				<span class="user-role">Member</span>
-				<!--<span class="user-role"><?php echo $user_role; ?></span>-->
+				<div class="user-info">
+					<h1><?php echo $realname; ?></h1>
+					<span class="user-role">Member</span>
+					<!--<span class="user-role"><?php echo $user_role; ?></span>-->
+				</div>
 			</div>
 			<div class="stats">
 				<span class="profile-label">Net Worth</span>
