@@ -59,17 +59,22 @@ function equus_members_preprocess_user_profile(&$vars) {
 	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_dob');
 	$date = array_pop($items);
 	
-	$dob = new DateTime($date['value']);
-	$interval = $dob->diff(new DateTime());
-	$vars['age'] = $interval->y;
+	$dob_raw = new DateTime($date['value']);
+	$dob = $dob_raw->format('M. d, Y');
+	$interval = $dob_raw->diff(new DateTime());
+	$vars['user_age'] = $interval->y;
+	$vars['user_dob'] = $dob;
 	
-	$vars['net_worth'] = equus_members_get_net_worth($vars['elements']['#account']->uid);
+	$vars['user_net_worth'] = equus_members_get_net_worth($vars['elements']['#account']->uid);
 
 	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_gender');
 	$vars['user_gender'] = $items[0]['value'];
 
 	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_biography');
 	$vars['user_biography'] = $items[0]['value'];
+
+	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_location');
+	$vars['user_location'] = $items[0]['value'];
 
 	//$vars['gallery_count'] = equus_members_gallery_image_count($vars['elements']['#account']->uid);
 	//$vars['horse_count'] = equus_members_horse_count($vars['elements']['#account']->uid);
