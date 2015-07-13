@@ -861,12 +861,28 @@ table.cols-3 tr td,
     display: inline-block;
 }
 
+.user-sub-header {
+    min-height: 64px;
+}
+
+.user-sub-header .stats {
+    float: right;
+}
+
+.user-sub-header .title img {
+    float: left;
+    margin-right: 20px;
+}
+
+.user-sub-header .title h1,
 .page-user .view-user-profile-avatar .views-field-name {
     padding-left: 0;
     font-size: 1.3em;
     font-weight: bold;
+    margin-bottom: 0px;
 }
 
+.user-sub-header .title h1,
 .page-user .view-user-profile-avatar .views-field-name a,
 .page-user .view-user-profile-avatar .views-field-name a:hover
 .page-user .view-user-profile-avatar .views-field-name a:active
@@ -1084,6 +1100,7 @@ table.cols-3 tr td,
     padding: 20px 30px;
 }
 
+.user-sub-header .title h1,
 .node-type-organization .block,
 .node-type-organization .block .view,
 .page-user .main-container .block {
