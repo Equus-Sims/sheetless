@@ -42,7 +42,7 @@
 					<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $pic_path));?>
 				</span>
 				<div class="user-info">
-					<h1><?php echo $realname; ?></h1>
+					<h1><?php echo $realname; ?><a href="/messages/new/2" class="icon message"></a></h1>
 					<span class="user-role">Member</span>
 					<!--<span class="user-role"><?php echo $user_role; ?></span>-->
 				</div>

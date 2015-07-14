@@ -93,6 +93,10 @@ div.main-container > h1 {
     content: '\e602';
 }
 
+.message.icon:before {
+    content: '\e60f';
+}
+
 /* END Icons */
 
 /* Login Page */
@@ -832,6 +836,10 @@ table.cols-3 tr td,
     padding: 0;
 }
 
+.page-user #block-views-user-profile-hero-image-block img {
+    width: 100%;
+}
+
 .page-user .main-container > h1 {
     display: none;
 }
@@ -906,6 +914,14 @@ table.cols-3 tr td,
 .page-user .view-user-profile-avatar .views-field-name a:focus {
     color: #6d6d6d;
     text-decoration: none;
+}
+
+.page-user .message {
+    font-size: 2em;
+    line-height: 0;
+    color: #bababa;
+    font-weight: normal;
+    vertical-align: middle;
 }
 
 .page-user .title .user-role,
@@ -1433,7 +1449,8 @@ table.cols-3 tr td,
 }
 
 .aboutBlock .view-content .views-field,
-.aboutBlock .view-content .views-field-body p {
+.aboutBlock .view-content .views-field-body p,
+#block-views-about-introduction-block-block > h2 {
     text-align: center;
 }
 
