@@ -710,7 +710,7 @@ div.views-field-field-blog-category {
     font-weight: 300;
 }
 
-div.views-field-body {
+table.cols-3 div.views-field-body {
     text-decoration: none;
     padding: 0 30px 50px 30px;
     text-align: left;
@@ -1454,6 +1454,10 @@ table.cols-3 tr td,
     text-align: center;
 }
 
+.aboutBlock .view-content .views-field-body {
+    margin-bottom: 20px;
+}
+
 .aboutBlock .view-content .views-label {
     text-transform: uppercase;
     margin-bottom: 30px;
@@ -1770,6 +1774,11 @@ footer.footer {
     margin-top: 0;
 }
 
+footer.footer a:hover, footer.footer a:focus, footer.footer a:active {
+    background: none;
+    border: none;
+}
+
 footer.footer > div.region-footer {
     margin: 0 auto;
     max-width: 1000px;
@@ -1777,10 +1786,12 @@ footer.footer > div.region-footer {
 
 footer.footer div > section {
     display: inline-block;
+    vertical-align: top;
+    width: 13%;
 }
 
 footer.footer div > section:not(:last-child) {
-    margin-right: 20%;
+    margin-right: 3%;
 }
 
 footer.footer div section > h2.block-title {
@@ -1799,10 +1810,47 @@ footer.footer a:active {
     background: none;
 }
 
-footer.footer div section ul.menu a {
+footer.footer div section ul.menu a,
+footer #block-views-footer-news-block-block .view-footer-news-block,
+footer #block-views-footer-news-block-block .view-content {
     padding: 2px 0;
     font-size: .95em;
     font-weight: bold;
+}
+
+footer #block-equus-core-footer-logo {
+    padding-right: 3%;
+    border-right: 1px solid #888;
+    width: 15%;
+}
+
+footer #block-equus-core-footer-logo img {
+    max-width: 80%;
+    display: block;
+}
+
+footer #block-equus-core-footer-logo span {
+    display: block;
+    font-weight: bold;
+}
+
+footer #block-equus-core-footer-logo .footer-header {
+    color: #383737;
+}
+
+footer #block-equus-core-footer-logo .footer-year {
+    color: #bababa;
+}
+
+footer #block-views-footer-news-block-block {
+    width: 31%;
+}
+
+footer #block-views-footer-news-block-block .view-footer-news-block,
+footer #block-views-footer-news-block-block .view-content {
+    color: #bababa;
+    font-weight: bold;
+    line-height: 1.7em;
 }
 
 /* End Footer */
