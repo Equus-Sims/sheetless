@@ -24,6 +24,10 @@ function equus_core_block_info() {
 		'visibility' => BLOCK_VISIBILITY_LISTED,
 		'pages' => 'user/*/profile'
 	);
+
+	$blocks['footer_logo'] = array(
+		'info' => t('Footer Logo'),
+	);
 	
 	return $blocks;
 }
@@ -37,6 +41,10 @@ function equus_core_block_view($delta='') {
 			$block['title'] = "Stats";
 			$block['content'] = theme('equus_stats', $vars);
 			break;
+		case 'footer_logo':
+			$vars = array('footer_logo' => array());
+			$block['content'] = theme('equus_footer_logo', $vars);
+			break;
 	}
 
 	return $block;
@@ -47,6 +55,10 @@ function equus_core_theme() {
 		'equus_stats' => array(
 			'variables' => array(),
 			'template' => 'equus_stats',
+		),
+		'equus_footer_logo' => array(
+			'variables' => array(),
+			'template' => 'equus_footer_logo',
 		),
 	);
 }
