@@ -1,0 +1,185 @@
+<?php
+/**
+ * @file
+ * user_avatar_block.module
+ *
+ * This module allow you to show styled users pictures into block.
+ *
+ */
+
+/**
+ * Implements hook_block_info().
+ *
+ * Cache it per user 'cause this block shows user avatar
+ */
+function user_avatar_block_block_info() {
+  $blocks['user_avatar_block'] = array(
+    'info' => t('User Avatar Block'),
+    'cache' => DRUPAL_CACHE_PER_USER,
+  );
+  return $blocks;
+}
+
+
+/**
+ * Implements of hook_theme().
+ */
+function user_avatar_block_theme($existing, $type, $theme, $path) {
+  return array(
+      'user_avatar_block' => array(
+          'render element'  => 'element',
+      )
+  );
+}
+
+
+/**
+ * Default theme for the wrapper around a user's picture.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - element: A render containing the user's picture.
+ */
+function theme_user_avatar_block($variables) {
+  $user_picture = $variables['element']['#children'];
+
+  global $user;
+  if($user->uid != 0) {
+    $attributes = array(
+        'attributes' => array('title' => t('View user profile.')),
+        'html' => TRUE,
+    );
+    $user_picture = l($user_picture, "user/$user->uid", $attributes);
+    $variables['element']['#block']->subject = check_plain($user->name);
+  }
+
+  return '	<div class="' . check_plain($variables['element']['#classes']) . '">' . $user_picture . '</div>';
+}
+
+
+/**
+ * Returns array for block content
+ *
+ * @param $which_block
+ *   Returns block delta of this module block
+ */
+function user_avatar_block_contents($which_block) {
+  global $user;
+
+  if (!empty($user->picture)) {
+    if (is_numeric($user->picture)) {
+      $picture = file_load($user->picture);
+    }
+    if (!empty($picture->uri)) {
+      $filepath = $picture->uri;
+    }
+  }
+  else {
+    $filepath = variable_get('user_picture_default');
+  }
+
+  $alt = t("@user's picture", array('@user' => format_username($user)));
+
+  return array(
+    '#theme' => 'image_style',
+    '#style_name' => variable_get('user_avatar_block_style', FALSE),
+    '#path' => check_url($filepath),
+    '#alt' => $alt,
+    '#title' => $alt,
+    '#theme_wrappers' => array('user_avatar_block'),
+    '#classes' => variable_get('user_avatar_block_class', 'user-picture'),
+  );
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function user_avatar_block_block_view($delta) {
+  $block = array();
+
+  $block['subject'] = t('Anonymous');
+
+  $settings = l(t('account settings'), 'admin/config/people/accounts');
+  $smile = '<p>;)</p>';
+
+  if (variable_get('user_pictures', 0) == 0) {
+    $block['content'] = $smile;
+    drupal_set_message(filter_xss(t('Go to !settings to enable user pictures, first.', array(
+      '!settings' => $settings)), $allowed_tags = array('a')), 'warning');
+  }
+  elseif (variable_get('upload_default_avatar_fid') == '') {
+    $block['content'] = $smile;
+    drupal_set_message(filter_xss(t('Go to !settings to upload default user picture.', array(
+      '!settings' => $settings)), $allowed_tags = array('a')), 'warning');
+  }
+  elseif (variable_get('user_avatar_block_style') == '0') {
+    $block['content'] = $smile;
+    drupal_set_message(filter_xss(t('!block_config to assign image style to user avatar showing in this block.', array(
+      '!block_config' => l(t('Configure User avatar block'), 'admin/structure/block/manage/' . $delta . '/' . $delta . '/configure', array(
+        'query' => drupal_get_destination())))), $allowed_tags = array('a')), 'warning');
+  }
+  else {
+    $block['content'] = user_avatar_block_contents($delta);
+  }
+  return  $block;
+}
+
+
+/**
+ * Get image styles to style user avatar
+ *
+ * Returns associative array of image styles
+ */
+function user_avatar_block_styles() {
+  $styles = array_keys(image_styles());
+  $styles = drupal_map_assoc($styles);
+  array_unshift($styles, t('<none>'));
+  return $styles;
+}
+
+
+/**
+ * Implements hook_block_configure().
+ */
+function user_avatar_block_block_configure($delta) {
+  $form = array();
+  $form['user_avatar_block'] = array(
+    '#weight' => '1',
+    '#title' => t('User picture style settings'),
+    '#collapsed' => '1',
+    '#type' => 'fieldset',
+    '#collapsible' => '1',
+  );
+  $form['user_avatar_block']['user_avatar_block_style'] = array(
+    '#required' => '0',
+    '#multiple' => '0',
+    '#key_type_toggled' => '0',
+    '#description' => t("Choose the style to style user picture showing in this block. If you don't choose any style the avatar will not be shown at all."),
+    '#weight' => '1',
+    '#type' => 'select',
+    '#options' => user_avatar_block_styles(),
+    '#multiple_toggle' => '1',
+    '#title' => t('User picture style'),
+    '#default_value' => variable_get('user_avatar_block_style'),
+  );
+  $form['user_avatar_block']['user_avatar_block_class'] = array(
+    '#default_value' => variable_get('user_avatar_block_class', 'user-picture'),
+    '#description' => t('By default user avatar wrapped by <code>&lt;div&gt;</code> with <code>.user-picture</code> class. If you specify <em>another</em> CSS class(es) in this field — class by default will be replaced by it. But if you want just add some more classes, add them using a space as separator (like in HTML code). For example: <code>user-picture my-class-1 myclass2</code>.'),
+    '#field_prefix' => 'div.',
+    '#required' => '0',
+    '#weight' => '2',
+    '#type' => 'textfield',
+    '#title' => t('CSS class of avatar wrapper'),
+  );
+  return $form;
+}
+
+
+/**
+ * Implements hook_block_save().
+ */
+function user_avatar_block_block_save($delta, $edit = array()) {
+  variable_set('user_avatar_block_class', $edit['user_avatar_block_class']);
+  variable_set('user_avatar_block_style', $edit['user_avatar_block_style']);
+}

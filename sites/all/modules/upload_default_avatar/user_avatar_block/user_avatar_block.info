@@ -1,0 +1,14 @@
+name = User Avatar Block
+description = This module allow you to show styled users pictures into block.
+dependencies[] = upload_default_avatar
+
+core = 7.x
+files[] = user_avatar_block.module
+files[] = user_avatar_block.install
+
+; Information added by drupal.org packaging script on 2013-04-05
+version = "7.x-1.1"
+core = "7.x"
+project = "upload_default_avatar"
+datestamp = "1365124518"
+

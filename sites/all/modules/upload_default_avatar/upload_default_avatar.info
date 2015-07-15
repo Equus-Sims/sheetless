@@ -1,0 +1,15 @@
+name = Upload default avatar
+description = This module adds form to upload the default user's avatar.
+dependencies[] = image
+core = 7.x
+files[] = upload_default_avatar.module
+files[] = upload_default_avatar.install
+
+configure = admin/config/people/accounts
+
+; Information added by drupal.org packaging script on 2013-04-05
+version = "7.x-1.1"
+core = "7.x"
+project = "upload_default_avatar"
+datestamp = "1365124518"
+

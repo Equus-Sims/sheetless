@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file upload_default_avatar.install
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function upload_default_avatar_uninstall() {
+  /* delete or leave it for removing on cron runs???
+  $picture = file_load(variable_get('upload_default_avatar_fid', ''));
+  file_usage_delete($picture, 'upload_default_avatar', 'user', '0');
+  file_delete($picture, $force = TRUE); */
+
+  // Clear image style and effect caches.
+  cache_clear_all('image_styles', 'cache');
+  cache_clear_all('image_effects:', 'cache', TRUE);
+  drupal_static_reset('image_styles');
+  drupal_static_reset('image_effects');
+  variable_del('user_picture_default');
+  variable_del('upload_default_avatar_fid');
+}

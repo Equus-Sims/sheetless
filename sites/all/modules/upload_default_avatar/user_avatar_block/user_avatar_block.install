@@ -1,0 +1,24 @@
+<?php
+/**
+ * @file
+ * user_avatar_block.install
+ */
+
+/**
+ * Implements hook_install().
+ */
+function user_avatar_block_install() {
+  variable_set('user_avatar_block_style', '0');
+}
+
+
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_avatar_block_uninstall() {
+  db_delete('variable')
+  ->condition('name', 'user_avatar_block%', 'LIKE')
+  ->execute();
+}

@@ -1,0 +1,121 @@
+<?php
+/**
+ * @file upload_default_avatar.module
+ *
+ * Upload default avatar module adds upload image field to account settings form
+ * that allows you to upload default user picture. Since you upload it you may
+ * use it with image styles in normal way.
+ */
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function upload_default_avatar_form_user_admin_settings_alter(&$form, &$form_state, $form_id) {
+
+  $form['personalization']['pictures']['user_picture_path']['#weight'] = '0';
+  $form['personalization']['pictures']['user_picture_default']['#weight'] = '0.0001';
+  $form['personalization']['pictures']['user_picture_default']['#description'] .= t("<br /><strong>This field disabled by <em>Upload default avatar</em> module</strong>, 'cause since you've installed this module you don't need fill this field manually. To define default user picture use upload field below.");
+  $form['personalization']['pictures']['user_picture_default']['#disabled'] = TRUE;
+
+  if (variable_get('upload_default_avatar_fid')) {
+    $avatar = file_load(variable_get('upload_default_avatar_fid'));
+    $alt = t('Default user picture');
+
+    $form['personalization']['pictures']['user_picture_default_upload_current'] = array(
+      '#markup' => theme('image', array('path' => $avatar->uri, 'alt' => $alt, 'title' => $alt)),
+      '#weight' => '0.0002',
+    );
+  }
+  $form['personalization']['pictures']['user_picture_default_upload'] = array(
+    '#title' => t('Upload default user picture'),
+    '#description' => t("Upload default user picture that will be used as avatar for users who didn't uploaded its user picture yet. Pictures larger than @dimensions pixels will be scaled down.", array('@dimensions' => variable_get('user_picture_dimensions', '85x85'))),
+    '#type' => 'file',
+    '#size' => '30',
+    '#required' => '0',
+    '#weight' => '0.0004',
+  );
+
+  // Add submits if pictures enabled only
+  if (variable_get('user_pictures', 0) == 1) {
+    $form['#validate'][] = 'upload_default_avatar_validate';
+    $form['#submit'][] = 'upload_default_avatar_submit';
+  }
+}
+
+/**
+ * If image valid upload it to temp dir
+ *
+ * Copied from user_validate_picture
+ *
+ * @param $form
+ * @param $form_state
+ */
+function upload_default_avatar_validate(&$form, &$form_state) {
+
+  // If required, validate the uploaded picture.
+  $validators = array(
+    'file_validate_is_image' => array(),
+    'file_validate_image_resolution' => array(variable_get('user_picture_dimensions', '85x85')),
+    'file_validate_size' => array(variable_get('user_picture_file_size', '30') * 1024),
+  );
+
+  // Save the file as a temporary file.
+  $file = file_save_upload('user_picture_default_upload', $validators);
+  if ($file === FALSE) {
+    form_set_error('user_picture_default_upload', t("Failed to upload the picture image; the %directory directory doesn't exist or is not writable.", array('%directory' => variable_get('user_picture_path', 'pictures'))));
+  }
+  elseif ($file !== NULL) {
+    $form_state['values']['user_picture_default_upload'] = $file;
+  }
+}
+
+/**
+ * Submit functoin:
+ *   1. remove old image
+ *   2. move valid image to pictures destination
+ *   3. assign new image to 'user_picture_default'
+ *
+ * @param $form
+ * @param $form_state
+ */
+function upload_default_avatar_submit(&$form, &$form_state) {
+  // If we have new image move it to pictures destination
+  if (!empty($form_state['values']['user_picture_default_upload'])) {
+    $picture = $form_state['values']['user_picture_default_upload'];
+
+      // Force delete prev file from everywhere, I mean all image styles caches
+      // Files can be with the same extension and with differ.
+      if (variable_get('upload_default_avatar_fid')) {
+        $prevpicture = file_load(variable_get('upload_default_avatar_fid'));
+        file_usage_delete($prevpicture, 'upload_default_avatar', 'user', '0');
+        file_delete($prevpicture, $force = TRUE);
+      }
+
+    if (is_numeric($picture->fid)) {
+
+      // Save image permanently
+      if (!$picture->status) {
+        $info = image_get_info($picture->uri);
+        $picture_directory = file_build_uri(variable_get('user_picture_path', 'pictures'));
+
+        // Prepare the pictures directory.
+        file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY);
+        $destination = file_stream_wrapper_uri_normalize($picture_directory . '/picture-default.' . $info['extension']);
+
+        // Move the temporary file into the final location.
+        if ($picture = file_move($picture, $destination, FILE_EXISTS_REPLACE)) {
+          $picture->filename = 'picture-default.' . $info['extension'];
+          $picture->status = FILE_STATUS_PERMANENT;
+          file_save($picture);
+          file_usage_add($picture, 'upload_default_avatar', 'user', '0');
+
+          // Set this image to default user picture
+          variable_set('user_picture_default', $picture->uri);
+          // Remember file ID
+          variable_set('upload_default_avatar_fid', $picture->fid);
+        }
+      }
+    }
+  }
+
+}
