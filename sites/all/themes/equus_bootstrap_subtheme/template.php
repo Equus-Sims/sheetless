@@ -173,7 +173,6 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 
 	$vars['user_role'] = print_r($u, true);
 
-	$vars['pic_path'] = $u->picture->uri;
 	if (arg(0,$alias) == 'user' && arg(2,$alias) == 'profile') {
 		$vars['user_profile_counters'] = true;
 	} else {

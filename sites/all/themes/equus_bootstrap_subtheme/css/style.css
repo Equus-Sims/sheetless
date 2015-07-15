@@ -1171,10 +1171,16 @@ table.cols-3 tr td,
     background: none;
 }
 
-.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img,
-.page-user .profile .user-picture img {
+.node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image img {
     width: 100%;
     height: auto;
+}
+
+.page-user .profile .user-picture {
+    display: inline-block;
+}
+.page-user .profile .user-info {
+    display: inline-block;
 }
 
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list div.views-field-field-user-property-cover-image:not(*:empty) img,

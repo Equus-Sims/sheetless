@@ -39,7 +39,7 @@
 		<div class="user-sub-header-block">
 			<div class="title">
 				<span class="roundImg">
-					<?php echo theme('image_style', array('style_name' => 'user_avatar', 'path' => $pic_path));?>
+					<?php echo render($user_profile['user_picture']); ?>
 				</span>
 				<div class="user-info">
 					<h1><?php echo $realname; ?><a href="/messages/new/2" class="icon message"></a></h1>
