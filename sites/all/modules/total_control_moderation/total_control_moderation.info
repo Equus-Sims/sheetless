@@ -1,0 +1,12 @@
+name = Total Moderation Control
+description = Workbench Moderation support for the Total Control Admin Dashboard
+dependencies[] = total_control
+dependencies[] = workbench_moderation
+package = Administration
+core = 7.x
+; Information added by drupal.org packaging script on 2013-10-19
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "total_control_moderation"
+datestamp = "1382147526"
+

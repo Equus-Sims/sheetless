@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file control_moderation.module
+ * Workbench Moderation support for the Total Control Admin Dashboard.
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function total_control_moderation_views_api() {
+  return array(
+    'api' => 2,
+  );
+}
+
+/**
+ * Implements hook_menu_alter().
+ *
+ * Rewrites workbench paths to work with total control instead.  For the case
+ * where default views are already overridden.
+ */
+function total_control_moderation_menu_alter(&$items) {
+  if (array_key_exists('admin/dashboard/drafts', $items)) {
+    $items['admin/dashboard/drafts'] = $items['admin/workbench/drafts'];
+    unset($items['admin/workbench/drafts']);
+  }
+  if (array_key_exists('admin/dashboard/needs-review', $items)) {
+    $items['admin/dashboard/needs-review'] = $items['admin/workbench/needs-review'];
+    unset($items['admin/workbench/needs-review']);
+  }
+}
+
+/**
+ * Implements hook__views_default_views_alter().
+ */
+function total_control_moderation_views_default_views_alter(&$views) {
+  if (isset($views['workbench_moderation'])) {
+    // Update the drafts path.
+    $views['workbench_moderation']->display['drafts_page']->display_options['path'] = 'admin/dashboard/drafts';
+    // Update the needs review path.
+    $views['workbench_moderation']->display['needs_review_page']->display_options['path'] = 'admin/dashboard/needs-review';
+  }
+}

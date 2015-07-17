@@ -1,0 +1,292 @@
+<?php
+
+/**
+ * @file control_moderation.view
+ *
+ * Default moderation view for content.
+ *
+ */
+ 
+ $view = new view;
+ $view->name = 'moderation_panes';
+ $view->description = '';
+ $view->tag = 'Workbench Moderation';
+ $view->base_table = 'node_revision';
+ $view->human_name = 'Moderation panes';
+ $view->core = 7;
+ $view->api_version = '3.0';
+ $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+ /* Display: Defaults */
+ $handler = $view->new_display('default', 'Defaults', 'default');
+ $handler->display->display_options['title'] = 'My content that needs review';
+ $handler->display->display_options['use_more_always'] = TRUE;
+ $handler->display->display_options['use_more_text'] = 'view all';
+ $handler->display->display_options['group_by'] = TRUE;
+ $handler->display->display_options['access']['type'] = 'perm';
+ $handler->display->display_options['access']['perm'] = 'have total control';
+ $handler->display->display_options['cache']['type'] = 'none';
+ $handler->display->display_options['query']['type'] = 'views_query';
+ $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+ $handler->display->display_options['exposed_form']['type'] = 'basic';
+ $handler->display->display_options['pager']['type'] = 'some';
+ $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+ $handler->display->display_options['pager']['options']['offset'] = '0';
+ $handler->display->display_options['style_plugin'] = 'list';
+ $handler->display->display_options['row_plugin'] = 'fields';
+ $handler->display->display_options['row_options']['inline'] = array(
+   'name' => 'name',
+   'changed' => 'changed',
+ );
+ $handler->display->display_options['row_options']['hide_empty'] = 0;
+ $handler->display->display_options['row_options']['default_field_elements'] = 1;
+ /* No results behavior: Global: Text area */
+ $handler->display->display_options['empty']['area']['id'] = 'area';
+ $handler->display->display_options['empty']['area']['table'] = 'views';
+ $handler->display->display_options['empty']['area']['field'] = 'area';
+ $handler->display->display_options['empty']['area']['empty'] = FALSE;
+ $handler->display->display_options['empty']['area']['content'] = 'You haven\'t created or edited any content.';
+ $handler->display->display_options['empty']['area']['format'] = '1';
+ /* Relationship: Content revision: User */
+ $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+ $handler->display->display_options['relationships']['uid']['table'] = 'node_revision';
+ $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+ /* Field: Content: Title */
+ $handler->display->display_options['fields']['title']['id'] = 'title';
+ $handler->display->display_options['fields']['title']['table'] = 'node';
+ $handler->display->display_options['fields']['title']['field'] = 'title';
+ $handler->display->display_options['fields']['title']['label'] = '';
+ $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+ $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+ $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+ $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+ $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+ $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+ $handler->display->display_options['fields']['title']['hide_alter_empty'] = 1;
+ $handler->display->display_options['fields']['title']['link_to_node'] = 1;
+ /* Field: User: Name */
+ $handler->display->display_options['fields']['name']['id'] = 'name';
+ $handler->display->display_options['fields']['name']['table'] = 'users';
+ $handler->display->display_options['fields']['name']['field'] = 'name';
+ $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+ $handler->display->display_options['fields']['name']['label'] = 'Revised by';
+ $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+ $handler->display->display_options['fields']['name']['alter']['make_link'] = 0;
+ $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+ $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+ $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+ $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+ $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+ $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+ $handler->display->display_options['fields']['name']['element_label_colon'] = 1;
+ $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+ $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+ $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+ $handler->display->display_options['fields']['name']['link_to_user'] = 1;
+ $handler->display->display_options['fields']['name']['overwrite_anonymous'] = 0;
+ /* Field: Content: Updated date */
+ $handler->display->display_options['fields']['changed']['id'] = 'changed';
+ $handler->display->display_options['fields']['changed']['table'] = 'node';
+ $handler->display->display_options['fields']['changed']['field'] = 'changed';
+ $handler->display->display_options['fields']['changed']['label'] = 'On ';
+ $handler->display->display_options['fields']['changed']['alter']['alter_text'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['make_link'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['absolute'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['external'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['replace_spaces'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['trim_whitespace'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['nl2br'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['word_boundary'] = 1;
+ $handler->display->display_options['fields']['changed']['alter']['ellipsis'] = 1;
+ $handler->display->display_options['fields']['changed']['alter']['strip_tags'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['trim'] = 0;
+ $handler->display->display_options['fields']['changed']['alter']['html'] = 0;
+ $handler->display->display_options['fields']['changed']['element_label_colon'] = 0;
+ $handler->display->display_options['fields']['changed']['element_default_classes'] = 1;
+ $handler->display->display_options['fields']['changed']['hide_empty'] = 0;
+ $handler->display->display_options['fields']['changed']['empty_zero'] = 0;
+ $handler->display->display_options['fields']['changed']['hide_alter_empty'] = 1;
+ $handler->display->display_options['fields']['changed']['date_format'] = 'custom';
+ $handler->display->display_options['fields']['changed']['custom_date_format'] = 'm/d g:ia';
+ /* Sort criterion: Content: Updated date */
+ $handler->display->display_options['sorts']['changed']['id'] = 'changed';
+ $handler->display->display_options['sorts']['changed']['table'] = 'node';
+ $handler->display->display_options['sorts']['changed']['field'] = 'changed';
+ $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
+ /* Filter criterion: User: Current */
+ $handler->display->display_options['filters']['uid_current']['id'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['table'] = 'users';
+ $handler->display->display_options['filters']['uid_current']['field'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['relationship'] = 'uid';
+ $handler->display->display_options['filters']['uid_current']['value'] = '1';
+ $handler->display->display_options['filters']['uid_current']['group'] = 0;
+ /* Filter criterion: Workbench Moderation: State */
+ $handler->display->display_options['filters']['state']['id'] = 'state';
+ $handler->display->display_options['filters']['state']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['state']['field'] = 'state';
+ $handler->display->display_options['filters']['state']['value'] = array(
+   'needs_review' => 'needs_review',
+ );
+ $handler->display->display_options['filters']['state']['group'] = 0;
+ $handler->display->display_options['filters']['state']['expose']['operator_id'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['label'] = 'State';
+ $handler->display->display_options['filters']['state']['expose']['operator'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['identifier'] = 'state';
+ $handler->display->display_options['filters']['state']['expose']['remember'] = 1;
+ $handler->display->display_options['filters']['state']['expose']['reduce'] = 1;
+ /* Filter criterion: Workbench Moderation: Current */
+ $handler->display->display_options['filters']['current']['id'] = 'current';
+ $handler->display->display_options['filters']['current']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['current']['field'] = 'current';
+ $handler->display->display_options['filters']['current']['value'] = '1';
+ $handler->display->display_options['filters']['current']['group'] = 0;
+
+ /* Display: All review pane */
+ $handler = $view->new_display('panel_pane', 'All review pane', 'panel_pane_1');
+ $handler->display->display_options['defaults']['title'] = FALSE;
+ $handler->display->display_options['title'] = 'All content that needs review';
+ $handler->display->display_options['defaults']['exposed_form'] = FALSE;
+ $handler->display->display_options['exposed_form']['type'] = 'basic';
+ $handler->display->display_options['exposed_form']['options']['autosubmit'] = 0;
+ $handler->display->display_options['exposed_form']['options']['autosubmit_hide'] = 1;
+ $handler->display->display_options['pane_title'] = 'Needs Review';
+ $handler->display->display_options['pane_description'] = 'Moderated content that needs review';
+ $handler->display->display_options['pane_category']['name'] = 'Dashboard';
+ $handler->display->display_options['pane_category']['weight'] = '0';
+ $handler->display->display_options['allow']['use_pager'] = 0;
+ $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
+ $handler->display->display_options['allow']['offset'] = 0;
+ $handler->display->display_options['allow']['link_to_view'] = 0;
+ $handler->display->display_options['allow']['more_link'] = 0;
+ $handler->display->display_options['allow']['path_override'] = 0;
+ $handler->display->display_options['allow']['title_override'] = 'title_override';
+ $handler->display->display_options['allow']['exposed_form'] = 0;
+ $handler->display->display_options['allow']['fields_override'] = 0;
+
+ /* Display: All drafts pane */
+ $handler = $view->new_display('panel_pane', 'All drafts pane', 'panel_pane_2');
+ $handler->display->display_options['defaults']['title'] = FALSE;
+ $handler->display->display_options['title'] = 'All draft content';
+ $handler->display->display_options['defaults']['filters'] = FALSE;
+ /* Filter criterion: User: Current */
+ $handler->display->display_options['filters']['uid_current']['id'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['table'] = 'users';
+ $handler->display->display_options['filters']['uid_current']['field'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['relationship'] = 'uid';
+ $handler->display->display_options['filters']['uid_current']['value'] = '1';
+ $handler->display->display_options['filters']['uid_current']['group'] = 0;
+ /* Filter criterion: Workbench Moderation: State */
+ $handler->display->display_options['filters']['state']['id'] = 'state';
+ $handler->display->display_options['filters']['state']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['state']['field'] = 'state';
+ $handler->display->display_options['filters']['state']['value'] = array(
+   'draft' => 'draft',
+ );
+ $handler->display->display_options['filters']['state']['group'] = 0;
+ $handler->display->display_options['filters']['state']['expose']['operator_id'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['label'] = 'State';
+ $handler->display->display_options['filters']['state']['expose']['operator'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['identifier'] = 'state';
+ $handler->display->display_options['filters']['state']['expose']['remember'] = 1;
+ $handler->display->display_options['filters']['state']['expose']['reduce'] = 1;
+ /* Filter criterion: Workbench Moderation: Current */
+ $handler->display->display_options['filters']['current']['id'] = 'current';
+ $handler->display->display_options['filters']['current']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['current']['field'] = 'current';
+ $handler->display->display_options['filters']['current']['value'] = '1';
+ $handler->display->display_options['filters']['current']['group'] = 0;
+ $handler->display->display_options['pane_title'] = 'All drafts';
+ $handler->display->display_options['pane_category']['name'] = 'Dashboard';
+ $handler->display->display_options['pane_category']['weight'] = '0';
+ $handler->display->display_options['allow']['use_pager'] = 0;
+ $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
+ $handler->display->display_options['allow']['offset'] = 0;
+ $handler->display->display_options['allow']['link_to_view'] = 0;
+ $handler->display->display_options['allow']['more_link'] = 0;
+ $handler->display->display_options['allow']['path_override'] = 0;
+ $handler->display->display_options['allow']['title_override'] = 'title_override';
+ $handler->display->display_options['allow']['exposed_form'] = 0;
+ $handler->display->display_options['allow']['fields_override'] = 0;
+
+ /* Display: My review pane */
+ $handler = $view->new_display('panel_pane', 'My review pane', 'panel_pane_3');
+ $handler->display->display_options['defaults']['relationships'] = FALSE;
+ /* Relationship: Content revision: User */
+ $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+ $handler->display->display_options['relationships']['uid']['table'] = 'node_revision';
+ $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+ $handler->display->display_options['relationships']['uid']['required'] = 1;
+ $handler->display->display_options['pane_title'] = 'My \'Needs review\' content';
+ $handler->display->display_options['pane_category']['name'] = 'Dashboard';
+ $handler->display->display_options['pane_category']['weight'] = '0';
+ $handler->display->display_options['allow']['use_pager'] = 0;
+ $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
+ $handler->display->display_options['allow']['offset'] = 0;
+ $handler->display->display_options['allow']['link_to_view'] = 0;
+ $handler->display->display_options['allow']['more_link'] = 0;
+ $handler->display->display_options['allow']['path_override'] = 0;
+ $handler->display->display_options['allow']['title_override'] = 'title_override';
+ $handler->display->display_options['allow']['exposed_form'] = 0;
+ $handler->display->display_options['allow']['fields_override'] = 0;
+
+ /* Display: My drafts pane */
+ $handler = $view->new_display('panel_pane', 'My drafts pane', 'panel_pane_4');
+ $handler->display->display_options['defaults']['title'] = FALSE;
+ $handler->display->display_options['title'] = 'My draft content';
+ $handler->display->display_options['defaults']['relationships'] = FALSE;
+ /* Relationship: Content revision: User */
+ $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+ $handler->display->display_options['relationships']['uid']['table'] = 'node_revision';
+ $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+ $handler->display->display_options['relationships']['uid']['required'] = 1;
+ $handler->display->display_options['defaults']['filters'] = FALSE;
+ /* Filter criterion: User: Current */
+ $handler->display->display_options['filters']['uid_current']['id'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['table'] = 'users';
+ $handler->display->display_options['filters']['uid_current']['field'] = 'uid_current';
+ $handler->display->display_options['filters']['uid_current']['relationship'] = 'uid';
+ $handler->display->display_options['filters']['uid_current']['value'] = '1';
+ $handler->display->display_options['filters']['uid_current']['group'] = 0;
+ /* Filter criterion: Workbench Moderation: State */
+ $handler->display->display_options['filters']['state']['id'] = 'state';
+ $handler->display->display_options['filters']['state']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['state']['field'] = 'state';
+ $handler->display->display_options['filters']['state']['value'] = array(
+   'draft' => 'draft',
+ );
+ $handler->display->display_options['filters']['state']['group'] = 0;
+ $handler->display->display_options['filters']['state']['expose']['operator_id'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['label'] = 'State';
+ $handler->display->display_options['filters']['state']['expose']['operator'] = 'state_op';
+ $handler->display->display_options['filters']['state']['expose']['identifier'] = 'state';
+ $handler->display->display_options['filters']['state']['expose']['remember'] = 1;
+ $handler->display->display_options['filters']['state']['expose']['reduce'] = 1;
+ /* Filter criterion: Workbench Moderation: Current */
+ $handler->display->display_options['filters']['current']['id'] = 'current';
+ $handler->display->display_options['filters']['current']['table'] = 'workbench_moderation_node_history';
+ $handler->display->display_options['filters']['current']['field'] = 'current';
+ $handler->display->display_options['filters']['current']['value'] = '1';
+ $handler->display->display_options['filters']['current']['group'] = 0;
+ $handler->display->display_options['pane_title'] = 'My drafts';
+ $handler->display->display_options['pane_category']['name'] = 'Dashboard';
+ $handler->display->display_options['pane_category']['weight'] = '0';
+ $handler->display->display_options['allow']['use_pager'] = 0;
+ $handler->display->display_options['allow']['items_per_page'] = 'items_per_page';
+ $handler->display->display_options['allow']['offset'] = 0;
+ $handler->display->display_options['allow']['link_to_view'] = 0;
+ $handler->display->display_options['allow']['more_link'] = 0;
+ $handler->display->display_options['allow']['path_override'] = 0;
+ $handler->display->display_options['allow']['title_override'] = 'title_override';
+ $handler->display->display_options['allow']['exposed_form'] = 0;
+ $handler->display->display_options['allow']['fields_override'] = 0;
+ 
