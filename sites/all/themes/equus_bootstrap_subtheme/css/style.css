@@ -531,9 +531,12 @@ table .field-content h2 a {
     font-weight: bold;
     font-size: .9em;
 }
+.moreBtn > a:hover {
+    text-decoration: none;
+}
 
 /* Brown 'Read More' Button with Arrow */
-.post-footer .footer-link > a,
+.footer-link > a,
 .menu-name-menu-about-links-menu li > a:after {
     width: 40px;
     height: 40px;
@@ -815,6 +818,12 @@ table.cols-3 tr td,
 
 .page-user .row, .page-user .region-content {
     max-width: 100%;
+}
+
+.page-user.page-user-blog .row {
+    max-width: 1100px;
+    margin-top: 30px;
+    padding: 0 50px;
 }
 
 /*.page-user .row /*page width and center {
@@ -1163,7 +1172,6 @@ table.cols-3 tr td,
 .node-type-organization .block,
 .node-type-organization .block .view,
 .page-user .main-container .block {
-    background: #FFF;
     font-family: 'Lato',Helvetica,Arial,sans-serif;
 }
 
@@ -1238,6 +1246,10 @@ table.cols-3 tr td,
 
 
 /* Blog Entry Side */
+.node-type-blog .col-sm-3, .node-type-blog .col-sm-9 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
 .node-type-blog .equus-sub-header {
     display: none;
 }
@@ -1366,17 +1378,37 @@ table.cols-3 tr td,
 }
 
 /* Sidebar */
+.node-type-blog #block-views-blog-author-block-block img {
+    margin: 10px auto 20px;
+}
+.node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
+    text-align: justify;
+}
+.node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
+    margin-bottom: 20px;
+}
+.node-type-blog #block-views-blog-author-block-block .views-field-privatemsg-link {
+    display: inline-block;
+}
 .node-type-blog aside, .node-type-blog aside > div {
     background: none;
     border: none;
 }
-.node-type-blog aside section:nth-child(2) {
+.node-type-blog aside section:nth-child(n+2) {
     margin-top: 20px;
 }
 .node-type-blog aside h2.block-title {
     text-transform: uppercase;
     font-size: 1em;
     font-family: inherit;
+}
+
+.node-type-blog #block-views-blog-tags-view-block-block .view-content > .views-row {
+    display: inline-block;
+}
+
+.node-type-blog #block-views-blog-tags-view-block-block .view-content > .views-row:not(.views-row-last):after {
+    content: ',';
 }
 
 .node-type-blog aside .node-content > div.field-name-field-blog-categories {
@@ -1398,18 +1430,27 @@ table.cols-3 tr td,
     color: #6E6E6E;
 }
 
-.node-type-blog aside .node-content > .submitted {
+.node-type-blog #block-views-related-blog-posts-block .submitted {
     font-size: .9em;
+    width: 73%;
+    display: inline-block;
 }
 
-.node-type-blog aside .node-content > .tags,
-.node-type-blog aside .view-content .node-links,
-.node-type-blog aside .view-content .node-comments {
+.node-type-blog #block-views-related-blog-posts-block .tags,
+.node-type-blog #block-views-related-blog-posts-block .node-links,
+.node-type-blog #block-views-related-blog-posts-block .view-content .node-comments {
     display: none;
 }
 
-.node-type-blog aside .node-content > .footer-link {
+.node-type-blog #block-views-related-blog-posts-block .footer-link {
+    display: inline-block;
     float: right;
+}
+
+.node-type-blog #block-views-related-blog-posts-block .footer-link > a {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
 }
 
 
@@ -1741,14 +1782,20 @@ form#privatemsg-new > div > div > label {
     background: #1F5E4C;
     height: 40px;
     width: 12%;
+    min-width: 100px;
     padding: 10px 30px 10px 30px;
     color: #FFF;
     font-weight: bold;
+    float: left;
 }
 
 form#privatemsg-new input {
     height: 40px;
     border-left: none;
+}
+
+form#privatemsg-new input#edit-subject {
+    width: 88%;
 }
 
 form#privatemsg-new .form-type-textfield,

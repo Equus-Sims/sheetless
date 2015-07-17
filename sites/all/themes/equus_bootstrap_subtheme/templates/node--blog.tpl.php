@@ -123,20 +123,20 @@
       <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
       <?php print render($title_suffix); ?>
 
-      <div class="footer-link">
-        <a href="<?php print $node_url; ?>">></a>
-      </div>
-
       <?php if ($display_submitted): ?>
         <div class="submitted">
           <?php if ($name): ?>
           <span class="author">Written by <?php print $name ?></span>
           <?php endif; ?>
           <?php if ($submitted): ?>
-            <span class="date">on <?php print $submitted; ?></span>
+            <br/><span class="date">on <?php print $submitted; ?></span>
           <?php endif; ?>
         </div>
       <?php endif; ?>
+
+      <div class="footer-link">
+        <a class="footer-readmore icon" href="<?php print $node_url; ?>"></a>
+      </div>
 
     <? endif; ?>
 
