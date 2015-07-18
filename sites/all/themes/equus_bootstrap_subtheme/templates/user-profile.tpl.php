@@ -38,9 +38,7 @@
 	<div class="user-sub-header">
 		<div class="user-sub-header-block">
 			<div class="title">
-				<span class="roundImg">
-					<?php echo render($user_profile['user_picture']); ?>
-				</span>
+				<?php echo render($user_profile['user_picture']); ?>
 				<div class="user-info">
 					<h1><?php echo $realname; ?><a href="/messages/new/2" class="icon message"></a></h1>
 					<span class="user-role">Member</span>
