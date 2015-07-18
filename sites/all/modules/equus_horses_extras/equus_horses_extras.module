@@ -151,7 +151,6 @@ function equus_horses_extras_gain_rare_hc($uid, $quantity) {
 }
 
 function equus_horses_extras_node_insert($node) {
-	//dpm('Janelle was here!');
 	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
 		return;
 	}
