@@ -36,36 +36,89 @@ function equus_store_form($form, &$form_state) {
 	return $form;
 }
 
+function equus_store_file_entity_access($op, $file, $account) {
+	if ($op == 'view' && !empty($file->fid)) {
+		$sw = file_stream_wrapper_get_instance_by_uri($file->uri);
+	    if ($sw instanceof DrupalPrivateStreamWrapper) {
+			$used_by = file_usage_list($file);
+			if (!array_key_exists("file", $used_by)) {
+				return FILE_ENTITY_ACCESS_IGNORE;
+			}
+
+			foreach($used_by['file'] as $entity_type => $entity_ids) {
+				if ($entity_type != "node") {
+					continue;
+				}
+
+				$entites = entity_load($entity_type, array_keys($entity_ids));
+				foreach($entites as $entity) {
+					dpm($entity);
+					if ($entity->type = "equus_sale") {
+						// check if the logged in user is the seller
+						if ($entity->uid == $account->uid) {
+							return FILE_ENTITY_ACCESS_ALLOW;
+						}
+						// check if the logged in user is one of the buyers
+						foreach($entity->field_buyer['und'] as $buyer) {
+							if ($buyer['target_id'] == $account->uid) {
+								return FILE_ENTITY_ACCESS_ALLOW;
+							}
+						}
+						// if you got here then you are neither a seller or a buyer
+						return FILE_ENTITY_ACCESS_DENY;
+					}
+				}
+			}
+	    }
+	}
+
+	return FILE_ENTITY_ACCESS_IGNORE;
+}
+
+function equus_store_horse_credit_sale($uid, $nid, $quantity, $price_per_unit) {
+	equus_horses_extras_gain_regular_hc($uid, $quantity);
+		if ($quantity == 1) {
+			$total = $price_per_unit;
+			equus_banking_create_transaction("Purchased 1 Horse Credit", $uid, $nid, $price_per_unit);
+			drupal_set_message("You have purchased 1 Horse Credit from the Equus Store for {$total}");
+		} else if ($quantity > 1) {
+			$total = $price_per_unit * $quantity;
+			equus_banking_create_transaction("Purchased {$quantity} Horse Credits", $uid, $nid, $price_per_unit);
+			drupal_set_message("You have purchased {$quantity} Horse Credits from the Equus Store for {$total}");
+		}
+}
+
+function equus_store_starter_pack_sale($uid) {
+	equus_horses_extras_gain_regular_hc($uid, 2);
+		equus_organizations_gain_org_credit($uid, 1);
+		drupal_set_message("You have purchased your Starter Pack from the Equus Store. You now have the credits required to create your first organization 
+			and activate two horses. To create your organization, go to your profile dropdown in the main navigation bar and select 'Dashboard', then click Add new Organization.");
+}
+
 function equus_store_form_submit($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
 	dpm($node);
 	dpm($form);
 	global $user;
-	if ($node->field_equus_sale_item_type['und'][0]['entity']->name == 'Horse Credit') {
-		equus_horses_extras_gain_regular_hc($user->uid, $form['quantity']['#value']);
-		if ($form['quantity']['#value'] == 1) {
-			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'];
-			equus_banking_create_transaction(
-				"Purchased 1 Horse Credit",
-				$user->uid, $node->uid,
-				$node->field_equus_sale_price_per_unit['und'][0]['value']
-			);
-			drupal_set_message("You have purchased 1 Horse Credit from the Equus Store for {$total}");
-		} else if ($form['quantity']['#value'] > 1) {
-			$total = $node->field_equus_sale_price_per_unit['und'][0]['value'] * $form['quantity']['#value'];
-			equus_banking_create_transaction(
-				"Purchased {$form['quantity']['#value']} Horse Credits",
-				$user->uid,
-				$node->uid,
-				$node->field_equus_sale_price_per_unit['und'][0]['value']
-			);
-			drupal_set_message("You have purchased {$form['quantity']['#value']} Horse Credits from the Equus Store for {$total}");
+
+	$sale_type = $node->field_equus_sale_type['und'][0]['value'];
+	$item_type = $node->field_equus_sale_item_type['und'][0]['entity']->name;
+
+	$uid = $user->uid;
+	$nid = $node->uid;
+	$price_per_unit = $node->field_equus_sale_price_per_unit['und'][0]['value'];
+
+	if ($sale_type == "gameplayitem") {
+		if ($item_type == 'Starter Pack') {
+			equus_store_starter_pack_sale($uid);
+			equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
+		} else {
+			$quantity = $form['quantity']['#value'];
 		}
-	} else if ($node->field_equus_sale_item_type['und'][0]['entity']->name == 'Starter Pack') {
-		equus_horses_extras_gain_regular_hc($user->uid, 2);
-		equus_organizations_gain_org_credit($user->uid, 1);
-		drupal_set_message("You have purchased your Starter Pack from the Equus Store. You now have the credits required to create your first organization 
-			and activate two horses. To create your organization, go to your profile dropdown in the main navigation bar and select 'Dashboard', then click Create an Organization.");
-	}
+
+		// TODO: Check if ret is false?
+		// if return value is false, it means the save failed
+	} //else if ($sale_type == "")
+	
 }
