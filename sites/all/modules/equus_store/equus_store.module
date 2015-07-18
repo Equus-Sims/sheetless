@@ -101,7 +101,7 @@ function equus_store_horse_credit_sale($uid, $nid, $quantity, $price_per_unit) {
 }
 
 function equus_store_starter_pack_sale($uid) {
-	if (equus_members_check_tutorial_progess($user->uid, 'start_pack_purchased')) {
+	if (equus_members_check_tutorial_progess($uid, 'start_pack_purchased')) {
 		drupal_set_message("You have already purchased a Starter Pack. You may not purchase another.", 'warning');
 		return;
 	}
