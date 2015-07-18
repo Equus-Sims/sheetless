@@ -52,6 +52,29 @@ function equus_organizations_get_assoc_orgs($uid) {
 }
 
 /**
+ * Gets a list of all organizations (by title) associated with a user.
+ * @param $uid ID of the user to get organizations for.
+ */
+function equus_organizations_get_org_options($uid) {
+	// get all organizations associated with the currently logged in user
+	$orgIDs = equus_organizations_get_assoc_orgs($uid);
+
+	$organizations = node_load_multiple($orgIDs);
+
+	// if the user has no organizations, print an error
+	if (empty($organizations)) {
+		drupal_set_message('You need to create an organization before you can purchase anything besides a Starter Pack.','error');
+	}
+
+	// populate the array that we are going to use to set the options
+	$org_options = array();
+	foreach ($organizations as $organization) {
+		$org_options[$organization->nid] = $organization->title;
+	}
+	return $org_options;
+}
+
+/**
  * Verifies that the user has at least 1 Org Credit in order to create an organization.
  * @param $uid ID of the currently logged in user.
  */
