@@ -100,3 +100,14 @@ function equus_members_update_tutorial_progress($uid, $new_milestone) {
 	$ret = user_save($account, $edit);
 }
 
+function equus_members_check_tutorial_progess($uid, $milestone_check) {
+	$user = user_load($uid);
+
+	foreach($user->field_user_tutorial_progress['und'] as $milestone) {
+		if ($milestone['value'] == $milestone_check) {
+			return true;
+		}
+	}
+	return false;
+}
+
