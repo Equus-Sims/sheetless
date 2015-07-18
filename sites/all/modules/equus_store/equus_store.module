@@ -17,6 +17,8 @@ function equus_store_menu() {
 function equus_store_form($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
+	global $user;
+
   	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
 		$form['quantity'] = array(
 			'#type' => 'textfield', //you can find a list of available types in the form api
@@ -28,10 +30,20 @@ function equus_store_form($form, &$form_state) {
 		);
 	}
 
-	$form['submit_button'] = array(
-		'#type' => 'submit',
-		'#value' => t('Buy'),
-	);
+	// check if the logged in user is one of the buyers
+	
+	if (equus_members_check_tutorial_progess($user->uid, 'start_pack_purchased')) {
+		$form['submit_button'] = array(
+			'#type' => 'submit',
+			'#value' => t('Purchased'),
+			'#disabled' => true
+		);
+	} else {
+		$form['submit_button'] = array(
+			'#type' => 'submit',
+			'#value' => t('Buy'),
+		);
+	}
 
 	return $form;
 }
@@ -89,10 +101,16 @@ function equus_store_horse_credit_sale($uid, $nid, $quantity, $price_per_unit) {
 }
 
 function equus_store_starter_pack_sale($uid) {
+	if (equus_members_check_tutorial_progess($user->uid, 'start_pack_purchased')) {
+		drupal_set_message("You have already purchased a Starter Pack. You may not purchase another.", 'warning');
+		return;
+	}
+
 	equus_horses_extras_gain_regular_hc($uid, 2);
-		equus_organizations_gain_org_credit($uid, 1);
-		drupal_set_message("You have purchased your Starter Pack from the Equus Store. You now have the credits required to create your first organization 
+	equus_organizations_gain_org_credit($uid, 1);
+	drupal_set_message("You have purchased your Starter Pack from the Equus Store. You now have the credits required to create your first organization 
 			and activate two horses. To create your organization, go to your profile dropdown in the main navigation bar and select 'Dashboard', then click Add new Organization.");
+	equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
 }
 
 function equus_store_form_submit($form, &$form_state) {
@@ -112,7 +130,6 @@ function equus_store_form_submit($form, &$form_state) {
 	if ($sale_type == "gameplayitem") {
 		if ($item_type == 'Starter Pack') {
 			equus_store_starter_pack_sale($uid);
-			equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
 		} else {
 			$quantity = $form['quantity']['#value'];
 		}
