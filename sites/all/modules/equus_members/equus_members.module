@@ -88,3 +88,15 @@ function equus_members_preprocess_equus_stats(&$vars) {
 	$vars['stats'][] = array('value'=>equus_members_get_net_worth($uid));
 }
 
+function equus_members_update_tutorial_progress($uid, $new_milestone) {
+	$account = user_load($uid);
+
+	$edit = array('field_user_tutorial_progress' => $account->field_user_tutorial_progress);
+	if (empty($edit)) {
+		$edit['field_user_tutorial_progress']['und'] = array();
+	}
+	$edit['field_user_tutorial_progress']['und'][] = array('value'=>$new_milestone);
+
+	$ret = user_save($account, $edit);
+}
+
