@@ -39,8 +39,8 @@ function equus_organizations_get_assoc_orgs($uid) {
 	$query
 		->entityCondition('entity_type', 'node')
 		->entityCondition('bundle', 'organization')
-		->propertyCondition('status', 1);
-		//->fieldCondition('field_co_owners', 'target_id', $uid);
+		->propertyCondition('status', 1)
+		->fieldCondition('equus_organizations_users', 'target_id', $uid);
 	$result = $query->execute();
 	$nid_co_owner = array();
 	if (count($result) > 0) {
