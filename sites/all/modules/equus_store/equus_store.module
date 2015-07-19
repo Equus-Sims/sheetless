@@ -39,8 +39,7 @@ function equus_store_form($form, &$form_state) {
 	}
 
 	// check if the logged in user is one of the buyers
-	
-	if (equus_members_check_tutorial_progess($user->uid, 'start_pack_purchased')) {
+	if ($node->field_equus_sale_item_type['und'][0]['entity']->name == 'Starter Pack' && equus_members_check_tutorial_progess($user->uid, 'start_pack_purchased')) {
 		$form['submit_button'] = array(
 			'#type' => 'submit',
 			'#value' => t('Purchased'),
