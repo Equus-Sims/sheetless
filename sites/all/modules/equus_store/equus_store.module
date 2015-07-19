@@ -153,6 +153,14 @@ function equus_store_form_submit($form, &$form_state) {
 			equus_store_starter_pack_sale($uid);
 		} else {
 			$quantity = $form['quantity']['#value'];
+			$total = $quantity * $price_per_unit;
+			$source_id = $form['organization']['#value'];
+			$dest_id = $node->field_hosting_organization['und'][0]['target_id'];
+			if (equus_banking_check_sufficient_funds($total, $source_id) == false) {
+				drupal_set_message("You do not have enough money to complete the purchase.");
+				return;
+			}
+		}
 		}
 
 		// TODO: Check if ret is false?
