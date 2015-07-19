@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+define("EQUUS_STORE_ID", 274);
+
 /**
  * Implements hook_entity_info_alter().
  */
