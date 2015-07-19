@@ -226,3 +226,15 @@ function equus_banking_balance($ledger, $organization) {
 
 	return $balance;
 }
+
+function equus_banking_check_sufficient_funds($amount, $source_id) {
+	$ledger = equus_banking_retrieve_ledger();
+
+	$org_balance = equus_banking_balance($ledger, $source_id);
+
+	if ($org_balance < $amount) {
+		return false;
+	} else {
+		return true;
+	}
+}
