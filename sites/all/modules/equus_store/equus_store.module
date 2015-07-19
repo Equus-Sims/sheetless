@@ -55,6 +55,22 @@ function equus_store_form($form, &$form_state) {
 	return $form;
 }
 
+/**
+ * Displays an error message if the user has not created 
+ * an organization when attempting to create a sale.
+ *
+ * Displays only those organizations associated with the
+ * currently logged in user in the organization field.
+ *
+ * Implements hook_form_alter for the sale creation form.
+ */
+function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
+	global $user;
+
+	// pass the correct organization options to the form for the organization field
+	$form['field_hosting_organization']['und']['#options'] = equus_organizations_get_org_options($user->uid);
+}
+
 function equus_store_file_entity_access($op, $file, $account) {
 	if ($op == 'view' && !empty($file->fid)) {
 		$sw = file_stream_wrapper_get_instance_by_uri($file->uri);
