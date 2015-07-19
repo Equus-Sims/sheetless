@@ -22,7 +22,7 @@ function equus_store_form($form, &$form_state) {
   	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
 		$form['quantity'] = array(
 			'#type' => 'textfield', //you can find a list of available types in the form api
-		    '#title' => 'Quantity',
+		    '#title' => t('Quantity'),
 		    '#size' => 10,
 		    '#maxlength' => 10,
 		    '#required' => TRUE, //make this field required
