@@ -137,8 +137,6 @@ function equus_store_starter_pack_sale($uid) {
 function equus_store_form_submit($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
-	dpm($node);
-	dpm($form);
 	global $user;
 
 	$sale_type = $node->field_equus_sale_type['und'][0]['value'];
@@ -155,9 +153,10 @@ function equus_store_form_submit($form, &$form_state) {
 			$quantity = $form['quantity']['#value'];
 			$total = $quantity * $price_per_unit;
 			$source_id = $form['organization']['#value'];
+			$org = node_load($source_id);
 			$dest_id = $node->field_hosting_organization['und'][0]['target_id'];
 			if (equus_banking_check_sufficient_funds($total, $source_id) == false) {
-				drupal_set_message("You do not have enough money to complete the purchase.");
+				drupal_set_message("The organization {$org->title} does not have enough money to complete the purchase.", 'error');
 				return;
 			}
 		}
