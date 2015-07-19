@@ -110,15 +110,13 @@ function equus_store_file_entity_access($op, $file, $account) {
 	return FILE_ENTITY_ACCESS_IGNORE;
 }
 
-function equus_store_horse_credit_sale($uid, $nid, $quantity, $price_per_unit) {
+function equus_store_horse_credit_sale($uid, $source_id, $dest_id, $quantity, $total) {
 	equus_horses_extras_gain_regular_hc($uid, $quantity);
 		if ($quantity == 1) {
-			$total = $price_per_unit;
-			equus_banking_create_transaction("Purchased 1 Horse Credit", $uid, $nid, $price_per_unit);
+			equus_banking_create_transaction("Purchased 1 Horse Credit", $source_id, $dest_id, $total);
 			drupal_set_message("You have purchased 1 Horse Credit from the Equus Store for {$total}");
 		} else if ($quantity > 1) {
-			$total = $price_per_unit * $quantity;
-			equus_banking_create_transaction("Purchased {$quantity} Horse Credits", $uid, $nid, $price_per_unit);
+			equus_banking_create_transaction("Purchased {$quantity} Horse Credits", $source_id, $dest_id, $total);
 			drupal_set_message("You have purchased {$quantity} Horse Credits from the Equus Store for {$total}");
 		}
 }
@@ -132,7 +130,7 @@ function equus_store_starter_pack_sale($uid) {
 	equus_horses_extras_gain_regular_hc($uid, 2);
 	equus_organizations_gain_org_credit($uid, 1);
 	drupal_set_message("You have purchased your Starter Pack from the Equus Store. You now have the credits required to create your first organization 
-			and activate two horses. To create your organization, go to your profile dropdown in the main navigation bar and select 'Dashboard', then click Add new Organization.");
+		and activate two horses. To create your organization, go to your profile dropdown in the main navigation bar and select 'Dashboard', then click Add new Organization.");
 	equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
 }
 
