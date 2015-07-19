@@ -107,6 +107,8 @@
       hide($content['comments']);
       hide($content['links']);
       print render($content);
+      print render($content_bottom_region);
+
     ?>
     <?php if ($teaser && $node->type == 'news') { echo '<span class="moreBtn"><a href="' . $node_url . '">read more</a></span>'; } ?>
   </div>

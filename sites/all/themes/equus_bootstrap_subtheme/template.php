@@ -135,6 +135,8 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
     }
     $vars['cover_image'] = $image;
 
+    $vars['content_bottom_region'] = equus_bootstrap_subtheme_get_content_bottom($vars['view_mode']);
+
     if ($vars['node']->type == 'blog') {
 	    // set up render array for blog categories
 	    $blog_categories = field_view_field('node',$vars['node'],'field_blog_categories');
@@ -146,6 +148,18 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	$body = field_get_items('node', $vars['node'], 'body');
 	$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
+}
+
+function equus_bootstrap_subtheme_get_content_bottom($view_mode) {
+	if ($view_mode == "full") {
+    	$content_bottom_region = block_get_blocks_by_region('content_bottom');
+	    if (!$content_bottom_region) {
+	    	$content_bottom_region = array();
+	    }
+    } else {
+    	$content_bottom_region = array();
+    }
+    return $content_bottom_region;
 }	
 
 function equus_bootstrap_subtheme_preprocess_flag(&$vars) {
@@ -178,4 +192,6 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 	} else {
 		$vars['user_profile_counters'] = false;
 	}
+
+	$vars['content_bottom_region'] = equus_bootstrap_subtheme_get_content_bottom("full");
 }

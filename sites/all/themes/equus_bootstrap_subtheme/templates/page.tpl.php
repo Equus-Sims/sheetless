@@ -190,9 +190,7 @@
       <?php endif; ?>
       
       <?php print render($page['content']); ?>
-      <?php if (!empty($page['content_bottom'])): ?>
-        <?php print render($page['content_bottom']); ?>
-      <?php endif; ?>
+      <!-- content_bottom_region is being printed by the node.tpl.php file -->
     </section>
 
   </div>
