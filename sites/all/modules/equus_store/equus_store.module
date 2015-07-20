@@ -89,15 +89,20 @@ function equus_store_file_entity_access($op, $file, $account) {
 				foreach($entites as $entity) {
 					dpm($entity);
 					if ($entity->type = "equus_sale") {
-						// check if the logged in user is the seller
-						if ($entity->uid == $account->uid) {
-							return FILE_ENTITY_ACCESS_ALLOW;
-						}
-						if ($entity->field_buyer) {
-							// check if the logged in user is one of the buyers
-							foreach($entity->field_buyer['und'] as $buyer) {
-								if ($buyer['target_id'] == $account->uid) {
-									return FILE_ENTITY_ACCESS_ALLOW;
+						// get all orgs associated with logged in user
+						$org_ids = equus_organizations_get_assoc_orgs($account->uid);
+						// check if a member of the selling org is viewing
+						foreach ($org_ids as $nid) {
+							if ($entity->field_hosting_organization['und'][0]['target_id'] == $nid) {
+								return FILE_ENTITY_ACCESS_ALLOW;
+							}
+							// if there are any buyers
+							if ($entity->field_buyer) {
+								// check if a member of a buying org is viewing
+								foreach($entity->field_buyer['und'] as $buyer) {
+									if ($buyer['target_id'] == $nid) {
+										return FILE_ENTITY_ACCESS_ALLOW;
+									}
 								}
 							}
 						}
