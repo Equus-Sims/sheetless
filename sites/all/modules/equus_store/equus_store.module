@@ -71,6 +71,7 @@ function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 	$form['field_hosting_organization']['und']['#options'] = equus_organizations_get_org_options($user->uid);
 }
 
+// TODO: Clean up the mess in this function
 function equus_store_file_entity_access($op, $file, $account) {
 	if ($op == 'view' && !empty($file->fid)) {
 		$sw = file_stream_wrapper_get_instance_by_uri($file->uri);
@@ -149,19 +150,49 @@ function equus_store_form_submit($form, &$form_state) {
 			equus_store_horse_credit_sale($uid, $source_id, EQUUS_STORE_ID, $quantity, $total);
 		}
 	} else if ($sale_type == "quicksale") {
-		equus_store_quick_sale($node, $source_id, $dest_id, $total);
+		try {
+			equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total);
+		} catch (Exception $e) {
+			drupal_set_message("Failed to complete purchase. Error: " . $e->getMessage(), 'error');
+			watchdog('equus_store_quick_sale', 'Failed to complete purchase. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+			return;
+		}
 	} else if ($sale_type == "directsale") {
 		//TODO: Write direct sale functionality
-		equus_store_quick_sale($nid, $source_id, $dest_id, $total);
+		try {
+			equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total);
+		} catch (Exception $e) {
+			drupal_set_message("Failed to complete purchase. Error: " . $e->getMessage(), 'error');
+			watchdog('equus_store_quick_sale', 'Failed to complete purchase. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+			return;
+		}
 	} else if ($sale_type == "auction") {
 		//TODO: Write auction functionality
-		equus_store_quick_sale($nid, $source_id, $dest_id, $total);
+		try {
+			equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total);
+		} catch (Exception $e) {
+			drupal_set_message("Failed to complete purchase. Error: " . $e->getMessage(), 'error');
+			watchdog('equus_store_quick_sale', 'Failed to complete purchase. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+			return;
+		}
 	} else if ($sale_type == "lease") {
 		//TODO: Write lease functionality
-		equus_store_quick_sale($nid, $source_id, $dest_id, $total);
+		try {
+			equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total);
+		} catch (Exception $e) {
+			drupal_set_message("Failed to complete purchase. Error: " . $e->getMessage(), 'error');
+			watchdog('equus_store_quick_sale', 'Failed to complete purchase. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+			return;
+		}
 	} else if ($sale_type == "customcontent") {
 		//TODO: Write custom content functionality
-		equus_store_quick_sale($nid, $source_id, $dest_id, $total);
+		try {
+			equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total);
+		} catch (Exception $e) {
+			drupal_set_message("Failed to complete purchase. Error: " . $e->getMessage(), 'error');
+			watchdog('equus_store_quick_sale', 'Failed to complete purchase. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+			return;
+		}
 	} else {
 		drupal_set_message("The sale type $sale_type doesn't exist.", "warning");
 		watchdog('equus_store_sale_type', 'Attempted to purchase an item with invalid sale type: @sale_type uid = @uid', array('@uid'=>$node->uid, '@sale_type' => $sale_type), WATCHDOG_ERROR);
@@ -195,19 +226,27 @@ function equus_store_starter_pack_sale($uid) {
 	equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
 }
 
-function equus_store_quick_sale($node, $source_id, $dest_id, $total) {
+function equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total) {
 	try {
+		dpm($node);
 		equus_banking_create_transaction("Sale: {$node->title}", $source_id, $dest_id, $total);
 	} catch (Exception $e) {
 		drupal_set_message("Failed to create transaction. Error: " . $e->getMessage(), 'error');
-		watchdog('equus_store_sale_type', 'Failed to create transaction. Error: $e->getMessage(): Node id = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		watchdog('equus_store_quick_sale', 'Failed to create transaction. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
 		return;
 	}
 	try {
 		equus_store_add_buyer($node, $source_id);
 	} catch (Exception $e) {
 		drupal_set_message("Failed to add a buyer. Error: " . $e->getMessage(), 'error');
-		watchdog('equus_store_sale_type', 'Failed to create transaction. Error: $e->getMessage(): Node id = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		watchdog('equus_store_quick_sale', 'Failed to add a buyer. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		return;	
+	}
+	try {
+		equus_store_reduce_quantity($node, $quantity);
+	} catch (Exception $e) {
+		drupal_set_message("Failed to reduce quantity. Error: " . $e->getMessage(), 'error');
+		watchdog('equus_store_quick_sale', 'Failed to reduce quantity. Error: $e->getMessage(): Node id: @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
 		return;	
 	}
 	drupal_set_message("Purchase completed");
@@ -225,15 +264,26 @@ function equus_store_add_buyer($node, $source_id) {
 	$node->revision = 1;
 	$node->log = 'This node was programmatically updated at ' . date('c') . 'to add buyer: ' . $org->title . "ID: " . $source_id;
 
-	$ret = node_save($node);
+	node_save($node);
 }
 
-/*function equus_store_reduce_quantity($node, $uid) {
+function equus_store_reduce_quantity($node, $quantity) {
+	if (!isset($node->field_equus_sale_quantity)) {
+		watchdog('field_equus_sale_quantity', 'Failed to reduce quantity on node id: @uid. Quantity isn\'t set.', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+	} else {
+		$previous_quantity = (int) $node->field_equus_sale_quantity['und'][0]['value'];
+		if ($previous_quantity > 0) {
+			$new_quantity = $previous_quantity - $quantity;
+			$node->field_equus_sale_quantity['und'][0]['value'] = $new_quantity;
 
+			// Make this change a new revision
+			$node->revision = 1;
+			$node->log = 'This node was programmatically updated at ' . date('c') . 'to add buyer: ' . $node->title;
 
-	// Make this change a new revision
-	$node->revision = 1;
-	$node->log = 'This node was programmatically updated at ' . date('c') . 'to add buyer: ' . $nid->title;
-
-	$ret = node_save($account, $edit);
-}*/
+			node_save($node);
+		} else {
+			drupal_set_message("This item is sold out. Sorry!");
+			watchdog('field_equus_sale_quantity', 'Failed to reduce quantity on node id: @uid. Quantity is already 0 or less.', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		}
+	}
+}
