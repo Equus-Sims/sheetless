@@ -133,7 +133,7 @@ div.main-container > h1 {
     width: 68%;
 }
 
-.page-user-login .reglink a {
+.page-user-login .reglink a, .page-user-register .reglink a {
     color: #40b392;
     font-weight: bold;
 }
@@ -154,7 +154,8 @@ form#user-register-form {
     margin: 20px auto;
 }
 
-form#user-login button[type='submit'] {
+form#user-login button[type='submit'],
+form#user-register-form button[type='submit'] {
     width: 100%;
     padding: 10px 0;
     color: #FFF;
@@ -181,11 +182,13 @@ form#user-login :-ms-input-placeholder {
     color: #353535;
 }
 
-.page-user-login .user-links {
+.page-user-login .user-links,
+.page-user-register .user-links {
     text-align: center;
 }
 
-.page-user-login .user-links a {
+.page-user-login .user-links a,
+.page-user-register .user-links a {
     color: #6D6D6D;
     font-style: italic;
 }
@@ -1106,7 +1109,8 @@ table.cols-3 tr td,
     padding: 0 5px 0 0;
 }
 
-.views-submit-button > button {
+.views-submit-button > button,
+.goldBtn {
     background: #256E5A;
     border-radius: 0;
     -moz-border-radius: 0;
@@ -1122,9 +1126,15 @@ table.cols-3 tr td,
     margin-top: 10px;
 }
 
-#filterBtn.views-submit-button > button {
+#filterBtn.views-submit-button > button,
+.goldBtn {
     background: #8F7F4C;
     width: 157px;
+}
+
+.goldBtn:hover, .goldBtn:focus, .goldBtn:active {
+    color: #FFF;
+    text-decoration: none;
 }
 
 .views-reset-button #edit-reset {
