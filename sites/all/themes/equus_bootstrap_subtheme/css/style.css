@@ -99,22 +99,22 @@ div.main-container > h1 {
 
 /* END Icons */
 
-/* Login Page */
+/* Login Page & Register Page */
 
-.page-user-login section {
-    max-width: 23%;
+.page-user-login section, .page-user-register section {
+    max-width: 300px;
     margin: 30px auto;
     font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     font-size: 14px;
 }
 
-.page-user-login .logoImg {
+.page-user-login .logoImg, .page-user-register .logoImg {
     max-width: 100px;
     display: block;
     margin: 0 auto;
 }
 
-.page-user-login h1 {
+.page-user-login h1, .page-user-register h1 {
     font-family: inherit;
     font-weight: bold;
     font-size: 2em;
@@ -125,7 +125,7 @@ div.main-container > h1 {
     width: 25%;
 }
 
-.page-user-login .reglink {
+.page-user-login .reglink, .page-user-register .reglink {
     text-align: right;
     font-style: italic;
     font-size: .9em;
@@ -138,7 +138,7 @@ div.main-container > h1 {
     font-weight: bold;
 }
 
-.page-user-login h2 {
+.page-user-login h2, .page-user-register h2 {
     border-top: 1px solid #bababa;
     margin-top: 0;
     padding-top: 20px;
@@ -189,6 +189,29 @@ form#user-login :-ms-input-placeholder {
     color: #6D6D6D;
     font-style: italic;
 }
+
+
+/* Register Page */
+
+.page-user-register .form-type-password, .page-user-register .password-field,
+.page-user-register .password-strength, .page-user-register .password-confirm,
+div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob fieldset {
+    width: 100%;
+}
+
+.page-user-register .password-strength, .page-user-register .password-confirm {
+    display: block;
+    float: none;
+}
+
+.page-user-register .password-strength {
+    margin-bottom: 10px;
+}
+
+.page-user-register .password-confirm {
+    margin-top: 0;
+}
+
 
 /* Primary Nav */
 
