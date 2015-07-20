@@ -101,6 +101,52 @@ div.main-container > h1 {
 
 /* Login Page */
 
+.page-user-login section {
+    max-width: 23%;
+    margin: 30px auto;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.page-user-login .logoImg {
+    max-width: 100px;
+    display: block;
+    margin: 0 auto;
+}
+
+.page-user-login h1 {
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 2em;
+    color: #6D6D6D;
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    width: 25%;
+}
+
+.page-user-login .reglink {
+    text-align: right;
+    font-style: italic;
+    font-size: .9em;
+    display: inline-block;
+    width: 68%;
+}
+
+.page-user-login .reglink a {
+    color: #40b392;
+    font-weight: bold;
+}
+
+.page-user-login h2 {
+    border-top: 1px solid #bababa;
+    margin-top: 0;
+    padding-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #6D6D6D;
+}
+
 form#user-login,
 form#user-register-form {
     max-width: 300px;
@@ -133,6 +179,15 @@ form#user-login ::-moz-placeholder {
 }
 form#user-login :-ms-input-placeholder {
     color: #353535;
+}
+
+.page-user-login .user-links {
+    text-align: center;
+}
+
+.page-user-login .user-links a {
+    color: #6D6D6D;
+    font-style: italic;
 }
 
 /* Primary Nav */
@@ -931,6 +986,10 @@ table.cols-3 tr td,
     color: #bababa;
     font-weight: normal;
     vertical-align: middle;
+}
+
+.page-user .message:hover {
+    text-decoration: none;
 }
 
 .page-user .title .user-role,
