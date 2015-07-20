@@ -42,7 +42,7 @@
 					<?php echo render($user_profile['user_picture']); ?>
 				</span>
 				<div class="user-info">
-					<h1><?php echo $realname; ?><a href="/messages/new/2" class="icon message"></a></h1>
+					<h1><?php echo $realname; ?><a href="<?php echo base_path(); ?>messages/new/<?php echo $profile_uid; ?>?destination=user/<?php echo $profile_uid; ?>/profile" class="icon message"></a></h1>
 					<span class="user-role">Member</span>
 					<!--<span class="user-role"><?php echo $user_role; ?></span>-->
 				</div>

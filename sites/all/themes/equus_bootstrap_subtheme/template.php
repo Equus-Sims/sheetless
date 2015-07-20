@@ -183,6 +183,8 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 
 	$u = user_load($profile_uid);
 
+	$vars['profile_uid'] = $profile_uid;
+
 	$vars['realname'] = $u->realname;
 
 	$vars['user_role'] = print_r($u, true);
