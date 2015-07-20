@@ -88,8 +88,12 @@
 	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
 	    
 	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+	    <?php if ($node->type == 'equus_sale'): ?>
+	    	<!-- <?php print_r($price_per_unit); ?> -->
+	    	<?php print render($price_per_unit); ?>
+	    <?php endif; ?>
 	    <div class="post-info">
-	    	<?php if ($node->type == 'blog' || $node->type == 'equus_sale') {
+	    	<?php if ($node->type == 'blog') {
 	    		print 'Posted by ' . $name . ' on ' . $submitted;
 	    	} ?>
 	    	<?php if ($node->type == 'horse') {
@@ -104,7 +108,6 @@
 		    	print render($body_teaser);
 		    } ?>
 	    <?php endif; ?>
-	    
 	</div>
   </div>
   <div class="post-footer">

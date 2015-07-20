@@ -133,7 +133,7 @@ function equus_store_form_submit($form, &$form_state) {
 		return;
 	}
 
-	$quantity = $form['quantity']['#value'];
+	$quantity = (int) $form['quantity']['#value'];
 	$price_per_unit = $node->field_equus_sale_price_per_unit['und'][0]['value'];
 	$total = $quantity * $price_per_unit;
 	$source_id = $form['organization']['#value'];

@@ -156,6 +156,13 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	$body = field_get_items('node', $vars['node'], 'body');
 	$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
+
+	if ($vars['node']->type == 'equus_sale') {
+	    // set up render array for blog categories
+	    $price_per_unit = field_view_field('node',$vars['node'],'field_equus_sale_price_per_unit');
+	    $price_per_unit['#label_display'] = 'hidden';
+	    $vars['price_per_unit'] = $price_per_unit;
+	}
 }
 
 function equus_bootstrap_subtheme_get_content_bottom($view_mode) {
