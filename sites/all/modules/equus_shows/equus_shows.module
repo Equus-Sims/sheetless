@@ -286,7 +286,7 @@ function _equus_shows_sum($carry, $item) {
 function equus_shows_run_show($show_id) {
 	$show = node_load($show_id);
 
-	dpm($show);
+	// dpm($show);
 
 	// build array of stuff
 	$raw_data = new stdClass();
@@ -307,7 +307,7 @@ function equus_shows_run_show($show_id) {
 	$raw_data->discipline->id = $show->field_discipline['und'][0]['tid'];
 
 	// get the id of the field collection item
-	$disc_stat_weights = $show->field_discipline['und'][0]['taxonomy_term']->field_disc_stat_weight['und'];
+	$disc_stat_weights = $show->field_discipline['und'][0]['taxonomy_term']->field_horse_stats['und'];
 	// dpm($disc_stat_weights[0]['value']);
 
 	// make a new anonymous object
@@ -317,14 +317,14 @@ function equus_shows_run_show($show_id) {
 	for ($i = 0; $i < count($disc_stat_weights); $i++) {
 		// load the field collection item from the id
 		$stats = field_collection_item_load($disc_stat_weights[$i]['value']);
-
+		// dpm($stats);
 		// dpm($field_collection_item);
 
 		$stat = $stats->field_stat['und'][0]['value'];
 
 		// dpm($stat);
 		
-		$stat_weight = $stats->field_stat_weight['und'][0]['value'];
+		$stat_weight = $stats->field_horse_stat_value['und'][0]['value'];
 
 		$raw_data->discipline->stats->$stat = $stat_weight;
 
@@ -350,7 +350,7 @@ function equus_shows_run_show($show_id) {
 	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
 	$horses = node_load_multiple($nids);
 
-	dpm($horses);
+	// dpm($horses);
 
 	// fill in horses
 	
@@ -365,11 +365,11 @@ function equus_shows_run_show($show_id) {
 
 		// get horse stats
 		$stats = $horse->field_horse_stats['und'];
-		dpm($stats);
+		// dpm($stats);
 		foreach ($stats as $stat) {
 			$field_collection_item = field_collection_item_load($stat['value']);
 			
-			dpm($field_collection_item);
+			// dpm($field_collection_item);
 
 			$stat_value = $field_collection_item->field_stat['und'][0]['value'];
 			
@@ -381,7 +381,7 @@ function equus_shows_run_show($show_id) {
 		
 	}
 
-	dpm(json_encode($raw_data,JSON_PRETTY_PRINT));
+	// dpm(json_encode($raw_data,JSON_PRETTY_PRINT));
 
 	// instantiate a show with array from above
 	$new_show = new equus_shows_show($raw_data);
@@ -390,8 +390,8 @@ function equus_shows_run_show($show_id) {
     $output = $new_show->run_the_show();
 
     // stuff the results into drupal and/or wherever
-    dpm($output);
-    dpm(json_encode($output,JSON_PRETTY_PRINT));
+    // dpm($output);
+    // dpm(json_encode($output,JSON_PRETTY_PRINT));
 
     // construct a map of nids to indexes in $output so we can look up
     // values in $output later
