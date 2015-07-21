@@ -221,7 +221,10 @@ function equus_banking_balance($ledger, $organization) {
 	}
 	$balance = 0;
 
+	// $dpm($ledger);
+	// dpm($organization);
 	foreach($ledger as $trans) {
+		// dpm($trans);
 		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
 			$balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
 		}

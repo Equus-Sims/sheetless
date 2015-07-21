@@ -88,7 +88,7 @@ function equus_store_file_entity_access($op, $file, $account) {
 
 				$entites = entity_load($entity_type, array_keys($entity_ids));
 				foreach($entites as $entity) {
-					dpm($entity);
+					// dpm($entity);
 					if ($entity->type = "equus_sale") {
 						// get all orgs associated with logged in user
 						$org_ids = equus_organizations_get_assoc_orgs($account->uid);
@@ -228,7 +228,7 @@ function equus_store_starter_pack_sale($uid) {
 
 function equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total) {
 	try {
-		dpm($node);
+		// dpm($node);
 		equus_banking_create_transaction("Sale: {$node->title}", $source_id, $dest_id, $total);
 	} catch (Exception $e) {
 		drupal_set_message("Failed to create transaction. Error: " . $e->getMessage(), 'error');
