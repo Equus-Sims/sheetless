@@ -143,6 +143,15 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
     }
     $vars['cover_image'] = $image;
 
+    $image = field_get_items('node', $vars['node'], 'field_cover_image');
+    if (!empty($image)) {
+        $image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
+          'type' => 'image',
+          'settings' => array('image_style' => 'tile')
+        ));
+    }
+    $vars['tile_image'] = $image;
+
     $vars['content_bottom_region'] = equus_bootstrap_subtheme_get_content_bottom($vars['view_mode']);
 
     if ($vars['node']->type == 'blog') {
