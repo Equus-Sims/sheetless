@@ -348,12 +348,11 @@ function field_collection_table_entity_view($entity, $type, $view_mode, $langcod
   if (get_class($entity) != 'FieldCollectionItemEntity') {
     return;
   }
-  if ($instance = $entity->instanceInfo()) {
-    $display = field_get_display($instance, $view_mode, $entity->hostEntity());
-    if ($display['type'] == 'field_collection_table_view') {
-      $entity->content['#theme'] = 'field_collection_table_multiple_value_field';
-      $entity->content['#pre_render'][] = 'field_collection_table_pre_render_field';
-    }
+
+  $display = field_get_display($entity->instanceInfo(), $view_mode, $entity->hostEntity());
+  if ($display['type'] == 'field_collection_table_view') {
+    $entity->content['#theme'] = 'field_collection_table_multiple_value_field';
+    $entity->content['#pre_render'][] = 'field_collection_table_pre_render_field';
   }
 }
 
