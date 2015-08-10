@@ -144,6 +144,36 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 
 	// Verify that residence/property is owned by the currently logged in user
 	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
+	equus_horses_extras_validate_stats($node);
+}
+
+function equus_horses_extras_validate_stats($node) {
+	$stats = $node->field_horse_stats['und'];
+	// drupal_set_message(print_r($stats, true));
+	$valid_stats = true;
+	$stat_info = [];
+	foreach ($stats as $stat) {
+		$statname = $stat['field_stat']['und'][0]['value'];
+		$statvalue = $stat['field_horse_stat_value']['und'][0]['value'];
+
+		if (empty($statname)) {
+			// drupal_set_message("ERROR??? ".print_r($statname,true));
+			$valid_stats = false;
+			form_set_error('field_horse_stats', "You must assign 6 stats to your horse.");
+			return $valid_stats;
+		} else {
+			// drupal_set_message(print_r($statname,true));
+			$stat_info[] = $statname;
+		}
+	}
+	$result = array_unique($stat_info);
+	if (count($result) < 6) {
+		$valid_stats = false;
+		form_set_error('field_horse_stats', "You may not use the same stat twice.");
+		return $valid_stats;
+	}
+
+	return $valid_stats;
 }
 
 /**
