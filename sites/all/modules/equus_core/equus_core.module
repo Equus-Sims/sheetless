@@ -63,8 +63,12 @@ function equus_core_theme() {
 			'variables' => array(),
 			'template' => 'equus_footer_logo',
 		),
+		'equus_toolbar' => array(
+			'variables' => array(),
+			'template' => 'equus_toolbar',
+		),
 	);
-}}
+}
 
 /**
  * Implements hook_admin_paths().

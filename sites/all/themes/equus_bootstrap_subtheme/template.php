@@ -120,16 +120,48 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	else {
 		$vars['content_column_class'] = ' class="col-sm-12"';
 	}
+
+	// what follows is the tale of the toolbar
+	$vars_toolbar = array();
+	$vars_toolbar['search_box'] = drupal_get_form('search_form');
+	if ($GLOBALS['user']->uid == 0) {
+		$vars_toolbar['logged_in'] = false;
+	} else {
+		$user = user_load($GLOBALS['user']->uid);
+		$vars_toolbar['logged_in'] = true;
+		$vars_toolbar['name'] = format_username($GLOBALS['user']);
+		$vars_toolbar['uid'] = $user->uid;
+		setlocale(LC_MONETARY, 'en_US');
+		$vars_toolbar['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
+		$vars_toolbar['orgs'] = array();
+		$nids = equus_organizations_get_assoc_orgs($user->uid);
+		$orgs = node_load_multiple($nids);
+		foreach ($orgs as $org) {
+			$org_info = array();
+			$org_info['name'] = $org->title;
+			$org_info['path'] = "node/{$org->nid}";
+			$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
+			$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";
+
+			$vars_toolbar['orgs'][] = $org_info;
+		}
+		$vars_toolbar['regular_credit'] = userpoints_get_current_points($user->uid, 1);
+		$vars_toolbar['rare_credit'] = userpoints_get_current_points($user->uid, 2);
+		$vars_toolbar['org_credit'] = userpoints_get_current_points($user->uid, 60);
+		$vars_toolbar['total_credits'] = $vars_toolbar['regular_credit'] + $vars_toolbar['rare_credit'] + $vars_toolbar['org_credit'];
+	}
+
+	$vars_toolbar['foo'] = print_r($GLOBALS['user'], true);
+	$vars['toolbar'] = theme('equus_toolbar', $vars_toolbar);
 }
 
 function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
 
 	if ($vars['node']->type == "organization") {
-		$ledger = equus_banking_retrieve_ledger();
-
+		$org = node_load($vars['node']->nid);
 		setlocale(LC_MONETARY, 'en_US');
-		$vars['bank_balance'] = money_format('%.0n',equus_banking_balance($ledger, $vars['node']->nid));
+		$vars['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
 		$vars['bank_transactions_path'] = "organization/transactions/{$vars['node']->nid}";
 	}
 
