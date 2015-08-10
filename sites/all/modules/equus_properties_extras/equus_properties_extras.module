@@ -46,44 +46,6 @@ function equus_properties_extras_node_validate($node, $form, &$form_state) {
 }
 
 /**
- * Displays an error message if the user has not created 
- * an organization and/or a property when attempting to create a horse.
- *
- * Displays only those properties associated with an organization
- * that the currently logged in user is a member of in the horse 
- * residence field.
- *
- * Implements hook_form_alter for the horse creation form.
- */
-function equus_properties_extras_form_horse_node_form_alter(&$form, $form_state) {
-
-	// get all organizations (and properties) associated with the currently logged in user
-	$organizations = equus_properties_get_user_assoc_properties($GLOBALS['user']->uid);
-
-	// if the user has no organizations, print an error
-	if (empty($organizations)) {
-		drupal_set_message('You need to create an organization and a property before you can create a horse.','error');
-	} else {
-		$empty = TRUE;
-
-		// if the user has no properties, print an error
-		foreach ($organizations as $property_list) {
-			if (!empty($property_list)) {
-				$empty = FALSE;
-				break;
-			}
-		}
-
-		if ($empty) {
-			drupal_set_message('You need to create a property before you can create a horse.','error');
-		}
-	}
-	
-	// pass the correct property options to the form for the horse residence field
-	$form['field_horse_residence']['und']['#options'] = $organizations;
-}
-
-/**
  * Gets the user's associated properties
  *
  * The output is an array with keys being organization names and values
