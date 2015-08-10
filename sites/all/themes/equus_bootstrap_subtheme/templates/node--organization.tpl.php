@@ -107,11 +107,11 @@
     ?>
 
       <div class='field'>
-          <div class="field-label">Stats</div>
+          <div class="field-label">Available Funds</div>
           <div class="field-items">
             <div class="field-item">
-              [img here] <?php print l($bank_balance,$bank_transactions_path); ?><br />
-              <span class="label">Available Funds</span>
+              <?php print l($bank_balance,$bank_transactions_path); ?><br />
+              <!-- <span class="label">Available Funds</span> -->
             </div>
           </div>
       <div>

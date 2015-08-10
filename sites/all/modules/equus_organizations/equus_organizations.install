@@ -52,6 +52,7 @@ function equus_organizations_install() {
     _equus_organizations_add_custom_fields();
 
     equus_organizations_update_7100();
+    equus_organizations_update_7101();
 }
 
 function _equus_organizations_installed_fields() {
@@ -70,11 +71,6 @@ function _equus_organizations_installed_fields() {
             'settings' => array(
                 'target_type' => 'user'
             )
-        ),
-        'equus_organizations_balance' => array(
-            'field_name' => 'equus_organizations_balance',
-            'label' => $t('Balance'),
-            'type' => 'number_integer'
         )
     );
 }
@@ -122,6 +118,49 @@ function _equus_organizations_installed_fields_batch1() {
     );
 
     return $field_bases;
+}
+
+function _equus_organizations_installed_fields_batch2() {
+    $t = get_t();
+    return array(
+        'equus_organizations_balance' => array(
+            'field_name' => 'equus_organizations_balance',
+            'label' => $t('Balance'),
+            'type' => 'number_integer'
+        )
+    );
+}
+
+function _equus_organizations_installed_instances() {
+    $t = get_t();
+    return array(
+        'equus_organizations_mission' => array(
+            'field_name' => 'equus_organizations_mission',
+            'type' => 'text_long',
+            'label' => $t('Mission Statement')
+            
+            /*'display' => array(
+                'example_node_list' => array(
+                    'label' => $t('Transaction amount'),
+                    'type' => 'number_integer'
+                )
+            )*/
+        ),
+        'equus_organizations_users' => array(
+            'field_name' => 'equus_organizations_users',
+            'label' => $t('Owner(s) and Staff'),
+            'entity_type' => 'user',
+            'widget' => array(
+                'module' => 'entityreference',
+                'settings' => array(
+                    'match_operator' => 'CONTAINS',
+                    'path' => '',
+                    'size' => '60'
+                ),
+                'type' => 'entityreference_autocomplete'
+            )   
+        )
+    );
 }
 
 function _equus_organizations_installed_instances_batch1() {
@@ -174,35 +213,20 @@ function _equus_organizations_installed_instances_batch1() {
     return $field_instances;
 }
 
-function _equus_organizations_installed_instances() {
+function _equus_organizations_installed_instances_batch2() {
     $t = get_t();
     return array(
-        'equus_organizations_mission' => array(
-            'field_name' => 'equus_organizations_mission',
-            'type' => 'text_long',
-            'label' => $t('Mission Statement')
-            
-            /*'display' => array(
-                'example_node_list' => array(
-                    'label' => $t('Transaction amount'),
-                    'type' => 'number_integer'
-                )
-            )*/
-        ),
-        'equus_organizations_users' => array(
-            'field_name' => 'equus_organizations_users',
-            'label' => $t('Owner(s) and Staff'),
-            'entity_type' => 'user',
-            'widget' => array(
-                'module' => 'entityreference',
-                'settings' => array(
-                    'match_operator' => 'CONTAINS',
-                    'path' => '',
-                    'size' => '60'
-                ),
-                'type' => 'entityreference_autocomplete'
-            )   
-        ),
+        //TODO: FIX THIS
+        'equus_organizations_balance' => array(
+            'field_name' => 'equus_organizations_balance',
+            'label' => $t('Balance'),
+            'entity_type' => 'node',
+            'bundle' => 'organization',
+            'type' => 'number_integer',
+            'default_value' => array(
+                array('value' => 0),
+            ),
+        )
     );
 }
 
@@ -228,6 +252,19 @@ function equus_organizations_update_7100() {
     }
 
     foreach (_equus_organizations_installed_instances_batch1() as $fieldinstance) {
+        field_create_instance($fieldinstance);
+    }
+}
+
+/**
+ * Adds balance field to organizations
+ */
+function equus_organizations_update_7101() {
+    foreach (_equus_organizations_installed_fields_batch2() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_equus_organizations_installed_instances_batch2() as $fieldinstance) {
         field_create_instance($fieldinstance);
     }
 }

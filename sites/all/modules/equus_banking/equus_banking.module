@@ -183,6 +183,9 @@ function equus_banking_create_transaction($memo, $source, $destination, $amount)
 	$ewrapper->equus_banking_destination->set(intval($destination));
 	$ewrapper->equus_banking_amount->set(intval($amount));
 	$ewrapper->save();
+
+	equus_banking_update_org_balance($source);
+	equus_banking_update_org_balance($destination);
 }
 
 /**
@@ -236,6 +239,26 @@ function equus_banking_balance($ledger, $organization) {
 	return $balance;
 }
 
+/**
+ * Updates the equus_organizations_balance field on organizations
+ * @param orgID must be node ID for an organization
+ */
+function equus_banking_update_org_balance($orgID) {
+	$ledger = equus_banking_retrieve_ledger();
+	$balance = equus_banking_balance($ledger, $orgID);
+
+	$org = node_load($orgID);
+	$org->equus_organizations_balance['und'][0]['value'] = $balance;
+
+	node_save($org);
+
+	$users = equus_organizations_get_assoc_users($orgID);
+
+	foreach ($users as $user) {
+		equus_banking_update_user_net_worth($user);
+	}
+}
+
 function equus_banking_check_sufficient_funds($amount, $source_id) {
 	$ledger = equus_banking_retrieve_ledger();
 
@@ -246,6 +269,95 @@ function equus_banking_check_sufficient_funds($amount, $source_id) {
 	} else {
 		return true;
 	}
+}
+
+function equus_banking_update_user_net_worth($uid) {
+	$nids = equus_organizations_get_assoc_orgs($uid);
+	
+	$total = 0;
+	foreach($nids as $nid) {
+		$org = node_load($nid);
+		$total += $org->equus_organizations_balance['und'][0]['value'];
+	}
+
+	$user = user_load($uid);
+	$user->field_equus_user_net_worth['und'][0]['value'] = $total;
+	user_save($user);
+}
+
+function equus_banking_get_user_net_worth($uid) {
+	$user = user_load($uid);
+
+	$net_worth = $user->field_equus_user_net_worth['und'][0]['value'];
+
+	return $net_worth;
+}
+
+function equus_banking_settings_form($form, &$form_state) {
+	$form['button1'] = array(
+		'#type' => 'submit',
+		'#value' => 'Update balance for all orgs',
+		'#submit' => array('equus_banking_settings_form_action_one')
+	);
+	return system_settings_form($form);
+}
+
+function equus_banking_settings_form_action_one($form, &$form_state) {
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'organization')
+		->propertyCondition('status', 1);
+	$result = $query->execute();
+	$orgIDs = array();
+	if (count($result) > 0) {
+		$orgIDs = array_keys($result['node']);
+
+		$ledger = equus_banking_retrieve_ledger();
+		$org_updated = false;
+		foreach($orgIDs as $orgID) {
+			$balance = equus_banking_balance($ledger, $orgID);
+			$org = node_load($orgID);
+			$cached_balance = $org->equus_organizations_balance['und'][0]['value'];
+			if ($balance != $cached_balance) {
+				$org->equus_organizations_balance['und'][0]['value'] = $balance;
+				node_save($org);
+				$org_updated = true;
+				watchdog('equus_banking_settings_form_action_one', 'Organization balance mismatch. Org id: $orgID', WATCHDOG_ERROR);
+				drupal_set_message("Organization $orgID had a balance mismatch. Cached balance was updated.");
+			}
+		}
+		if (!$org_updated) {
+			drupal_set_message("All cached balances matched computed values. No organization balances were updated.");
+		}
+	} else {
+		drupal_set_message("No organizations currently exist. Update failed.");
+	}
+}
+
+function equus_banking_menu() {
+  $items = array();
+
+  $items['admin/settings/equus-banking'] = array(
+    'title' => 'Equus banking module settings',
+    'description' => 'Configuration page for the Equus banking module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('equus_banking_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+   );
+
+  return $items;
+}
+
+function equus_banking_node_insert($node) {
+	if ($node->type != 'transaction') {
+		return;
+	}
+	$destination = $node->equus_banking_destination['und'][0]['target_id'];
+	$source = $node->equus_banking_source['und'][0]['target_id'];
+	equus_banking_update_org_balance($source);
+	equus_banking_update_org_balance($destination);
 }
 
 //TODO: Write a function that reverses a transaction

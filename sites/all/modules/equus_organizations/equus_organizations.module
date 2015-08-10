@@ -116,3 +116,25 @@ function equus_organizations_spend_org_credit($uid) {
 	));
 	return true;
 }
+
+/**
+ * Returns an array of uids associated with the org
+ * @param $orgID ID of the org to find assoc users for
+ */
+function equus_organizations_get_assoc_users($orgID) {
+	$org = node_load($orgID);
+	dpm($org);
+
+	$users = [];
+	if (isset($org->equus_organizations_users['und'])) {
+		$user_count = $org->equus_organizations_users['und'];
+
+		for ($i = 0; $i < count($user_count); $i++) {
+			$users[] = $user_count[$i]['target_id'];
+		}
+	}
+	
+	$users[] = $org->uid;
+
+	return $users;
+}

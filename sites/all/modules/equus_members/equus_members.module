@@ -15,18 +15,6 @@ function equus_members_entity_info_alter(&$entity_info) {
 	);
 }
 
-function equus_members_get_net_worth($uid) {
-	$ledger = equus_banking_retrieve_ledger();
-	$nids = equus_organizations_get_assoc_orgs($uid);
-	
-	$total = array_reduce($nids, function($carry, $item) use (&$ledger) {
-		return $carry + equus_banking_balance($ledger, $item);
-	}, 0);
-
-	setlocale(LC_MONETARY, 'en_US');
-	return money_format('%.0n', $total);
-}
-
 /*function equus_members_gallery_image_count($uid) {
 	$query = new EntityFieldQuery();
 	$query
@@ -65,7 +53,8 @@ function equus_members_preprocess_user_profile(&$vars) {
 	$vars['user_age'] = $interval->y;
 	$vars['user_dob'] = $dob;
 	
-	$vars['user_net_worth'] = equus_members_get_net_worth($vars['elements']['#account']->uid);
+	setlocale(LC_MONETARY, 'en_US');
+	$vars['user_net_worth'] = money_format('%.0n', equus_banking_get_user_net_worth($vars['elements']['#account']->uid));
 
 	$items = field_get_items('user', $vars['elements']['#account'], 'field_user_gender');
 	$vars['user_gender'] = $items[0]['value'];
