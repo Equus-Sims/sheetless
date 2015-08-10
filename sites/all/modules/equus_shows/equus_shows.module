@@ -136,7 +136,23 @@ function equus_shows_entry_form($form, &$form_state) {
 		->propertyCondition('uid', $GLOBALS['user']->uid)
 		->propertyOrderBy('created', 'DESC');
 	$result = $query->execute();
+
+	if (empty($result)) {
+		$form['some_text'] = array(
+			'#markup' => "<p>None of your organizations own any activated horses. Unactivated horses may not compete in shows. To activate a horse, first create or edit one and set its Horse Activation Status from pending to active.</p>"
+		);
+
+		$form['submit_button'] = array(
+			'#type' => 'submit',
+			'#value' => t('Submit entry'),
+			'#disabled' => true
+		);
+
+		return $form;
+	}
+
 	$nids = array_keys($result['node']);
+
 	$nodes = node_load_multiple($nids);
 
 	$horse_list = array();
@@ -370,7 +386,7 @@ function equus_shows_run_show($show_id) {
 			$field_collection_item = field_collection_item_load($stat['value']);
 			
 			// dpm($field_collection_item);
-
+			//TODO: Check for messed up horses and provide a button to the show host to remove that horse from the show
 			$stat_value = $field_collection_item->field_stat['und'][0]['value'];
 			
 			$stat_weight = $field_collection_item->field_horse_stat_value['und'][0]['value'];
