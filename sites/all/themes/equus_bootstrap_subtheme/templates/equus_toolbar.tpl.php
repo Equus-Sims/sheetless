@@ -17,19 +17,19 @@
 		<li>Net Worth: <?php print $net_worth; ?>
 			<ul>
 				<?php foreach($orgs as $org): ?>
-				<li><?php 
+				<li><span><?php 
 					print l($org['name'], $org['path']);
 					print ": ";
 					print l($org['bank_balance'], $org['bank_transactions_path']);
-				?></li>
+				?></span></li>
 				<?php endforeach; ?>
 			</ul>
 		</li>
 		<li>Credits: <?php print $total_credits; ?>
 			<ul>
-				<li>Regular Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></li>
-				<li>Rare Horse Credit: <?php print l($rare_credit, 'dashboard'); ?></li>
-				<li>Organization Credit: <?php print l($org_credit, 'dashboard'); ?></li>
+				<li><span>Regular Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></span></li>
+				<li><span>Rare Horse Credit: <?php print l($rare_credit, 'dashboard'); ?></span></li>
+				<li><span>Organization Credit: <?php print l($org_credit, 'dashboard'); ?></span></li>
 			</ul>
 		</li>
 		<li>MP: 0</li>
