@@ -294,6 +294,7 @@ body > .toolbar {
 .toolbar ul > li.searchBar {
     margin: 0;
     float: right;
+    width: 200px;
 }
 
 .toolbar #search-form #edit-basic {
