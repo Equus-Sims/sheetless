@@ -216,6 +216,59 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 }
 
 
+/* Toolbar */
+body > .toolbar {
+    overflow: visible;
+}
+
+.toolbar ul {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.toolbar ul li {
+    cursor: pointer;
+}
+
+.toolbar > ul > li {
+    display: inline-block;
+    margin: 10px;
+}
+
+.toolbar ul > li > ul {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    background: #FFF;
+    border-radius: 2px;
+    box-shadow: 0px 0px 10px rgba(80, 80, 80, 0.3);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -o-border-radius: 2px;
+    z-index: 2;
+}
+
+.toolbar ul > li.searchBar {
+    margin: 0;
+    float: right;
+}
+
+.toolbar #search-form #edit-basic {
+    margin-bottom: 0;
+}
+
+.toolbar #search-form input,
+.toolbar #search-form span,
+.toolbar #search-form button {
+    height: 30px;
+}
+
+.toolbar .toolbarOpen {
+    display: block;
+}
+
+
 /* Primary Nav */
 
 .navbar-btn {

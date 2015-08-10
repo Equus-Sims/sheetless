@@ -48,6 +48,6 @@
 			<li><?php print l('Login', 'user/login'); ?></li>
 			<li><?php print l('Register', 'user/register'); ?></li>
 		<?php endif; ?>
-		<li><?php print render($search_box); ?></li>
+		<li class="searchBar"><?php print render($search_box); ?></li>
 	</ul>
 </div>

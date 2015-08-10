@@ -965,6 +965,17 @@ jQuery(window).load(function() {
 
     };
 
+    /* Toolbar Menus */
+    if ($('body .toolbar ul > li > ul').length > 0) {
+      $('body .toolbar ul > li').click(function() {
+        $('ul',$(this).siblings()).removeClass('toolbarOpen');
+        $('ul',this).toggleClass('toolbarOpen');
+      });
+      $($('body .toolbar').siblings()).click(function() {
+        $('body .toolbar ul.toolbarOpen').removeClass('toolbarOpen');
+      });
+    };
+
     searchForm.after(searchBtn);
 
     $('.navbar #block-search-form div#searchBtn').click(function() {
