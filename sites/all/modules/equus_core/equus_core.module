@@ -64,4 +64,17 @@ function equus_core_theme() {
 			'template' => 'equus_footer_logo',
 		),
 	);
+}}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function equus_core_admin_paths() {
+  $paths = array(
+    // Exclude the block demonstration page from admin treatment.
+    // This allows us to present this page in its true form, full page.
+    'admin/dashboard' => FALSE,
+    'admin/dashboard/*' => FALSE,
+  );
+  return $paths;
 }
