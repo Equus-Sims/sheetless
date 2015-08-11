@@ -364,6 +364,11 @@ function equus_shows_run_show($show_id) {
 	$relations = relation_load_multiple($rids);
 
 	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
+	if (empty($nids)) {
+		drupal_set_message("No horses are entered in this show yet.", 'error');
+		return;
+	}
+
 	$horses = node_load_multiple($nids);
 
 	// dpm($horses);
