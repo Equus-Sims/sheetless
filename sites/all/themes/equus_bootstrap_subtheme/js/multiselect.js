@@ -918,7 +918,7 @@ jQuery(window).load(function() {
   
   // disabling this for now because it interferes with the Chosen module
   // which does something similar.
-  /*if ( $('select').length > 0 ) {
+  if ( ($('.chosen-container').length <= 0) && ($('select').length > 0) ) {
 
     $('select[id*="breed"]').multiselect().multiselectfilter();
 
@@ -928,7 +928,7 @@ jQuery(window).load(function() {
       multiple: false
     });
 
-  };*/
+  };
 
   $('#filterBtn button').click(function(e) {
     e.preventDefault();
@@ -968,13 +968,13 @@ jQuery(window).load(function() {
     };
 
     /* Toolbar Menus */
-    if ($('body .toolbar ul > li > ul').length > 0) {
-      $('body .toolbar ul > li').click(function() {
+    if ($('.toolbar ul > li > ul').length > 0) {
+      $('.toolbar ul > li').click(function() {
         $('ul',$(this).siblings()).removeClass('toolbarOpen');
         $('ul',this).toggleClass('toolbarOpen');
       });
-      $($('body .toolbar').siblings()).click(function() {
-        $('body .toolbar ul.toolbarOpen').removeClass('toolbarOpen');
+      $('.navbar .container, .main-container, .footer').click(function() {
+        $('.toolbar ul.toolbarOpen').removeClass('toolbarOpen');
       });
     };
 

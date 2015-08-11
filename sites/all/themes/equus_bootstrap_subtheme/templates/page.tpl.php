@@ -79,11 +79,10 @@
 
 </script>
 
-<?php if (!empty($toolbar)): ?>
-  <?php print render($toolbar); ?>
-<?php endif; ?>
-
 <header id="navbar" role="navigation" class="<?php print $navbar_classes; ?>">
+  <?php if (!empty($toolbar)): ?>
+    <?php print render($toolbar); ?>
+  <?php endif; ?>
   <div class="container">
     <div class="navbar-header">
       <?php if ($logo): ?>
