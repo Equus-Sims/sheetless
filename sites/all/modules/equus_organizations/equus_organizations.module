@@ -22,6 +22,26 @@ function organization_form($node, $form_state) {
 	return node_content_form($node, $form_state);
 }
 
+function equus_organizations_node_insert($node) {
+	if ($node->type != 'organization') {
+		return;
+	}
+	$status = equus_organizations_spend_org_credit($node->uid);
+
+	if ($status == false) {
+		watchdog('equus_organizations', 'Attempted to spend Org Credit but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		return;
+	}
+}
+
+function equus_organizations_node_validate($node, $form, $form_state) {
+	dpm($node);
+	drupal_set_message(userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID));
+	if ($node->nid == NULL && userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID) == 0) {
+		form_set_error('', "You do not have enough Organization Credits to create this Organization. If you are a new member, please go to the Store and purchase your Starter Pack. If you have already purchased your Starter Pack and created your first Organization, then you must buy another Organization Credit from the Store before you can create additional Organizations.");
+	}
+}
+
 function equus_organizations_get_assoc_orgs($uid) {
 	$query = new EntityFieldQuery();
 	$query
