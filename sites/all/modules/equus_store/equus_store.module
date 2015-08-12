@@ -119,9 +119,14 @@ function equus_store_file_entity_access($op, $file, $account) {
 }
 
 function equus_store_form_validate($form, &$form_state) {
-	$quantity = (int) $form['quantity']['#value'];
-	if ($quantity == 0) {
-		form_set_error('quantity', "Please set the quantity to at least 1 if you would like to purchase the item.");
+	$node_ID = arg(1);
+	$node = node_load($node_ID);
+	
+	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
+			$quantity = (int) $form['quantity']['#value'];
+		if ($quantity == 0) {
+			form_set_error('quantity', "Please set the quantity to at least 1 if you would like to purchase the item.");
+		}
 	}
 }
 
