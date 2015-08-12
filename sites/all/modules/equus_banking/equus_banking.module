@@ -272,7 +272,7 @@ function equus_banking_check_sufficient_funds($amount, $source_id) {
 }
 
 function equus_banking_update_user_net_worth($uid) {
-	$total = equus_banking_calc_user_net_worth($nids);
+	$total = equus_banking_calc_user_net_worth($uid);
 
 	$user = user_load($uid);
 	$user->field_equus_user_net_worth['und'][0]['value'] = $total;
