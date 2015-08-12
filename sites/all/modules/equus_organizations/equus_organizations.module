@@ -35,6 +35,9 @@ function equus_organizations_node_insert($node) {
 }
 
 function equus_organizations_node_validate($node, $form, $form_state) {
+	if ($node->type != 'organization')
+		return;
+	}
 	drupal_set_message(userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID));
 	if ($node->nid == NULL && userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID) == 0) {
 		form_set_error('', "You do not have enough Organization Credits to create this Organization. If you are a new member, please go to the Store and purchase your Starter Pack. If you have already purchased your Starter Pack and created your first Organization, then you must buy another Organization Credit from the Store before you can create additional Organizations.");
