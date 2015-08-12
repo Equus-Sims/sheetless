@@ -135,15 +135,17 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 		$vars_toolbar['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
 		$vars_toolbar['orgs'] = array();
 		$nids = equus_organizations_get_assoc_orgs($user->uid);
-		$orgs = node_load_multiple($nids);
-		foreach ($orgs as $org) {
-			$org_info = array();
-			$org_info['name'] = $org->title;
-			$org_info['path'] = "node/{$org->nid}";
-			$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
-			$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";
+		if (!empty($nids)) {
+			$orgs = node_load_multiple($nids);
+			foreach ($orgs as $org) {
+				$org_info = array();
+				$org_info['name'] = $org->title;
+				$org_info['path'] = "node/{$org->nid}";
+				$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
+				$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";
 
-			$vars_toolbar['orgs'][] = $org_info;
+				$vars_toolbar['orgs'][] = $org_info;
+			}
 		}
 		$vars_toolbar['regular_credit'] = userpoints_get_current_points($user->uid, 1);
 		$vars_toolbar['rare_credit'] = userpoints_get_current_points($user->uid, 2);

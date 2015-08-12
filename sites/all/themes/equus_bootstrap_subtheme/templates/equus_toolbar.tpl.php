@@ -33,7 +33,7 @@
 			</ul>
 		</li>
 		<li>MP: 0</li>
-		<li>Create a...
+		<li>Add new
 			<ul>
 				<li><?php print l('Blog Entry', 'node/add/blog'); ?></li>
 				<li><?php print l('Horse', current_path(), array('fragment' => 'overlay=node/add/horse')); ?></li>
