@@ -1,6 +1,6 @@
 <?php
 
-function equus_store_menu() {
+/*function equus_store_menu() {
 	$items = array();
   
 	$items['examples/form-example'] = array( //this creates a URL that will call this form at "examples/form-example"
@@ -12,7 +12,7 @@ function equus_store_menu() {
 	  );
 
 	return $items;
-}
+}*/
 
 function equus_store_form($form, &$form_state) {
 	$node_ID = arg(1);
@@ -118,6 +118,13 @@ function equus_store_file_entity_access($op, $file, $account) {
 	return FILE_ENTITY_ACCESS_IGNORE;
 }
 
+function equus_store_form_validate($form, &$form_state) {
+	$quantity = (int) $form['quantity']['#value'];
+	if ($quantity == 0) {
+		form_set_error('quantity', "Please set the quantity to at least 1 if you would like to purchase the item.");
+	}
+}
+
 function equus_store_form_submit($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
@@ -135,6 +142,10 @@ function equus_store_form_submit($form, &$form_state) {
 	}
 
 	$quantity = (int) $form['quantity']['#value'];
+	/*if ($quantity == 0) {
+		drupal_set_message("Please set the quantity to at least 1 if you would like to purchase the item.", 'error');
+		return;
+	}*/
 	$price_per_unit = $node->field_equus_sale_price_per_unit['und'][0]['value'];
 	$total = $quantity * $price_per_unit;
 	$source_id = $form['organization']['#value'];
