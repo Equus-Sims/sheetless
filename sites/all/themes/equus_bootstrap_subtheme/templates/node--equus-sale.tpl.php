@@ -115,6 +115,7 @@
 
   <?php
     $form = drupal_get_form('equus_store_form');
+    print theme_status_messages(array('display' => 'error'));
     print drupal_render($form); 
   ?>
 
