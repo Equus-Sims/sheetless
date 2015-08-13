@@ -121,7 +121,7 @@ function equus_store_file_entity_access($op, $file, $account) {
 function equus_store_form_validate($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
-	
+
 	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
 			$quantity = (int) $form['quantity']['#value'];
 		if ($quantity == 0) {
@@ -147,10 +147,6 @@ function equus_store_form_submit($form, &$form_state) {
 	}
 
 	$quantity = (int) $form['quantity']['#value'];
-	/*if ($quantity == 0) {
-		drupal_set_message("Please set the quantity to at least 1 if you would like to purchase the item.", 'error');
-		return;
-	}*/
 	$price_per_unit = $node->field_equus_sale_price_per_unit['und'][0]['value'];
 	$total = $quantity * $price_per_unit;
 	$source_id = $form['organization']['#value'];
@@ -164,6 +160,11 @@ function equus_store_form_submit($form, &$form_state) {
 	if ($sale_type == "gameplayitem") {
 		if ($item_type == 'Horse Credit') {
 			equus_store_horse_credit_sale($uid, $source_id, EQUUS_STORE_ID, $quantity, $total);
+		} else if ($item_type == 'Organization Credit') {
+			equus_store_org_credit_sale($uid, $source_id, EQUUS_STORE_ID, $quantity, $total);
+		}  else {
+			drupal_set_message("The sale type $sale_type doesn't exist.", "warning");
+			watchdog('equus_store_sale_type', 'Attempted to purchase an item with invalid sale type: @sale_type uid = @uid', array('@uid'=>$node->uid, '@sale_type' => $sale_type), WATCHDOG_ERROR);
 		}
 	} else if ($sale_type == "quicksale") {
 		try {
@@ -224,6 +225,19 @@ function equus_store_horse_credit_sale($uid, $source_id, $dest_id, $quantity, $t
 
 		$memo = "Purchased $quantity Horse Credit{$suffix}";
 		$message = "You have purchased $quantity Horse Credit{$suffix} from the Equus Store for " . money_format('%.0n', $total);
+
+		equus_banking_create_transaction($memo, $source_id, $dest_id, $total);
+		drupal_set_message($message);
+}
+
+function equus_store_org_credit_sale($uid, $source_id, $dest_id, $quantity, $total) {
+	equus_organizations_gain_org_credit($uid, $quantity);
+		$suffix = ($quantity == 1 ? "" : "s");
+
+		setlocale(LC_MONETARY, 'en_US');
+
+		$memo = "Purchased $quantity Organization Credit{$suffix}";
+		$message = "You have purchased $quantity Organization Credit{$suffix} from the Equus Store for " . money_format('%.0n', $total);
 
 		equus_banking_create_transaction($memo, $source_id, $dest_id, $total);
 		drupal_set_message($message);
