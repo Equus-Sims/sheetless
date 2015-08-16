@@ -1,0 +1,22 @@
+Computed field tools 7.x-1.1
+============================
+- Support for entity types in general. Most entity types should work now, if
+  they follow the structure of the node or the user f.ex. But it's still trial
+  and error, if it works or not.
+- Now warming up the static cache for entity loads, which should speed up the
+  processing of the computed fields considerably. Best time recorded halfed the
+  total processing time. It should also help with the memory leak issue when
+  using drush to compute the fields.
+- Reversed the order of the processing so that the latest content is fixed
+  first.
+- When running through drush, the memory peak is outputted. Helps spotting
+  memory leaks before they become a critical issue.
+- Fixed a lot of Coder and code sniffer issues.
+- Now using merge rather that the update/insert logic. This should eliminate the
+  myriad of warnings related to that.
+- Fixed a bug, that did'nt allow to recompute across multiple entity types, when
+  the entity count exceeded the batch run count.
+
+Computed field tools 7.x-1.0
+============================
+- Initial release.

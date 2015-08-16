@@ -78,3 +78,13 @@ function adminimal_admin_menu_uninstall() {
   variable_del('adminimal_admin_menu_render');
 
 }
+
+/**
+ * Clean up some files that are no longer needed.
+ */
+function adminimal_admin_menu_update_7100() {
+
+  // Include the update file.
+  include 'updates/update_7100.php';
+
+}

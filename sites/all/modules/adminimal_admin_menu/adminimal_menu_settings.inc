@@ -33,6 +33,41 @@ function adminimal_admin_menu_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  // Create the shortcut category.
+  $form['advanced_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced Settings'),
+    '#description' => '<div class="messages warning">WARNING: Do not change any of the advanced setting unless you know what you are doing!</div>',
+  );
+
+	$form['advanced_settings']['adminimal_admin_menu_slicknav'] = array(
+	  '#type' => 'checkbox',
+	  '#default_value' => variable_get('adminimal_admin_menu_slicknav', 'TRUE'),
+	  '#title' => t('Enable Responsive Menu.'),
+	  '#description' => t('<strong>Default value => Checked</strong>. 
+	  Enable this option if you want to have responsive menu and mobile device support. 
+	  While disabling this option could save you few kilobytes (around 3KB), i will completely disable the responsive menu functionality.'),
+	);
+
+	$form['advanced_settings']['adminimal_admin_menu_jquery'] = array(
+	  '#type' => 'checkbox',
+	  '#default_value' => variable_get('adminimal_admin_menu_jquery', 'TRUE'),
+	  '#title' => t('Load the requred jQuery 1.7 library automagically.'),
+	  '#description' => t('<strong>Default value => Checked</strong>. This will load the newer jQuery version 1.7 using 
+	  the no-conflict method so it wont interfere with any existing jQuery or other java-script libraries. 
+	  The only reason to uncheck this if you are already using a newer version of jQuery site-wide and its globally accessible by the "$" variable. 
+	  Unchekig this option could save you 33KB, but it may also break your javasctipt if not used correctly.'),
+    '#states' => array(
+      // Hide the settings when the cancel notify checkbox is disabled.
+      'visible' => array(
+       ':input[name="adminimal_admin_menu_slicknav"]' => array('checked' => TRUE),
+      ),
+      'unchecked' => array(
+       variable_get('adminimal_admin_menu_jquery', 'TRUE') => FALSE,
+      ),
+     ),
+	);
+
   // Create the submit button.
   $form['submit'] = array(
     '#type' => 'submit',

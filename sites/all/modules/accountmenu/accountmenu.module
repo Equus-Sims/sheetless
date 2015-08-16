@@ -48,10 +48,11 @@ function accountmenu_menu() {
   );
 
   $items['user/self'] = array(
-    'title' => 'My Account',
+    'title' => 'My Own Account',
     'description' => 'The user\'s own account page.',
     'page callback' => 'accountmenu_myaccount',
     'access callback' => 'accountmenu_self_access',
+    'menu_name' => 'accountmenu',
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -59,13 +60,13 @@ function accountmenu_menu() {
 }
 
 /**
- * Returns TRUE if the current user can access 
+ * Returns TRUE if the current user can access
  * his own account page.
  */
 function accountmenu_self_access() {
   global $user;
 
-  // Nothing for 
+  // Nothing for a NULL user
   if (empty($user)) {
     return FALSE;
   }
@@ -181,7 +182,7 @@ function _accountmenu_setup_menu() {
 }
 
 /**
- * Returns TRUE if the path should have a ?destination=path 
+ * Returns TRUE if the path should have a ?destination=path
  * parameter in the HTTP query.
  */
 function _accountmenu_menu_need_destination($path) {
@@ -215,13 +216,6 @@ function accountmenu_translated_menu_link_alter(&$item) {
     // potx will complain here, but line 496 of menu.inc is doing the same so
     $item['title'] = t($item['link_title']);
   }
-  elseif ($item['link_path'] == 'user/self') {
-    $token_list = _accountmenu_get_name_and_realname();
-    // no check_plain() here because menu display will do it
-    $item['options']['accountmenu_link_title'] = $item['link_title'];
-    // Substitute the @name and @realname (internal) tokens.
-    $item['title'] = $item['link_title'] = t($item['link_title'], $token_list);
-  }
 }
 
 /**
@@ -241,10 +235,34 @@ function accountmenu_preprocess_block(&$vars) {
 }
 
 /**
+ * Apply the @name and @realname tokens to the user/self menu item in a menus
+ * embedded in a theme.
+ */
+function accountmenu_preprocess_links(&$vars) {
+  if (array_key_exists('links', $vars)) {
+    foreach ($vars['links'] as $key => $link) {
+      if ((substr($key, 0, 5) === 'menu-') && ($link['href'] == 'user/self')) {
+        $vars['links'][$key]['title'] = t($link['title'], _accountmenu_get_name_and_realname());
+      }
+    }
+  }
+}
+
+/**
+ * Apply the @name and @realname tokens to the user/self menu item in a menu
+ * block
+ */
+function accountmenu_preprocess_menu_link(&$vars) {
+  if ($vars['element']['#href'] == 'user/self') {
+    $vars['element']['#title'] = t($vars['element']['#title'], _accountmenu_get_name_and_realname());
+  }
+}
+
+/**
  * Retrieve the user's name and realname
- * 
- * @return a two-element array, first element is the user login name, 
- *  the second element is user's real name if the realname module is 
+ *
+ * @return a two-element array, first element is the user login name,
+ *  the second element is user's real name if the realname module is
  *  installed.  If not, it is the same as the first element.
  */
 function _accountmenu_get_name_and_realname() {
@@ -257,6 +275,7 @@ function _accountmenu_get_name_and_realname() {
     '@realname' => format_username($user),
   );
 
+  // Allow other modules to muck about with the tokens.
   drupal_alter('accountmenu_name_realname', $result);
 
   return $result;
@@ -273,7 +292,14 @@ function _accountmenu_is_404() {
  * Implementation of hook_form_alter.
  */
 function accountmenu_form_alter(&$form, $form_state, $form_id) {
-  if ($form_id == 'menu_edit_item' && !empty($form['options']['#value']['accountmenu_link_title'])) {
-    $form['link_title']['#default_value'] = $form['options']['#value']['accountmenu_link_title'];
+
+  if ($form_id == 'menu_edit_item') {
+    if (!empty($form['options']['#value']['accountmenu_link_title'])) {
+      $form['link_title']['#default_value'] = $form['options']['#value']['accountmenu_link_title'];
+    }
+
+    if ($form['link_path']['#value'] == 'user/self') {
+      $form['link_title']['#description'] .= '  The tokens <i>@name</i> (login) and <i>@realname</i> (realname, requires Realname module) are available for this menu item.';
+    }
   }
 }

@@ -19,43 +19,39 @@ Drupal.admin.behaviors.toolbarActiveTrail = function (context, settings, $adminM
   }
 };
 
-/**
- * @} End of "ingroup admin_behaviors".
- */
-
 Drupal.admin.behaviors.shorcutcollapsed = function (context, settings, $adminMenu) {
 
   // Create the dropdown base 
-  $("<li class=\"label\"><a>"+Drupal.t('Shortcuts')+"</a></li>").prependTo("body.menu-render-collapsed div.toolbar-shortcuts ul"); 
+  $("<li class=\"label\"><a>"+Drupal.t('Shortcuts')+"</a></li>").prependTo("body.menu-render-collapsed #toolbar div.toolbar-shortcuts ul"); 
 
-}
+};
 
 Drupal.admin.behaviors.shorcutselect = function (context, settings, $adminMenu) {
 
   // Create the dropdown base
-  $("<select id='shortcut-menu'/>").appendTo("body.menu-render-dropdown div.toolbar-shortcuts");
-    
+  $("<select id='shortcut-menu'/>").appendTo("body.menu-render-dropdown #toolbar div.toolbar-shortcuts");
+
   // Create default option "Select"
   $("<option />", {
     "selected"  :  "selected",
     "value"     :  "",
     "text"      :  Drupal.t('Shortcuts')
-  }).appendTo("body.menu-render-dropdown div.toolbar-shortcuts select");
-    
+  }).appendTo("body.menu-render-dropdown #toolbar div.toolbar-shortcuts select");
+
   // Populate dropdown with menu items
-  $("body.menu-render-dropdown div.toolbar-shortcuts a").each(function() {
+  $("body.menu-render-dropdown #toolbar div.toolbar-shortcuts a").each(function() {
     var el = $(this);
     $("<option />", {
       "value"   :  el.attr("href"),
       "text"    :  el.text()
-    }).appendTo("body.menu-render-dropdown div.toolbar-shortcuts select");
+    }).appendTo("body.menu-render-dropdown #toolbar div.toolbar-shortcuts select");
     });
-    
-  $("body.menu-render-dropdown div.toolbar-shortcuts select").change(function() {
+
+  $("body.menu-render-dropdown #toolbar div.toolbar-shortcuts select").change(function() {
     window.location = $(this).find("option:selected").val();
   });
-  
-  $('body.menu-render-dropdown div.toolbar-shortcuts ul').remove();
+
+  $('body.menu-render-dropdown #toolbar div.toolbar-shortcuts ul').remove();
 
 };
 

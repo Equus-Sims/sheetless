@@ -10,24 +10,23 @@
  */
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function computed_field_tools_help($section) {
   switch ($section) {
     case 'admin/structure/computed_field_recompute':
+
       return '<p>' .
-      t('<strong>This module is in development. Known issues: Only Nodes Taxonomies and Users are supported for now.</strong><br />') .
       t('The computed field tools module offers a way to re-compute the computed fields of existing entities. It does so through the Batch API.
 When using the Drupal module Computed Field you sometimes make changes to the logic behind the value in the computed field. If you wish to avoid re-saving all entities using the computing field, you can use this tool to re-compute all the values again. It is possible to choose which field (cross entities) to re-compute and you can also choose which entity types you whish to re-compute.
 When the batch is running it does not save the entire entity again, but it only saves the computed field.<br />
 <br />
 <em>Please note that when you re-compute the entities, the entity is fetched through entity_load() which means that the format of some values might defer from when you submit the entity through the entity edit form. $entity->{taxonomy_field} does this.</em>') . '</p> ';
-      break;
   }
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function computed_field_tools_menu() {
   $items = array();
@@ -44,7 +43,7 @@ function computed_field_tools_menu() {
 }
 
 /**
- * Implementation of hook_permission().
+ * Implements hook_permission().
  */
 function computed_field_tools_permission() {
   return array(
@@ -70,13 +69,14 @@ function computed_field_tools_recompute_form($form, &$form_state) {
       // Collect fields of type computed_field.
       $computed_fields_options[$field['field_name']] = $field['field_name'];
 
-      foreach ($field['bundles'] as $entity_type => $bundle) {
-        foreach ($bundle as $subtype) {
-          // Collect additional information to help get an overview of which fields are used on which entity types.
-          $computed_fields_entity_type_info[$field['field_name']][] = t('%subtype (%entity_type)', array('%subtype' => $subtype, '%entity_type' => $entity_type));
+      foreach ($field['bundles'] as $entity_type => $bundles) {
+        foreach ($bundles as $bundle) {
+          // Collect additional information to help get an overview of which
+          // fields are used on which entity types.
+          $computed_fields_entity_type_info[$field['field_name']][] = t('%bundle (%entity_type)', array('%bundle' => $bundle, '%entity_type' => $entity_type));
 
           // Collect entity types which has computed fields.
-          $entities_options[$entity_type][$subtype] = $subtype;
+          $entities_options[$entity_type][$bundle] = $bundle;
         }
       }
     }
@@ -97,7 +97,8 @@ function computed_field_tools_recompute_form($form, &$form_state) {
     return $form;
   }
 
-  // Collect additional information to help get an overview of which fields are used on which entity types.
+  // Collect additional information to help get an overview of which fields are
+  // used on which entity types.
   $field_info_description = '';
   foreach ($computed_fields_entity_type_info as $field_name => $bundles) {
     $field_info_description .= empty($field_info_description) ? '' : '<br />';
@@ -114,7 +115,9 @@ function computed_field_tools_recompute_form($form, &$form_state) {
     '#required' => TRUE,
     '#options' => $computed_fields_options,
     '#default_value' => current($computed_fields_options),
-    '#description' => t('Computed fields and the entities they are used on:<br />!field_info_description', array('!field_info_description' => $field_info_description)),
+    '#description' => t('Computed fields and the entities they are used on:<br />!field_info_description', array(
+      '@field_info_description' => $field_info_description,
+    )),
   );
 
   $form['fields']['number_fields_in_each_batch'] = array(
@@ -166,22 +169,23 @@ function computed_field_tools_recompute_form($form, &$form_state) {
 }
 
 /**
- * Submit handler.
+ * Submit handler triggering the batch update.
+ *
  * This prepares the computed field and entity types and then it triggers the
  * batch run which does the actual re-computation.
  */
 function computed_field_tools_recompute_form_submit($form, &$form_state) {
   $field_name_to_recompute = $form_state['values']['computed_field_to_recompute'];
 
-  $entities_by_type = array_filter($form_state['values']['entities']);
+  $bundles_by_entity_type = array_filter($form_state['values']['entities']);
 
   // If no entity types was selected, then lets default to them all.
-  if (empty($entities_by_type)) {
+  if (empty($bundles_by_entity_type)) {
     $field_info_fields = field_info_fields();
-    $entities_by_type = $field_info_fields[$field_name_to_recompute]['bundles'];
+    $bundles_by_entity_type = $field_info_fields[$field_name_to_recompute]['bundles'];
   }
 
-  if (empty($entities_by_type)) {
+  if (empty($bundles_by_entity_type)) {
     drupal_set_message(t('No entity types found for computed_field %field_name.', array('%field_name' => $field_name_to_recompute)), 'error');
     return;
   }
@@ -189,25 +193,33 @@ function computed_field_tools_recompute_form_submit($form, &$form_state) {
   // Default to 100 entities per run, if none is given.
   $entities_per_run = empty($form_state['values']['number_fields_in_each_batch']) ? 100 : $form_state['values']['number_fields_in_each_batch'];
 
-  $batch = _computed_field_tools_setup_batch_args($field_name_to_recompute, $entities_by_type, $entities_per_run);
+  $batch = _computed_field_tools_setup_batch_args($field_name_to_recompute, $bundles_by_entity_type, $entities_per_run);
 
   batch_set($batch);
 }
 
 /**
  * Returns an array containing the batch job info.
- * @param $field_name_to_recompute
- *  A string containing the computed_field name.
- * @param $entities_by_type
- *  Array of entity types and an array of bundles for each.
- * @param $entities_per_run
- *  Number of entities to process for each batch.
+ *
+ * @param string $field_name_to_recompute
+ *   A string containing the computed_field name.
+ * @param array $bundles_by_entity_type
+ *   Array of entity types and an array of bundles for each.
+ * @param int $entities_per_run
+ *   Number of entities to process for each batch.
  */
-function _computed_field_tools_setup_batch_args($field_name_to_recompute, $entities_by_type = array(), $entities_per_run = 100) {
+function _computed_field_tools_setup_batch_args($field_name_to_recompute, $bundles_by_entity_type = array(), $entities_per_run = 100) {
   $batch = array(
     'title' => t('Re-computing @field_name', array('@field_name' => $field_name_to_recompute)),
     'operations' => array(
-      array('_computed_field_tools_batch_recompute', array($entities_by_type, $field_name_to_recompute, $entities_per_run)),
+      array(
+        '_computed_field_tools_batch_recompute',
+        array(
+          $bundles_by_entity_type,
+          $field_name_to_recompute,
+          $entities_per_run,
+        ),
+      ),
     ),
     'progress_message' => '',
     'finished' => '_computed_field_tools_batch_recompute_finished',
@@ -219,51 +231,76 @@ function _computed_field_tools_setup_batch_args($field_name_to_recompute, $entit
 /**
  * Returns the total number of all entities to process.
  */
-function _computed_field_tools_get_total_batch_count($entities_by_type) {
-  $total_counts_by_type = _computed_field_tools_get_total_batch_count_for_entity_types($entities_by_type);
+function _computed_field_tools_get_total_batch_count($bundles_by_entity_type) {
+  $total_counts_by_type = _computed_field_tools_get_total_batch_count_for_entity_types($bundles_by_entity_type);
   return array_sum($total_counts_by_type);
 }
 
 /**
  * Returns the total number of entities per entity type to process.
+ *
+ * @param array $bundles_by_entity_type
+ *   Array of bundles per entity type.
+ *
+ * @return array
+ *   The number of entities per entity type given.
  */
-function _computed_field_tools_get_total_batch_count_for_entity_types($entities_by_type) {
+function _computed_field_tools_get_total_batch_count_for_entity_types($bundles_by_entity_type) {
   $total_counts_by_type = array();
 
   $info = entity_get_info();
 
-  foreach ($entities_by_type as $type => $entity_types) {
-    $id_key = $info[$type]['entity keys']['id'];
-    $base_table = $info[$type]['base table'];
-    $bundle = $info[$type]['entity keys']['bundle'];
+  foreach ($bundles_by_entity_type as $entity_type => $bundles) {
+    // At least an id key and a base table needs to be defined for this to
+    // work. Else set the count to 0, and the field on that entity will not be
+    // computed.
+    if (empty($info[$entity_type]['entity keys']['id']) || empty($info[$entity_type]['base table'])) {
+      drupal_set_message(t('Entity type %entity_type does not seem to be supported.', array(
+        '%entity_type' => $entity_type,
+      )), 'warning');
+      $total_counts_by_type[$entity_type] = 0;
+      continue;
+    }
 
-    switch ($type) {
-      case 'node':
-        $total_counts_by_type[$type] = db_select($base_table)
-          ->fields($base_table, array($id_key))
-          ->condition($bundle, $entity_types, 'IN')
-          ->execute()
-          ->rowCount();
+    $id_key = $info[$entity_type]['entity keys']['id'];
+    $base_table = $info[$entity_type]['base table'];
+
+    // Bundle is not required. User for example does not have a bundle.
+    if (!empty($info[$entity_type]['entity keys']['bundle'])) {
+      $bundle = $info[$entity_type]['entity keys']['bundle'];
+    }
+    else {
+      $bundle = FALSE;
+    }
+
+    switch ($entity_type) {
+      default:
+        $query = db_select($base_table)
+          ->fields($base_table, array($id_key));
+
+        // Add bundle condition only if entity type supports bundles.
+        if ($bundle) {
+          $query->condition($bundle, $bundles, 'IN');
+        }
+
+        $result = $query->countQuery()->execute()->fetchField();
+        $total_counts_by_type[$entity_type] = $result;
 
         break;
+
       case 'taxonomy_term':
         $vids = db_select('taxonomy_vocabulary', 'tv')
           ->fields('tv', array('vid'))
-          ->condition('machine_name', $entity_types, 'IN')
+          ->condition('machine_name', $bundles, 'IN')
           ->execute()
           ->fetchCol();
 
-        $total_counts_by_type[$type] = db_select('taxonomy_term_data', 'ttd')
+        $total_counts_by_type[$entity_type] = db_select('taxonomy_term_data', 'ttd')
           ->fields('ttd', array('tid'))
           ->condition('vid', $vids, 'IN')
+          ->countQuery()
           ->execute()
-          ->rowCount();
-        break;
-      case 'user':
-        $total_counts_by_type[$type] = db_select($base_table)
-          ->fields($base_table, array($id_key))
-          ->execute()
-          ->rowCount();
+          ->fetchField();
         break;
     }
   }
@@ -272,16 +309,97 @@ function _computed_field_tools_get_total_batch_count_for_entity_types($entities_
 }
 
 /**
+ * Returns the max entity id per entity type to process.
+ *
+ * @param array $bundles_by_entity_type
+ *   Array of bundles per entity type.
+ *
+ * @return array
+ *   The max entity id per entity type given.
+ */
+function _computed_field_tools_get_total_batch_max_id_by_entity_type($bundles_by_entity_type) {
+  $max_entity_id_by_type = array();
+
+  $info = entity_get_info();
+
+  foreach ($bundles_by_entity_type as $entity_type => $bundles) {
+    $max_entity_id_by_type[$entity_type] = 0;
+
+    // At least an id key and a base table needs to be defined for this to
+    // work. Else set the count to 0, and the field on that entity will not be
+    // computed.
+    if (empty($info[$entity_type]['entity keys']['id']) || empty($info[$entity_type]['base table'])) {
+      drupal_set_message(t('Entity type %entity_type does not seem to be supported.', array(
+        '%entity_type' => $entity_type,
+      )), 'warning');
+      continue;
+    }
+
+    $id_key = $info[$entity_type]['entity keys']['id'];
+    $base_table = $info[$entity_type]['base table'];
+
+    // Bundle is not required. User for example does not have a bundle.
+    if (!empty($info[$entity_type]['entity keys']['bundle'])) {
+      $bundle = $info[$entity_type]['entity keys']['bundle'];
+    }
+    else {
+      $bundle = FALSE;
+    }
+
+    switch ($entity_type) {
+      default:
+        $query = db_select($base_table)
+          ->fields($base_table, array($id_key));
+
+        // Add bundle condition only if entity type supports bundles.
+        if ($bundle) {
+          $query->condition($bundle, $bundles, 'IN');
+        }
+
+        $max_id = $query->orderBy($id_key, 'DESC')
+          ->range(0, 1)
+          ->execute()
+          ->fetchField();
+
+        $max_entity_id_by_type[$entity_type] = empty($max_id) ? 0 : $max_id;
+        break;
+
+      case 'taxonomy_term':
+        $vids = db_select('taxonomy_vocabulary', 'tv')
+          ->fields('tv', array('vid'))
+          ->condition('machine_name', $bundles, 'IN')
+          ->execute()
+          ->fetchCol();
+
+        $max_entity_id_by_type[$entity_type] = db_select('taxonomy_term_data', 'ttd')
+          ->fields('ttd', array('tid'))
+          ->condition('vid', $vids, 'IN')
+          ->orderBy($id_key, 'DESC')
+          ->range(0, 1)
+          ->execute()
+          ->fetchField();
+        break;
+    }
+  }
+
+  return $max_entity_id_by_type;
+}
+
+/**
  * Returns array of ids by entity type.
  *
- * @param &$offsets_by_type
- *  Array indexed by entity types. Each contains offset value and bundles.
- * @param $number_of_items
- *  The number of items, we wish to limit the result to.
- * @return
- *  Array containing the entities to process.
+ * @param array &$offsets_by_type
+ *   Array indexed by entity types. Each contains offset value and bundles.
+ * @param int $number_of_items
+ *   The number of items, we wish to limit the result to.
+ * @param array $entity_max_ids
+ *   Array of max entity ids per entity type. Enables processing of the newest
+ *   entities first.
+ *
+ * @return array
+ *   Array containing the entities to process.
  */
-function _computed_field_tools_get_entity_ids(&$offsets_by_type, $number_of_items) {
+function _computed_field_tools_get_entity_ids(&$offsets_by_type, $number_of_items, $entity_max_ids) {
   $results = array();
 
   if (empty($offsets_by_type)) {
@@ -295,28 +413,50 @@ function _computed_field_tools_get_entity_ids(&$offsets_by_type, $number_of_item
   // Run through each entity type until we have the number of results we wanted
   // or until we run out of items.
   foreach ($offsets_by_type as $entity_type => $bundle_info) {
-    $id_key = $info[$entity_type]['entity keys']['id'];
-    $base_table = $info[$entity_type]['base table'];
-    $bundle = $info[$entity_type]['entity keys']['bundle'];
-
     $offset = $bundle_info['offset'];
+
+    // If there are no max id, then there is nothing to process for this entity
+    // type.
+    if (empty($entity_max_ids[$entity_type])) {
+      $offsets_by_type[$entity_type]['offset'] = FALSE;
+      $offset = FALSE;
+      continue;
+    }
 
     if ($offset === FALSE) {
       continue;
     }
 
-    // Reset query in case we are presented with an unsupported entity type.
-    $query = FALSE;
+    $id_key = $info[$entity_type]['entity keys']['id'];
+    $base_table = $info[$entity_type]['base table'];
+
+    $max_key = $entity_max_ids[$entity_type];
+
+    // Bundle is not required. User for example does not have a bundle.
+    if (!empty($info[$entity_type]['entity keys']['bundle'])) {
+      $bundle = $info[$entity_type]['entity keys']['bundle'];
+    }
+    else {
+      $bundle = FALSE;
+    }
+
     switch ($entity_type) {
-      case 'node':
+      default:
         $query = db_select($base_table)
           ->fields($base_table, array($id_key))
-          ->condition($bundle, $bundle_info['types'], 'IN')
-          ->orderBy($id_key, 'ASC')
+          ->condition($id_key, $max_key, '<=');
+
+        // Add bundle condition only if entity type supports bundles.
+        if ($bundle) {
+          $query->condition($bundle, $bundle_info['types'], 'IN');
+        }
+
+        $result = $query->orderBy($id_key, 'DESC')
           ->range($offset, $range)
           ->execute();
 
         break;
+
       case 'taxonomy_term':
         $vids = db_select('taxonomy_vocabulary', 'tv')
           ->fields('tv', array('vid'))
@@ -324,46 +464,44 @@ function _computed_field_tools_get_entity_ids(&$offsets_by_type, $number_of_item
           ->execute()
           ->fetchCol();
 
-        $query = db_select('taxonomy_term_data', 'ttd')
+        $result = db_select('taxonomy_term_data', 'ttd')
           ->fields('ttd', array('tid'))
           ->condition('vid', $vids, 'IN')
           ->orderBy('tid', 'ASC')
           ->range($offset, $range)
           ->execute();
         break;
-      case 'user':
-        $query = db_select($base_table)
-          ->fields($base_table, array($id_key))
-          ->orderBy($id_key, 'ASC')
-          ->range($offset, $range)
-          ->execute();
-        break;
     }
 
-    if (empty($query)) {
+    if (empty($result)) {
+      $results[$entity_type] = array();
       continue;
     }
 
     // Get the number of results for current query.
-    $row_count = $query->rowCount();
+    $row_count = $result->rowCount();
 
     // Fetch the actual results.
-    $results[$entity_type] = $query->fetchCol();
+    $results[$entity_type] = $result->fetchCol();
 
     // Adjust range.
     // If 0 or less we are done fetching clump of data.
-    // If more, we jump to the next entity type to fetch results up til whats left
-    // in the $range.
+    // If more, we jump to the next entity type to fetch results up til whats
+    // left in the $range.
     $range -= $row_count;
 
-    // If we got exactly the number of entities we wanted, lets assume that there
-    // are more.
-    if ($row_count == $number_of_items) {
+    // If we got exactly the number of entities we wanted, lets assume that
+    // there are more.
+    if ($row_count > 0) {
       $offsets_by_type[$entity_type]['offset'] += $row_count;
     }
     // If not, lets assume that there is no more to get for this entity type. By
     // settings it to FALSE we tell the loop above that it should be inored.
     else {
+      $offsets_by_type[$entity_type]['offset'] = FALSE;
+    }
+
+    if ($offsets_by_type[$entity_type]['offset'] <= 0) {
       $offsets_by_type[$entity_type]['offset'] = FALSE;
     }
 
@@ -378,15 +516,14 @@ function _computed_field_tools_get_entity_ids(&$offsets_by_type, $number_of_item
 }
 
 /**
- * Batch job.
- * Process the entities
+ * Batch job, processes the entities.
  *
- * @param $entities_by_type
- *  Array of entity types and an array of bundles for each.
- * @param $field_name
- *  A string containing the computed_field name.
- * @param $entities_per_run
- *  Number of entities to process for each batch.
+ * @param array $entities_by_type
+ *   Array of entity types and an array of bundles for each.
+ * @param string $field_name
+ *   A string containing the computed_field name.
+ * @param int $entities_per_run
+ *   Number of entities to process for each batch.
  */
 function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $entities_per_run, &$context) {
 
@@ -396,10 +533,13 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
     // When all entities from a entity type has been computed, unset it.
     // When this is empty, we are done.
     $context['sandbox']['offsets_by_type'] = array();
-    foreach ($entities_by_type as $type => $bundle_types) {
-      $context['sandbox']['offsets_by_type'][$type]['offset'] = 0;
-      $context['sandbox']['offsets_by_type'][$type]['types'] = $bundle_types;
+    foreach ($entities_by_type as $entity_type => $bundles) {
+      $context['sandbox']['offsets_by_type'][$entity_type]['offset'] = 0;
+      $context['sandbox']['offsets_by_type'][$entity_type]['types'] = $bundles;
     }
+
+    // Max entity ids by entity type.
+    $context['sandbox']['max_ids'] = _computed_field_tools_get_total_batch_max_id_by_entity_type($entities_by_type);
 
     $context['results']['total_entities_touched'] = 0;
     $context['results']['start'] = microtime(TRUE);
@@ -410,8 +550,15 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
   }
 
   // Get entity ids by type.
-  // We parses the function the offsets_by_type by reference because we need to be able to alter this a the batch runs progresses
-  $entities_to_load = _computed_field_tools_get_entity_ids($context['sandbox']['offsets_by_type'], $entities_per_run);
+  // We parses the function the offsets_by_type by reference because we need to
+  // be able to alter this as the batch runs progresses.
+  $entities_to_load = _computed_field_tools_get_entity_ids($context['sandbox']['offsets_by_type'], $entities_per_run, $context['sandbox']['max_ids']);
+
+  if (empty($entities_to_load)) {
+    $context['results']['end'] = microtime(TRUE);
+    $context['finished'] = 1;
+    return;
+  }
 
   $field = field_info_field($field_name);
   $field_info_instances = field_info_instances();
@@ -429,10 +576,15 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
   }
 
   $entity_info = entity_get_info();
-  foreach ($entities_by_type as $entity_type => $bundle) {
+  foreach ($entities_by_type as $entity_type => $bundles) {
     if (empty($entities_to_load[$entity_type])) {
       continue;
     }
+
+    // Let's warm of the cache by pre-loading all the entities in one go. This
+    // speeds up the processing a lot. Also, reset the static "caching" to avoid
+    // memory issues when run through drush.
+    entity_load($entity_type, $entities_to_load[$entity_type], array(), TRUE);
 
     // Collect a list of language codes to recompute.
     $field_langcodes = array();
@@ -449,7 +601,7 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
       $field_langcodes += $languages_enabled;
     }
 
-    $bundle_name = current($bundle);
+    $bundle_name = current($bundles);
     $field_info_instances = field_info_instances($entity_type, $bundle_name);
     $instance = $field_info_instances[$field_name];
 
@@ -458,11 +610,18 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
     // The revision id key. Falls back to the id key.
     $revision_id_key = empty($entity_info[$entity_type]['entity keys']['revision']) ? $id_key : $entity_info[$entity_type]['entity keys']['revision'];
 
+    // Bundle is not required. User for example does not have a bundle.
+    if (!empty($entity_info[$entity_type]['entity keys']['bundle'])) {
+      $bundle_key = $entity_info[$entity_type]['entity keys']['bundle'];
+    }
+    else {
+      $bundle_key = FALSE;
+    }
 
     // The function used to load the entity. (node_load etc.)
     $load_function = $entity_info[$entity_type]['load hook'];
 
-    // Run through the entities
+    // Run through the entities.
     foreach ($entities_to_load[$entity_type] as $id) {
       $context['results']['total_entities_touched']++;
 
@@ -475,7 +634,8 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
       foreach ($field_langcodes as $langcode) {
         $items = empty($entity->{$field_name}[$langcode]) ? array() : $entity->{$field_name}[$langcode];
 
-        // Process the field. $items hold the new values as it is parsed by reference.
+        // Process the field. $items hold the new values as it is parsed by
+        // reference.
         _computed_field_compute_value($entity_type, $entity, $field, $instance, $langcode, $items);
 
         $recomputed_values = array();
@@ -484,19 +644,18 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
         // @TODO: Hmmm, it would be nice to not have to do this by hand.
         foreach ($items as $delta => $item_value) {
           $bundle = '';
-          // $entity_info[$entity_type]['entity keys']['bundle']
           switch ($entity_type) {
-            case 'node':
-              $bundle = $entity->type;
+            default:
+              if ($bundle_key) {
+                $bundle = $entity->{$bundle_key};
+              }
+              else {
+                $bundle = $entity_type;
+              }
               break;
 
             case 'taxonomy_term':
               $bundle = $entity->vocabulary_machine_name;
-              break;
-
-            case 'user':
-              // @TODO: untested!!
-              $bundle = 'user';
               break;
           }
 
@@ -511,73 +670,26 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
             'delta' => $delta,
             $table_value_column_name => $item_value['value'],
           );
-          // Update values. Only new values.
-          $recomputed_values_update = array(
-            $table_value_column_name => $item_value['value'],
+
+          // Define merge keys and update/insert field_data and field_revision
+          // tables with the new data.
+          $field_keys = array(
+            'entity_type' => $entity_type,
+            'entity_id' => $entity->{$id_key},
+            'revision_id' => $entity->{$revision_id_key},
+            'delta' => $delta,
+            'language' => $langcode,
           );
 
-          // Check to see if we are updating or inserting the current value.
-          $existing_content = db_select($table_name_current, $table_name_current)
-            ->fields($table_name_current, array($table_value_column_name))
-            ->condition('entity_type', $entity_type)
-            ->condition('bundle', $bundle)
-            ->condition('entity_id', $entity->{$id_key})
-            ->condition('revision_id', $entity->{$revision_id_key})
-            ->condition('language', $langcode)
-            ->condition('delta', $delta)
-            ->execute()
-            ->fetchField();
-          // Insert new computed field value.
-          if (empty($existing_content)) {
-            $query = db_insert($table_name_current)
-              ->fields(array('entity_type', 'bundle', 'deleted', 'entity_id', 'revision_id', 'language', 'delta', $table_value_column_name))
-              ->values(array($recomputed_values))
-              ->execute();
-          }
-          // Update existing computed field value, but only if it is different
-          // from the already stored value.
-          elseif ($existing_content != $item_value['value']) {
-            $query = db_update($table_name_current)
-              ->fields($recomputed_values_update)
-              ->condition('entity_type', $entity_type)
-              ->condition('bundle', $bundle)
-              ->condition('entity_id', $entity->{$id_key})
-              ->condition('revision_id', $entity->{$revision_id_key})
-              ->condition('language', $langcode)
-              ->condition('delta', $delta)
-              ->execute();
-          }
+          $query = db_merge($table_name_current)
+            ->key($field_keys)
+            ->fields($recomputed_values)
+            ->execute();
 
-          // Check to see if we are updating or inserting the revision value.
-          $existing_content = db_select($table_name_revision, $table_name_revision)
-            ->fields($table_name_revision, array($table_value_column_name))
-            ->condition('entity_type', $entity_type)
-            ->condition('bundle', $bundle)
-            ->condition('entity_id', $entity->{$id_key})
-            ->condition('revision_id', $entity->{$revision_id_key})
-            ->condition('language', $langcode)
-            ->condition('delta', $delta)
-            ->execute()
-            ->fetchField();
-          if (empty($existing_content)) {
-            $query = db_insert($table_name_revision)
-              ->fields(array('entity_type', 'bundle', 'deleted', 'entity_id', 'revision_id', 'language', 'delta', $table_value_column_name))
-              ->values(array($recomputed_values))
-              ->execute();
-          }
-          // Update existing computed field value, but only if it is different
-          // from the already stored value.
-          elseif ($existing_content != $item_value['value']) {
-            $query = db_update($table_name_revision)
-              ->fields($recomputed_values_update)
-              ->condition('entity_type', $entity_type)
-              ->condition('bundle', $bundle)
-              ->condition('entity_id', $entity->{$id_key})
-              ->condition('revision_id', $entity->{$revision_id_key})
-              ->condition('language', $langcode)
-              ->condition('delta', $delta)
-              ->execute();
-          }
+          $query = db_merge($table_name_revision)
+            ->key($field_keys)
+            ->fields($recomputed_values)
+            ->execute();
         }
       }
 
@@ -594,8 +706,8 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
   }
 
   // Estimate the time. Just nice to know if you should get a cup of coffee.
-  // (The time estimate in the first run will be a bit misleading as the complete
-  // page request is not included in the estimate.)
+  // (The time estimate in the first run will be a bit misleading as the
+  // complete page request is not included in the estimate.)
   $time_left = t('Calculating...');
   if ($context['results']['total_entities_touched'] > $entities_per_run) {
     $time_spent = time() - $context['results']['start'];
@@ -603,7 +715,12 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
     $time_left = t('@minutes minutes @seconds seconds', array('@minutes' => (intval($time_left_in_seconds / 60)), '@seconds' => ($time_left_in_seconds % 60)));
   }
 
-  $context['message'] = '<p>' . t('Working on computed field: %field_name. Processed %entities of %entities_total entities. Estimated time left: %time_left', array('%entities' => $context['results']['total_entities_touched'], '%entities_total' => $context['results']['total_id_count'], '%field_name' => $field_name, '%time_left' => $time_left)) . '</p>';
+  $context['message'] = '<p>' . t('Working on computed field: %field_name. Processed %entities of %entities_total entities. Estimated time left: %time_left', array(
+    '%entities' => $context['results']['total_entities_touched'],
+    '%entities_total' => $context['results']['total_id_count'],
+    '%field_name' => $field_name,
+    '%time_left' => $time_left,
+  )) . '</p>';
   $context['finished'] = $context['results']['total_entities_touched'] / $context['results']['total_id_count'];
 }
 
@@ -612,10 +729,17 @@ function _computed_field_tools_batch_recompute($entities_by_type, $field_name, $
  */
 function _computed_field_tools_batch_recompute_finished($success, $results, $options) {
   $duration = round($results['end'] - $results['start'], 2);
-  drupal_set_message(t('Re-computed %entities_recomputed of %total_count fields in %duration seconds', array('%entities_recomputed' => $results['total_entities_touched'], '%total_count' => $results['total_id_count'], '%duration' => $duration)));
-  // Display this message only if total count of processed fields more than zero.
+  drupal_set_message(t('Re-computed %entities_recomputed of %total_count fields in %duration seconds', array(
+    '%entities_recomputed' => $results['total_entities_touched'],
+    '%total_count' => $results['total_id_count'],
+    '%duration' => $duration,
+  )));
+  // Display this message only if total count of processed fields more than
+  // zero.
   if ($results['total_id_count']) {
     $average_time_pr_thousand = round($duration * 1000 / $results['total_id_count'], 2);
-    drupal_set_message(t('It took an average of %average_time_pr_thousand seconds per 1000 fields to compute.', array('%average_time_pr_thousand' => $average_time_pr_thousand)));
+    drupal_set_message(t('It took an average of %average_time_pr_thousand seconds per 1000 fields to compute.', array(
+      '%average_time_pr_thousand' => $average_time_pr_thousand,
+    )));
   }
 }

@@ -2,10 +2,11 @@ name = Account menu
 description = Provides dynamic Log in/My account/Log out account menu
 core = 7.x
 dependencies[] = menu
+configure = admin/config/people/accountmenu
 
-; Information added by Drupal.org packaging script on 2014-05-31
-version = "7.x-1.0-alpha2+2-dev"
+; Information added by Drupal.org packaging script on 2015-07-20
+version = "7.x-1.0"
 core = "7.x"
 project = "accountmenu"
-datestamp = "1401550128"
+datestamp = "1437375240"
 

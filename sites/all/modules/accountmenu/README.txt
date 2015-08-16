@@ -13,7 +13,7 @@ the primary-links menu. These links can be moved to be part of any other
 menu using the admin/settings/accountmenu screen.
 
 The [Log in] link takes the user to the Drupal login screen. After the user
-sucessfully log in, the screen return back to the page from where the user
+sucessfully logs in, the screen return back to the page from where the user
 originally click [Log in] link.
 
 The links are fully configurable through the admin/build/menu interface.
@@ -21,9 +21,9 @@ However, remember that if you subsequently move the links to another menu,
 the configuration changes are lost. So it's best to first move the links
 first, then set configuration.
 
-The "My account" link title can include tokens @name or @realname. @name is replaced
-with the log in name, @realname is replace with the real name if the RealName module
-is installed, if not, it's replaced with the log in name.
+The "My account" link title can include tokens @name or @realname. @name is
+replaced with the login, @realname is replace with the real name if the
+RealName module is installed, if not, it's replaced with the login name.
 
 The accountmenu block title can have token @name and @realname and these works
 the same as the "My account" link title

@@ -32,4 +32,5 @@ function accountmenu_uninstall() {
   _accountmenu_delete_menu();
 
   db_query("DELETE FROM {menu_custom} WHERE menu_name = 'accountmenu'");
+  db_query("DELETE FROM {menu_links} WHERE link_path = 'user/self'");
 }
