@@ -87,7 +87,12 @@
     <div class="content-info">
 	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
 	    
-	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>">
+	    <?php if ($node->type == 'horse') {
+	    	print render($real_name);
+	    } else {
+	    	print $title;
+	    } ?></a></h2
 	    <?php if ($node->type == 'equus_sale'): ?>
 	    	<!-- <?php print_r($price_per_unit); ?> -->
 	    	<?php print render($price_per_unit); ?>
@@ -98,12 +103,19 @@
 	    	} ?>
 	    	<?php if ($node->type == 'horse') {
 	    		print 'Owned by ' . $name;
-	    		print '<br><span class="horse-info">' . render($content['field_breed']) . ' ' . render($content['field_horse_gender']) . '</span>';
+	    		print '<br><span class="horse-info">' 
+	    			. render($content['field_breed']) 
+	    			. ' ' 
+	    			. render($content['field_horse_gender']) 
+	    			. '</span>';
 	    	} ?>
 	    </div>
 	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale'): ?>
 	    	<?php if (strlen($body_teaser) >= 150) {
-		    	print substr(strip_tags($body_teaser), 0, 150) . '...<a href="' . $node_url . '" class="link-readmore">read more</a>';
+		    	print substr(strip_tags($body_teaser), 0, 150) 
+		    	. '...<a href="' 
+		    	. $node_url 
+		    	. '" class="link-readmore">read more</a>';
 		    } else {
 		    	print render($body_teaser);
 		    } ?>

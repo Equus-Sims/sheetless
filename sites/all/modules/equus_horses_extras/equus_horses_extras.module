@@ -61,6 +61,12 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 		$message .= "and $current_rare_HC Rare Horse Credits.";
 	}
 	drupal_set_message($message);
+
+	// If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
+	if ($form['nid']['#value'] != NULL) {
+		$form['field_horse_creating_org']['#access'] = false;
+	}
+}
 }
 
 /**
@@ -145,6 +151,37 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 	// Verify that residence/property is owned by the currently logged in user
 	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
 	equus_horses_extras_validate_stats($node);
+
+	// Verify that existing horse hasn't had its creating org changed
+/*	if ($node->nid != NULL) {
+		$original_creating_org = $form['#node']->field_horse_creating_org['und'][0]['target_id'];
+		$new_creating_org = $node->field_horse_creating_org['und'][0]['target_id'];
+		// If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
+		if ($original_creating_org != $new_creating_org) {
+			form_set_error('field_horse_creating_org', "Database consistency error. Please contact the site administrator.");
+			watchdog('field_horse_creating_org', 'Attempted to change creating org after horse was already created. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		}
+	}*/
+	// TODO: Test whether the field permissions module handles this for me already: 
+	// Are there any fields that are critical to gameplay and would be game breaking if people were able to freely edit?
+	// Stats
+	// Gender
+	// Age
+	// Pedigree
+	// Show Cooldown
+	// TODO: Ask Peter about doing this in a loop
+}
+
+function equus_horses_extras_node_presave($node) {
+	if ($node->type != 'horse') {
+		return;
+	}
+	if ($node->nid == NULL || $node->original->title != $node->title) {
+		$orgID = $node->field_horse_creating_org['und'][0]['target_id'];
+		$org = node_load($orgID);
+		$real_name = equus_organizations_calc_real_name($node->title, $org);
+		$node->field_horse_real_name['und'][0]['value'] = $real_name;
+	}
 }
 
 function equus_horses_extras_validate_stats($node) {

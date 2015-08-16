@@ -285,7 +285,7 @@ function equus_shows_enter_show($showid,$horseid,$data) {
 
 	$show_name = $show->title;
 
-	$horse_name = $horse->title;
+	$horse_name = $horse->field_horse_real_name['und'][0]['value'];
 
 	$destination = $show->field_hosting_organization[LANGUAGE_NONE][0]['target_id'];
 
@@ -371,17 +371,12 @@ function equus_shows_run_show($show_id) {
 
 	$horses = node_load_multiple($nids);
 
-	// dpm($horses);
-
-	// fill in horses
-	
-
 	// get horse info
 	foreach ($horses as $horse) {
 		$newhorse = new stdClass();
 		$newhorse->type = "Horse";
 		$newhorse->id = $horse->nid;
-		$newhorse->name = $horse->title;
+		$newhorse->name = $horse->field_horse_real_name['und'][0]['value'];
 		$newhorse->stats = new stdClass();
 
 		// get horse stats

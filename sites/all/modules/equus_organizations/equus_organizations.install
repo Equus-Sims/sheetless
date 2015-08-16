@@ -53,6 +53,7 @@ function equus_organizations_install() {
 
     equus_organizations_update_7100();
     equus_organizations_update_7101();
+    equus_organizations_update_7102();
 }
 
 function _equus_organizations_installed_fields() {
@@ -128,6 +129,32 @@ function _equus_organizations_installed_fields_batch2() {
             'label' => $t('Balance'),
             'type' => 'number_integer'
         )
+    );
+}
+
+function _equus_organizations_installed_fields_batch3() {
+    $t = get_t();
+    return array(
+        'equus_organizations_prefix' => array(
+            'field_name' => 'equus_organizations_prefix',
+            'label' => $t('Prefix'),
+            'type' => 'text',
+            'required' => 1,
+        ),
+        'equus_organizations_pfx_display' => array(
+            'field_name' => 'equus_organizations_pfx_display',
+            'label' => $t('Display prefix as..'),
+            'type' => 'list_text',
+            'required' => 1,
+            'settings' => array(
+                'allowed_values' => array(
+                    'prefix' => 'prefix',
+                    'posessive' => 'prefix + \'s',
+                    'suffix' => 'suffix',
+                    'hidden' => 'hidden'
+                )
+            )
+        ),
     );
 }
 
@@ -230,6 +257,40 @@ function _equus_organizations_installed_instances_batch2() {
     );
 }
 
+function _equus_organizations_installed_instances_batch3() {
+    $t = get_t();
+    return array(
+        'equus_organizations_prefix' => array(
+            'field_name' => 'equus_organizations_prefix',
+            'label' => $t('Prefix'),
+            'type' => 'text',
+            'required' => 1,
+            'entity_type' => 'node',
+            'bundle' => 'organization',
+        ),
+        'equus_organizations_pfx_display' => array(
+            'field_name' => 'equus_organizations_pfx_display',
+            'label' => $t('Display prefix as..'),
+            'required' => 1,
+            'type' => 'list_text',
+            'entity_type' => 'node',
+            'bundle' => 'organization',
+            'widget' => array(
+                'active' => 1,
+                'module' => 'options',
+                'settings' => array(),
+                'type' => 'options_buttons',
+                'weight' => 35,
+            ),
+            'default_value' => array(
+                0 => array(
+                    'value' => 'prefix',
+                ),
+            ),
+        ),
+    );
+}
+
 function _equus_organizations_add_custom_fields() {
     foreach (_equus_organizations_installed_fields() as $field) {
         field_create_field($field);
@@ -265,6 +326,19 @@ function equus_organizations_update_7101() {
     }
 
     foreach (_equus_organizations_installed_instances_batch2() as $fieldinstance) {
+        field_create_instance($fieldinstance);
+    }
+}
+
+/**
+ * Adds prefix and prefix display fields to organizations
+ */
+function equus_organizations_update_7102() {
+    foreach (_equus_organizations_installed_fields_batch3() as $field) {
+        field_create_field($field);
+    }
+
+    foreach (_equus_organizations_installed_instances_batch3() as $fieldinstance) {
         field_create_instance($fieldinstance);
     }
 }

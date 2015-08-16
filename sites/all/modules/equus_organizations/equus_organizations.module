@@ -34,13 +34,66 @@ function equus_organizations_node_insert($node) {
 	}
 }
 
+function equus_organizations_node_update($node) {
+	if ($node->type != 'organization') {
+		return;
+	}
+	if ($node->equus_organizations_prefix['und'][0]['value'] != $node->original->equus_organizations_prefix['und'][0]['value'] || 
+		$node->equus_organizations_pfx_display['und'][0]['value'] != $node->original->equus_organizations_pfx_display['und'][0]['value'])
+	{
+		$query = new EntityFieldQuery();
+		$query
+			->entityCondition('entity_type', 'node')
+			->entityCondition('bundle', 'horse')
+			->propertyCondition('status', 1)
+			->fieldCondition('field_horse_creating_org', 'target_id', $node->nid);
+		$result = $query->execute();
+		if (count($result) > 0) {
+			$horseIDs = array_keys($result['node']);
+		} 
+		$horses = node_load_multiple($horseIDs);
+		foreach ($horses as $horse) {
+			$real_name = equus_organizations_calc_real_name($horse->title, $node);
+			$horse->field_horse_real_name['und'][0]['value'] = $real_name;
+			//TODO: Is there a way to not save horses in this organizations module?
+			node_save($horse);
+		}
+	}
+}
+
 function equus_organizations_node_validate($node, $form, $form_state) {
 	if ($node->type != 'organization') {
 		return;
 	}
-	drupal_set_message(userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID));
 	if ($node->nid == NULL && userpoints_get_current_points($node->uid, EQUUS_HORSES_EXTRAS_ORG_CREDIT_TID) == 0) {
 		form_set_error('', "You do not have enough Organization Credits to create this Organization. If you are a new member, please go to the Store and purchase your Starter Pack. If you have already purchased your Starter Pack and created your first Organization, then you must buy another Organization Credit from the Store before you can create additional Organizations.");
+	}
+
+	// ensure that the variable exists
+	$original_prefix = '';
+	// if the node is not new, get the original prefix
+	if ($node->nid != NULL) {
+		$original_prefix = $form['#node']->equus_organizations_prefix['und'][0]['value'];
+	}
+	
+	// ensures that special characters, spaces, and punctuation are not used in prefixes. Only a-z English characters are allowed.
+	$prefix = $node->equus_organizations_prefix['und'][0]['value'];
+	if ($original_prefix != $prefix) {
+		$result = preg_match('/^[a-zA-Z]+$/', $prefix);
+		if ($result === 0) {
+			form_set_error('equus_organizations_prefix', "Special characters, spaces, and punctuation are not allowed in prefixes. Please choose a prefix that only contains the English letters a-z.");
+		}
+		// ensure that prefixes are unique
+		$query = new EntityFieldQuery();
+		$query
+			->entityCondition('entity_type', 'node')
+			->entityCondition('bundle', 'organization')
+			->propertyCondition('status', 1)
+			->fieldCondition('equus_organizations_prefix', 'value', $prefix, '=');
+		$result = $query->execute();
+		if (!empty($result)) {
+			form_set_error('equus_organizations_prefix', "That prefix is already in use. Please choose a different prefix.");
+		}
 	}
 }
 
@@ -145,7 +198,6 @@ function equus_organizations_spend_org_credit($uid) {
  */
 function equus_organizations_get_assoc_users($orgID) {
 	$org = node_load($orgID);
-	dpm($org);
 
 	$users = [];
 	if (isset($org->equus_organizations_users['und'])) {
@@ -159,4 +211,31 @@ function equus_organizations_get_assoc_users($orgID) {
 	$users[] = $org->uid;
 
 	return $users;
+}
+
+/**
+ * Constructs the horse's real name (prefix + name)
+ *
+ * @param $name The raw name of the horse without any prefixes
+ * @param $creating_org The loaded node of the horse's creating org (determines prefix settings)
+ */
+function equus_organizations_calc_real_name($name, $creating_org) {
+	if (!$creating_org) {
+		return $name;
+	}
+	$prefix = $creating_org->equus_organizations_prefix['und'][0]['value'];
+	$prefix_display = $creating_org->equus_organizations_pfx_display['und'][0]['value'];
+
+	switch ($prefix_display) {
+		case 'prefix':
+			return "$prefix $name";
+		case 'posessive':
+			return "$prefix's $name";
+		case 'suffix':
+			return "$name $prefix";
+		case 'hidden':
+			return $name;
+		default:
+			return $name;
+	}
 }

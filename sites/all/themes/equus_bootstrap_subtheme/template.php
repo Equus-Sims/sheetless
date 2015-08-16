@@ -206,6 +206,14 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	    $price_per_unit['#label_display'] = 'hidden';
 	    $vars['price_per_unit'] = $price_per_unit;
 	}
+
+	if ($vars['node']->type == 'horse') {
+	    // set up render array for blog categories
+	    $real_name = field_view_field('node',$vars['node'],'field_horse_real_name');
+	    $real_name['#label_display'] = 'hidden';
+	    $vars['real_name'] = $real_name;
+	    $vars['title'] = $real_name;
+	}
 }
 
 function equus_bootstrap_subtheme_get_content_bottom($view_mode) {
