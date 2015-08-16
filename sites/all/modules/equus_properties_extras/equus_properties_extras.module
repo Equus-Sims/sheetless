@@ -48,6 +48,35 @@ function equus_properties_extras_node_validate($node, $form, &$form_state) {
 /**
  * Gets the user's associated properties
  *
+ * @param $uid The ID of the user in question.
+ * @return An array of property IDs
+ */
+function equus_properties_get_user_assoc_properties($uid) {
+	// get user's associated orgs
+	$nids = equus_organizations_get_assoc_orgs($uid);
+	// query for all properties associated with an org
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'property')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_property_ownership', 'target_id', $nids, 'IN');
+	$result = $query->execute();
+
+	// initialize array of property IDs
+	$propertyIDs = array();
+
+	// if a property exists, add it to the array
+	if (count($result) > 0) {
+		$propertyIDs = array_keys($result['node']);
+	}
+
+	return $propertyIDs;
+}
+
+/**
+ * Gets the user's associated properties
+ *
  * The output is an array with keys being organization names and values
  * being an array of associated properties. Each entry in the properties
  * array has a property id as a key and the property name as a value.
@@ -68,7 +97,7 @@ function equus_properties_extras_node_validate($node, $form, &$form_state) {
  * @param $uid The ID of the user in question.
  * @return An array with keys being organization names and values being an array of associated properties.
  */
-function equus_properties_get_user_assoc_properties($uid) {
+function equus_properties_get_user_assoc_properties_by_org($uid) {
 	// get all organization IDs that the member is associated with
 	$orgIDs = equus_organizations_get_assoc_orgs($uid);
 
@@ -82,7 +111,8 @@ function equus_properties_get_user_assoc_properties($uid) {
 		$properties[$organization->title] = array();
 
 		// get the property nodes associated with an org
-		$property_nodes = equus_properties_get_org_assoc_properties($organization->nid);
+		$property_nids = equus_properties_get_org_assoc_properties($organization->nid);
+		$property_nodes = node_load_multiple($property_nids);
 		foreach ($property_nodes as $property) {
 			// fill properties array with key/value (ID/title) pairs for property nodes
 			$properties[$organization->title][$property->nid] = $property->title;
@@ -115,8 +145,5 @@ function equus_properties_get_org_assoc_properties($nid) {
 		$propertyIDs = array_keys($result['node']);
 	}
 
-	// get all the property nodes from property IDs
-	$properties = node_load_multiple($propertyIDs);
-
-	return $properties;
+	return $propertyIDs;
 }

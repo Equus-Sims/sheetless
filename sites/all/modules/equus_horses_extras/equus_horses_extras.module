@@ -18,7 +18,7 @@ define("EQUUS_HORSES_EXTRAS_RARE_HC_TID",2);
 function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	$uid = $GLOBALS['user']->uid;
 	// get all organizations (and properties) associated with the currently logged in user
-	$organizations = equus_properties_get_user_assoc_properties($uid);
+	$organizations = equus_properties_get_user_assoc_properties_by_org($uid);
 
 	// if the user has no organizations, print an error
 	if (empty($organizations)) {
@@ -67,6 +67,77 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 		$form['field_horse_creating_org']['#access'] = false;
 	}
 }
+
+/**
+ * Gets the user's active associated horses
+ *
+ * @param $uid The ID of the user in question.
+ * @return An array of active horse IDs
+ */
+function equus_horses_extras_get_assoc_active_horses($uid) {
+	// get user's associated properties
+	$nids = equus_properties_get_user_assoc_properties($uid);
+	//query for all horses associated with a property
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'horse')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_horse_activation_status', 'value', 'Active', '=')
+		->fieldCondition('field_horse_residence', 'target_id', $nids, 'IN');
+	$result = $query->execute();
+
+	$horses = array();
+
+	if (count($result) > 0) {
+		$horses = array_keys($result['node']);
+	}
+	return $horses;
+}
+
+/**
+ * Gets the user's associated horses (active and inactive)
+ *
+ * @param $uid The ID of the user in question.
+ * @return An array of horse IDs
+ */
+function equus_horses_extras_get_assoc_horses($uid) {
+		// get user's associated properties
+	$nids = equus_properties_get_user_assoc_properties($uid);
+	//query for all horses associated with a property
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'horse')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_horse_residence', 'target_id', $nids, 'IN');
+	$result = $query->execute();
+
+	$horses = array();
+
+	if (count($result) > 0) {
+		$horses = array_keys($result['node']);
+	}
+	return $horses;
+}
+
+/**
+ * Gets a list of horse options by name.
+ * @param $nids IDs of the horses 
+ */
+function equus_horses_extras_get_horse_options($nids) {
+	if (empty($nids)) {
+		return;
+	}
+
+	$horses = node_load_multiple($nids);
+
+	// populate the array that we are going to use to set the options
+	$horse_options = array();
+	foreach ($horses as $horse) {
+		$horse_options[$horse->nid] = $horse->field_horse_real_name['und'][0]['value'];
+	}
+	return $horse_options;
 }
 
 /**
@@ -98,7 +169,7 @@ function equus_horses_extras_validate_rare_hc_count($uid) {
  * @param $nid ID of the property in question
  */
 function equus_horses_extras_validate_residence_ownshp($uid, $nid) {
-	$organizations = equus_properties_get_user_assoc_properties($uid);
+	$organizations = equus_properties_get_user_assoc_properties_by_org($uid);
 
 	$found = FALSE;
 	foreach ($organizations as $properties) {

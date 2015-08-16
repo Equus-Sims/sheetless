@@ -124,20 +124,11 @@ function equus_shows_block_view($delta = '') {
 }
 
 function equus_shows_entry_form($form, &$form_state) {
-	// find logged in user id
-	// EFQ for horses with that owner
+	// call function to find all horses owned by currently logged in user
+	$uid = $GLOBALS['user']->uid;
+	$nids = equus_horses_extras_get_assoc_horses($uid);
 
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'horse')
-		->propertyCondition('status', 1)
-		->fieldCondition('field_horse_activation_status', 'value', 'Active', '=')
-		->propertyCondition('uid', $GLOBALS['user']->uid)
-		->propertyOrderBy('created', 'DESC');
-	$result = $query->execute();
-
-	if (empty($result)) {
+	if (empty($nids)) {
 		$form['some_text'] = array(
 			'#markup' => "<p>None of your organizations own any activated horses. Unactivated horses may not compete in shows. To activate a horse, first create or edit one and set its Horse Activation Status from pending to active.</p>"
 		);
@@ -151,15 +142,7 @@ function equus_shows_entry_form($form, &$form_state) {
 		return $form;
 	}
 
-	$nids = array_keys($result['node']);
-
-	$nodes = node_load_multiple($nids);
-
-	$horse_list = array();
-
-	foreach ($nodes as $node) {
-		$horse_list[$node->nid] = $node->title;
-	}
+	$horse_list = equus_horses_extras_get_horse_options($nids);
 
 	$form['horseid'] = array(
 		'#type' => 'select', //you can find a list of available types in the form api

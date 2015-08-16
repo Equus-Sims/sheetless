@@ -66,7 +66,10 @@ function equus_store_form($form, &$form_state) {
  */
 function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 	global $user;
-
+	// get a list of horse IDs associated with a user
+	$nids = equus_horses_extras_get_assoc_horses($user->uid);
+	// give the IDs to return a list of those horses by name and populate dropdown
+	$form['field_equus_sale_item']['und']['#options'] = equus_horses_extras_get_horse_options($nids);
 	// pass the correct organization options to the form for the organization field
 	$form['field_hosting_organization']['und']['#options'] = equus_organizations_get_org_options($user->uid);
 }
@@ -218,6 +221,10 @@ function equus_store_form_submit($form, &$form_state) {
 }
 
 function equus_store_horse_credit_sale($uid, $source_id, $dest_id, $quantity, $total) {
+	if ($quantity < 1) {
+		drupal_set_message("Quantity must be greater than 1.");
+		return;
+	}
 	equus_horses_extras_gain_regular_hc($uid, $quantity);
 		$suffix = ($quantity == 1 ? "" : "s");
 
