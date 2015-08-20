@@ -66,6 +66,16 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	if ($form['nid']['#value'] != NULL) {
 		$form['field_horse_creating_org']['#access'] = false;
 	}
+
+	$breed_IDs = array_slice(array_keys($form['field_horse_breed']['und']['#options']),1);
+
+	$breeds = node_load_multiple($breed_IDs);
+
+	foreach ($breeds as $breed) {
+		$form['field_horse_breed']['und']['#options'][$breed->nid] = $breed->field_base_breed['und'][0]['value'] . " - " . $breed->title;
+	}
+
+	asort($form['field_horse_breed']['und']['#options']);
 }
 
 /**
