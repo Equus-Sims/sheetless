@@ -92,9 +92,8 @@
 	    	print render($real_name);
 	    } else {
 	    	print $title;
-	    } ?></a></h2
+	    } ?></a></h2>
 	    <?php if ($node->type == 'equus_sale'): ?>
-	    	<!-- <?php print_r($price_per_unit); ?> -->
 	    	<?php print render($price_per_unit); ?>
 	    <?php endif; ?>
 	    <div class="post-info">
