@@ -77,6 +77,10 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 function equus_horses_extras_get_assoc_active_horses($uid) {
 	// get user's associated properties
 	$nids = equus_properties_get_user_assoc_properties($uid);
+	if (empty($nids)) {
+		// if nids is empty return an empty array
+		return array();
+	}
 	//query for all horses associated with a property
 	$query = new EntityFieldQuery();
 	$query
@@ -99,11 +103,15 @@ function equus_horses_extras_get_assoc_active_horses($uid) {
  * Gets the user's associated horses (active and inactive)
  *
  * @param $uid The ID of the user in question.
- * @return An array of horse IDs
+ * @return An array of horse IDs. Will return empty array if there are no assoc horses.
  */
 function equus_horses_extras_get_assoc_horses($uid) {
 		// get user's associated properties
 	$nids = equus_properties_get_user_assoc_properties($uid);
+	if (empty($nids)) {
+		// if nids is empty return an empty array
+		return array();
+	}
 	//query for all horses associated with a property
 	$query = new EntityFieldQuery();
 	$query
