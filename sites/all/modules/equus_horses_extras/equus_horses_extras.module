@@ -216,6 +216,13 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 		return;
 	}
 
+	$breedID = $node->field_horse_breed['und'][0]['target_id'];
+	$breed = node_load($breedID);
+
+	$body_typeID = $node->field_horse_body_type['und'][0]['target_id'];
+	$body_type = node_load($body_typeID);
+
+
 	// Verify that user has enough horse credits to activate the horse
 	// TODO: Make this section its own function
 	// check if new horse
@@ -239,7 +246,6 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 
 	// Verify that residence/property is owned by the currently logged in user
 	equus_horses_extras_validate_residence_ownshp($form['uid']['#value'], $node->field_horse_residence['und'][0]['target_id']);
-	equus_horses_extras_validate_stats($node);
 
 	// Verify that existing horse hasn't had its creating org changed
 /*	if ($node->nid != NULL) {
@@ -271,35 +277,6 @@ function equus_horses_extras_node_presave($node) {
 		$real_name = equus_organizations_calc_real_name($node->title, $org);
 		$node->field_horse_real_name['und'][0]['value'] = $real_name;
 	}
-}
-
-function equus_horses_extras_validate_stats($node) {
-	$stats = $node->field_horse_stats['und'];
-	// drupal_set_message(print_r($stats, true));
-	$valid_stats = true;
-	$stat_info = [];
-	foreach ($stats as $stat) {
-		$statname = $stat['field_stat']['und'][0]['value'];
-		$statvalue = $stat['field_horse_stat_value']['und'][0]['value'];
-
-		if (empty($statname)) {
-			// drupal_set_message("ERROR??? ".print_r($statname,true));
-			$valid_stats = false;
-			form_set_error('field_horse_stats', "You must assign 6 stats to your horse.");
-			return $valid_stats;
-		} else {
-			// drupal_set_message(print_r($statname,true));
-			$stat_info[] = $statname;
-		}
-	}
-	$result = array_unique($stat_info);
-	if (count($result) < 6) {
-		$valid_stats = false;
-		form_set_error('field_horse_stats', "You may not use the same stat twice.");
-		return $valid_stats;
-	}
-
-	return $valid_stats;
 }
 
 /**
@@ -367,6 +344,7 @@ function equus_horses_extras_gain_rare_hc($uid, $quantity) {
 }
 
 function equus_horses_extras_node_insert($node) {
+	//TODO: Move all this stuff to the register horse function
 	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
 		return;
 	}
@@ -376,6 +354,113 @@ function equus_horses_extras_node_insert($node) {
 	if ($status === false) {
 		watchdog('equus_horse_aging', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
 	}
+	equus_horses_extras_calc_stats($node->nid);
+}
+
+/**
+ *	Calculates the horse's initial stats based on breed and body type
+ *
+ * -- SHOULD ONLY BE USED UPON INITIAL STAT DISTRIBUTION FOR FOUNDATIONS--
+ *
+ * @param $nid Node ID of the horse
+ */
+function equus_horses_extras_calc_stats($nid) {
+	$horse = node_load($nid);
+
+	$breedID = $horse->field_horse_breed['und'][0]['target_id'];
+	$breed_stats = equus_horses_extras_get_breed_stats($breedID);
+
+	$body_typeID = $horse->field_horse_body_type['und'][0]['target_id'];
+	$modifiers = equus_horses_extras_get_body_type_modifiers($body_typeID);
+
+	$stats = array_keys(list_allowed_values(field_info_field('field_stat')));
+
+	// we get the entity ids of the current stats if any
+	$eids = array();
+	foreach ($horse->field_horse_stats[LANGUAGE_NONE]as $key => $value) {
+		$eids[] = $value['value'];
+		unset($horse->field_horse_stats[LANGUAGE_NONE][$key]);
+	}
+	if ($eids > 0) {
+		entity_delete_multiple('field_collection_item', $eids);
+		node_save($horse);
+	}
+	drupal_set_message(print_r($eids, true));
+
+	foreach ($stats as $stat) {
+		$raw_potential = rand($breed_stats[$stat]['low'], $breed_stats[$stat]['high']);
+		$potential = $raw_potential + $modifiers[$stat];
+		if ($potential < 0) {
+			$potential = 0;
+		} else if ($potential > 100) {
+			$potential = 100;
+		}
+		$current = rand(0, $potential);
+		// Setup the values in the structure expected by the field_collection entity.
+		$values = array(
+		  	'field_name' => 'field_horse_stats',
+		  	'field_stat' => array(
+		   		LANGUAGE_NONE => array(array('value' => $stat)),
+		  	),
+		  	'field_horse_current_stat_value' => array(
+		    	LANGUAGE_NONE => array(array('value' => $current)),
+		  	),
+		  	'field_horse_potential_stat_value' => array(
+		    	LANGUAGE_NONE => array(array('value' => $potential)),
+		  	),
+		);
+		$entity = entity_create('field_collection_item', $values);
+		// Attach the field_collection entity to the application node. This has to
+		// happen separately so that it actually works -- you can't just specify
+		// this via the $values array.
+		$entity->setHostEntity('node', $horse);
+		// Save the entity. Since it's attached to the right application node, this
+		// will both create the field_collection entity and update the application
+		// node to point to the new field_activity_log record.
+		// drupal_set_message(print_r($entity, true));
+		//$entity->save();
+		entity_save('field_collection_item', $entity);
+	}
+}
+
+function equus_horses_extras_get_breed_stats($breedID) {
+	$breed = node_load($breedID);
+	// get horse stats
+	$stats = $breed->field_breed_stat_windows[LANGUAGE_NONE];
+	// dpm($stats);
+	$result = array();
+	foreach ($stats as $stat) {
+		$field_collection_item = field_collection_item_load($stat['value']);
+		
+		// dpm($field_collection_item);
+		$stat_name = $field_collection_item->field_stat['und'][0]['value'];
+		
+		$stat_low_value = $field_collection_item->field_breed_low_stat_value['und'][0]['value'];
+
+		$stat_high_value = $field_collection_item->field_breed_high_stat_value['und'][0]['value'];
+
+		$result[$stat_name] = array('low' => $stat_low_value, 'high' => $stat_high_value);
+	}
+	return $result;
+}
+
+function equus_horses_extras_get_body_type_modifiers($body_typeID) {
+	$body_type = node_load($body_typeID);
+	// get horse stats
+	$stats = $body_type->field_body_type_stat_modifier[LANGUAGE_NONE];
+	// dpm($stats);
+	$result = array();
+	foreach ($stats as $stat) {
+		$field_collection_item = field_collection_item_load($stat['value']);
+		
+		// dpm($field_collection_item);
+		$stat_name = $field_collection_item->field_stat['und'][0]['value'];
+		
+		$stat_modifier = $field_collection_item->field_stat_modifier['und'][0]['value'];
+
+		$result[$stat_name] = $stat_modifier;
+	}
+	return $result;
 }
 
 function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
