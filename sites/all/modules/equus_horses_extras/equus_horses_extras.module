@@ -140,6 +140,29 @@ function equus_horses_extras_get_assoc_horses($uid) {
 }
 
 /**
+ *	Gets the org which owns the property the horse resides at
+ * 
+ * @param $horse Horse node.
+ * @return Organization node or null.
+ */
+function equus_horses_extras_get_residence_org($horse) {
+	$residence_id = $horse->field_horse_residence[LANGUAGE_NONE][0]['target_id'];
+
+	$residence = node_load($residence_id);
+	if (!$residence) {
+		return NULL;
+	}
+
+	$org_ID = $residence->field_property_ownership[LANGUAGE_NONE][0]['target_id'];
+
+	$org = node_load($org_ID);
+	if (!$org_ID) {
+		return NULL;
+	}
+	return $org;
+}
+
+/**
  * Gets a list of horse options by name.
  * @param $nids IDs of the horses 
  */
