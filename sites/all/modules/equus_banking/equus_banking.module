@@ -244,10 +244,15 @@ function equus_banking_balance($ledger, $organization) {
  * @param orgID must be node ID for an organization
  */
 function equus_banking_update_org_balance($orgID) {
+	$org = node_load($orgID);
+
+	if (!$org) {
+		return NULL;
+	}
+
 	$ledger = equus_banking_retrieve_ledger();
 	$balance = equus_banking_balance($ledger, $orgID);
 
-	$org = node_load($orgID);
 	$org->equus_organizations_balance['und'][0]['value'] = $balance;
 
 	node_save($org);
