@@ -27,7 +27,7 @@ function equus_shows_node_type_insert($node_type) {
 }
 
 function equus_shows_node_insert($node) {
-	if ($node->type != 'equus_show') {
+	if ($node->type != 'show') {
 		return;
 	}
 	$hosting_org = $node->field_hosting_organization['und'][0]['target_id'];
@@ -36,14 +36,14 @@ function equus_shows_node_insert($node) {
 }
 
 function equus_shows_node_validate($node, $form, &$form_state) {
-	if ($node->type != 'equus_show') {
+	if ($node->type != 'show') {
 		return;
 	}
 	$hosting_org_id = $node->field_hosting_organization['und'][0]['target_id'];
 	$hosting_org = node_load($hosting_org_id);
 
 	if ($node->nid == NULL) {
-		if (!$hosting_org || $hosting_org->type != "equus_organization") {
+		if (!$hosting_org || $hosting_org->type != "organization") {
 			form_set_error('field_hosting_organization', "Invalid hosting organization.");
 		} else {
 			if (!equus_banking_check_sufficient_funds(PURSE, $hosting_org_id)) {
@@ -271,7 +271,7 @@ function equus_shows_enter_show($showid,$horseid,$data) {
 		return false;
 	}
 
-	if (equus_banking_check_sufficient_funds($entry_fee, $org->nid)) {
+	if (!equus_banking_check_sufficient_funds($entry_fee, $org->nid)) {
 		drupal_set_message(t('You do not have enough money for this entry.'), 'error');
 		return false;
 	}
@@ -304,7 +304,7 @@ function _equus_shows_sum($carry, $item) {
 
 function equus_shows_run_weighted_stat_show($show_id) {
 	$show = node_load($show_id);
-	$hosting_org = $show->field_hosting_organization['und'][0]['target_id'];
+	$hosting_org = node_load($show->field_hosting_organization['und'][0]['target_id']);
 	if (!$hosting_org) {
 		drupal_set_message("The hosting organization does not exist.", 'error');
 		return false;
@@ -413,7 +413,6 @@ function equus_shows_run_weighted_stat_show($show_id) {
     $output = $new_show->run_the_show();
 
     // stuff the results into drupal and/or wherever
-    dpm($output);
     // dpm(json_encode($output,JSON_PRETTY_PRINT));
 
     // construct a map of nids to indexes in $output so we can look up
@@ -432,6 +431,8 @@ function equus_shows_run_weighted_stat_show($show_id) {
 	}
 
 	// award money here
+	$payout = floor(PURSE / 6);
+	$remainder = PURSE % 6;
 	foreach ($horses as $horse) {
 		$placement = $output[$nid_to_output[$horse->nid]];
 
@@ -439,8 +440,11 @@ function equus_shows_run_weighted_stat_show($show_id) {
 			continue;
 		}
 		$org = equus_horses_extras_get_residence_org($horse);
-		$payout = PURSE / 6;
-		equus_banking_create_transaction("{$horse->title} was awarded payout for placing {$placement->placement} in {$show->title}", EQUUS_COMP_COM_ID, $org->nid, $payout);
+		$individual_payout = $payout;
+		if ($placement->placement == 1) {
+			$individual_payout += $remainder;
+		}
+		equus_banking_create_transaction("{$horse->title} was awarded payout for placing {$placement->placement} in {$show->title}", EQUUS_COMP_COM_ID, $org->nid, $individual_payout);
 
 	}
 	// deliver entry fees to hosting organization
