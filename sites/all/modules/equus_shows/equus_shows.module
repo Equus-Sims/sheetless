@@ -247,7 +247,48 @@ function equus_shows_compute_form_validate($form, &$form_state) {
 
 function equus_shows_compute_form_submit($form, &$form_state) {
 	// dpm($form);
-	equus_shows_run_weighted_stat_show($form_state['showid']);
+	$show = node_load($form_state['showid']);
+	if (!$show || $show->type != 'show') {
+		watchdog('equus_shows', 'equus_shows_compute_form_submit called from a non-show. show_id = @nid',
+			array('@nid'=>$form_state['showid']), WATCHDOG_ERROR);
+		return;
+	}
+	equus_shows_run_show($show);
+}
+
+function equus_shows_run_show($show) {
+	try {
+		$show_types = equus_shows_load_json("show_types.json");
+		
+		$phase_types = equus_shows_load_json("show_phase_types.json");
+
+		$show_type = $show->field_show_type[LANGUAGE_NONE][0]['value'];
+		if (!property_exists($show_types, $show_type)) {
+			throw new Exception("Show type $show_type does not exist.");
+		}
+
+		$show_type_data = $show_types->$show_type;
+
+		foreach ($show_type_data->phases as $phase) {
+			drupal_set_message($phase);
+			$function_name = "equus_shows_run_{$phase}_phase";
+			if (!property_exists($phase_types, $phase)) {
+				throw new Exception("Phase type $phase does not exist.");
+			}
+			if (!function_exists($function_name)) {
+				throw new Exception("Function $function_name does not exist.");
+			}
+			$phase_data = $phase_types->$phase;
+			// the phase functions will return true if we should immediately continue to the next phase, 
+			// false if we should pause and wait for some other event to continue
+			if (!$function_name($show, $show_type_data, $phase_data)) {
+				break;
+			}
+		}
+	} catch (Exception $e) {
+		drupal_set_message("There was an error running this show. Please contact the site administrator.", 'error');
+		watchdog('equus_shows', "Error in equus_shows_run_show (showid = {$show->nid}): " . $e->getMessage(), NULL, WATCHDOG_ERROR);
+	}
 }
 
 function equus_shows_enter_show($showid,$horseid,$data) {
@@ -302,8 +343,20 @@ function _equus_shows_sum($carry, $item) {
     return $carry;
 }
 
-function equus_shows_run_weighted_stat_show($show_id) {
-	$show = node_load($show_id);
+function equus_shows_load_json($file_name) {
+	$raw = file_get_contents(drupal_get_path("module", "equus_shows") . "/" . $file_name);
+	if ($raw === FALSE) {
+		throw new Exception ("Could not open {$file_name}.");
+	}
+
+	$the_json = json_decode($raw);
+	if ($the_json === NULL) {
+		throw new Exception ("{$file_name} contained invalid JSON.");
+	}
+}
+
+
+function equus_shows_run_weighted_stat_phase($show, $show_type_data) {
 	$hosting_org = node_load($show->field_hosting_organization['und'][0]['target_id']);
 	if (!$hosting_org) {
 		drupal_set_message("The hosting organization does not exist.", 'error');
@@ -360,7 +413,7 @@ function equus_shows_run_weighted_stat_show($show_id) {
 	// $entity_type = The entity type of one of the endpoints
 	// $entity_id = The entity id of one of the endpoints. Can also be an array of entity IDs.
 	// $r_index = The index of the search entity in the relation to be found (0 = source, 1 = target)
-	$query = relation_query('node', $show_id, 1);
+	$query = relation_query('node', $show->nid, 1);
 	$results = $query->entityCondition('bundle', 'is_entered_in')->execute();
 
 	$rids = array_map(function($o) { return $o->rid; }, $results);
@@ -373,7 +426,7 @@ function equus_shows_run_weighted_stat_show($show_id) {
 	$nids = array_map(function($o) {return $o->endpoints[LANGUAGE_NONE][0]['entity_id'];}, $relations);
 	if (empty($nids)) {
 		drupal_set_message("No horses are entered in this show yet.", 'error');
-		return;
+		return false;
 	}
 
 	$horses = node_load_multiple($nids);
@@ -429,7 +482,6 @@ function equus_shows_run_weighted_stat_show($show_id) {
 		$relation->equus_shows_placement[LANGUAGE_NONE][0]['value'] = $output[$nid_to_output[$nid]]->placement;
 		relation_save($relation);
 	}
-
 	// award money here
 	$payout = floor(PURSE / 6);
 	$remainder = PURSE % 6;
@@ -451,4 +503,5 @@ function equus_shows_run_weighted_stat_show($show_id) {
 	$entry_fees_total = ENTRY_FEE * count($horses);
 	equus_banking_create_transaction("Entry fees for {$show->title}", EQUUS_COMP_COM_ID, $hosting_org->nid, $entry_fees_total);
 	// award HP here
+	return true;
 }

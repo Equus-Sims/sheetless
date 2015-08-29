@@ -1,0 +1,33 @@
+{
+	"weighted_stat": {
+		"base_purse": 5000,
+		"placement_weights": [
+			0.30,
+			0.25,
+			0.15,
+			0.12,
+			0.10,
+			0.08
+		],
+		"hp_base": 10,
+		"hp_level_mult": 2,
+		"hp_placement_mult": -2
+	},
+	"photo": {
+		"base_purse": 7500,
+		"placement_weights": [
+			0.30,
+			0.25,
+			0.15,
+			0.12,
+			0.10,
+			0.08
+		],
+		"mp_base": 10,
+		"mp_level_mult": 2,
+		"mp_placement_mult": -2
+	},
+	"roleplay": {
+		"mp_base": 5
+	}
+}

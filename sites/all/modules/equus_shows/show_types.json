@@ -1,0 +1,23 @@
+{
+	"weighted_stat": {
+		"phases": [
+			"weighted_stat"
+		],
+		"min_entries": 10,
+		"max_entries": 20
+	},
+	"photo": {
+		"phases": [
+			"photo"
+		],
+		"max_entries": 20
+	},
+	"combination": {
+		"phases": [
+			"weighted_stat",
+			"roleplay"
+		],
+		"min_entries": 10,
+		"max_entries": 20
+	}
+}
