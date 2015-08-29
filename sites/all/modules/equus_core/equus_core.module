@@ -82,3 +82,26 @@ function equus_core_admin_paths() {
   );
   return $paths;
 }
+
+function equus_core_get_es_months() {
+	$start = 2013;
+	$nowy = date('Y');
+	$nowm = date('n');
+	return ($nowy-$start)*12 + $nowm + 3;
+}
+
+function equus_core_get_es_year() {
+	return floor(equus_core_get_es_months() / 4);
+}
+
+function equus_core_get_es_season() {
+	return equus_core_get_es_months() % 4;
+}
+
+function equus_core_get_es_pretty_year() {
+	$months = equus_core_get_es_months();
+	$year = floor($months / 4);
+	$season = $months % 4;
+	$seasons = array("Winter","Spring","Summer","Fall");
+	return $seasons[$season] . ", Year " . $year;
+}
