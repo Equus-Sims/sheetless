@@ -1,6 +1,7 @@
 {
 	"weighted_stat": {
 		"base_purse": 5000,
+		"entry_fee_mult": 0.10,
 		"placement_weights": [
 			0.30,
 			0.25,
@@ -11,7 +12,8 @@
 		],
 		"hp_base": 10,
 		"hp_level_mult": 2,
-		"hp_placement_mult": -2
+		"hp_placement_mult": -2,
+		"hp_placement_cutoff": 6
 	},
 	"photo": {
 		"base_purse": 7500,
