@@ -17,6 +17,7 @@
 	},
 	"photo": {
 		"base_purse": 7500,
+		"entry_fee_mult": 0.10,
 		"placement_weights": [
 			0.30,
 			0.25,
@@ -27,7 +28,8 @@
 		],
 		"mp_base": 10,
 		"mp_level_mult": 2,
-		"mp_placement_mult": -2
+		"mp_placement_mult": -2,
+		"mp_placement_cutoff": 6
 	},
 	"roleplay": {
 		"mp_base": 5

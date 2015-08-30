@@ -435,8 +435,49 @@ function equus_shows_show_types_weighted_stat_validate($data) {
 
 }
 
+function equus_shows_show_types_photo_validate($data) {
+	foreach (array("phases", "max_entries") as $field) {
+		if (!property_exists($data, $field)) {
+			throw new Exception("Show type missing $field value.");
+		}
+	}
+
+	if (empty($data->phases)) {
+		throw new Exception("Show type has no phases.");
+	}
+
+	// max_entries exists and is sane number and greater than min
+
+}
+
+function equus_shows_show_types_combination_validate($data) {
+	foreach (array("phases", "min_entries", "max_entries") as $field) {
+		if (!property_exists($data, $field)) {
+			throw new Exception("Show type missing $field value.");
+		}
+	}
+
+	if (empty($data->phases)) {
+		throw new Exception("Show type has no phases.");
+	}
+
+	// min_entries exists and is sane number
+
+	// max_entries exists and is sane number and greater than min
+
+}
+
 function equus_shows_show_phase_types_weighted_stat_validate($data) {
-	foreach (array("base_purse", "entry_fee_mult", "placement_weights", "hp_base", "hp_level_mult", "hp_placement_mult", "hp_placement_cutoff") as $field) {
+	$fields = array(
+		"base_purse", 
+		"entry_fee_mult", 
+		"placement_weights", 
+		"hp_base", 
+		"hp_level_mult", 
+		"hp_placement_mult", 
+		"hp_placement_cutoff"
+	);
+	foreach ($fields as $field) {
 		if (!property_exists($data, $field)) {
 			throw new Exception("Phase data missing $field value for weighted stats phase type.");
 		}
@@ -444,6 +485,12 @@ function equus_shows_show_phase_types_weighted_stat_validate($data) {
 
 	if (!is_int($data->base_purse) || $data->base_purse < 0) {
 		throw new Exception("Base purse must be a non-negative integer.");
+	}
+	if (!is_numeric($data->entry_fee_mult)) {
+		throw new Exception("Entry Fee Multiplier must be a number.");
+	}
+	if (array_sum($data->placement_weights) != 1) {
+		throw new Exception("Placement weights must sum to 1.");
 	}
 	if (!is_int($data->hp_base) || $data->hp_base < 0) {
 		throw new Exception("HP Base must be a non-negative integer.");
@@ -454,14 +501,62 @@ function equus_shows_show_phase_types_weighted_stat_validate($data) {
 	if (!is_int($data->hp_placement_mult)) {
 		throw new Exception("HP Placement Multiplier must be an integer.");
 	}
+	if (!is_int($data->hp_placement_cutoff) || $data->hp_placement_cutoff < 0) {
+		throw new Exception("HP Placement Cutoff must be a non-negative integer.");
+	}
+}
+
+function equus_shows_show_phase_types_photo_validate($data) {
+	$fields = array(
+		"base_purse", 
+		"entry_fee_mult", 
+		"placement_weights", 
+		"mp_base", 
+		"mp_level_mult", 
+		"mp_placement_mult", 
+		"mp_placement_cutoff"
+	);
+	foreach ($fields as $field) {
+		if (!property_exists($data, $field)) {
+			throw new Exception("Phase data missing $field value for photo phase type.");
+		}
+	}
+
+	if (!is_int($data->base_purse) || $data->base_purse < 0) {
+		throw new Exception("Base purse must be a non-negative integer.");
+	}
 	if (!is_numeric($data->entry_fee_mult)) {
 		throw new Exception("Entry Fee Multiplier must be a number.");
 	}
 	if (array_sum($data->placement_weights) != 1) {
 		throw new Exception("Placement weights must sum to 1.");
 	}
-	if (!is_int($data->hp_placement_cutoff) || $data->hp_placement_cutoff < 0) {
-		throw new Exception("HP Placement Cutoff must be a non-negative integer.");
+	if (!is_int($data->mp_base) || $data->mp_base < 0) {
+		throw new Exception("MP Base must be a non-negative integer.");
+	}
+	if (!is_int($data->mp_level_mult)) {
+		throw new Exception("MP Level Multiplier must be an integer.");
+	}
+	if (!is_int($data->mp_placement_mult)) {
+		throw new Exception("MP Placement Multiplier must be an integer.");
+	}
+	if (!is_int($data->mp_placement_cutoff) || $data->mp_placement_cutoff < 0) {
+		throw new Exception("MP Placement Cutoff must be a non-negative integer.");
+	}
+}
+
+function equus_shows_show_phase_types_roleplay_validate($data) {
+	$fields = array( 
+		"mp_base"
+	);
+	foreach ($fields as $field) {
+		if (!property_exists($data, $field)) {
+			throw new Exception("Phase data missing $field value for roleplay phase type.");
+		}
+	}
+
+	if (!is_int($data->mp_base) || $data->mp_base < 0) {
+		throw new Exception("MP Base must be a non-negative integer.");
 	}
 }
 
