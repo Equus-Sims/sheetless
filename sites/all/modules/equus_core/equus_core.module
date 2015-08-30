@@ -105,3 +105,17 @@ function equus_core_get_es_pretty_year() {
 	$seasons = array("Winter","Spring","Summer","Fall");
 	return $seasons[$season] . ", Year " . $year;
 }
+
+function equus_core_node_load($nid, $type) {
+	$node = node_load($nid);
+
+	if (!$node) {
+		throw new Exception("Error loading nid: {$nid}. Node does not exist.");
+	}
+
+	if ($node->type != $type) {
+		throw new Exception("Node type mismatch. Expected: {$type} Loaded: {$node->type}");
+	}
+
+	return $node;
+}

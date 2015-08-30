@@ -20,11 +20,11 @@ function equus_shows_node_info() {
 	);
 }
 
-function equus_shows_node_type_insert($node_type) {
+/*function equus_shows_node_type_insert($node_type) {
 	if ($node_type->type == 'show') {
 
 	}
-}
+}*/
 
 function equus_shows_node_insert($node) {
 	if ($node->type != 'show') {
@@ -348,10 +348,7 @@ function equus_shows_get_phase_data($show_type) {
 
 function equus_shows_enter_show($showid,$horseid,$data) {
 	try {
-		$show = node_load($showid);
-		if (!$show) {
-			throw new Exception('Show does not exist.');
-		}
+		$show = equus_core_node_load($showid, "show");
 
 		$level = $show->field_show_level[LANGUAGE_NONE][0]['value'];
 
@@ -363,10 +360,7 @@ function equus_shows_enter_show($showid,$horseid,$data) {
 			$entry_fee = equus_shows_get_entry_fee($level, $phase_data);
 		}
 
-		$horse = node_load($horseid);
-		if (!$horse) {
-			throw new Exception('Horse does not exist.');
-		}
+		$horse = equus_core_node_load($horseid, "horse");
 
 		$org = equus_horses_extras_get_residence_org($horse);
 		if ($org === NULL) {
@@ -561,12 +555,7 @@ function equus_shows_show_phase_types_roleplay_validate($data) {
 }
 
 function equus_shows_run_weighted_stat_phase($show, $show_type_data, $phase_data) {
-	$hosting_org = node_load($show->field_hosting_organization['und'][0]['target_id']);
-	if (!$hosting_org) {
-		drupal_set_message("The hosting organization does not exist.", 'error');
-		return false;
-	}
-	// dpm($show);
+	$hosting_org = equus_core_node_load($show->field_hosting_organization['und'][0]['target_id'], "organization");
 
 	// build array of stuff
 	$raw_data = new stdClass();
