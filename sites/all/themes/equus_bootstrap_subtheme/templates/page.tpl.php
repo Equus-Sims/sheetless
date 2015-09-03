@@ -194,6 +194,7 @@
       <?php endif; ?>
       
       <?php print render($page['content']); ?>
+      <?php print render($page['content_bottom']); ?>
       <!-- content_bottom_region is being printed by the node.tpl.php file -->
     </section>
 

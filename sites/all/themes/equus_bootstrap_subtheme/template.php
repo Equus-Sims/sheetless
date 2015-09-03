@@ -186,8 +186,6 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
     }
     $vars['tile_image'] = $image;
 
-    $vars['content_bottom_region'] = equus_bootstrap_subtheme_get_content_bottom($vars['view_mode']);
-
     if ($vars['node']->type == 'blog') {
 	    // set up render array for blog categories
 	    $blog_categories = field_view_field('node',$vars['node'],'field_blog_categories');
