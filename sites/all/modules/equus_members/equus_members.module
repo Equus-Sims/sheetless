@@ -1,4 +1,5 @@
-<?php 
+<?php
+define("EQUUS_MEMBERS_MP_TID",105);
 /**
  * Implements hook_entity_info_alter().
  */
@@ -100,3 +101,15 @@ function equus_members_check_tutorial_progess($uid, $milestone_check) {
 	return false;
 }
 
+/**
+ * Adds some number of Member Points to a user's account
+ * @param $uid ID of the user to give MP to.
+ * @param $num Number of MP to give a user.
+ */
+function equus_members_gain_mp($uid, $num) {
+	userpoints_userpointsapi(array(
+		'uid' => $uid,
+		'points' => $num,
+		'tid' => EQUUS_MEMBERS_MP_TID
+	));
+}
