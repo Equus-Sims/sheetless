@@ -5,6 +5,7 @@ core = 7.x
 version = 7.x-1.0
 files[] = equus_horses_extras.install
 files[] = equus_horses_extras.module
+files[] = equus_horses_extras.test
 dependencies[] = entityreference
 dependencies[] = equus_core
 dependencies[] = equus_properties

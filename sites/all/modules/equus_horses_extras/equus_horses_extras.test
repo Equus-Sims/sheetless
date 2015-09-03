@@ -1,0 +1,17 @@
+<?php
+
+class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
+    public static function getInfo() {
+        return array(
+            'name' => 'Equus Horse Extras Unit Tests',
+            'description' => 'Test that Horse Extras works.',
+            'group' => 'equus_horses_extras',
+        );
+    }
+
+    function testCalcAge() {
+        $result = equus_horses_extras_calc_age(2012, 8, 2, 1, 4);
+
+        $this->assertEqual($result, 10, "The calculated age should be correct.", "equus_horses_extras");
+    }
+}
