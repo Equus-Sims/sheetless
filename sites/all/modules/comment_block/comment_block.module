@@ -1,0 +1,70 @@
+<?php
+
+/**
+* Implements hook_block_info().
+*/
+function comment_block_block_info() {
+  $blocks['node_comments'] = array(
+    'info' => t('Node Comments'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+* Implements hook_block_view().
+*/
+function comment_block_block_view($delta = '') {
+  global $user;
+  $block = array();
+  if ($delta == 'node_comments') {
+    // Get the active menu object.
+    if ($node = menu_get_object()) {
+      // Make sure user is viewing a node with comments enabled.
+      if ($node->comment != COMMENT_NODE_HIDDEN) {
+        // Set the title of the block.
+        $block['subject'] = NULL;
+        // Render the comments and comment form (access checks, etc. are done
+        // by comment_node_page_additions()).
+        if (!empty($block['content'])) {
+            $block['content'] .= comment_block_static_comments($node->nid, FALSE, $node);
+        }
+        else {
+            $block['content'] = comment_block_static_comments($node->nid, FALSE, $node);
+        }
+      }
+    }
+  }
+  return $block;
+}
+
+function comment_block_node_view_alter(&$build) {
+  comment_block_static_comments($build['#node']->nid, $build);
+  unset($build['comments']);
+  unset($build['links']['comment']);
+}
+
+/*
+ * This breaks just about every rule in the book, but our choices are to either rebuild the content or
+ * or to have the node put the content into this static variable, then retrieve it from the block view
+ * For sake of performance, we choose the static variable
+ */
+function comment_block_static_comments($nid, $build = false, $node = false) {
+  $comments = &drupal_static(__FUNCTION__);
+
+  if ($build) {
+    if (isset($build['links']['comment'])) {
+      $comments[$nid]['links'] = $build['links']['comment'];
+    }
+    if (isset($build['comments'])) {
+      $comments[$nid]['comments'] = $build['comments'];
+    }
+  } else {
+    #normal behavior will be that the node calls this function before 
+    if (!isset($comments[$nid])) {
+      $comments[$nid]['links'] = '';
+      $comments[$nid]['comments'] = comment_node_page_additions($node);
+    }
+    return $comments[$nid];
+  }
+}

@@ -1,0 +1,10 @@
+name = Comment Block 
+description = Exposes Comments as a Block
+core = 7.x
+dependencies[] = comment
+; Information added by Drupal.org packaging script on 2014-03-14
+version = "7.x-1.2"
+core = "7.x"
+project = "comment_block"
+datestamp = "1394821409"
+
