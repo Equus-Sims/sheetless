@@ -54,6 +54,9 @@ function equus_properties_extras_node_validate($node, $form, &$form_state) {
 function equus_properties_get_user_assoc_properties($uid) {
 	// get user's associated orgs
 	$nids = equus_organizations_get_assoc_orgs($uid);
+	if (empty($nids)) {
+		return array();
+	}
 	// query for all properties associated with an org
 	$query = new EntityFieldQuery();
 	$query
