@@ -342,11 +342,9 @@ function equus_horses_extras_spend_rare_hc($uid) {
  * @param $quantity Number of regular HC to give a user.
  */
 function equus_horses_extras_gain_regular_hc($uid, $quantity) {
-	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
-
 	userpoints_userpointsapi(array(
 		'uid' => $uid,
-		'points' => + $quantity,
+		'points' => $quantity,
 		'tid' => EQUUS_HORSES_EXTRAS_REGULAR_HC_TID
 	));
 }
@@ -357,11 +355,9 @@ function equus_horses_extras_gain_regular_hc($uid, $quantity) {
  * @param $quantity Number of rare HC to give a user.
  */
 function equus_horses_extras_gain_rare_hc($uid, $quantity) {
-	$current_rare_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_RARE_HC_TID);
-
 	userpoints_userpointsapi(array(
 		'uid' => $uid,
-		'points' => + $quantity,
+		'points' => $quantity,
 		'tid' => EQUUS_HORSES_EXTRAS_RARE_HC_TID
 	));
 }
@@ -505,6 +501,14 @@ function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $e
 	$entity_field[0]['value'] = equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier);
 }
 
+/**
+ * @param $year int Year of horse's birth
+ * @param $month int Month of horse's birth
+ * @param $transition_year int Age when horse switches from foal aging to adult aging
+ * @param $foal_multiplier int The number of months in one year for foal aging
+ * @param $adult_multiplier int The number of months in one year for adult aging
+ * @return int Age of horse in years
+ */
 function equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier) {
 	$dob = mktime(0,0,0,$month,1,$year);
 	$today = mktime(0,0,0);
@@ -516,7 +520,7 @@ function equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multip
 	$years_as_foal = $age_in_months/$foal_multiplier;
 
 	if ($years_as_foal < 1) {
-		return 0;
+		return int(0);
 	} else {
 		$months_as_adult = $age_in_months - $months_as_foal;
 
