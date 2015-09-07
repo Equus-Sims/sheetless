@@ -1,0 +1,12 @@
+name = Equus Sim
+description = Fields and other support related to Sims
+core = 7.x
+package = Equus Sims
+version = 7.x-1.0
+dependencies[] = entityreference
+dependencies[] = features
+dependencies[] = list
+features[features_api][] = api:2
+features[field_base][] = field_sim_employer
+features[field_base][] = field_sim_gender
+features[field_base][] = field_sim_residence
