@@ -14,4 +14,125 @@ class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
 
         $this->assertEqual($result, 10, "The calculated age should be correct.", "equus_horses_extras");
     }
+
+    function testcalcAge0() {
+        $year = date('Y');
+        $month = date('m');
+
+        $result = equus_horses_extras_calc_age($year, $month, 2, 1, 4);
+
+        $this->assertEqual($result, 0, "The calculated age should be correct.", "equus_horses_extras");
+    }
+
+    function testCalcAgeBetter() {
+        $speed = array(
+            array(
+                'start' => new DateTime('2015-07-01'),
+                'end' => new DateTime('2015-08-30'),
+                'speed' => 12
+            ),
+            array(
+                'start' => new DateTime('2015-08-31'),
+                'end' => NULL,
+                'speed' => 3
+            )
+        );
+
+        $speed2 = array(
+            array(
+                'start' => new DateTime('2015-07-01'),
+                'end' => NULL,
+                'speed' => 3
+            )
+        );
+
+        $speed3 = array(
+            array(
+                'start' => new DateTime('2015-07-01'),
+                'end' => new DateTime('2015-07-31'),
+                'speed' => 3
+            ),
+            array(
+                'start' => new DateTime('2015-08-01'),
+                'end' => NULL,
+                'speed' => 0
+            )
+        );
+
+        $speed4 = array(
+            array(
+                'start' => new DateTime('2015-07-01'),
+                'end' => new DateTime('2015-07-31'),
+                'speed' => 3
+            ),
+            array(
+                'start' => new DateTime('2015-08-01'),
+                'end' => new DateTime('2015-08-31'),
+                'speed' => 0
+            ),
+            array(
+                'start' => new DateTime('2015-09-01'),
+                'end' => new DateTime('2015-09-30'),
+                'speed' => 12
+            ),
+            array(
+                'start' => new DateTime('2015-10-01'),
+                'end' => NULL,
+                'speed' => 1
+            ),
+        );
+
+        $result = equus_horses_extras_calc_age_better_one(array(), new DateTime('2015-07-01'));
+        $this->assertNull($result);
+
+        $this->assertEqual($result, 0, "The calculated age should be correct.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed, new DateTime('2015-07-01'));
+        $this->assertEqual($result, 12, "The calculated age should be correct.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed, new DateTime('2015-07-02'));
+        $this->assertEqual($result, 24, "The calculated age should be correct.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed, new DateTime('2015-08-30'));
+        $this->assertEqual($result, 732, "The calculated age should be correct.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed, new DateTime('2015-08-31'));
+        $this->assertEqual($result, 735, "The calculated age $result should be 735.", "equus_horses_extras");
+
+
+        $result = equus_horses_extras_calc_age_better_one($speed2, new DateTime('2015-07-01'));
+        $this->assertEqual($result, 3, "The calculated age should be correct.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed2);
+        $this->assert($result > 0, "The calculated age $result should be positive.", "equus_horses_extras");
+
+
+        $result = equus_horses_extras_calc_age_better_one($speed3, new DateTime('2015-07-30'));
+        $this->assertEqual($result, 90, "The calculated age $result should be 90.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed3, new DateTime('2015-07-31'));
+        $this->assertEqual($result, 93, "The calculated age $result should be 93.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed3, new DateTime('2015-08-01'));
+        $this->assertEqual($result, 93, "The calculated age $result should be 93.", "equus_horses_extras");
+
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-07-31'));
+        $this->assertEqual($result, 93, "The calculated age $result should be 93.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-08-01'));
+        $this->assertEqual($result, 93, "The calculated age $result should be 93.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-08-31'));
+        $this->assertEqual($result, 93, "The calculated age $result should be 93.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-09-01'));
+        $this->assertEqual($result, 105, "The calculated age $result should be 105.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-09-30'));
+        $this->assertEqual($result, 453, "The calculated age $result should be 453.", "equus_horses_extras");
+
+        $result = equus_horses_extras_calc_age_better_one($speed4, new DateTime('2015-10-01'));
+        $this->assertEqual($result, 454, "The calculated age $result should be 454.", "equus_horses_extras");
+    }
 }

@@ -2,6 +2,9 @@
 
 define("EQUUS_HORSES_EXTRAS_REGULAR_HC_TID",1);
 define("EQUUS_HORSES_EXTRAS_RARE_HC_TID",2);
+define("EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MAX", 1000);
+define("EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MIN", 500);
+define("EQUUS_HORSES_EXTRAS_CUR_POT_STAT_RATIO", 0.50);
 
 /**
  * Displays an error message if the user has not created 
@@ -406,15 +409,30 @@ function equus_horses_extras_calc_stats($nid) {
 	}
 	drupal_set_message(print_r($eids, true));
 
+    $potential_sum = 0;
+    $raw_potentials = array();
 	foreach ($stats as $stat) {
-		$raw_potential = rand($breed_stats[$stat]['low'], $breed_stats[$stat]['high']);
-		$potential = $raw_potential + $modifiers[$stat];
-		if ($potential < 0) {
-			$potential = 0;
-		} else if ($potential > 100) {
-			$potential = 100;
-		}
-		$current = rand(0, $potential);
+        $low_potential = $breed_stats[$stat]['low'] + $modifiers[$stat];
+        $high_potential = $breed_stats[$stat]['high'] + $modifiers[$stat];
+
+        if ($low_potential < 0) {
+            $low_potential = 0;
+        }
+        if ($high_potential > 100) {
+            $high_potential = 100;
+        }
+        $raw_potential = rand($low_potential, $high_potential);
+        $potential_sum += $raw_potential;
+
+        $raw_potentials[$stat] = $raw_potential;
+    }
+
+    $indiv_potential_max = rand(EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MIN, EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MAX);
+    $scale_factor = $indiv_potential_max / $potential_sum;
+    foreach ($raw_potentials as $stat => $raw_potential) {
+        $indiv_potential = $raw_potential * $scale_factor;
+
+		$current = 0;
 		// Setup the values in the structure expected by the field_collection entity.
 		$values = array(
 		  	'field_name' => 'field_horse_stats',
@@ -425,8 +443,11 @@ function equus_horses_extras_calc_stats($nid) {
 		    	LANGUAGE_NONE => array(array('value' => $current)),
 		  	),
 		  	'field_horse_potential_stat_value' => array(
-		    	LANGUAGE_NONE => array(array('value' => $potential)),
+		    	LANGUAGE_NONE => array(array('value' => $indiv_potential)),
 		  	),
+            'field_horse_trained_stat_value' => array(
+                LANGUAGE_NONE => array(array('value' => $current)),
+            ),
 		);
 		$entity = entity_create('field_collection_item', $values);
 		// Attach the field_collection entity to the application node. This has to
