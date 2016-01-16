@@ -261,3 +261,13 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 
 	$vars['content_bottom_region'] = equus_bootstrap_subtheme_get_content_bottom("full");
 }
+
+function equus_bootstrap_subtheme_preprocess_field(&$vars) {
+	if ($vars['element']['#field_name'] == 'field_horse_stats') {
+		$stats = json_decode($vars['element']['#items'][0]['value']);
+		foreach($stats as $stat => $value) {
+			$value->potential = round($value->potential, 0);
+		}
+		$vars['stats'] = $stats;
+	}
+}
