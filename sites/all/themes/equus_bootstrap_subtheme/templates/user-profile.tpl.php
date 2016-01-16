@@ -86,5 +86,4 @@
 			</span>
 		</div>
 	</div>
-	<?php echo render($content_bottom_region); ?>
 </div>
