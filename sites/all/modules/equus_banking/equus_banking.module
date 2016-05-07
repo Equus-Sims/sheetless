@@ -156,27 +156,36 @@ function equus_banking_views_default_views() {
  * Implements hook_node_info()
  */
 function equus_banking_node_info() {
-	);
+    return array(
+        'transaction' => array(
+            'name' => t('Transaction'),
+            'base' => 'transaction',
+            'description' => t('A financial transaction'),
+            'has_title' => TRUE,
+            'title_label' => t('Memo')
+        )
+    );
 }
 
 function equus_banking_create_transaction($memo, $source, $destination, $amount) {
-	global $user;
-	$values = array(
-		'type' => 'transaction',
-		'uid' => $user->uid,
-		'status' => 1,
-		'comment' => 0,
-		'promote' => 0,
-	);
-	$ewrapper = entity_metadata_wrapper('node', $entity);
-	$ewrapper->title->set($memo);
-	$ewrapper->equus_banking_source->set(intval($source));
-	$ewrapper->equus_banking_destination->set(intval($destination));
-	$ewrapper->equus_banking_amount->set(intval($amount));
-	$ewrapper->save();
+    global $user;
+    $values = array(
+        'type' => 'transaction',
+        'uid' => $user->uid,
+        'status' => 1,
+        'comment' => 0,
+        'promote' => 0,
+    );
+    $entity = entity_create('node', $values);
+    $ewrapper = entity_metadata_wrapper('node', $entity);
+    $ewrapper->title->set($memo);
+    $ewrapper->equus_banking_source->set(intval($source));
+    $ewrapper->equus_banking_destination->set(intval($destination));
+    $ewrapper->equus_banking_amount->set(intval($amount));
+    $ewrapper->save();
 
-	equus_banking_update_org_balance($source);
-	equus_banking_update_org_balance($destination);
+    equus_banking_update_org_balance($source);
+    equus_banking_update_org_balance($destination);
 }
 
 /**
@@ -315,85 +324,94 @@ function equus_banking_settings_form($form, &$form_state) {
 }
 
 function equus_banking_settings_form_action_one($form, &$form_state) {
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'organization')
-		->propertyCondition('status', 1);
-	$result = $query->execute();
-	$orgIDs = array();
-	if (count($result) > 0) {
-		$orgIDs = array_keys($result['node']);
+    $query = new EntityFieldQuery();
+    $query
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'organization')
+        ->propertyCondition('status', 1);
+    $result = $query->execute();
+    $orgIDs = array();
+    if (count($result) > 0) {
+        $orgIDs = array_keys($result['node']);
 
-		$ledger = equus_banking_retrieve_ledger();
-		$org_updated = false;
-		foreach($orgIDs as $orgID) {
-			$balance = equus_banking_balance($ledger, $orgID);
-			$org = node_load($orgID);
-			$cached_balance = $org->equus_organizations_balance['und'][0]['value'];
-			if ($balance != $cached_balance) {
-				$org->equus_organizations_balance['und'][0]['value'] = $balance;
-				node_save($org);
-				$org_updated = true;
-				watchdog('equus_banking_settings_form_action_one', 'Organization balance mismatch. Org id: $orgID', WATCHDOG_ERROR);
-				drupal_set_message("Organization $orgID had a balance mismatch. Cached balance was updated.");
-			}
-		}
-		if (!$org_updated) {
-			drupal_set_message("All cached balances matched computed values. No organization balances were updated.");
-		}
-	} else {
-		drupal_set_message("No organizations currently exist. Update failed.");
-	}
+        $ledger = equus_banking_retrieve_ledger();
+        $org_updated = false;
+        foreach($orgIDs as $orgID) {
+            $balance = equus_banking_balance($ledger, $orgID);
+            $org = node_load($orgID);
+            $cached_balance = $org->equus_organizations_balance['und'][0]['value'];
+            if ($balance != $cached_balance) {
+                $org->equus_organizations_balance['und'][0]['value'] = $balance;
+                node_save($org);
+                $org_updated = true;
+                watchdog('equus_banking_settings_form_action_one', 'Organization balance mismatch. Org id: $orgID', WATCHDOG_ERROR);
+                drupal_set_message("Organization $orgID had a balance mismatch. Cached balance was updated.");
+            }
+        }
+        if (!$org_updated) {
+            drupal_set_message("All cached balances matched computed values. No organization balances were updated.");
+        }
+    } else {
+        drupal_set_message("No organizations currently exist. Update failed.");
+    }
 }
 
 function equus_banking_settings_form_action_two($form, &$form_state) {
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'user');
-	$result = $query->execute();
-	$uids = array();
-	if (count($result) > 0) {
-		$uids = array_keys($result['user']);
+    $query = new EntityFieldQuery();
+    $query
+        ->entityCondition('entity_type', 'user');
+    $result = $query->execute();
+    $uids = array();
+    if (count($result) > 0) {
+        $uids = array_keys($result['user']);
 
-		$ledger = equus_banking_retrieve_ledger();
-		$user_updated = false;
-		foreach($uids as $uid) {
-			if ($uid == 0) {
-				continue;
-			}
-			$net_worth = equus_banking_calc_user_net_worth($uid);
-			$user = user_load($uid);
-			$cached_net_worth = $user->field_equus_user_net_worth['und'][0]['value'];
-			if ($net_worth != $cached_net_worth) {
-				$user->field_equus_user_net_worth['und'][0]['value'] = $net_worth;
-				user_save($user);
-				$user_updated = true;
-				watchdog('equus_banking_settings_form_action_two', 'User net worth mismatch. User id: $uid', WATCHDOG_ERROR);
-				drupal_set_message("User $uid had a net worth mismatch. Cached net worth was updated.");
-			}
-		}
-		if (!$user_updated) {
-			drupal_set_message("All cached net worths matched computed values. No user net worths were updated.");
-		}
-	} else {
-		drupal_set_message("No users currently exist. Update failed.");
-	}
+        $ledger = equus_banking_retrieve_ledger();
+        $user_updated = false;
+        foreach($uids as $uid) {
+            if ($uid == 0) {
+                continue;
+            }
+            $net_worth = equus_banking_calc_user_net_worth($uid);
+            $user = user_load($uid);
+            $cached_net_worth = $user->field_equus_user_net_worth['und'][0]['value'];
+            if ($net_worth != $cached_net_worth) {
+                $user->field_equus_user_net_worth['und'][0]['value'] = $net_worth;
+                user_save($user);
+                $user_updated = true;
+                watchdog('equus_banking_settings_form_action_two', 'User net worth mismatch. User id: $uid', WATCHDOG_ERROR);
+                drupal_set_message("User $uid had a net worth mismatch. Cached net worth was updated.");
+            }
+        }
+        if (!$user_updated) {
+            drupal_set_message("All cached net worths matched computed values. No user net worths were updated.");
+        }
+    } else {
+        drupal_set_message("No users currently exist. Update failed.");
+    }
 }
 
 function equus_banking_menu() {
-  $items = array();
+    $items = array();
 
-  $items['admin/settings/equus-banking'] = array(
-    'title' => 'Equus banking module settings',
-    'description' => 'Configuration page for the Equus banking module.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('equus_banking_settings_form'),
-    'access arguments' => array('access administration pages'),
-    'type' => MENU_NORMAL_ITEM,
-   );
+    $items['admin/config/equus-modules'] = array(
+        'title' => 'Equus modules',
+        'description' => 'Configuration page for Equus modules.',
+        'page callback' => 'system_admin_menu_block_page',
+        'access arguments' => array('access administration pages'),
+        'file' => 'system.admin.inc',
+        'file_path' => drupal_get_path('module', 'system'),
+    );
 
-  return $items;
+    $items['admin/config/equus-modules/equus-banking'] = array(
+        'title' => 'Equus banking module settings',
+        'description' => 'Configuration page for the Equus banking module.',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('equus_banking_settings_form'),
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    return $items;
 }
 
 function equus_banking_node_insert($node) {
