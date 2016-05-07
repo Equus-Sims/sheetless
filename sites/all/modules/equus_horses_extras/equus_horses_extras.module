@@ -178,6 +178,30 @@ function equus_horses_extras_get_assoc_horses($uid) {
 }
 
 /**
+ * Gets the horses that are in residence at a property.
+ *
+ * @param $nid The id of the property.
+ * @return array An array of horse IDs in residence at the property.
+ * 				 Will return empty array if there are no assoc horses.
+ */
+function equus_horses_extras_get_prop_assoc_horses($nid) {
+	$query = new EntityFieldQuery();
+	$query
+		->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'horse')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_horse_residence', 'target_id', $nid, '=');
+	$result = $query->execute();
+
+	$horses = array();
+
+	if (count($result) > 0) {
+		$horses = array_keys($result['node']);
+	}
+	return $horses;
+}
+
+/**
  *	Gets the org which owns the property the horse resides at
  * 
  * @param $horse Horse node.
