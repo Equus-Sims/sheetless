@@ -561,12 +561,10 @@ function equus_horses_extras_get_breed_stats($breedID) {
 	$breed = node_load($breedID);
 	// get horse stats
 	$stats = $breed->field_breed_stat_windows[LANGUAGE_NONE];
-	// dpm($stats);
 	$result = array();
 	foreach ($stats as $stat) {
 		$field_collection_item = field_collection_item_load($stat['value']);
 		
-		// dpm($field_collection_item);
 		$stat_name = $field_collection_item->field_stat['und'][0]['value'];
 		
 		$stat_low_value = $field_collection_item->field_breed_low_stat_value['und'][0]['value'];
@@ -582,12 +580,10 @@ function equus_horses_extras_get_body_type_modifiers($body_typeID) {
 	$body_type = node_load($body_typeID);
 	// get horse stats
 	$stats = $body_type->field_body_type_stat_modifier[LANGUAGE_NONE];
-	// dpm($stats);
 	$result = array();
 	foreach ($stats as $stat) {
 		$field_collection_item = field_collection_item_load($stat['value']);
 		
-		// dpm($field_collection_item);
 		$stat_name = $field_collection_item->field_stat['und'][0]['value'];
 		
 		$stat_modifier = $field_collection_item->field_stat_modifier['und'][0]['value'];
