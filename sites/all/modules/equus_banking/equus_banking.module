@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 function equus_banking_views_api() {
@@ -9,7 +9,7 @@ function equus_banking_views_api() {
 
 /**
  * see https://drupal.org/node/1451218 for details
- */ 
+ */
 function equus_banking_views_query_alter(&$view, &$query) {
   if ($view->name == 'transactions') {
     $query->where[0]['type'] = 'OR';
