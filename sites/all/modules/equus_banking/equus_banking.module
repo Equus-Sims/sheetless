@@ -17,153 +17,145 @@ function equus_banking_views_query_alter(&$view, &$query) {
 }
 
 function equus_banking_views_default_views() {
-	$view = new view();
-	$view->name = 'transactions';
-	$view->description = '';
-	$view->tag = 'default';
-	$view->base_table = 'node';
-	$view->human_name = 'Transactions';
-	$view->core = 7;
-	$view->api_version = '3.0';
-	$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+    $view = new view();
+    $view->name = 'transactions';
+    $view->description = '';
+    $view->tag = 'default';
+    $view->base_table = 'node';
+    $view->human_name = 'Transactions';
+    $view->core = 7;
+    $view->api_version = '3.0';
+    $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
-	/* Display: Master */
-	$handler = $view->new_display('default', 'Master', 'default');
-	$handler->display->display_options['title'] = 'Transactions';
-	$handler->display->display_options['use_more_always'] = FALSE;
-	$handler->display->display_options['access']['type'] = 'perm';
-	$handler->display->display_options['cache']['type'] = 'none';
-	$handler->display->display_options['query']['type'] = 'views_query';
-	$handler->display->display_options['exposed_form']['type'] = 'basic';
-	$handler->display->display_options['pager']['type'] = 'full';
-	$handler->display->display_options['pager']['options']['items_per_page'] = '10';
-	$handler->display->display_options['style_plugin'] = 'table';
-	/* No results behavior: Global: Text area */
-	$handler->display->display_options['empty']['area']['id'] = 'area';
-	$handler->display->display_options['empty']['area']['table'] = 'views';
-	$handler->display->display_options['empty']['area']['field'] = 'area';
-	$handler->display->display_options['empty']['area']['empty'] = TRUE;
-	$handler->display->display_options['empty']['area']['content'] = 'ggggg';
-	$handler->display->display_options['empty']['area']['format'] = 'filtered_html';
-	/* Field: Content: Title */
-	$handler->display->display_options['fields']['title']['id'] = 'title';
-	$handler->display->display_options['fields']['title']['table'] = 'node';
-	$handler->display->display_options['fields']['title']['field'] = 'title';
-	$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-	$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-	/* Field: Content: Destination */
-	$handler->display->display_options['fields']['equus_banking_destination']['id'] = 'equus_banking_destination';
-	$handler->display->display_options['fields']['equus_banking_destination']['table'] = 'field_data_equus_banking_destination';
-	$handler->display->display_options['fields']['equus_banking_destination']['field'] = 'equus_banking_destination';
-	$handler->display->display_options['fields']['equus_banking_destination']['settings'] = array(
-	  'link' => 1,
-	);
-	/* Field: Content: Source */
-	$handler->display->display_options['fields']['equus_banking_source']['id'] = 'equus_banking_source';
-	$handler->display->display_options['fields']['equus_banking_source']['table'] = 'field_data_equus_banking_source';
-	$handler->display->display_options['fields']['equus_banking_source']['field'] = 'equus_banking_source';
-	$handler->display->display_options['fields']['equus_banking_source']['settings'] = array(
-	  'link' => 1,
-	);
-	/* Field: Content: Transaction amount */
-	$handler->display->display_options['fields']['equus_banking_amount']['id'] = 'equus_banking_amount';
-	$handler->display->display_options['fields']['equus_banking_amount']['table'] = 'field_data_equus_banking_amount';
-	$handler->display->display_options['fields']['equus_banking_amount']['field'] = 'equus_banking_amount';
-	$handler->display->display_options['fields']['equus_banking_amount']['label'] = '';
-	$handler->display->display_options['fields']['equus_banking_amount']['element_label_colon'] = FALSE;
-	$handler->display->display_options['fields']['equus_banking_amount']['settings'] = array(
-	  'thousand_separator' => ',',
-	  'prefix_suffix' => 1,
-	);
-	/* Sort criterion: Content: Post date */
-	$handler->display->display_options['sorts']['created']['id'] = 'created';
-	$handler->display->display_options['sorts']['created']['table'] = 'node';
-	$handler->display->display_options['sorts']['created']['field'] = 'created';
-	$handler->display->display_options['sorts']['created']['order'] = 'DESC';
-	/* Contextual filter: Content: Source (equus_banking_source) */
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['id'] = 'equus_banking_source_target_id';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['table'] = 'field_data_equus_banking_source';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['field'] = 'equus_banking_source_target_id';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['default_action'] = 'default';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['default_argument_type'] = 'raw';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['default_argument_options']['index'] = '2';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['summary']['number_of_records'] = '0';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['summary']['format'] = 'default_summary';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['summary_options']['items_per_page'] = '25';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['specify_validation'] = TRUE;
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['validate']['type'] = 'node';
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['validate_options']['types'] = array(
-	  'organization' => 'organization',
-	);
-	$handler->display->display_options['arguments']['equus_banking_source_target_id']['validate_options']['access'] = TRUE;
-	/* Contextual filter: Content: Destination (equus_banking_destination) */
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['id'] = 'equus_banking_destination_target_id';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['table'] = 'field_data_equus_banking_destination';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['field'] = 'equus_banking_destination_target_id';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_action'] = 'default';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_argument_type'] = 'raw';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_argument_options']['index'] = '2';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary']['number_of_records'] = '0';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary']['format'] = 'default_summary';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary_options']['items_per_page'] = '25';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['specify_validation'] = TRUE;
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate']['type'] = 'node';
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate_options']['types'] = array(
-	  'organization' => 'organization',
-	);
-	$handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate_options']['access'] = TRUE;
-	/* Filter criterion: Content: Published */
-	$handler->display->display_options['filters']['status']['id'] = 'status';
-	$handler->display->display_options['filters']['status']['table'] = 'node';
-	$handler->display->display_options['filters']['status']['field'] = 'status';
-	$handler->display->display_options['filters']['status']['value'] = '1';
-	$handler->display->display_options['filters']['status']['group'] = 1;
-	/* Filter criterion: Content: Type */
-	$handler->display->display_options['filters']['type']['id'] = 'type';
-	$handler->display->display_options['filters']['type']['table'] = 'node';
-	$handler->display->display_options['filters']['type']['field'] = 'type';
-	$handler->display->display_options['filters']['type']['value'] = array(
-	  'transaction' => 'transaction',
-	);
-	$handler->display->display_options['filters']['type']['group'] = 1;
+    /* Display: Master */
+    $handler = $view->new_display('default', 'Master', 'default');
+    $handler->display->display_options['title'] = 'Transactions';
+    $handler->display->display_options['use_more_always'] = FALSE;
+    $handler->display->display_options['access']['type'] = 'perm';
+    $handler->display->display_options['cache']['type'] = 'none';
+    $handler->display->display_options['query']['type'] = 'views_query';
+    $handler->display->display_options['exposed_form']['type'] = 'basic';
+    $handler->display->display_options['pager']['type'] = 'full';
+    $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+    $handler->display->display_options['style_plugin'] = 'table';
+    /* No results behavior: Global: Text area */
+    $handler->display->display_options['empty']['area']['id'] = 'area';
+    $handler->display->display_options['empty']['area']['table'] = 'views';
+    $handler->display->display_options['empty']['area']['field'] = 'area';
+    $handler->display->display_options['empty']['area']['empty'] = TRUE;
+    $handler->display->display_options['empty']['area']['content'] = 'ggggg';
+    $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
+    /* Field: Content: Title */
+    $handler->display->display_options['fields']['title']['id'] = 'title';
+    $handler->display->display_options['fields']['title']['table'] = 'node';
+    $handler->display->display_options['fields']['title']['field'] = 'title';
+    $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+    $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+    /* Field: Content: Destination */
+    $handler->display->display_options['fields']['equus_banking_destination']['id'] = 'equus_banking_destination';
+    $handler->display->display_options['fields']['equus_banking_destination']['table'] = 'field_data_equus_banking_destination';
+    $handler->display->display_options['fields']['equus_banking_destination']['field'] = 'equus_banking_destination';
+    $handler->display->display_options['fields']['equus_banking_destination']['settings'] = array(
+      'link' => 1,
+    );
+    /* Field: Content: Source */
+    $handler->display->display_options['fields']['equus_banking_source']['id'] = 'equus_banking_source';
+    $handler->display->display_options['fields']['equus_banking_source']['table'] = 'field_data_equus_banking_source';
+    $handler->display->display_options['fields']['equus_banking_source']['field'] = 'equus_banking_source';
+    $handler->display->display_options['fields']['equus_banking_source']['settings'] = array(
+      'link' => 1,
+    );
+    /* Field: Content: Transaction amount */
+    $handler->display->display_options['fields']['equus_banking_amount']['id'] = 'equus_banking_amount';
+    $handler->display->display_options['fields']['equus_banking_amount']['table'] = 'field_data_equus_banking_amount';
+    $handler->display->display_options['fields']['equus_banking_amount']['field'] = 'equus_banking_amount';
+    $handler->display->display_options['fields']['equus_banking_amount']['label'] = '';
+    $handler->display->display_options['fields']['equus_banking_amount']['element_label_colon'] = FALSE;
+    $handler->display->display_options['fields']['equus_banking_amount']['settings'] = array(
+      'thousand_separator' => ',',
+      'prefix_suffix' => 1,
+    );
+    /* Sort criterion: Content: Post date */
+    $handler->display->display_options['sorts']['created']['id'] = 'created';
+    $handler->display->display_options['sorts']['created']['table'] = 'node';
+    $handler->display->display_options['sorts']['created']['field'] = 'created';
+    $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+    /* Contextual filter: Content: Source (equus_banking_source) */
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['id'] = 'equus_banking_source_target_id';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['table'] = 'field_data_equus_banking_source';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['field'] = 'equus_banking_source_target_id';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['default_action'] = 'default';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['default_argument_type'] = 'raw';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['default_argument_options']['index'] = '2';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['summary']['number_of_records'] = '0';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['summary']['format'] = 'default_summary';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['summary_options']['items_per_page'] = '25';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['specify_validation'] = TRUE;
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['validate']['type'] = 'node';
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['validate_options']['types'] = array(
+      'organization' => 'organization',
+    );
+    $handler->display->display_options['arguments']['equus_banking_source_target_id']['validate_options']['access'] = TRUE;
+    /* Contextual filter: Content: Destination (equus_banking_destination) */
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['id'] = 'equus_banking_destination_target_id';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['table'] = 'field_data_equus_banking_destination';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['field'] = 'equus_banking_destination_target_id';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_action'] = 'default';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_argument_type'] = 'raw';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['default_argument_options']['index'] = '2';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary']['number_of_records'] = '0';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary']['format'] = 'default_summary';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['summary_options']['items_per_page'] = '25';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['specify_validation'] = TRUE;
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate']['type'] = 'node';
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate_options']['types'] = array(
+      'organization' => 'organization',
+    );
+    $handler->display->display_options['arguments']['equus_banking_destination_target_id']['validate_options']['access'] = TRUE;
+    /* Filter criterion: Content: Published */
+    $handler->display->display_options['filters']['status']['id'] = 'status';
+    $handler->display->display_options['filters']['status']['table'] = 'node';
+    $handler->display->display_options['filters']['status']['field'] = 'status';
+    $handler->display->display_options['filters']['status']['value'] = '1';
+    $handler->display->display_options['filters']['status']['group'] = 1;
+    /* Filter criterion: Content: Type */
+    $handler->display->display_options['filters']['type']['id'] = 'type';
+    $handler->display->display_options['filters']['type']['table'] = 'node';
+    $handler->display->display_options['filters']['type']['field'] = 'type';
+    $handler->display->display_options['filters']['type']['value'] = array(
+      'transaction' => 'transaction',
+    );
+    $handler->display->display_options['filters']['type']['group'] = 1;
 
-	/* Display: Bank */
-	$handler = $view->new_display('block', 'Bank', 'block');
-	$handler->display->display_options['defaults']['relationships'] = FALSE;
-	/* Relationship: Entity Reference: Referenced Entity */
-	$handler->display->display_options['relationships']['equus_banking_source_target_id']['id'] = 'equus_banking_source_target_id';
-	$handler->display->display_options['relationships']['equus_banking_source_target_id']['table'] = 'field_data_equus_banking_source';
-	$handler->display->display_options['relationships']['equus_banking_source_target_id']['field'] = 'equus_banking_source_target_id';
-	/* Relationship: Entity Reference: Referenced Entity */
-	$handler->display->display_options['relationships']['equus_banking_destination_target_id']['id'] = 'equus_banking_destination_target_id';
-	$handler->display->display_options['relationships']['equus_banking_destination_target_id']['table'] = 'field_data_equus_banking_destination';
-	$handler->display->display_options['relationships']['equus_banking_destination_target_id']['field'] = 'equus_banking_destination_target_id';
-	$handler->display->display_options['defaults']['arguments'] = FALSE;
-	$handler->display->display_options['block_description'] = 'Bank';
+    /* Display: Bank */
+    $handler = $view->new_display('block', 'Bank', 'block');
+    $handler->display->display_options['defaults']['relationships'] = FALSE;
+    /* Relationship: Entity Reference: Referenced Entity */
+    $handler->display->display_options['relationships']['equus_banking_source_target_id']['id'] = 'equus_banking_source_target_id';
+    $handler->display->display_options['relationships']['equus_banking_source_target_id']['table'] = 'field_data_equus_banking_source';
+    $handler->display->display_options['relationships']['equus_banking_source_target_id']['field'] = 'equus_banking_source_target_id';
+    /* Relationship: Entity Reference: Referenced Entity */
+    $handler->display->display_options['relationships']['equus_banking_destination_target_id']['id'] = 'equus_banking_destination_target_id';
+    $handler->display->display_options['relationships']['equus_banking_destination_target_id']['table'] = 'field_data_equus_banking_destination';
+    $handler->display->display_options['relationships']['equus_banking_destination_target_id']['field'] = 'equus_banking_destination_target_id';
+    $handler->display->display_options['defaults']['arguments'] = FALSE;
+    $handler->display->display_options['block_description'] = 'Bank';
 
-	/* Display: Page */
-	$handler = $view->new_display('page', 'Page', 'page_1');
-	$handler->display->display_options['path'] = 'organization/transactions/%';
+    /* Display: Page */
+    $handler = $view->new_display('page', 'Page', 'page_1');
+    $handler->display->display_options['path'] = 'organization/transactions/%';
 
-	$views[$view->name] = $view;
+    $views[$view->name] = $view;
 
-	// other views here
+    // other views here
 
-	return $views;
+    return $views;
 }
 
 /**
  * Implements hook_node_info()
  */
 function equus_banking_node_info() {
-	return array(
-		'transaction' => array(
-			'name' => t('Transaction'),
-			'base' => 'transaction',
-			'description' => t('A financial transaction'),
-			'has_title' => TRUE,
-			'title_label' => t('Memo')
-		)
 	);
 }
 
@@ -176,7 +168,6 @@ function equus_banking_create_transaction($memo, $source, $destination, $amount)
 		'comment' => 0,
 		'promote' => 0,
 	);
-	$entity = entity_create('node', $values);
 	$ewrapper = entity_metadata_wrapper('node', $entity);
 	$ewrapper->title->set($memo);
 	$ewrapper->equus_banking_source->set(intval($source));
@@ -192,26 +183,26 @@ function equus_banking_create_transaction($memo, $source, $destination, $amount)
  * transaction_form is for debugging purposes only. TODO : Should be hidden or deleted before live.
  */
 function transaction_form($node, $form_state) {
-	return node_content_form($node, $form_state);
+    return node_content_form($node, $form_state);
 }
 
 /**
  * Return the ledger with all transactions.
  */
 function equus_banking_retrieve_ledger() {
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'transaction')
-		->propertyCondition('status', 1)
-		->propertyOrderBy('created', 'DESC');
-	$result = $query->execute();
-	if (!$result) {
-		return;
-	}
-	$nids = array_keys($result['node']);
-	$nodes = node_load_multiple($nids);
-	return $nodes;
+    $query = new EntityFieldQuery();
+    $query
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'transaction')
+        ->propertyCondition('status', 1)
+        ->propertyOrderBy('created', 'DESC');
+    $result = $query->execute();
+    if (!$result) {
+        return;
+    }
+    $nids = array_keys($result['node']);
+    $nodes = node_load_multiple($nids);
+    return $nodes;
 }
 
 /**
@@ -219,24 +210,24 @@ function equus_banking_retrieve_ledger() {
  * Organization must be node ID for an organization
  */
 function equus_banking_balance($ledger, $organization) {
-	if (!$ledger) {
-		return;
-	}
-	$balance = 0;
+    if (!$ledger) {
+        return;
+    }
+    $balance = 0;
 
-	// $dpm($ledger);
-	// dpm($organization);
-	foreach($ledger as $trans) {
-		// dpm($trans);
-		if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
-			$balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
-		}
-		if ($organization == $trans->equus_banking_destination['und'][0]['target_id']) {
-			$balance = $balance + $trans->equus_banking_amount['und'][0]['value'];
-		}	
-	}
+    // $dpm($ledger);
+    // dpm($organization);
+    foreach($ledger as $trans) {
+        // dpm($trans);
+        if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
+            $balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
+        }
+        if ($organization == $trans->equus_banking_destination['und'][0]['target_id']) {
+            $balance = $balance + $trans->equus_banking_amount['und'][0]['value'];
+        }
+    }
 
-	return $balance;
+    return $balance;
 }
 
 /**
@@ -244,83 +235,83 @@ function equus_banking_balance($ledger, $organization) {
  * @param orgID must be node ID for an organization
  */
 function equus_banking_update_org_balance($orgID) {
-	$org = node_load($orgID);
+    $org = node_load($orgID);
 
-	if (!$org) {
-		return NULL;
-	}
+    if (!$org) {
+        return NULL;
+    }
 
-	$ledger = equus_banking_retrieve_ledger();
-	$balance = equus_banking_balance($ledger, $orgID);
+    $ledger = equus_banking_retrieve_ledger();
+    $balance = equus_banking_balance($ledger, $orgID);
 
-	$org->equus_organizations_balance['und'][0]['value'] = $balance;
+    $org->equus_organizations_balance['und'][0]['value'] = $balance;
 
-	node_save($org);
+    node_save($org);
 
-	$users = equus_organizations_get_assoc_users($orgID);
+    $users = equus_organizations_get_assoc_users($orgID);
 
-	foreach ($users as $user) {
-		equus_banking_update_user_net_worth($user);
-	}
+    foreach ($users as $user) {
+        equus_banking_update_user_net_worth($user);
+    }
 }
 
 function equus_banking_check_sufficient_funds($amount, $source_id) {
-	$ledger = equus_banking_retrieve_ledger();
+    $ledger = equus_banking_retrieve_ledger();
 
-	$org_balance = equus_banking_balance($ledger, $source_id);
+    $org_balance = equus_banking_balance($ledger, $source_id);
 
-	if ($org_balance < $amount) {
-		return false;
-	} else {
-		return true;
-	}
+    if ($org_balance < $amount) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function equus_banking_update_user_net_worth($uid) {
-	$total = equus_banking_calc_user_net_worth($uid);
+    $total = equus_banking_calc_user_net_worth($uid);
 
-	$user = user_load($uid);
-	$user->field_equus_user_net_worth['und'][0]['value'] = $total;
-	user_save($user);
+    $user = user_load($uid);
+    $user->field_equus_user_net_worth['und'][0]['value'] = $total;
+    user_save($user);
 }
 
 function equus_banking_calc_user_net_worth($uid) {
-	$nids = equus_organizations_get_assoc_orgs($uid);
+    $nids = equus_organizations_get_assoc_orgs($uid);
 
-	$total = 0;
+    $total = 0;
 
-	if (empty($nids)) {
-		return $total;
-	}
+    if (empty($nids)) {
+        return $total;
+    }
 
-	foreach($nids as $nid) {
-		$org = node_load($nid);
-		$total += $org->equus_organizations_balance['und'][0]['value'];
-	}
-	return $total;
+    foreach($nids as $nid) {
+        $org = node_load($nid);
+        $total += $org->equus_organizations_balance['und'][0]['value'];
+    }
+    return $total;
 }
 
 function equus_banking_get_user_net_worth($uid) {
-	$user = user_load($uid);
+    $user = user_load($uid);
 
-	$net_worth = $user->field_equus_user_net_worth['und'][0]['value'];
+    $net_worth = $user->field_equus_user_net_worth['und'][0]['value'];
 
-	return $net_worth;
+    return $net_worth;
 }
 
 function equus_banking_settings_form($form, &$form_state) {
-	$form['button1'] = array(
-		'#type' => 'submit',
-		'#value' => 'Update balance for all orgs',
-		'#submit' => array('equus_banking_settings_form_action_one')
-	);
+    $form['button1'] = array(
+        '#type' => 'submit',
+        '#value' => 'Update balance for all orgs',
+        '#submit' => array('equus_banking_settings_form_action_one')
+    );
 
-	$form['button2'] = array(
-		'#type' => 'submit',
-		'#value' => 'Update net worth for all users',
-		'#submit' => array('equus_banking_settings_form_action_two')
-	);
-	return system_settings_form($form);
+    $form['button2'] = array(
+        '#type' => 'submit',
+        '#value' => 'Update net worth for all users',
+        '#submit' => array('equus_banking_settings_form_action_two')
+    );
+    return system_settings_form($form);
 }
 
 function equus_banking_settings_form_action_one($form, &$form_state) {
@@ -406,13 +397,13 @@ function equus_banking_menu() {
 }
 
 function equus_banking_node_insert($node) {
-	if ($node->type != 'transaction') {
-		return;
-	}
-	$destination = $node->equus_banking_destination['und'][0]['target_id'];
-	$source = $node->equus_banking_source['und'][0]['target_id'];
-	equus_banking_update_org_balance($source);
-	equus_banking_update_org_balance($destination);
+    if ($node->type != 'transaction') {
+        return;
+    }
+    $destination = $node->equus_banking_destination['und'][0]['target_id'];
+    $source = $node->equus_banking_source['und'][0]['target_id'];
+    equus_banking_update_org_balance($source);
+    equus_banking_update_org_balance($destination);
 }
 
 //TODO: Write a function that reverses a transaction
