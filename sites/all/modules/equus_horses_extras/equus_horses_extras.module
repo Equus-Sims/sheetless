@@ -468,7 +468,7 @@ function equus_horses_extras_node_insert($node) {
 	$status = equus_horses_extras_spend_regular_hc($node->uid);
 
 	if ($status === false) {
-		watchdog('equus_horse_aging', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+		watchdog('equus_horses_extras', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
 	}
 	equus_horses_extras_calc_stats($node->nid);
 }
