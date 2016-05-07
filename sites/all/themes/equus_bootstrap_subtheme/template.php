@@ -196,7 +196,15 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	$vars['submitted'] = date("M j, Y", $vars['created']);
 
 	$body = field_get_items('node', $vars['node'], 'body');
-	$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
+	if ($vars['view_mode'] == 'tiles') {
+		$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 150);
+		$vars['body_teaser'] .= '...' . l("read more", "node/{$vars['node']->nid}", array(
+			'attributes' => array(
+				'class' => array(
+					'link-readmore'))));
+	} else {
+		$vars['body_teaser'] = text_summary($body[0]['value'], NULL, 400);
+	}
 
 	if ($vars['node']->type == 'equus_sale') {
 	    // set up render array for blog categories

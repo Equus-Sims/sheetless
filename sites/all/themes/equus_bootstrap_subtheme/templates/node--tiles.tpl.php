@@ -109,16 +109,9 @@
 	    			. '</span>';
 	    	} ?>
 	    </div>
-	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale'): ?>
-	    	<?php if (strlen($body_teaser) >= 150) {
-		    	print substr(strip_tags($body_teaser), 0, 150) 
-		    	. '...<a href="' 
-		    	. $node_url 
-		    	. '" class="link-readmore">read more</a>';
-		    } else {
-		    	print render($body_teaser);
-		    } ?>
-	    <?php endif; ?>
+	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale') {
+			print render($body_teaser);
+		} ?>
 	</div>
   </div>
   <div class="post-footer">
