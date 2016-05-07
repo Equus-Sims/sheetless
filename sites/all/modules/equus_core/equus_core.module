@@ -120,7 +120,10 @@ function equus_core_get_es_pretty_year() {
 	return $seasons[$season] . ", Year " . $year;
 }
 
-function equus_core_node_load($nid, $type) {
+/*
+ * TODO: Think of a better name for this function. Named such to prevent Drupal from confusing it with hook_node_load
+ */
+function equus_core_node_load_2($nid, $type) {
 	$node = node_load($nid);
 
 	if (!$node) {
