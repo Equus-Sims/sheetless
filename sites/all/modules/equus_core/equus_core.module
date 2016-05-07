@@ -83,6 +83,20 @@ function equus_core_admin_paths() {
   return $paths;
 }
 
+/**
+ * Queries the database for a list of stats
+ * @return mixed The list of stats
+ */
+function equus_core_get_stats_list() {
+	$result = db_query("SELECT data FROM field_config WHERE `field_name` = 'field_stat'");
+
+	$record = $result->fetchObject();
+
+	$stats = unserialize($record->data);
+
+	return $stats['settings']['allowed_values'];
+}
+
 function equus_core_get_es_months() {
 	$start = 2013;
 	$nowy = date('Y');
