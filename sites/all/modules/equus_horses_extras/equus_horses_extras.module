@@ -79,6 +79,41 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	}
 
 	asort($form['field_horse_breed']['und']['#options']);
+
+    // TODO: Add form element for foal aging speed, age transition year, adult aging speed
+    $speed_options = array(
+        1 => '1x (real time)',
+        3 => '3x (standard ES time)',
+        6 => '6x (double standard ES time)',
+        12 => '12x (standard for foals - not recommended for adults)'
+    );
+    $form['foal_speed'] = array(
+        '#type' => 'select',
+        '#title' => 'Foal Aging Speed',
+        '#options' => $speed_options,
+        '#description' => 'insert help text here',
+        // TODO: Write help text for aging systems
+        '#default_value' => 12,
+        '#required' => true,
+    );
+    $form['adult_speed'] = array(
+        '#type' => 'select',
+        '#title' => 'Adult Aging Speed',
+        '#options' => $speed_options,
+        '#description' => 'insert help text here',
+        // TODO: Write help text for aging systems
+        '#default_value' => 3,
+        '#required' => true,
+    );
+    //TODO: Validation!!!
+    $form['transition_year'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Transition Year',
+        '#description' => 'The year the horse transitions from foal to adult.',
+        '#default_value' => '4',
+        '#required' => true,
+        '#size' => 3
+    );
 }
 
 /**
@@ -291,6 +326,41 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 	// Pedigree
 	// Show Cooldown
 	// TODO: Ask Peter about doing this in a loop
+
+    $transition_year = $form['transition_year']['#value'];
+    if (!is_numeric($transition_year) || $transition_year < 0 || $transition_year != floor($transition_year)) {
+        form_set_error('transition_year', "$transition_year is not a valid year.");
+    }
+}
+
+function equus_horses_extras_node_submit($node, $form, &$form_state) {
+    if ($node->type != 'horse') {
+        return;
+    }
+
+    if ($node->nid == NULL) {
+        $dob = $node->field_horse_date_of_birth[LANGUAGE_NONE][0]['value'];
+        $dob_date = new DateTime($dob);
+
+        if ($form['foal_speed']['#value'] == $form['adult_speed']['#value']) {
+            $foal_end_date_str = NULL;
+        } else {
+            $foal_days = round(($form['transition_year']['#value']*365)/$form['foal_speed']['#value']);
+            $foal_end_date = $dob_date->add(new DateInterval("P{$foal_days}D"));
+            $foal_end_date_str = $foal_end_date->format('Y-m-d H:i:s');
+        }
+
+        $aging_details = array();
+        $aging_details[] = array('start' => $dob, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value']);
+
+        // Add adult period if there is one
+        if ($foal_end_date_str != NULL) {
+            $adult_start_date = $foal_end_date->add(new DateInterval("P1D"));
+            $adult_start_date_str = $adult_start_date->format('Y-m-d H:i:s');
+            $aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value']);
+        }
+        $node->field_horse_aging_details[LANGUAGE_NONE][0]['value'] = json_encode($aging_details);
+    }
 }
 
 function equus_horses_extras_node_presave($node) {
@@ -504,51 +574,49 @@ function equus_horses_extras_get_body_type_modifiers($body_typeID) {
 }
 
 function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
-	$dob = field_get_items($entity_type, $entity, 'field_horse_date_of_birth');
-	$date = array_pop($dob);
-	$real_date = new DateTime($date['value']);
+	$aging_details_json = field_get_items($entity_type, $entity, 'field_horse_aging_details');
+    $aging_details = json_decode($aging_details_json[0]['value']);
 
-	$year = $real_date->format("Y");
-	$month = $real_date->format("m");
-
-	$field_age_transition_year = field_get_items($entity_type, $entity, 'field_age_transition_year');
-	$field_foal_age_multiplier = field_get_items($entity_type, $entity, 'field_foal_age_multiplier');
-	$field_adult_age_multiplier = field_get_items($entity_type, $entity, 'field_adult_age_multiplier');
-
-	$transition_year = $field_age_transition_year[0]['value'];
-	$foal_multiplier = $field_foal_age_multiplier[0]['value'];
-	$adult_multiplier = $field_adult_age_multiplier[0]['value'];
-
-	$entity_field[0]['value'] = equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier);
+	$entity_field[0]['value'] = floor(equus_horses_extras_calc_age($aging_details)/365);
 }
 
 /**
- * @param $year int Year of horse's birth
- * @param $month int Month of horse's birth
- * @param $transition_year int Age when horse switches from foal aging to adult aging
- * @param $foal_multiplier int The number of months in one year for foal aging
- * @param $adult_multiplier int The number of months in one year for adult aging
- * @return int Age of horse in years
+ * Calculates the age of a horse in game days based on information about the aging
+ * speed at various time periods in its life.
+ *
+ * @param Array $aging_speed Array of time period objects to consider. Each time period
+ *                           should have properties start (string:Y-m-d H:i:s),
+ *                           end (string:Y-m-d H:i:s), and speed (Integer).
+ * @param string $today The day to calculate the age against, defaults to today
+ * @return int Number of game days old the horse is
  */
-function equus_horses_extras_calc_age($year,$month,$transition_year,$foal_multiplier,$adult_multiplier) {
-	$dob = mktime(0,0,0,$month,1,$year);
-	$today = mktime(0,0,0);
+function equus_horses_extras_calc_age($aging_speed, $today = NULL) {
+    if (empty($aging_speed)) {
+        return NULL;
+    }
 
-	$age_in_months = ($today - $dob)/(60*60*24*(365/12));
+    if ($today == NULL) {
+        $today = new DateTime('now');
+    } else {
+        $today = new DateTime($today);
+    }
 
-	$months_as_foal = $transition_year*($foal_multiplier);
+    $game_days_old = 0;
+    foreach($aging_speed as $time_period) {
+        if ($time_period->end == NULL) {
+            $end = $today;
+        } else {
+            $end = min($today, new DateTime($time_period->end));
+        }
 
-	$years_as_foal = $age_in_months/$foal_multiplier;
+        $time_period_length = $end->diff(new DateTime($time_period->start))->days+1;
 
-	if ($years_as_foal < 1) {
-		return int(0);
-	} else {
-		$months_as_adult = $age_in_months - $months_as_foal;
+        $game_days_old += $time_period_length * $time_period->speed;
 
-		$years_as_adult = $months_as_adult/$adult_multiplier;
+        if ($end == $today) {
+            break;
+        }
+    }
 
-		$calc_age = $years_as_adult + $transition_year;
-
-		return floor($calc_age);
-	}
+    return $game_days_old;
 }
