@@ -13,7 +13,10 @@
 		"hp_base": 10,
 		"hp_level_mult": 2,
 		"hp_placement_mult": -2,
-		"hp_placement_cutoff": 6
+		"hp_placement_cutoff": 6,
+		"image_entry": false,
+		"text_entry": false,
+		"default_entry_status": "approved"
 	},
 	"photo": {
 		"base_purse": 7500,
@@ -29,9 +32,17 @@
 		"mp_base": 10,
 		"mp_level_mult": 2,
 		"mp_placement_mult": -2,
-		"mp_placement_cutoff": 6
+		"mp_placement_cutoff": 6,
+		"image_entry": true,
+		"text_entry": false,
+		"default_entry_status": "pending"
 	},
 	"roleplay": {
-		"mp_base": 5
+		"base_purse": 0,
+		"entry_fee_mult": 0,
+		"mp_base": 5,
+		"image_entry": true,
+		"text_entry": true,
+		"default_entry_status": "pending"
 	}
 }
