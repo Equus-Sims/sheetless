@@ -1,0 +1,31 @@
+<?php
+
+class equus_store_test_case extends DrupalWebTestCase {
+    public static function getInfo() {
+        return array(
+            'name' => 'Equus Store Web Tests',
+            'description' => 'Test that Equus Store works.',
+            'group' => 'equus_store',
+        );
+    }
+
+    public function setUp() {
+        parent::setUp(array('equus_store'));
+        $this->testUser = $this->drupalCreateUser();
+        $this->drupalLogin($this->testUser);
+        // probably need to create the store
+        // probably need to create the starter pack
+
+    }
+
+    public function testStarterPack() {
+
+        $this->assertEqual($this->testUser->field_user_tutorial_progress[LANGUAGE_NONE][0]['value'], 'brand_new');
+
+        // $request = array(
+
+        // );
+        // $this->drupalPost('store/sale/starter-pack', $request, t('Buy'));
+        // $this->assertEqual($this->testUser->field_user_tutorial_progress[LANGUAGE_NONE][0]['value'], 'start_pack_purchased');
+    }
+}
