@@ -1,0 +1,9 @@
+name = Equus Trainers Extras
+description = A custom module for Equus-sims trainer extras.
+package = Equus Sims
+core = 7.x
+version = 7.x-1.0
+files[] = equus_trainers_extras.install
+files[] = equus_trainers_extras.module
+files[] = equus_trainers_extras.test
+; dependencies[] = equus_trainers

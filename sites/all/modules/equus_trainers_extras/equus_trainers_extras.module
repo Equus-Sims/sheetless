@@ -1,0 +1,211 @@
+<?php
+/**
+ * Implements hook_block_info().
+ *
+ * This function tells drupal about our block.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_info/7
+ */
+function equus_trainers_extras_block_info() {
+	// Create an array that will hold our blocks
+	$blocks = array();
+
+	// Create a key in our $blocks array that
+	// defines our block. Note that the key in
+	// this array can be anything. For this
+	// tutorial, we use 'tellafriend_form'.
+	$blocks['equus_trainers_extras_add_roster'] = array(
+		// 'info' is what you will see when viewing the blocks admin page.
+		// Note that we use the t() (translate) function which lets drupal
+		// translate any text passed in if needed.
+		'info' => t('Add to Roster Form'),
+		// 'cache' how this block will be cached
+		'cache' => DRUPAL_CACHE_GLOBAL,
+	);
+
+	// Note, if you wanted to define multiple blocks, you
+	// could simply define more blocks just like above.
+
+	// Finally, we return the $blocks array.
+	return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This function tells drupal how to define our block when viewed.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_view/7
+ */
+function equus_trainers_extras_block_view($delta = '') {
+	// Create an array that will be returned as our block
+	$block = array();
+
+	// Since hook_block_view is called for every block,
+	// Drupal passes in $delta (the key of the blocks defined
+	// in hook_block_info. In our case, we're checking for
+	// $delta to be 'tellafriend_form'.
+	switch($delta) {
+		case 'equus_trainers_extras_add_roster':
+			// Since this $delta matches our case, we'll define
+			// the subject and contents.
+
+			// 'subject' can be blank ('') or anything you wish to define.
+			$block['subject'] = t('Add horse to roster');
+
+			// 'content' are just that, the contents of the block.
+			// In our case, we will be showing a form.
+			// We use drupal_get_form() to return a drupal-built form.
+			// Note that the parameter passed to drupal_get_form is the name
+			// of the function we will build below to define our form.
+			// This can be any function name we define below.
+			$block['content'] = drupal_get_form('equus_trainers_extras_add_to_roster_form');
+			break;
+	}
+
+	// Finally, we return the $block array.
+	return $block;
+}
+
+function equus_trainers_extras_add_to_roster_form($form, &$form_state) {
+	// dpm($form);
+	// dpm($form_state);
+	$trainer = menu_get_object();
+	if ($trainer) {
+		$form_state['trainer_id'] = $trainer->nid;
+	} else {
+		$trainer = node_load($form_state['trainer_id']);
+		if (!$trainer || $trainer->type != 'trainer') {
+			// TODO: There is no way to continue building the form without a trainer, so find a way to tell the user and
+			// gracefully die
+			drupal_set_message("I'm broken!", 'error');
+			return $form;
+		}
+	}
+	// dpm($trainer);
+	// call function to find all horses owned by the trainer's property
+	$property_id = $trainer->field_sim_residence[LANGUAGE_NONE][0]['target_id'];
+	$nids = equus_horses_extras_get_prop_assoc_horses($property_id);
+	$horse_list = equus_horses_extras_get_horse_options($nids);
+	$stats_list = equus_core_get_stats_list();
+	// TODO: Filter list to only stats that the trainer is capable of training
+	// $trainable_stats_list = stats that the trainer can train
+
+	$form['horseid'] = array(
+		'#type' => 'select', //you can find a list of available types in the form api
+		'#title' => 'Select a horse',
+		'#multiple' => FALSE,
+		'#options' => $horse_list,
+		'#required' => TRUE, //make this field required
+	);
+
+	// TODO: Add field for stat to train
+	$form['stat_increase'] = array(
+		'#type' => 'select', //you can find a list of available types in the form api
+		'#title' => 'Select a stat to train',
+		'#multiple' => FALSE,
+		'#options' => $stats_list,
+		'#required' => TRUE, //make this field required
+	);
+
+	// amount to improve stat by
+	$form['increase_amount'] = array(
+		'#type' => 'select', //you can find a list of available types in the form api
+		'#title' => 'Improve stat by:',
+		'#multiple' => FALSE,
+		'#options' => array(
+			1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10
+		),
+		'#required' => TRUE, //make this field required
+	);
+
+	// whether to allow redistribution
+	$form['allow_redistribution'] = array(
+		'#type' => 'checkbox', //you can find a list of available types in the form api
+		'#title' => 'Allow redistribution',
+		'#required' => FALSE, //make this field required
+	);
+
+	// field for stat to forget
+	$form['stat_decrease'] = array(
+		'#type' => 'select', //you can find a list of available types in the form api
+		'#title' => 'Select a stat to forget',
+		'#multiple' => FALSE,
+		'#options' => $stats_list,
+		'#required' => FALSE, //make this field required
+	);
+
+	$form['submit_button'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit'),
+	);
+
+	return $form;
+}
+
+function equus_trainers_extras_add_to_roster_form_validate($form, &$form_state) {
+	$horse = node_load($form_state['values']['horseid']);
+	if ($horse == FALSE) {
+		form_set_error('horseid', t('Horse does not exist.'));
+	} else {
+		if ($horse->type != 'horse') {
+			form_set_error('horseid', t('Only horses may be trained.'));
+		}
+	}
+
+	dpm($form);
+	dpm($form_state);
+
+	// TODO: Validate the trainer exists and is a trainer
+
+	// TODO: Validate that the horse and trainer reside at the same property?
+
+	// TODO: Validate that the stat to decrease isn't the same as the stat to increase
+}
+
+function equus_trainers_extras_add_to_roster_form_submit($form, &$form_state) {
+	// TODO: Create a new relation when the form is submitted
+	// dpm($form);
+	// dpm($form_state);
+
+	$horse_id = $form['horseid']['#value'];
+	$trainer_id = $form_state['trainer_id'];
+
+	$endpoints = array(
+		array('entity_type' => 'node', 'entity_id' => $horse_id),
+		array('entity_type' => 'node', 'entity_id' => $trainer_id)
+	);
+
+	$new_relation = relation_create('was_trained_by', $endpoints);
+
+	$new_relation->field_stat_increased[LANGUAGE_NONE][0]['value'] = $form_state['values']['stat_increase'];
+	$new_relation->field_stat_increased_amt[LANGUAGE_NONE][0]['value'] = $form_state['values']['increase_amount'];
+
+	if ($form_state['values']['allow_redistribution'] == "0") {
+		$stat_decreased = NULL;
+	} else {
+		$stat_decreased = $form_state['values']['stat_decrease'];
+	}
+	$new_relation->field_stat_decreased[LANGUAGE_NONE][0]['value'] = $stat_decreased;
+
+	$horse = node_load($horse_id);
+	$horse_aging_speed = $horse->field_adult_age_multiplier[LANGUAGE_NONE][0]['value'];
+
+	$now = time();
+	// TODO: Maybe adjust the cooldown by trainer level?
+	$cooldown = 86400 / $horse_aging_speed;
+
+	$new_relation->field_training_duration[LANGUAGE_NONE][0] = array(
+		'value' => $now,
+		'value2' => $now + $cooldown,
+		'timezone' => date('T'),
+		'timezone2' => date('T'),
+	);
+
+	$rid = relation_save($new_relation);
+	if (!$rid) {
+		throw new Exception('Relation create failed in equus_trainers_extras_add_to_roster_form_submit.');
+	}
+}
