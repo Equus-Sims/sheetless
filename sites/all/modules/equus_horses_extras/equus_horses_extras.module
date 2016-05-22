@@ -491,18 +491,6 @@ function equus_horses_extras_calc_stats($nid) {
 
 	$stats = array_keys(list_allowed_values(field_info_field('field_stat')));
 
-	// we get the entity ids of the current stats if any
-	$eids = array();
-	foreach ($horse->field_horse_stats[LANGUAGE_NONE]as $key => $value) {
-		$eids[] = $value['value'];
-		unset($horse->field_horse_stats[LANGUAGE_NONE][$key]);
-	}
-	if ($eids > 0) {
-		entity_delete_multiple('field_collection_item', $eids);
-		node_save($horse);
-	}
-	drupal_set_message(print_r($eids, true));
-
     $potential_sum = 0;
     $raw_potentials = array();
 	foreach ($stats as $stat) {
@@ -523,38 +511,20 @@ function equus_horses_extras_calc_stats($nid) {
 
     $indiv_potential_max = rand(EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MIN, EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MAX);
     $scale_factor = $indiv_potential_max / $potential_sum;
+    $stats_field = array();
     foreach ($raw_potentials as $stat => $raw_potential) {
         $indiv_potential = $raw_potential * $scale_factor;
 
 		$current = 0;
-		// Setup the values in the structure expected by the field_collection entity.
-		$values = array(
-		  	'field_name' => 'field_horse_stats',
-		  	'field_stat' => array(
-		   		LANGUAGE_NONE => array(array('value' => $stat)),
-		  	),
-		  	'field_horse_current_stat_value' => array(
-		    	LANGUAGE_NONE => array(array('value' => $current)),
-		  	),
-		  	'field_horse_potential_stat_value' => array(
-		    	LANGUAGE_NONE => array(array('value' => $indiv_potential)),
-		  	),
-            'field_horse_trained_stat_value' => array(
-                LANGUAGE_NONE => array(array('value' => $current)),
-            ),
-		);
-		$entity = entity_create('field_collection_item', $values);
-		// Attach the field_collection entity to the application node. This has to
-		// happen separately so that it actually works -- you can't just specify
-		// this via the $values array.
-		$entity->setHostEntity('node', $horse);
-		// Save the entity. Since it's attached to the right application node, this
-		// will both create the field_collection entity and update the application
-		// node to point to the new field_activity_log record.
-		// drupal_set_message(print_r($entity, true));
-		//$entity->save();
-		entity_save('field_collection_item', $entity);
+
+        $stats_field[$stat] = array(
+            'current' => $current,
+            'potential' => $indiv_potential,
+            'highest_trained' => $current
+        );
 	}
+    $horse->field_horse_stats[LANGUAGE_NONE][0]['value'] = json_encode($stats_field);
+    node_save($horse);
 }
 
 function equus_horses_extras_get_breed_stats($breedID) {
