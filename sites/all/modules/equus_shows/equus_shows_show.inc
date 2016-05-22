@@ -61,17 +61,17 @@ class equus_shows_show {
 		});
 
 		// Build the output array
-		$output = [];
+		$show_results = [];
 
 		for ($i = 0; $i < count($entries); $i++) {
-			$temp = new stdClass();
-			$temp->placement = $i + 1;
-			$temp->id = $entries[$i]->horse_id;
-			$temp->scores = (object)$entries[$i]->scores;
-			$output[] = $temp;
+			$entry = new stdClass();
+			$entry->placement = $i + 1;
+			$entry->id = $entries[$i]->horse_id;
+			$entry->scores = (object)$entries[$i]->scores;
+			$show_results[$entry->id] = $entry;
 		}
 
-		return $output;
+		return $show_results;
 	}
 }
 
