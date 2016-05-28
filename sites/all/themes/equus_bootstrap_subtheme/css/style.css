@@ -1229,6 +1229,7 @@ table.cols-3 tr td,
 .goldBtn {
     background: #8F7F4C;
     width: 157px;
+    margin: 5px;
 }
 
 .goldBtn:hover, .goldBtn:focus, .goldBtn:active {
