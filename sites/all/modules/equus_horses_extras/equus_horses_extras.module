@@ -95,6 +95,7 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
         // TODO: Write help text for aging systems
         '#default_value' => 12,
         '#required' => true,
+        '#weight' => 22,
     );
     $form['adult_speed'] = array(
         '#type' => 'select',
@@ -104,16 +105,30 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
         // TODO: Write help text for aging systems
         '#default_value' => 3,
         '#required' => true,
+        '#weight' => 23,
     );
     //TODO: Validation!!!
     $form['transition_year'] = array(
         '#type' => 'textfield',
         '#title' => 'Transition Year',
-        '#description' => 'The year the horse transitions from foal to adult.',
+        '#description' => 'The age the horse transitions from foal to adult.',
         '#default_value' => '4',
         '#required' => true,
-        '#size' => 3
+        '#size' => 3,
+        '#weight' => 24,
     );
+
+    // add programmatically created aging related fields to the general group on the horse node
+    $form['#group_children']['foal_speed'] = 'group_horse_general';
+    $form['#group_children']['adult_speed'] = 'group_horse_general';
+    $form['#group_children']['transition_year'] = 'group_horse_general';
+
+    // hide aging details field from users
+    $form['field_horse_aging_details']['#access'] = 0;
+
+    // hide horse stats field from users
+    $form['field_horse_stats']['#access'] = 0;
+    dpm($form);
 }
 
 /**
