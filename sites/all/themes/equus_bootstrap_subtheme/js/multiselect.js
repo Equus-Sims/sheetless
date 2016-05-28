@@ -961,8 +961,8 @@ jQuery(window).load(function() {
       menuBtn.parent('li').addClass('userDropdownBtn');
       $('head').append('<style>ul.userDropdownMenu:before { left: ' + (($('ul.userDropdownMenu').outerWidth() / 2) + 30) + 'px; }</style>');
 
-      $(this).click(function() {
-        preventDefault;
+      $(this).click(function(e) {
+        // e.preventDefault();
       });
 
     };
