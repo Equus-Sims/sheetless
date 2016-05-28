@@ -1666,6 +1666,10 @@ table.cols-3 tr td,
     position: relative;
 }
 
+.views-exposed-form {
+    overflow: visible !important;
+}
+
 .page-stable .views-exposed-widget.views-submit-button,
 .page-stable .views-exposed-widget.views-reset-button {
     width: auto;
