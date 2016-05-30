@@ -21,16 +21,16 @@ define("EQUUS_HORSES_EXTRAS_CUR_POT_STAT_RATIO", 0.50);
 function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	$uid = $GLOBALS['user']->uid;
 	// get all organizations (and properties) associated with the currently logged in user
-	$organizations = equus_properties_get_user_assoc_properties_by_org($uid);
+	$properties = equus_properties_get_user_assoc_properties_by_org($uid);
 
 	// if the user has no organizations, print an error
-	if (empty($organizations)) {
+	if (empty($properties)) {
 		drupal_set_message('You need to create an organization and a property before you can create a horse.','error');
 	} else {
 		$empty = TRUE;
 
 		// if the user has no properties, print an error
-		foreach ($organizations as $property_list) {
+		foreach ($properties as $property_list) {
 			if (!empty($property_list)) {
 				$empty = FALSE;
 				break;
@@ -43,7 +43,11 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	}
 	
 	// pass the correct property options to the form for the horse residence field
-	$form['field_horse_residence']['und']['#options'] = $organizations;
+	$form['field_horse_residence']['und']['#options'] = $properties;
+
+    // pass the correct organization options to the form for the creating organization field
+    $organizations = equus_organizations_get_org_options($uid);
+    $form['field_horse_creating_org']['und']['#options'] = $organizations;
 
 	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
 	$current_rare_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_RARE_HC_TID);
@@ -128,7 +132,6 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 
     // hide horse stats field from users
     $form['field_horse_stats']['#access'] = 0;
-    dpm($form);
 }
 
 /**
