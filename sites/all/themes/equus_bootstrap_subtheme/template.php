@@ -235,18 +235,21 @@ function equus_bootstrap_subtheme_get_content_bottom($view_mode) {
 }	
 
 function equus_bootstrap_subtheme_preprocess_flag(&$vars) {
-	$vars['link_text'] = "<span class='icon {$vars['status']}'></span><span class='count'>".equus_bootstrap_subtheme_get_like_count($vars['entity_id'])."</span>";
+    // uncomment this line and equus_boostrap_subtheme_get_like_count and comment the line below for like counts on equus tiles
+	// $vars['link_text'] = "<span class='icon {$vars['status']}'></span><span class='count'>".equus_bootstrap_subtheme_get_like_count($vars['entity_id'])."</span>";
+
+    $vars['link_text'] = "<span class='icon {$vars['status']}'></span>";
 }
 
-function equus_bootstrap_subtheme_get_like_count($nid) {
-	$result = flag_get_counts('node', $nid);
-
-	if (isset($result['likes'])) {
-		return $result['likes'];
-	} else {
-		return 0;
-	}
-}
+//function equus_bootstrap_subtheme_get_like_count($nid) {
+//	$result = flag_get_counts('node', $nid);
+//
+//	if (isset($result['likes'])) {
+//		return $result['likes'];
+//	} else {
+//		return 0;
+//	}
+//}
 
 function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 	$alias = drupal_get_path_alias();
