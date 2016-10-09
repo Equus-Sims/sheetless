@@ -26,6 +26,18 @@ function equus_shows_node_info() {
 	}
 }*/
 
+function equus_shows_form_show_node_form_alter(&$form, $form_state) {
+    $uid = $GLOBALS['user']->uid;
+    // pass the correct organization options to the form for the hosting organization field
+    $organizations = equus_organizations_get_org_options($uid);
+    $form['field_hosting_organization']['und']['#options'] = $organizations;
+
+    // hide show status field from users
+    $form['field_show_status']['#access'] = 0;
+    // hide current phase field from users
+    $form['field_show_current_phase']['#access'] = 0;
+}
+
 /**
  * @param $node
  */
@@ -257,7 +269,7 @@ function equus_shows_entry_form($form, &$form_state) {
         // TODO: Expand error messages for why a show cannot be entered to include other states
     } else if ($show_status != 'open') {
         $form['some_text'] = array(
-            '#markup' => "<p>This show cannot be entered.</p>"
+            '#markup' => "<p>The deadline to enter this show has passed. We hope to see you at the next one!</p>"
         );
         return $form;
     }
@@ -268,14 +280,16 @@ function equus_shows_entry_form($form, &$form_state) {
 
 	// call function to find all horses owned by currently logged in user
 	$uid = $GLOBALS['user']->uid;
-	$nids = equus_horses_extras_get_assoc_horses($uid);
+
+    // excludes non-activated horses for non-Roleplay show types
+	$nids = equus_horses_extras_get_assoc_horses($uid, ($show_type != 'roleplay'));
+
+    $entered_nids = equus_shows_get_horses_entered_in_show($show->nid);
+    $nids = array_diff($nids, $entered_nids);
 
 	if (empty($nids)) {
 		$form['some_text'] = array(
-			'#markup' => "<p>None of your organizations own any activated horses.
-                Unactivated horses may not compete in shows. To activate a horse,
-                first create or edit one and set its Horse Activation Status from
-                pending to active.</p>"
+			'#markup' => "<p>Either you have no eligible horses or they have all been entered already. Stuff a few more in your barn and enter them in the show!</p>"
 		);
 
 		$form['submit_button'] = array(
@@ -287,13 +301,13 @@ function equus_shows_entry_form($form, &$form_state) {
 		return $form;
 	}
 
-	$horse_list = equus_horses_extras_get_horse_options($nids);
+	$horses = equus_horses_extras_get_horse_options($nids);
 
 	$form['horseid'] = array(
 		'#type' => 'select', //you can find a list of available types in the form api
 		'#title' => 'Select a horse',
 		'#multiple' => FALSE,
-		'#options' => $horse_list,
+		'#options' => $horses,
 		'#required' => TRUE, //make this field required
 	);
 
@@ -327,21 +341,32 @@ function equus_shows_entry_form($form, &$form_state) {
 
 function equus_shows_entry_form_validate($form, &$form_state) {
 	$horse = node_load($form_state['values']['horseid']);
+    $show = node_load($form_state['showid']);
+
+    if ($show == FALSE) {
+        form_set_error('', t('Show does not exist.'));
+    } else {
+        if ($show->type != 'show') {
+            form_set_error('', t('Show must be a show.'));
+        }
+    }
+
 	if ($horse == FALSE) {
 		form_set_error('horseid', t('Horse does not exist.'));
 	} else {
 		if ($horse->type != 'horse') {
 			form_set_error('horseid', t('Entrant must be a horse.'));
 		}
-	}
-
-	$show = node_load($form_state['showid']);
-	if ($show == FALSE) {
-		form_set_error('', t('Show does not exist.'));
-	} else {
-		if ($show->type != 'show') {
-			form_set_error('', t('Show must be a show.'));
-		}
+        if ($show->field_show_type[LANGUAGE_NONE][0]['value'] != 'Roleplay') {
+            // check if horse is active
+            if ($horse->field_horse_activation_status[LANGUAGE_NONE][0]['value'] != 'Active') {
+                form_set_error('horseid', t('Horses must be activated before they can enter shows.'));
+            }
+        }
+        $entered_nids = equus_shows_get_horses_entered_in_show($show->nid);
+        if (in_array($horse->nid, $entered_nids)) {
+            form_set_error('horseid', t('This horse has already entered the show.'));
+        }
 	}
 
 	if (isset($form['image_entry']) && isset($form['text_entry'])) {
@@ -355,11 +380,9 @@ function equus_shows_entry_form_validate($form, &$form_state) {
 }
 
 function equus_shows_entry_form_submit($form, &$form_state) {
-	// TODO: Prepare a data object that contains the extra data to attach to this entry
 	$data = array();
 	if (isset($form['image_entry'])) {
 		if ($form['image_entry']['#file'] !== FALSE) {
-			// TODO: Pull image out in a way that it can be stored in the relation
 			$data['image_entry'] = $form['image_entry']['#file'];
 		}
 	}
@@ -374,7 +397,6 @@ function equus_shows_entry_form_submit($form, &$form_state) {
 
 function equus_shows_edit_entry_form($form, &$form_state, $entryid) {
     $entry = relation_load($entryid);
-	dpm($entry);
     $error_message =  "There was an error editing this entry. Please contact the site administrator.";
     if (!$entry) {
         form_set_error('', $error_message);
@@ -394,10 +416,9 @@ function equus_shows_edit_entry_form($form, &$form_state, $entryid) {
         form_set_error('', $error_message);
         return $form;
     }
-	$show_phase = $show->field_show_current_phase['und'][0]['value'];
-    $entry_status = $entry->field_show_entry_status['und'][$show_phase]['value'];
-    if (!in_array($entry_status, array('pending', 'pending_auth', 'pending_submission'))) {
-        form_set_error('', "This entry has already been authenticated and can no longer be edited.");
+    $show_status = $show->field_show_status[LANGUAGE_NONE][0]['value'];
+    if ($show_status != 'submissions') {
+        form_set_error('', "You can only add or edit your submissions during the submissions phase of the show.");
         return $form;
     }
     $form['text_entry'] = array(
@@ -466,9 +487,21 @@ function equus_shows_edit_entry_form_submit($form, &$form_state) {
 		form_set_error('', $error_message);
 		return $form;
 	}
-	$show_phase = $show->field_show_current_phase['und'][0]['value'];
-	$entry_status = $entry->field_show_entry_status['und'][$show_phase]['value'];
+
+    $show_status = $show->field_show_status[LANGUAGE_NONE][0]['value'];
+    if ($show_status != 'submissions') {
+        form_set_error('', "You can only add or edit your submissions during the submissions phase of the show.");
+        return $form;
+    }
+
+    $show_phase = $show->field_show_current_phase['und'][0]['value'];
+    $entry->field_show_entry_status['und'][$show_phase]['value'] = 'submitted';
+
     relation_save($entry);
+
+    $form_state['redirect'] = array(
+        "show/$showid",
+    );
 }
 
 function equus_shows_compute_form($form, &$form_state) {
@@ -493,6 +526,7 @@ function equus_shows_compute_form_validate($form, &$form_state) {
 	}
 
 	if ($show->field_show_status[LANGUAGE_NONE][0]['value'] != 'open') {
+        if ($show->field_show_status[LANGUAGE_NONE][0]['value'] != 'submissions')
 		form_set_error('', "The show must be open in order to run.");
 	}
 
@@ -550,6 +584,7 @@ function equus_shows_authenticate_form($form, &$form_state) {
     $total_actionable_entries = 0;
     foreach ($entries as $entry) {
         $total_pending_auth++;
+
         if (isset($entry->field_show_entry_auth_by[LANGUAGE_NONE][0]['target_id'])) {
             if ($entry->field_show_entry_auth_by[LANGUAGE_NONE][0]['target_id'] == $user->uid) {
                 $total_locked_by_current_user++;
@@ -631,12 +666,13 @@ function equus_shows_authenticate_form_validate($form, &$form_state) {
 	// TODO: Validate that form rid is sane
 }
 
+//TODO: Maybe change this to authenticated
 function equus_shows_authenticate_form_submit_approve($form, $form_state) {
-    equus_shows_authenticate_form_update_status($form_state, 'approved');
+    equus_shows_authenticate_form_update_status($form_state, 'auth_approved');
 }
 
 function equus_shows_authenticate_form_submit_reject($form, $form_state) {
-	equus_shows_authenticate_form_update_status($form_state, 'rejected');
+	equus_shows_authenticate_form_update_status($form_state, 'auth_rejected');
 }
 
 function equus_shows_authenticate_form_submit_defer($form, $form_state) {
@@ -653,24 +689,35 @@ function equus_shows_authenticate_form_submit_pass($form, $form_state) {
 function equus_shows_authenticate_form_update_status($form_state, $new_status) {
     $rid = $form_state['rid'];
     $entry = relation_load($rid);
-    // TODO: Include an id number in the form so the auther can bring an id number to admin
-    $message = "This entry could not be authenticated. Please contact the site administrator.";
+    // TODO: Include an id number in the form so the authenticator can bring an id number to admin
+    $message = "Submission on entry number $rid could not be authenticated. Please contact the site administrator.";
     if (!$entry) {
         drupal_set_message($message, 'error');
+        watchdog('equus_shows', "Failed to load show relation for authentication purposes. rid = $rid");
         return;
     }
-    $entry->field_show_entry_status[LANGUAGE_NONE][0]['value'] = $new_status;
-    relation_save($entry);
 
-    drupal_set_message("Entry {$new_status}.");
-
-    // try to run the show in case this auth was the last one needed
     $showid = $entry->endpoints[LANGUAGE_NONE][1]['entity_id'];
     $show = node_load($showid);
     if (!$show) {
-        watchdog('equus_shows', "Failed to run show $showid after authing entry {$rid}.");
+        drupal_set_message($message, 'error');
+        watchdog('equus_shows', "Failed to load show for authentication purposes. showid = $showid, rid = $rid");
         return;
     }
+
+    $show_phase = $show->field_show_current_phase[LANGUAGE_NONE][0]['value'];
+
+    $entry->field_show_entry_status[LANGUAGE_NONE][$show_phase]['value'] = $new_status;
+    relation_save($entry);
+
+    if ($new_status == 'auth_approved') {
+        drupal_set_message("Submission for entry number $rid was approved.");
+    } else if ($new_status == 'auth_rejected') {
+        drupal_set_message("Submission for entry number $rid was rejected.", 'error');
+    }
+
+    // try to run the show in case this auth was the last one needed
+
     equus_shows_run_show($show);
 }
 
@@ -845,7 +892,7 @@ function equus_shows_enter_show($showid,$horseid,$data) {
 		}
 		
 		if (array_key_exists('image_entry', $data)) {
-			// TODO: Fill in image relation field
+			// Fill in image relation field
 			$new_relation->field_shows_entry_photo[LANGUAGE_NONE][0] = (array) $data['image_entry'];
 		}
 		if (array_key_exists('text_entry', $data)) {
@@ -1290,12 +1337,18 @@ function equus_shows_run_roleplay_phase($show, $show_type_data, $phase_data, $ph
             'submissions' => 'in_progress',
         );
         $next_entry_status = array(
-            'in_progress' => 'pending_auth',
-            'submissions' => 'pending_submission',
+            'in_progress' => array(
+                'pending_submission' => 'abstained',
+                'submitted' => 'pending_auth',
+            ),
+            'submissions' => array(
+                'pending' => 'pending_submission',
+            ),
         );
         $show_status = $next_show_status[$show_status];
         foreach ($entries as $entry) {
-            $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'] = $next_entry_status[$show_status];
+            $entry_status = $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'];
+            $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'] = $next_entry_status[$show_status][$entry_status];
             relation_save($entry);
         }
         node_save($show);
@@ -1304,9 +1357,12 @@ function equus_shows_run_roleplay_phase($show, $show_type_data, $phase_data, $ph
         return false;
     }
 
-	foreach ($entries as $entry) {
+    /** should be in the in_progress phase if this code is running */
+    //TODO: Make this an assert
+
+    foreach ($entries as $entry) {
         // Check status of this horse in this phase
-        // if not scratched include in the list
+        // If any status is pending_auth then we're not ready to run and should return
         $status = $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'];
         if ($status == 'pending_auth') {
             return false;
@@ -1314,26 +1370,81 @@ function equus_shows_run_roleplay_phase($show, $show_type_data, $phase_data, $ph
     }
 
     foreach ($entries as $entry) {
-        $status = $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'];
-        if ($status != 'approved') {
-            continue;
-        }
         $mp_total = 0;
-        if (!empty($entry->field_shows_entry_photo)) {
-            $mp_total += $phase_data->mp_base;
+        $status = $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'];
+        if ($status == 'auth_approved') {
+            if (!empty($entry->field_shows_entry_photo)) {
+                $mp_total += $phase_data->mp_base;
+            }
+            if (isset($entry->field_shows_entry_story[LANGUAGE_NONE][0]['value']) &&
+                $entry->field_shows_entry_story[LANGUAGE_NONE][0]['value'] != ''
+            ) {
+                $mp_total += $phase_data->mp_base;
+            }
+            equus_members_gain_mp($entry->field_shows_member_id[LANGUAGE_NONE][0]['value'], $mp_total);
         }
-        if (isset($entry->field_shows_entry_story[LANGUAGE_NONE][0]['value']) &&
-            $entry->field_shows_entry_story[LANGUAGE_NONE][0]['value'] != ''
-        ) {
-            $mp_total += $phase_data->mp_base;
-        }
+
         $entry->field_shows_member_pts_awarded[LANGUAGE_NONE][0]['value'] = $mp_total;
 
-        $entry->field_show_entry_status[LANGUAGE_NONE][$phase_index]['value'] = 'completed';
-
         relation_save($entry);
-
-        equus_members_gain_mp($entry->field_shows_member_id[LANGUAGE_NONE][0]['value'], $mp_total);
     }
 	return true;
+}
+
+// TODO: Export results view and put it here
+
+function equus_shows_preprocess_views_view_field(&$vars) {
+    if ($vars['view']->name != 'show_results') {
+        return;
+    }
+
+    $user = $GLOBALS['user'];
+
+    if ($vars['output'] == 'rp_entry') {
+        $member_id = $vars['row']->field_field_shows_member_id[0]['raw']['value'];
+        if ($user->uid != $member_id) {
+            $vars['output'] = "not your entry";
+        } else {
+            $show_status = $vars['row']->field_field_show_status[0]['raw']['value'];
+            $show_phase = $vars['row']->field_field_show_current_phase[0]['raw']['value'];
+            // protect from index out of bounds error when show moves into completed phase
+            if ($show_phase >= count($vars['row']->field_field_show_entry_status)) {
+                $show_phase = count($vars['row']->field_field_show_entry_status) - 1;
+            }
+            $entry_status = $vars['row']->field_field_show_entry_status[$show_phase]['raw']['value'];
+            $rid = $vars['row']->rid;
+            if ($show_status == 'open') {
+                $vars['output'] = "wait";
+            } else if ($show_status == 'submissions') {
+                $vars['output'] = l('➕', "entry/$rid/edit");
+            } else if ($show_status == 'in_progress' || $show_status == 'completed') {
+                // some of the outputs do not have a corresponding glyph in all text editor fonts, so they
+                // may appear empty even if they are not.
+                if ($entry_status == 'pending_auth') {
+                    $vars['output'] = "wait";
+                } else if ($entry_status == 'abstained') {
+                    $vars['output'] = "🚫";
+                } else if ($entry_status == 'auth_approved') {
+                    $vars['output'] = "✓";
+                } else if ($entry_status == 'auth_rejected') {
+                    $vars['output'] = "❌";
+                } else {
+                    $vars['output'] = "";
+                }
+            } else {
+                $vars['output'] = "";
+            }
+        }
+    }
+}
+
+function equus_shows_get_horses_entered_in_show($show_id) {
+    $query = relation_query('node', $show_id, 1);
+    $results = $query->entityCondition('bundle', 'is_entered_in')->execute();
+
+    $rids = array_map(function($o) { return $o->rid; }, $results);
+
+    $entries = relation_load_multiple($rids);
+
+    return array_map(function($o) { return $o->endpoints['und'][0]['entity_id']; }, $entries);
 }
