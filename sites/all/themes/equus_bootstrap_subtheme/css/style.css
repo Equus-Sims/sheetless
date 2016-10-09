@@ -839,6 +839,80 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     color: #8F7F4C;
 }
 
+/* styling on grid view of equus tiles
+   equus-tile-view needs to be manually added to the view itself
+   equus-tile-row needs to be added to the row itself
+   best to use unformatted list */
+.view.equus-tile-view .view-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+
+.view.equus-tile-view .equus-tile-row {
+    width: 31%;
+    margin-right: 3.5%;
+    margin-bottom: 6.8%;
+}
+
+.view.equus-tile-view .equus-tile-row:nth-child(3n) {
+    margin-right: 0;
+}
+
+.view.equus-tile-view img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+/* styling on individual equus tiles */
+.equus-tile {
+    position: relative;
+    padding-bottom: 40px;
+    height:100%;
+}
+
+.equus-tile .field-name-field-blog-categories a {
+    text-transform: uppercase;
+    color: #8F7F4C;
+    margin-right: 8px;
+}
+
+.equus-tile h2 {
+    font-size: 1.2em;
+    font-family: inherit;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.equus-tile h2 a {
+    color: #6E6E6E;
+}
+
+.equus-tile .post-info {
+    margin-bottom: 20px;
+}
+
+.equus-tile .post-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 40px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+.equus-tile .footer-link {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+}
+
 /* Daily Digest */
 
 table.cols-3 span.views-label {
@@ -1588,6 +1662,7 @@ table.cols-3 tr td,
 /* Sidebar */
 .node-type-blog #block-views-blog-author-block-block img {
     margin: 10px auto 20px;
+    position: relative;
 }
 .node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
     text-align: justify;
@@ -1595,8 +1670,15 @@ table.cols-3 tr td,
 .node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
     margin-bottom: 20px;
 }
+
+.node-type-blog .views-field-nothing {
+    display: inline-block;
+}
 .node-type-blog #block-views-blog-author-block-block .views-field-privatemsg-link {
     display: inline-block;
+    height: 0px;
+    padding-top: 10px;
+
 }
 .node-type-blog aside, .node-type-blog aside > div {
     background: none;
