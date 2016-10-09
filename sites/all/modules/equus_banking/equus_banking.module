@@ -167,7 +167,48 @@ function equus_banking_node_info() {
     );
 }
 
+/**
+ * @param $memo A descriptive memo for the transaction
+ * @param $source The ID of the organization that is sending the money
+ * @param $destination The ID of the organization that is receiving the money
+ * @param $amount The amount of money that is being transferred
+ */
 function equus_banking_create_transaction($memo, $source, $destination, $amount) {
+    $fail = false;
+    if ($destination == NULL) {
+        watchdog('equus_banking', 'Destination ID @destination_id was null', array('@destination_id'=>$destination), WATCHDOG_ERROR);
+        $fail = true;
+    }
+
+    if ($source == NULL) {
+        watchdog('equus_banking', 'Source ID @source_id was null', array('@source_id'=>$source), WATCHDOG_ERROR);
+        $fail = true;
+    }
+
+    if ($fail) {
+        drupal_set_message("There was an error processing your transaction. Please contact an administrator.");
+        return;
+    }
+
+    if ($source == EQUUS_BANK_ID) {
+        equus_banking_create_transaction_helper($memo, $source, $destination, $amount);
+    } else {
+        $sufficient_funds = equus_banking_check_sufficient_funds($amount, $source);
+        if ($sufficient_funds) {
+            equus_banking_create_transaction_helper($memo, $source, $destination, $amount);
+        } else {
+            drupal_set_message("That organization does not have enough money to complete the transaction.");
+        }
+    }
+}
+
+/**
+ * @param $memo A descriptive memo for the transaction
+ * @param $source The ID of the organization that is sending the money
+ * @param $destination The ID of the organization that is receiving the money
+ * @param $amount The amount of money that is being transferred
+ */
+function equus_banking_create_transaction_helper($memo, $source, $destination, $amount) {
     global $user;
     $values = array(
         'type' => 'transaction',
@@ -183,7 +224,6 @@ function equus_banking_create_transaction($memo, $source, $destination, $amount)
     $ewrapper->equus_banking_destination->set(intval($destination));
     $ewrapper->equus_banking_amount->set(intval($amount));
     $ewrapper->save();
-
     equus_banking_update_org_balance($source);
     equus_banking_update_org_balance($destination);
 }
@@ -224,10 +264,7 @@ function equus_banking_balance($ledger, $organization) {
     }
     $balance = 0;
 
-    // $dpm($ledger);
-    // dpm($organization);
     foreach($ledger as $trans) {
-        // dpm($trans);
         if ($organization == $trans->equus_banking_source['und'][0]['target_id']) {
             $balance = $balance - $trans->equus_banking_amount['und'][0]['value'];
         }
@@ -412,6 +449,43 @@ function equus_banking_menu() {
     );
 
     return $items;
+}
+
+function equus_banking_form_alter(&$form, &$form_state, $form_id) {
+    if ($form_id != 'transaction_node_form') {
+        return;
+    }
+    global $user;
+    $form['equus_banking_source']['und']['#options'] = equus_organizations_get_org_options($user->uid);
+}
+
+function equus_banking_node_validate($node, $form, &$form_state) {
+    if ($node->type != 'transaction') {
+        return;
+    }
+    $source = $form_state['values']['equus_banking_source'][LANGUAGE_NONE][0]['target_id'];
+    $destination = $form_state['values']['equus_banking_destination'][LANGUAGE_NONE][0]['target_id'];
+    $amount = $form_state['values']['equus_banking_amount'][LANGUAGE_NONE][0]['value'];;
+
+    $fail = false;
+    if ($destination == NULL) {
+        watchdog('equus_banking', 'Destination ID @destination_id was null', array('@destination_id'=>$destination), WATCHDOG_ERROR);
+        $fail = true;
+    }
+
+    if ($source == NULL) {
+        watchdog('equus_banking', 'Source ID @source_id was null', array('@source_id'=>$source), WATCHDOG_ERROR);
+        $fail = true;
+    }
+
+    if ($fail) {
+        form_set_error(NULL, "There was an error processing your transaction. Please contact an administrator.");
+        return;
+    }
+    $sufficient_funds = equus_banking_check_sufficient_funds($amount, $source);
+    if (!$sufficient_funds) {
+        form_set_error('equus_banking_amount', "That organization does not have enough money to complete the transaction.");
+    }
 }
 
 function equus_banking_node_insert($node) {
