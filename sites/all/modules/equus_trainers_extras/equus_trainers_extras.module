@@ -155,9 +155,6 @@ function equus_trainers_extras_add_to_roster_form_validate($form, &$form_state) 
 		}
 	}
 
-	dpm($form);
-	dpm($form_state);
-
 	// TODO: Validate the trainer exists and is a trainer
 
 	// TODO: Validate that the horse and trainer reside at the same property?
