@@ -137,9 +137,12 @@ function equus_organizations_get_org_options($uid) {
 	$organizations = node_load_multiple($orgIDs);
 
 	// if the user has no organizations, print an error
-	if (empty($organizations)) {
-		drupal_set_message('You need to create an organization before you can purchase anything besides a Starter Pack.','error');
-	}
+	// TODO: Move this error to the place it's actually being called
+//	if (empty($organizations)) {
+//		dpm(debug_backtrace());
+//		// drupal_set_message(print_r(debug_backtrace(), true));
+//		drupal_set_message('You need to create an organization before you can purchase anything besides a Starter Pack.','error');
+//	}
 
 	// populate the array that we are going to use to set the options
 	$org_options = array();
