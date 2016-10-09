@@ -53,7 +53,8 @@ div.main-container > h1 {
 /* Icons */
 
 .icon,
-.menu-name-menu-about-links-menu li a:after {
+.menu-name-menu-about-links-menu li a:after,
+.views-field-privatemsg-link a:before {
     font-family: 'icons';
     color: #666666;
     font-size: 1.3em;
@@ -95,6 +96,18 @@ div.main-container > h1 {
 
 .message.icon:before {
     content: '\e60f';
+}
+.node-type-blog .views-field-privatemsg-link a:before {
+    content: '\e60f';
+    font-size: 4em;
+    vertical-align: middle;
+    line-height: 1em;
+    /*padding: 1px 10px;*/
+    width: 55px;
+    height: 36px;
+    overflow: hidden;
+    background: #256E5A;
+    color: white;
 }
 
 /* END Icons */
@@ -235,6 +248,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 
 .toolbar ul li {
     cursor: pointer;
+    font-weight: 600;
 }
 
 .toolbar > ul > li {
@@ -346,7 +360,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     color: #b7b59c;
     text-transform: uppercase;
     font: 16px/20px 'Open Sans', Helvetica, sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     padding: 0;
     margin: 25px 0;
 }
@@ -474,6 +488,12 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 
 .page-header {
     display: none;
+}
+
+.block-image .imageblock-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* User Dropdown Menu */
@@ -958,11 +978,7 @@ table.cols-3 .post-footer {
     height: 40px;
 }
 
-.post-footer .footer-link {
-    bottom: 0;
-    position: absolute;
-    right: 0;
-}
+
 
 table .post-footer .footer-link > a:hover {
     text-decoration: none;
