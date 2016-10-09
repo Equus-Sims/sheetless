@@ -1,6 +1,6 @@
 <?php
 
-define("EQUUS_STORE_ID", 274);
+define("EQUUS_BANK_ID", 274);
 
 /**
  * Implements hook_entity_info_alter().
