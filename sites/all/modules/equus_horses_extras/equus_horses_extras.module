@@ -69,10 +69,38 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	}
 	drupal_set_message($message);
 
-	// If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
-	if ($form['nid']['#value'] != NULL) {
+    $is_new = $form['nid']['#value'] === NULL;
+    $is_active = false;
+    $is_foal = true;
+
+    // If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
+    if (!$is_new) {
+        $horse = node_load($form['nid']['#value']);
 		$form['field_horse_creating_org']['#access'] = false;
-	}
+
+        $aging_details = json_decode($horse->field_horse_aging_details[LANGUAGE_NONE][0]['value']);
+        $aging_details_vars = array(
+            'has_aging_details' => true,
+            'aging_details' => $aging_details,
+        );
+        if ($horse->field_horse_activation_status[LANGUAGE_NONE][0]['value'] == 'Active') {
+            $is_active = true;
+        }
+        $is_foal = equus_horses_extras_check_is_foal($aging_details);
+        $current_time_period = equus_horses_extras_get_time_period($aging_details);
+
+	} else {
+        $aging_details_vars = array(
+            'has_aging_details' => false,
+        );
+        $current_time_period = NULL;
+    }
+
+    $form['aging_details'] = array(
+        '#weight' => 0,
+        '#type' => 'markup',
+        '#markup' => theme("equus_horses_extras_aging_history", $aging_details_vars),
+    );
 
 	$breed_IDs = array_slice(array_keys($form['field_horse_breed']['und']['#options']),1);
 
@@ -84,23 +112,35 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 
 	asort($form['field_horse_breed']['und']['#options']);
 
-    // TODO: Add form element for foal aging speed, age transition year, adult aging speed
+    // Add form element for foal aging speed, age transition year, adult aging speed
     $speed_options = array(
         1 => '1x (real time)',
         3 => '3x (standard ES time)',
         6 => '6x (double standard ES time)',
         12 => '12x (standard for foals - not recommended for adults)'
     );
-    $form['foal_speed'] = array(
-        '#type' => 'select',
-        '#title' => 'Foal Aging Speed',
-        '#options' => $speed_options,
-        '#description' => 'insert help text here',
-        // TODO: Write help text for aging systems
-        '#default_value' => 12,
-        '#required' => true,
-        '#weight' => 22,
-    );
+
+    if ($is_foal || !$is_active) {
+        $foal_speed_default = $current_time_period ? $current_time_period->speed : 12;
+        $form['foal_speed'] = array(
+            '#type' => 'select',
+            '#title' => 'Foal Aging Speed',
+            '#options' => $speed_options,
+            '#description' => 'insert help text here',
+            // TODO: Write help text for aging systems
+            '#default_value' => $foal_speed_default,
+            '#required' => true,
+            '#weight' => 22,
+            '#chosen' => FALSE,
+            '#states' => array(
+                'enabled' => array(
+                    'input[name="aging_system_unlock"]' => array(
+                        'checked' => true,
+                    )
+                )
+            )
+        );
+    }
     $form['adult_speed'] = array(
         '#type' => 'select',
         '#title' => 'Adult Aging Speed',
@@ -110,6 +150,14 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
         '#default_value' => 3,
         '#required' => true,
         '#weight' => 23,
+        '#chosen' => FALSE,
+        '#states' => array(
+            'enabled' => array(
+                'input[name="aging_system_unlock"]' => array(
+                    'checked' => true,
+                )
+            )
+        )
     );
     //TODO: Validation!!!
     $form['transition_year'] = array(
@@ -121,63 +169,83 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
         '#size' => 3,
         '#weight' => 24,
     );
+    if ($is_foal || !$is_active) {
+        $form['transition_year']['#states'] = array(
+            'enabled' => array(
+                'input[name="aging_system_unlock"]' => array(
+                    'checked' => true,
+                )
+            )
+        );
+    }
+    $form['temp_age'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Age',
+        '#description' => 'Enter an age to automatically update the Date of Birth field, or change the date of birth to have the age automatically calculated.',
+        '#required' => false,
+        '#size' => 3,
+        '#weight' => 21,
+        '#states' => array(
+            'enabled' => array(
+                'input[name="aging_system_unlock"]' => array(
+                    'checked' => true,
+                )
+            )
+        )
+    );
+
+    $form['field_horse_date_of_birth']['#states'] = array(
+        'enabled' => array(
+            'input[name="aging_system_unlock"]' => array(
+                'checked' => true,
+            )
+        )
+    );
+
+	$form['aging_system_unlock'] = array(
+        '#type' => 'checkbox',
+        '#title' => 'Unlock aging system?',
+        '#description' => 'Checking this box will unlock the fields related to the aging system for this horse. Changes will be saved when the horse is saved.',
+        '#required' => false,
+        '#attributes' => array(
+            'onclick' => "equusHorsesExtrasToggleAgingSystem();",
+        )
+    );
 
     // add programmatically created aging related fields to the general group on the horse node
-    $form['#group_children']['foal_speed'] = 'group_horse_general';
-    $form['#group_children']['adult_speed'] = 'group_horse_general';
-    $form['#group_children']['transition_year'] = 'group_horse_general';
+    $form['#group_children']['foal_speed'] = 'group_horse_aging';
+    $form['#group_children']['adult_speed'] = 'group_horse_aging';
+    $form['#group_children']['transition_year'] = 'group_horse_aging';
+    $form['#group_children']['temp_age'] = 'group_horse_aging';
+    $form['#group_children']['aging_system_unlock'] = 'group_horse_aging';
+    $form['#group_children']['aging_details'] = 'group_horse_aging';
 
     // hide aging details field from users
     $form['field_horse_aging_details']['#access'] = 0;
 
     // hide horse stats field from users
     $form['field_horse_stats']['#access'] = 0;
-}
 
-/**
- * Gets the user's active associated horses
- *
- * @param $uid The ID of the user in question.
- * @return An array of active horse IDs
- */
-function equus_horses_extras_get_assoc_active_horses($uid) {
-	// get user's associated properties
-	$nids = equus_properties_get_user_assoc_properties($uid);
-	if (empty($nids)) {
-		// if nids is empty return an empty array
-		return array();
-	}
-	//query for all horses associated with a property
-	$query = new EntityFieldQuery();
-	$query
-		->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'horse')
-		->propertyCondition('status', 1)
-		->fieldCondition('field_horse_activation_status', 'value', 'Active', '=')
-		->fieldCondition('field_horse_residence', 'target_id', $nids, 'IN');
-	$result = $query->execute();
-
-	$horses = array();
-
-	if (count($result) > 0) {
-		$horses = array_keys($result['node']);
-	}
-	return $horses;
+//    $form['#attached']['js'] = array(
+//        drupal_get_path('module', 'equus_horses_extras') . '/equus_horses_extras.js',
+//    );
 }
 
 /**
  * Gets the user's associated horses (active and inactive)
  *
  * @param $uid The ID of the user in question.
+ * @param $only_active True if only want activated horses. False by default.
  * @return An array of horse IDs. Will return empty array if there are no assoc horses.
  */
-function equus_horses_extras_get_assoc_horses($uid) {
+function equus_horses_extras_get_assoc_horses($uid, $only_active = false) {
 		// get user's associated properties
 	$nids = equus_properties_get_user_assoc_properties($uid);
 	if (empty($nids)) {
 		// if nids is empty return an empty array
 		return array();
 	}
+
 	//query for all horses associated with a property
 	$query = new EntityFieldQuery();
 	$query
@@ -185,6 +253,11 @@ function equus_horses_extras_get_assoc_horses($uid) {
 		->entityCondition('bundle', 'horse')
 		->propertyCondition('status', 1)
 		->fieldCondition('field_horse_residence', 'target_id', $nids, 'IN');
+
+    if ($only_active) {
+        $query->fieldCondition('field_horse_activation_status', 'value', 'Active', '=');
+    }
+
 	$result = $query->execute();
 
 	$horses = array();
@@ -354,7 +427,7 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 /*	if ($node->nid != NULL) {
 		$original_creating_org = $form['#node']->field_horse_creating_org['und'][0]['target_id'];
 		$new_creating_org = $node->field_horse_creating_org['und'][0]['target_id'];
-		// If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
+		// If the horse is being edited, disable the creating org field. Creating org should only be accessible on first creation.
 		if ($original_creating_org != $new_creating_org) {
 			form_set_error('field_horse_creating_org', "Database consistency error. Please contact the site administrator.");
 			watchdog('field_horse_creating_org', 'Attempted to change creating org after horse was already created. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
@@ -373,18 +446,34 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
     if (!is_numeric($transition_year) || $transition_year < 0 || $transition_year != floor($transition_year)) {
         form_set_error('transition_year', "$transition_year is not a valid year.");
     }
+    // TODO: Test this
+    if (isset($node->nid) && $transition_year <= $node->field_horse_age[LANGUAGE_NONE][0]['value']) {
+        form_set_error('transition_year', "This transition year has already passed. Choose a transition year that is greater than the horse's current age.");
+    }
+    //TODO: If already an adult, can't change foal stuff (unless still pending)
+
+    dpm($node);
+    dpm($form);
+    dpm($form_state);
 }
 
 function equus_horses_extras_node_submit($node, $form, &$form_state) {
     if ($node->type != 'horse') {
         return;
     }
+    // TODO: Hide all aging fields behind a checkbox that would allow you to edit them.
+    // TODO: Use the status of the checkbox to determine whether to run the next 100 lines of code
 
+    $now_raw = new DateTime('now');
+    $now = $now_raw->format('Y-m-d H:i:s');
+    // TODO: equals null OR is pending
     if ($node->nid == NULL) {
+        dpm($node);
+        dpm($form);
         $dob = $node->field_horse_date_of_birth[LANGUAGE_NONE][0]['value'];
         $dob_date = new DateTime($dob);
 
-        if ($form['foal_speed']['#value'] == $form['adult_speed']['#value']) {
+        if ($form['foal_speed']['#value'] == 0) {
             $foal_end_date_str = NULL;
         } else {
             $foal_days = round(($form['transition_year']['#value']*365)/$form['foal_speed']['#value']);
@@ -393,15 +482,82 @@ function equus_horses_extras_node_submit($node, $form, &$form_state) {
         }
 
         $aging_details = array();
-        $aging_details[] = array('start' => $dob, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value']);
+        $aging_details[] = array('start' => $dob, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now, 'transition_year' => $form['transition_year']['#value']);
 
         // Add adult period if there is one
         if ($foal_end_date_str != NULL) {
             $adult_start_date = $foal_end_date->add(new DateInterval("P1D"));
             $adult_start_date_str = $adult_start_date->format('Y-m-d H:i:s');
-            $aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value']);
+            $aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
         }
         $node->field_horse_aging_details[LANGUAGE_NONE][0]['value'] = json_encode($aging_details);
+    } else {
+
+        $aging_details = json_decode($node->field_horse_aging_details[LANGUAGE_NONE][0]['value']);
+        $current_time_period = 0;
+        $game_days_old = 0;
+        while ($aging_details[$current_time_period]->end !== NULL && $aging_details[$current_time_period]->end < $now) {
+            $current_time_period++;
+            // add this time period to the horse lifetime counter
+            $end = new DateTime($aging_details[$current_time_period]->end);
+            $time_period_length = $end->diff(new DateTime($aging_details[$current_time_period]->start))->days+1;
+            $game_days_old += $time_period_length * $aging_details[$current_time_period]->speed;
+        }
+        // at this point, game_days_old only includes completed time periods
+
+        $current_details = $aging_details[$current_time_period];
+        // if still a foal
+        if ($current_details->lifestage == 'foal') {
+            // delete all entries that start in the future
+            $new_aging_details = array_slice($aging_details, 0, $current_time_period + 1);
+
+            // mark the end period of the last entry after all future entries have ben deleted with today's date
+            $new_aging_details[$current_time_period]->end = $now;
+
+            // adds however many days the horse lived in the period that was just closed
+            $end = new DateTime($new_aging_details[$current_time_period]->end);
+            $time_period_length = $end->diff(new DateTime($new_aging_details[$current_time_period]->start))->days+1;
+            $game_days_old += $time_period_length * $new_aging_details[$current_time_period]->speed;
+
+            // if foal speed > 0 create a new entry, starting today, ending at the new transition year end date
+            if ($form['foal_speed']['#value'] > 0) {
+                $dob = $new_aging_details[0]->start;
+                $dob_date = new DateTime($dob);
+                // given the new information (new speed or new transition year), what real date will the transition happen on?
+                $foal_game_days_remaining = ($form['transition_year']['#value']*365) - $game_days_old;
+                if ($foal_game_days_remaining < 0) {
+                    watchdog('equus_horses_extras', "Attempted to set transition year before current time.", NULL, WATCHDOG_WARNING);
+                    drupal_goto('/');
+                }
+
+                $foal_days_remaining = round(($foal_game_days_remaining/$form['foal_speed']['#value']));
+                $foal_end_date = $now_raw->add(new DateInterval("P{$foal_days_remaining}D"));
+                $foal_end_date_str = $foal_end_date->format('Y-m-d H:i:s');
+
+                $new_aging_details[] = array('start' => $now, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now);
+
+                // add a new adult phase starting at the transition year end date
+                $adult_start_date = $foal_end_date->add(new DateInterval("P1D"));
+                $adult_start_date_str = $adult_start_date->format('Y-m-d H:i:s');
+                $new_aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
+            } else {
+                // if foal speed == 0 create a new entry starting today with an indefinite end period and a speed of 0
+                $new_aging_details[] = array('start' => $now, 'end' => NULL, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now);
+                // and do not create an additional adult phase
+            }
+        } else {
+            // if an adult
+            // mark the most recent period's end date with today's date
+            $new_aging_details = $aging_details;
+            $new_aging_details[$current_time_period]->end = $now;
+
+            // start a new period with today's date as the starting point and the aging rate being the adult aging rate
+            $new_aging_details[] = array('start' => $now, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
+        }
+
+        $node->field_horse_aging_details[LANGUAGE_NONE][0]['value'] = json_encode($new_aging_details);
+
+
     }
 }
 
@@ -415,6 +571,31 @@ function equus_horses_extras_node_presave($node) {
 		$real_name = equus_organizations_calc_real_name($node->title, $org);
 		$node->field_horse_real_name['und'][0]['value'] = $real_name;
 	}
+
+    // assign stats to horse if activation status changes from pending to active
+    if (isset($node->original->field_horse_activation_status['und'][0]['value'])) {
+        $original_value = $node->original->field_horse_activation_status['und'][0]['value'];
+    } else {
+        $original_value = false;
+    }
+    $new_value = $node->field_horse_activation_status['und'][0]['value'];
+
+    // if not new check whether previous value is pending and new value is active
+    if ((!$original_value || $original_value == 'Pending') && $new_value == 'Active') {
+        // spend a horse credit to activate the horse
+        $status = equus_horses_extras_spend_regular_hc($node->uid);
+
+        // if we failed to spend a horse credit
+        if ($status === false) {
+            // reset activation status
+            $node->field_horse_activation_status['und'][0]['value'] = 'Pending';
+            watchdog('equus_horses_extras', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
+            drupal_set_message("Not enough horse credits to activate a horse. Activating a horse costs one horse credit. You can buy one in the store!", 'error');
+        } else {
+            // assign stats
+            $node->field_horse_stats[LANGUAGE_NONE][0]['value'] = equus_horses_extras_calc_stats($node);
+        }
+    }
 }
 
 /**
@@ -477,20 +658,6 @@ function equus_horses_extras_gain_rare_hc($uid, $quantity) {
 	));
 }
 
-function equus_horses_extras_node_insert($node) {
-	//TODO: Move all this stuff to the register horse function
-	if ($node->type != 'horse' || $node->field_horse_activation_status['und'][0]['value'] != 'Active') {
-		return;
-	}
-
-	$status = equus_horses_extras_spend_regular_hc($node->uid);
-
-	if ($status === false) {
-		watchdog('equus_horses_extras', 'Attempted to spend HC but didn\'t have enough. uid = @uid', array('@uid'=>$node->uid), WATCHDOG_ERROR);
-	}
-	equus_horses_extras_calc_stats($node->nid);
-}
-
 /**
  *	Calculates the horse's initial stats based on breed and body type
  *
@@ -498,13 +665,11 @@ function equus_horses_extras_node_insert($node) {
  *
  * @param $nid Node ID of the horse
  */
-function equus_horses_extras_calc_stats($nid) {
-	$horse = node_load($nid);
-
-	$breedID = $horse->field_horse_breed['und'][0]['target_id'];
+function equus_horses_extras_calc_stats($horse) {
+	$breedID = $horse->field_horse_breed[LANGUAGE_NONE][0]['target_id'];
 	$breed_stats = equus_horses_extras_get_breed_stats($breedID);
 
-	$body_typeID = $horse->field_horse_body_type['und'][0]['target_id'];
+	$body_typeID = $horse->field_horse_body_type[LANGUAGE_NONE][0]['target_id'];
 	$modifiers = equus_horses_extras_get_body_type_modifiers($body_typeID);
 
 	$stats = array_keys(list_allowed_values(field_info_field('field_stat')));
@@ -526,14 +691,19 @@ function equus_horses_extras_calc_stats($nid) {
 
         $raw_potentials[$stat] = $raw_potential;
     }
+    $aging_details = json_decode($horse->field_horse_aging_details[LANGUAGE_NONE][0]['value']);
 
+    $age = floor(equus_horses_extras_calc_age($aging_details)/365);
+    $target = equus_horses_extras_calc_current_stat_target($age);
+    $target = $target / 100;
     $indiv_potential_max = rand(EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MIN, EQUUS_HORSES_EXTRAS_POTENTIAL_STAT_MAX);
     $scale_factor = $indiv_potential_max / $potential_sum;
     $stats_field = array();
     foreach ($raw_potentials as $stat => $raw_potential) {
         $indiv_potential = $raw_potential * $scale_factor;
 
-		$current = 0;
+        // potential * ratio * age scale
+		$current = round($indiv_potential * EQUUS_HORSES_EXTRAS_CUR_POT_STAT_RATIO * $target);
 
         $stats_field[$stat] = array(
             'current' => $current,
@@ -541,8 +711,7 @@ function equus_horses_extras_calc_stats($nid) {
             'highest_trained' => $current
         );
 	}
-    $horse->field_horse_stats[LANGUAGE_NONE][0]['value'] = json_encode($stats_field);
-    node_save($horse);
+    return json_encode($stats_field);
 }
 
 function equus_horses_extras_get_breed_stats($breedID) {
@@ -592,14 +761,14 @@ function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $e
  * Calculates the age of a horse in game days based on information about the aging
  * speed at various time periods in its life.
  *
- * @param Array $aging_speed Array of time period objects to consider. Each time period
+ * @param Array $aging_details Array of time period objects to consider. Each time period
  *                           should have properties start (string:Y-m-d H:i:s),
  *                           end (string:Y-m-d H:i:s), and speed (Integer).
  * @param string $today The day to calculate the age against, defaults to today
  * @return int Number of game days old the horse is
  */
-function equus_horses_extras_calc_age($aging_speed, $today = NULL) {
-    if (empty($aging_speed)) {
+function equus_horses_extras_calc_age($aging_details, $today = NULL) {
+    if (empty($aging_details)) {
         return NULL;
     }
 
@@ -610,7 +779,7 @@ function equus_horses_extras_calc_age($aging_speed, $today = NULL) {
     }
 
     $game_days_old = 0;
-    foreach($aging_speed as $time_period) {
+    foreach($aging_details as $time_period) {
         if ($time_period->end == NULL) {
             $end = $today;
         } else {
@@ -627,4 +796,62 @@ function equus_horses_extras_calc_age($aging_speed, $today = NULL) {
     }
 
     return $game_days_old;
+}
+
+/**
+ * Determines, given the aging details, whether the horse is a foal or an adult.
+ *
+ * @param Array $aging_details Array of time period objects to consider. Each time period
+ *                           should have properties start (string:Y-m-d H:i:s),
+ *                           end (string:Y-m-d H:i:s), and speed (Integer).
+ * @param string $today The day to calculate the age against, defaults to today
+ * @return bool True if the horse is currently a foal, false if horse is currently an adult
+ */
+function equus_horses_extras_check_is_foal($aging_details, $today = NULL) {
+    $time_period = equus_horses_extras_get_time_period($aging_details, $today);
+    return $time_period->lifestage == 'foal';
+}
+
+function equus_horses_extras_get_time_period($aging_details, $today = NULL) {
+    if (empty($aging_details)) {
+        return NULL;
+    }
+
+    if ($today == NULL) {
+        $today = new DateTime('now');
+    } else {
+        $today = new DateTime($today);
+    }
+
+    foreach ($aging_details as $time_period) {
+        $start = new DateTime($time_period->start);
+        if ($time_period->end != NULL) {
+            $end = new DateTime($time_period->end);
+        } else {
+            $end = NULL;
+        }
+
+        if ($today > $start && ($end == NULL || $today < $end)) {
+            return $time_period;
+        }
+    }
+}
+
+function equus_horses_extras_calc_current_stat_target($age) {
+    if ($age >= 0 && $age < 5) {
+        return round(2 * ($age * $age));
+    } else if ($age >= 5 && $age < 10) {
+        return round(100 - 2 * (pow(10 - $age, 2)));
+    } else {
+        return 100;
+    }
+}
+
+function equus_horses_extras_theme() {
+    return array(
+        'equus_horses_extras_aging_history' => array(
+            'variables' => array(),
+            'template' => 'equus_horses_extras_aging_history',
+        ),
+    );
 }

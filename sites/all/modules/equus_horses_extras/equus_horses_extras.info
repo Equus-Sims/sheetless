@@ -11,3 +11,5 @@ dependencies[] = equus_core
 dependencies[] = equus_properties
 dependencies[] = equus_properties_extras
 dependencies[] = equus_organizations
+scripts[] = moment.js
+scripts[] = equus_horses_extras.js
