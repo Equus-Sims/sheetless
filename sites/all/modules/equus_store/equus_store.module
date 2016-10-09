@@ -18,7 +18,7 @@ function equus_store_form($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
 	global $user;
-
+    
   	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
 		$form['quantity'] = array(
 			'#type' => 'textfield', //you can find a list of available types in the form api
@@ -66,12 +66,52 @@ function equus_store_form($form, &$form_state) {
  */
 function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 	global $user;
+
+    // if user is administrator, include admin-only sale item terms in query
+    $admin_only = 0;
+    if ($user->uid == 1) {
+        $admin_only = 1;
+    }
+
+    // load all terms and discard the ones that are admin only
+    if ($sale_type = taxonomy_vocabulary_machine_name_load('equus_sale_item_type')) {
+        // query for all terms that are not admin-only
+        $query = new EntityFieldQuery();
+        $query->entityCondition('entity_type', 'taxonomy_term')
+            ->entityCondition('bundle', array('equus_sale_item_type'))
+            ->fieldCondition('field_sale_item_permissions', 'value', $admin_only)
+            ->propertyOrderBy('weight');
+        $result = $query->execute();
+        $tids = array_keys($result['taxonomy_term']);
+        $terms = taxonomy_term_load_multiple($tids);
+
+        $sale_types = array();
+        foreach ($terms as $term) {
+            $sale_types[$term->tid] = $term->name;
+        }
+        $form['field_equus_sale_item_type']['und']['#options'] = $sale_types;
+    }
+
+    // if user is administrator, include admin-only sale types in sale type options
+    $form['field_equus_sale_type']['und']['#options'] = array(
+        'quicksale' => 'Quick Sale',
+        'directsale' => 'Direct Sale',
+        'auction' => 'Auction',
+        'lease' => 'Lease',
+    );
+    if ($user->uid == 1) {
+        $form['field_equus_sale_type']['und']['#options']['gameplayitem'] = 'Gameplay Item';
+    }
+
 	// get a list of horse IDs associated with a user
 	$nids = equus_horses_extras_get_assoc_horses($user->uid);
 	// give the IDs to return a list of those horses by name and populate dropdown
 	$form['field_equus_sale_item']['und']['#options'] = equus_horses_extras_get_horse_options($nids);
 	// pass the correct organization options to the form for the organization field
 	$form['field_hosting_organization']['und']['#options'] = equus_organizations_get_org_options($user->uid);
+
+    // hide buyer field from users
+    $form['field_buyer']['#access'] = 0;
 }
 
 // TODO: Clean up the mess in this function
@@ -91,7 +131,6 @@ function equus_store_file_entity_access($op, $file, $account) {
 
 				$entites = entity_load($entity_type, array_keys($entity_ids));
 				foreach($entites as $entity) {
-					// dpm($entity);
 					if ($entity->type = "equus_sale") {
 						// get all orgs associated with logged in user
 						$org_ids = equus_organizations_get_assoc_orgs($account->uid);
@@ -156,15 +195,21 @@ function equus_store_form_submit($form, &$form_state) {
 	$dest_id = $node->field_hosting_organization['und'][0]['target_id'];
 	$org = node_load($source_id);
 
+    // TODO: BEFORE LAUNCH: Remove this case!
+    if ($item_type == 'Testing Money') {
+        equus_store_testing_money_sale($source_id);
+        return;
+    }
+
 	if (equus_banking_check_sufficient_funds($total, $source_id) == false) {
 		drupal_set_message("The organization {$org->title} does not have enough money to complete the purchase.", 'error');
 		return;
 	}
 	if ($sale_type == "gameplayitem") {
 		if ($item_type == 'Horse Credit') {
-			equus_store_horse_credit_sale($uid, $source_id, EQUUS_STORE_ID, $quantity, $total);
+			equus_store_horse_credit_sale($uid, $source_id, EQUUS_BANK_ID, $quantity, $total);
 		} else if ($item_type == 'Organization Credit') {
-			equus_store_org_credit_sale($uid, $source_id, EQUUS_STORE_ID, $quantity, $total);
+			equus_store_org_credit_sale($uid, $source_id, EQUUS_BANK_ID, $quantity, $total);
 		}  else {
 			drupal_set_message("The sale type $sale_type doesn't exist.", "warning");
 			watchdog('equus_store_sale_type', 'Attempted to purchase an item with invalid sale type: @sale_type uid = @uid', array('@uid'=>$node->uid, '@sale_type' => $sale_type), WATCHDOG_ERROR);
@@ -263,9 +308,14 @@ function equus_store_starter_pack_sale($uid) {
 	equus_members_update_tutorial_progress($uid, 'start_pack_purchased');
 }
 
+// TODO: BEFORE LAUNCH: Remove this function!
+function equus_store_testing_money_sale($source_id) {
+    equus_banking_create_transaction("Testing money", EQUUS_BANK_ID, $source_id, 100000);
+    drupal_set_message("Testing money in the amount of $100,000 has been credited to your organization.");
+}
+
 function equus_store_quick_sale($node, $source_id, $dest_id, $quantity, $total) {
 	try {
-		// dpm($node);
 		equus_banking_create_transaction("Sale: {$node->title}", $source_id, $dest_id, $total);
 	} catch (Exception $e) {
 		drupal_set_message("Failed to create transaction. Error: " . $e->getMessage(), 'error');
