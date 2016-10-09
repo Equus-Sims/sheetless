@@ -2954,3 +2954,17 @@ body.adminimal-theme ul.rules-operations .delete_event a:hover {
 .adminimal-theme #dashboard #disabled-blocks .block {
   margin-right: 8px;
 }
+
+/* Horse Creation Form */
+
+#edit-field-horse-date-of-birth.form-disabled input.form-text{
+    background-color: #eee;
+    color: #777;
+}
+
+#edit-field-horse-date-of-birth input.form-text{
+    background-color: transparent;
+    color: black;
+}
+
+/* End Horse Creation Form */
