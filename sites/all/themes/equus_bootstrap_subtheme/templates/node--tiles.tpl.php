@@ -85,51 +85,85 @@
     <a href="<?php print $node_url; ?>"><?php print render($tile_image); ?></a>
 
     <div class="content-info">
-	    <?php if ($node->type == 'blog') { print render($blog_categories); } ?>
-	    
+		<div class="vocab">
+			<?php if ($node->type == 'blog') { print render($blog_categories); } ?>
+			<?php if ($node->type == 'organization') { print render($org_type); } ?>
+			<?php if ($node->type == 'horse') { print render($status); } ?>
+			<?php if ($node->type == 'property'): ?>
+				<div class="property-type">
+					<?php print render($property_type); ?>
+				</div>
+			<?php endif; ?>
+			<?php if ($node->type == 'equus_sale'): ?>
+				<?php if ($sale_type['#items'][0]['value'] != 'gameplayitem'): ?>
+					<?php { print render($item_type); } ?>
+				<?php endif; ?>
+			<?php endif; ?>
+		</div>
 	    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>">
 	    <?php if ($node->type == 'horse') {
 	    	print render($real_name);
 	    } else {
 	    	print $title;
 	    } ?></a></h2>
-	    <?php if ($node->type == 'equus_sale'): ?>
-	    	<?php print render($price_per_unit); ?>
-	    <?php endif; ?>
 	    <div class="post-info">
 	    	<?php if ($node->type == 'blog') {
 	    		print 'Posted by ' . $name . ' on ' . $submitted;
 	    	} ?>
 	    	<?php if ($node->type == 'horse') {
 	    		print 'Owned by ' . $name;
-	    		print '<br><span class="horse-info">' 
-	    			. render($content['field_breed']) 
-	    			. ' ' 
-	    			. render($content['field_horse_gender']) 
+	    		print '<br><span class="horse-info">'
+	    			. render($content['field_breed'])
+	    			. ' '
+	    			. render($content['field_horse_gender'])
 	    			. '</span>';
 	    	} ?>
 	    </div>
-	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale') {
+	    <?php if ($node->type == 'blog' || $node->type == 'equus_sale' || $node->type == 'property') {
 			print render($body_teaser);
 		} ?>
+		<?php if ($node->type == 'organization'): ?>
+<!--			<span class="org-label">Prefix</span>-->
+<!--			<span class="org-value">--><?php //print render($prefix); ?><!--</span>-->
+			<?php print render($mission_summary); ?>
+		<?php endif; ?>
 	</div>
   </div>
   <div class="post-footer">
-		<?php
+		<!-- <?php
 		  if (!empty($node->field_blog_tags)) {
 		    print '<span class="tags">';
 		    print '<span class="icon"></span>';
 		    foreach($node->field_blog_tags['und'] as $tag) {
 		      $term = taxonomy_term_load($tag['tid']);
 		      if ($term->vocabulary_machine_name == 'blog_tags') {
-		        print l($term->name, "blog-tags/{$term->name}").' ';
+		        print l($term->name, "taxonomy/term/{$term->tid}").' ';
 		      }
 		    };
 		    print '</span>';
 		  }
-		?>
+		?> -->
+		<?php
+	      print '<span class="comments">';
+	      print flag_create_link("likes", $node->nid);
+	      $link_body = "<span class='icon'></span><span class='count'>$comment_count</span>";
+	      print l($link_body, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments', 'html' => TRUE));
+	      print '</span>';
+	    ?>
+          <?php if ($node->type == 'equus_sale'): ?>
+              <?php print render($price_per_unit); ?>
+          <?php endif; ?>
+	  	<?php if ($node->type == 'organization'): ?>
+	  		<span class="org-funds">
+				<?php print l($bank_balance,$bank_transactions_path); ?>
+			</span>
+	  	<?php endif; ?>
+		  <?php if ($node->type == 'horse'): ?>
+			<?php print '<span class="tags">'; ?>
+			<?php print render($disciplines); ?>
+			<?php print '</span>'; ?>
+		  <?php endif; ?>
 		<div class="footer-link">
-			<?php print flag_create_link("likes", $node->nid); ?>
 			<a class="icon footer-readmore" href="<?php print $node_url; ?>"></a>
 		</div>
 	</div>

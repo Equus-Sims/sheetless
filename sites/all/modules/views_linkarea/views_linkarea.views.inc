@@ -1,5 +1,4 @@
 <?php
-// $Id: views_linkarea.views.inc,v 1.1.4.1 2010/11/18 20:17:19 crell Exp $
 
 /**
  * Implementation of hook_views_data()

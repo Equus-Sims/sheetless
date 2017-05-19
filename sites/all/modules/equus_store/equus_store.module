@@ -69,7 +69,7 @@ function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 
     // if user is administrator, include admin-only sale item terms in query
     $admin_only = 0;
-    if ($user->uid == 1) {
+    if ($user->uid == 1 || $user->uid == 65) {
         $admin_only = 1;
     }
 
@@ -99,7 +99,7 @@ function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
         'auction' => 'Auction',
         'lease' => 'Lease',
     );
-    if ($user->uid == 1) {
+    if ($user->uid == 1 || $user->uid == 65) {
         $form['field_equus_sale_type']['und']['#options']['gameplayitem'] = 'Gameplay Item';
     }
 

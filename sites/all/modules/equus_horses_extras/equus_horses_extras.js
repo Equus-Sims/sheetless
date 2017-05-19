@@ -11,11 +11,11 @@ var equusHorsesExtrasCalcAge = function(dob, foal_speed, adult_speed, transition
 
     var game_days_tentative = real_days * foal_speed;
     if (game_days_tentative < transition_days) {
-        return game_days_tentative / 365;
+        return Math.floor(game_days_tentative / 365);
     } else {
         var real_days_foal = transition_days / foal_speed;
         var real_days_adult = real_days - real_days_foal;
-        return transition_year + (real_days_adult * adult_speed) / 365;
+        return Math.floor(transition_year + (real_days_adult * adult_speed) / 365);
     }
 };
 

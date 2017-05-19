@@ -78,6 +78,16 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
 function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	 $alias = drupal_get_path_alias();
 
+	$menu = menu_navigation_links('main-menu');
+    // foreach ($menu as &$item) {
+    //     if (isset($item['attributes']) && isset($item['attributes']['class']) && in_array('home', $item['attributes']['class'])) {
+    //         $item['html'] = true;
+    //         $item['title'] = "<img src=" . base_path() . path_to_theme() . "/horseshoe-nearblack.svg />";
+    //     }
+    // }
+	$vars['main_menu'] = theme('links__system_main_menu', array('links' => $menu));
+	$vars['title_logo'] = "<img src=" . base_path() . path_to_theme() . "/horseshoe-nearblack.svg />";
+
 	if (arg(0, $alias) == 'user' && arg(1, $alias) == 'login') {
 		$vars['theme_hook_suggestions'][] = 'page__login';
 	}
@@ -121,19 +131,18 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 		$vars['content_column_class'] = ' class="col-sm-12"';
 	}
 
-	// what follows is the tale of the toolbar
-	$vars_toolbar = array();
-	$vars_toolbar['search_box'] = drupal_get_form('search_form');
-	if ($GLOBALS['user']->uid == 0) {
-		$vars_toolbar['logged_in'] = false;
+    $uid = $GLOBALS['user']->uid;
+    if ($uid == 0) {
+		$vars['logged_in'] = false;
 	} else {
-		$user = user_load($GLOBALS['user']->uid);
-		$vars_toolbar['logged_in'] = true;
-		$vars_toolbar['name'] = format_username($GLOBALS['user']);
-		$vars_toolbar['uid'] = $user->uid;
-		setlocale(LC_MONETARY, 'en_US');
-		$vars_toolbar['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
-		$vars_toolbar['orgs'] = array();
+		$user = user_load($uid);
+        $vars['uid'] = $uid;
+        $vars['logged_in'] = true;
+        $vars['name'] = format_username($GLOBALS['user']);
+        $vars['user_picture'] = "<img src='" . file_create_url($user->picture->uri) . "' />";
+        setlocale(LC_MONETARY, 'en_US');
+		$vars['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
+		$vars['orgs'] = array();
 		$nids = equus_organizations_get_assoc_orgs($user->uid);
 		if (!empty($nids)) {
 			$orgs = node_load_multiple($nids);
@@ -144,46 +153,131 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 				$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
 				$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";
 
-				$vars_toolbar['orgs'][] = $org_info;
+				$vars['orgs'][] = $org_info;
 			}
 		}
-		$vars_toolbar['regular_credit'] = userpoints_get_current_points($user->uid, 1);
-		$vars_toolbar['rare_credit'] = userpoints_get_current_points($user->uid, 2);
-		$vars_toolbar['org_credit'] = userpoints_get_current_points($user->uid, 60);
-		$vars_toolbar['total_credits'] = $vars_toolbar['regular_credit'] + $vars_toolbar['rare_credit'] + $vars_toolbar['org_credit'];
+        $vars['regular_credit'] = userpoints_get_current_points($user->uid, 1);
+        $vars['rare_credit'] = userpoints_get_current_points($user->uid, 2);
+        $vars['org_credit'] = userpoints_get_current_points($user->uid, 60);
+        $vars['total_credits'] = $vars['regular_credit'] + $vars['rare_credit'] + $vars['org_credit'];
 	}
 
-	$vars_toolbar['foo'] = print_r($GLOBALS['user'], true);
-	$vars['toolbar'] = theme('equus_toolbar', $vars_toolbar);
+//	// what follows is the tale of the toolbar
+//	$vars_toolbar = array();
+//	$vars_toolbar['search_box'] = drupal_get_form('search_form');
+//	if ($GLOBALS['user']->uid == 0) {
+//		$vars_toolbar['logged_in'] = false;
+//	} else {
+//		$user = user_load($GLOBALS['user']->uid);
+//		$vars_toolbar['logged_in'] = true;
+//		$vars_toolbar['name'] = format_username($GLOBALS['user']);
+//		$vars_toolbar['uid'] = $user->uid;
+//		setlocale(LC_MONETARY, 'en_US');
+//		$vars_toolbar['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
+//		$vars_toolbar['orgs'] = array();
+//		$nids = equus_organizations_get_assoc_orgs($user->uid);
+//		if (!empty($nids)) {
+//			$orgs = node_load_multiple($nids);
+//			foreach ($orgs as $org) {
+//				$org_info = array();
+//				$org_info['name'] = $org->title;
+//				$org_info['path'] = "node/{$org->nid}";
+//				$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
+//				$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";
+//
+//				$vars_toolbar['orgs'][] = $org_info;
+//			}
+//		}
+//		$vars_toolbar['regular_credit'] = userpoints_get_current_points($user->uid, 1);
+//		$vars_toolbar['rare_credit'] = userpoints_get_current_points($user->uid, 2);
+//		$vars_toolbar['org_credit'] = userpoints_get_current_points($user->uid, 60);
+//		$vars_toolbar['total_credits'] = $vars_toolbar['regular_credit'] + $vars_toolbar['rare_credit'] + $vars_toolbar['org_credit'];
+//	}
+//
+//	$vars_toolbar['foo'] = print_r($GLOBALS['user'], true);
+//	$vars['toolbar'] = theme('equus_toolbar', $vars_toolbar);
 }
 
-function equus_bootstrap_subtheme_preprocess_node(&$vars) {
+function equus_bootstrap_subtheme_preprocess_node(&$vars)
+{
+	$vars['base_path'] = base_path();
+
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
+
+	if ($vars['node']->type == 'property' && isset($vars['field_user_property_type']['und'])) {
+		$vars['property_type'] = $vars['field_user_property_type']['und'][0]['value'];
+	}
 
 	if ($vars['node']->type == "organization") {
 		$org = node_load($vars['node']->nid);
 		setlocale(LC_MONETARY, 'en_US');
+
+		if ($vars['view_mode'] == 'tiles') {
+			$vars['prefix'] = $vars['equus_organizations_prefix']['und'][0]['value'];
+
+			$org_type = field_view_field('node', $vars['node'], 'equus_organizations_type', array('type' => 'taxonomy_term_reference_plain'));
+			$org_type['#label_display'] = 'hidden';
+			$vars['org_type'] = $org_type;
+
+			if (isset($vars['equus_organizations_mission']['und'])) {
+				$vars['mission_summary'] = text_summary($vars['equus_organizations_mission']['und'][0]['value'], NULL, 400);
+				$vars['mission_summary'] .= '...' . l("read more", "node/{$vars['node']->nid}", array(
+						'attributes' => array(
+							'class' => array(
+								'link-readmore'))));
+			}
+		}
+
 		$vars['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
 		$vars['bank_transactions_path'] = "organization/transactions/{$vars['node']->nid}";
 	}
 
-	// set up render array for cover image
-	$image = field_get_items('node', $vars['node'], 'field_cover_image');
-    if (!empty($image)) {
-        $image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
-          'type' => 'image',
-          'settings' => array('image_style' => 'cover_image')
-        ));
-    }
-    $vars['cover_image'] = $image;
+	$view_mode = $vars['view_mode'];
+	if ($view_mode == 'tiles') {
+		$image_style = 'tile';
+	} else {
+		$image_style = 'blog_cover_image';
+	}
 
-    $image = field_get_items('node', $vars['node'], 'field_cover_image');
-    if (!empty($image)) {
-        $image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
-          'type' => 'image',
-          'settings' => array('image_style' => 'tile')
-        ));
-    }
+	if ($vars['node']->type == 'blog') {
+		// set up render array for cover image
+		$image = field_get_items('node', $vars['node'], 'field_cover_image');
+		if (!empty($image)) {
+			$image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
+				'type' => 'image',
+				'settings' => array('image_style' => $image_style)
+			));
+		}
+		$vars['cover_image'] = $image;
+	} else if ($vars['node']->type == 'property') {
+		// set up render array for cover image
+		$image = field_get_items('node', $vars['node'], 'field_user_property_cover_image');
+		if (!empty($image)) {
+			$image = field_view_value('node', $vars['node'], 'field_user_property_cover_image', $image[0], array(
+				'type' => 'image',
+				'settings' => array('image_style' => $image_style)
+			));
+		}
+		$vars['cover_image'] = $image;
+	} else {
+		// set up render array for cover image
+		$image = field_get_items('node', $vars['node'], 'field_cover_image');
+		if (!empty($image)) {
+			$image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
+				'type' => 'image',
+				'settings' => array('image_style' => $image_style)
+			));
+		}
+		$vars['cover_image'] = $image;
+	}
+
+//    $image = field_get_items('node', $vars['node'], 'field_cover_image');
+//    if (!empty($image)) {
+//        $image = field_view_value('node', $vars['node'], 'field_cover_image', $image[0], array(
+//          'type' => 'image',
+//          'settings' => array('image_style' => 'tile')
+//        ));
+//    }
     $vars['tile_image'] = $image;
 
     if ($vars['node']->type == 'blog') {
@@ -207,18 +301,38 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	}
 
 	if ($vars['node']->type == 'equus_sale') {
-	    // set up render array for blog categories
+	    // set up render array for sale categories and price
+        $sale_type = field_view_field('node', $vars['node'], 'field_equus_sale_type');
+        $sale_type['#label_display]'] = 'hidden';
+        $vars['sale_type'] = $sale_type;
+
+        $item_type = field_view_field('node', $vars['node'], 'field_equus_sale_item_type');
+        $item_type['#label_display]'] = 'hidden';
+        $vars['item_type'] = $item_type;
+
 	    $price_per_unit = field_view_field('node',$vars['node'],'field_equus_sale_price_per_unit');
 	    $price_per_unit['#label_display'] = 'hidden';
 	    $vars['price_per_unit'] = $price_per_unit;
+
+		$item_nid = field_get_items('node', $vars['node'], 'field_equus_sale_item');
+		$vars['item_nid'] = $item_nid[0]['target_id'];
 	}
 
 	if ($vars['node']->type == 'horse') {
-	    // set up render array for blog categories
+		//	$status = field_view_field('node', $vars['node'], 'field_horse_status');
+		$status = 'Training';
+		// $status['#label_display'] = 'hidden';
+		$vars['status'] = $status;
+
 	    $real_name = field_view_field('node',$vars['node'],'field_horse_real_name');
 	    $real_name['#label_display'] = 'hidden';
 	    $vars['real_name'] = $real_name;
 	    $vars['title'] = $real_name;
+
+//		$disciplines = field_view_field('node',$vars['node'],'field_horse_discipline');
+//		$disciplines['#label_display'] = 'hidden';
+//		$vars['disciplines'] = $disciplines;
+		$vars['disciplines'] = "Barrels and Poles";
 	}
 }
 
@@ -264,6 +378,9 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 
 	$vars['user_role'] = print_r($u, true);
 
+	$created_date = new DateTime('@' . $u->created);
+	$vars['created'] = $created_date->format('M. d, Y');
+
 	if (arg(0,$alias) == 'user' && arg(2,$alias) == 'profile') {
 		$vars['user_profile_counters'] = true;
 	} else {
@@ -280,5 +397,62 @@ function equus_bootstrap_subtheme_preprocess_field(&$vars) {
 			$value->potential = round($value->potential, 0);
 		}
 		$vars['stats'] = $stats;
+	}
+}
+
+function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
+    if ($vars['view']->name == 'user_blog' || $vars['view']->name == 'organizations' || $vars['view']->name == 'puppies') {
+		$alias = drupal_get_path_alias();
+
+		$profile_uid = arg(1,$alias);
+
+		$u = user_load($profile_uid);
+		// dpm($u);
+
+		if ($vars['view']->name == 'user_blog') {
+			$vars['blog_active'] = "class='active-trail active'";
+		} else {
+			$vars['blog_active'] = "";
+		}
+		if ($vars['view']->name == 'organizations') {
+			$vars['orgs_active'] = "class='active-trail active'";
+		} else {
+			$vars['orgs_active'] = "";
+		}
+		if ($vars['view']->name == 'puppies') {
+			$vars['horses_active'] = "class='active-trail active'";
+		} else {
+			$vars['horses_active'] = "";
+		}
+		$dob_raw = new DateTime($u->field_user_dob['und'][0]['value']);
+		$dob = $dob_raw->format('M. d, Y');
+		$interval = $dob_raw->diff(new DateTime());
+		$vars['user_age'] = $interval->y;
+		$vars['user_dob'] = $dob;
+
+		$vars['cover_photo'] = array(
+			'style_name' => 'hero_image_style',
+			'path' => $u->field_cover_image['und'][0]['uri'],
+			'alt' => 'User Profile Cover Image',
+			'title' => 'User Profile Cover Image'
+		);
+
+		$vars['user_picture'] = "<img src='" . file_create_url($u->picture->uri) . "' />";
+
+		$vars['profile_uid'] = $profile_uid;
+
+		$vars['realname'] = $u->realname;
+
+		$vars['user_role'] = print_r($u, true);
+
+		$vars['user_location'] = $u->field_user_location['und'][0]['value'];
+
+		$created_date = new DateTime('@' . $u->created);
+		$vars['created'] = $created_date->format('M. d, Y');
+
+		$vars['user_biography'] = $u->field_user_biography['und'][0]['safe_value'];
+
+		setlocale(LC_MONETARY, 'en_US');
+		$vars['user_net_worth'] = money_format('%.0n', $u->field_equus_user_net_worth['und'][0]['value']);
 	}
 }

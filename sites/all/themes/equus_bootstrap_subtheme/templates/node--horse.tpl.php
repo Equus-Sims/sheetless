@@ -91,10 +91,18 @@
   <?php print render($title_suffix); ?>
 
   <div class="content"<?php print $content_attributes; ?>>
+    <?php print render($content); ?>
     <?php
       hide($content['comments']);
       hide($content['links']);
     ?>
+    <div class="node-links">
+      <span class="edit-delete">
+        <!-- <?php print $base_path;?>node/<?php print $id;?>/edit -->
+        <span class="edit-icon"><?php print l("Edit", "node/{$node->nid}/edit").' '; ?></span>
+        <span class="delete-icon"><?php print l("Delete", "node/{$node->nid}/delete").' '; ?></span>
+      </span>
+    </div>
   </div>
   <?php
   if ($teaser) {
@@ -102,9 +110,5 @@
   	print render($content['body']);
   }
   ?>
-
-  <?php print render($content['links']); ?>
-
-  <?php print render($content['comments']); ?>
 
 </div>

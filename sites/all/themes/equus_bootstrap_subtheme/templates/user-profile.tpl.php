@@ -61,10 +61,6 @@
 		<div class="user-profile-content-about">
 			<h2 class="content-header">About Me</h2>
 			<div>
-				<span class="profile-label">Gender</span>
-				<span class="profile-value"><?php echo ucfirst($user_gender); ?></span>
-			</div>
-			<div>
 				<span class="profile-label">Birthday</span>
 				<span class="profile-value"><?php echo $user_dob; ?></span>
 			</div>
@@ -75,6 +71,10 @@
 			<div>
 				<span class="profile-label">Location</span>
 				<span class="profile-value"><?php echo $user_location; ?></span>
+			</div>
+			<div>
+				<span class="profile-label">Joined</span>
+				<span class="profile-value"><?php echo $created; ?></span>
 			</div>
 		</div>
 		<div class="user-profile-content-bio">

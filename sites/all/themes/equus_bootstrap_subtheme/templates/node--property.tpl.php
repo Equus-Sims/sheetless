@@ -82,41 +82,79 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-  <?php print $user_picture; ?>
-
-  <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
-    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-  <?php endif; ?>
-  <?php print render($title_suffix); ?>
 
-  <?php if ($display_submitted): ?>
-    <div class="submitted">
-      <?php print $submitted; ?>
-    </div>
+    <?php if ($cover_image): ?>
+      <div class="node-blogimage"><?php print render($cover_image); ?></div>
+    <?php endif; ?>
+
   <?php endif; ?>
+
+  <div class="node-content">
+
+    <?php if ($page): ?>
+
+      <div class="category"><?php print render($blog_categories); ?></div>
+
+      <?php print render($title_prefix); ?>
+      <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
+      <?php print render($title_suffix); ?>
+
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($name): ?>
+          <span class="author">Written by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($submitted): ?>
+            <span class="date">on <?php print $submitted; ?></span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if ($cover_image): ?>
+        <div class="node-blogimage"><?php print render($cover_image); ?></div>
+      <?php endif; ?>
+
+    <? endif; ?>
+
+    <?php if (!$page): ?>
+
+      <?php print render($title_prefix); ?>
+      <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+      <?php print render($title_suffix); ?>
+
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($name): ?>
+          <span class="author">Written by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($submitted): ?>
+            <br/><span class="date">on <?php print $submitted; ?></span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="footer-link">
+        <a class="footer-readmore icon" href="<?php print $node_url; ?>"></a>
+      </div>
+
+    <? endif; ?>
+
+  <?php
+    if ($teaser) {
+    	print $body_teaser;
+    } else {
+    	print render($content['body']);
+    }
+  ?>
 
   <div class="content"<?php print $content_attributes; ?>>
     <?php
-      // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
-      if ($node->field_equus_sale_quantity['und'][0]['value'] == -1) {
-          hide($content['field_equus_sale_quantity']);
-      }
-      
-      print render($content);
     ?>
   </div>
 
-  <?php print render($content['links']); ?>
-
-  <?php print render($content['comments']); ?>
-
-  <?php
-    $form = drupal_get_form('equus_store_form');
-    print theme_status_messages(array('display' => 'error'));
-    print drupal_render($form); 
-  ?>
+</div>
 
 </div>

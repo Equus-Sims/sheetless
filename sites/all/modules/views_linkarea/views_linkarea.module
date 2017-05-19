@@ -1,5 +1,4 @@
 <?php
-// $Id: views_linkarea.module,v 1.1 2010/04/15 20:49:02 crell Exp $
 
 /**
  * Implementation of hook_views_api().

@@ -80,45 +80,67 @@
  * @ingroup themeable
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  
-  <?php print $user_picture; ?>
 
-  <?php print render($title_prefix); ?>
-  <?php if (!$page): ?>
-    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-  <?php endif; ?>
-  <?php print render($title_suffix); ?>
-
-  <?php if ($display_submitted): ?>
-    <div class="submitted">
-      <?php print $submitted; ?>
-    </div>
-  <?php endif; ?>
-
-  <div class="content"<?php print $content_attributes; ?>>
-    <?php
-      // We hide the comments and links now so that we can render them later.
-      //hide($content['comments']);
-      //hide($content['links']);
-      //print render($content);
-      print render($content['equus_organizations_users']);
-      print render($content['equus_organizations_mission']);
-    ?>
-
-      <div class='field'>
-          <div class="field-label">Available Funds</div>
-          <div class="field-items">
-            <div class="field-item">
-              <?php print l($bank_balance,$bank_transactions_path); ?><br />
-              <!-- <span class="label">Available Funds</span> -->
-            </div>
+  <div class="organization"<?php print $attributes; ?>>
+    <div id="hero"><?php print render($content['field_cover_image']); ?></div>
+    <div class="org-sub-header">
+      <div class="org-sub-header-block">
+        <div class="title">
+<!--				<span class="roundImg">-->
+<!--					--><?php //echo render($user_profile['user_picture']); ?>
+<!--				</span>-->
+          <div class="user-info">
+            <h1><?php echo $title; ?></h1>
+            <span class="org-type"><?php echo "Organization | "; print render($content['equus_organizations_type']); ?></span>
           </div>
-      <div>
+        </div>
+        <div class="stats">
+          <span class="org-label">Available Funds</span>
+          <span class="org-funds"><?php print l($bank_balance,$bank_transactions_path); ?></span>
+        </div>
+      </div>
+    </div>
+    <div class="org-content">
+      <div class="org-content-about">
+        <h2 class="content-header">About</h2>
+        <div>
+          <span class="org-label">Owner</span>
+          <span class="org-value"><?php echo $name; ?></span>
+        </div>
+        <div>
+          <?php if (isset($content['equus_organizations_users'])): ?>
+            <span class="org-label">Members</span>
+            <span class="org-value"><?php print render($content['equus_organizations_users']); ?></span>
+          <?php endif; ?>
+        </div>
+        <div>
+          <?php if (isset($content['field_user_location'])): ?>
+            <span class="org-label">Location</span>
+            <span class="org-value"><?php print render($content['field_user_location']); ?></span>
+          <?php endif; ?>
+        </div>
+        <div>
+          <span class="org-label">Prefix</span>
+          <span class="org-value"><?php print render($content['equus_organizations_prefix']); ?></span>
+        </div>
+      </div>
+      <div class="org-content-mission">
+        <h2 class="content-header">Mission Statement</h2>
+			<span class="org-value">
+				<?php if (isset($content['equus_organizations_mission'])): ?>
+                  <?php print render($content['equus_organizations_mission']); ?>
+                <?php endif; ?>
+			</span>
+      </div>
+    </div>
+    <div class="user-menu">
+        <ul>
+            <li><a class="active-trail active" href=<?php echo $node_url; ?> >Properties</a></li>
+        </ul>
+    </div>
+      <div class="property-content">
+          <?php
+            echo views_embed_view('user_property_list', 'block_1');
+          ?>
+      </div>
   </div>
-
-  <?php print render($content['links']); ?>
-
-  <?php print render($content['comments']); ?>
-
-</div>

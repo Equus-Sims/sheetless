@@ -191,11 +191,10 @@
         print '</span>';
       }
       ?>
-      <span class="edit-delete">
-        <!-- <?php print $base_path;?>node/<?php print $id;?>/edit -->
-        <span class="edit-icon"><?php print l("Edit", "node/{$node->nid}/edit").' '; ?></span>
-        <span class="delete-icon"><?php print l("Delete", "node/{$node->nid}/delete").' '; ?></span>
-      </span>
+    </div>
+
+    <div class="node-comments">
+      <?php print render($content['comments']); ?>
     </div>
   </div>
 
