@@ -1270,7 +1270,7 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 .equus-tile {
     position: relative;
     padding-bottom: 40px;
-    min-height: 440px;
+    min-height: 460px;
 }
 
 /* .equus-tile .field-name-field-blog-categories a,
