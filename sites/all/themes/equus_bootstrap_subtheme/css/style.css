@@ -1222,11 +1222,11 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 
 
 .view.equus-tile-view .equus-tile-row {
-    width: 32%;
-    margin-right: 2%;
+    width: 31%;
+    margin-right: 3%;
     /*margin-bottom: 6.8%;*/
-    margin-bottom: 2%;
-    background-color: white;
+    margin-bottom: 3%;
+    /*background-color: white;*/
     /*box-shadow: -3px -3px 3px 1px rgba(0,0,0,0.2), 3px 3px 3px 1px rgba(0,0,0,0.2); */
 }
 
@@ -1234,11 +1234,20 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     .view.equus-tile-view .equus-tile-row {
         width: 100%;
     }
+    .view.equus-tile-view .equus-tile-row:nth-child(3n) {
+        margin-right: 3%;
+    }
 }
 
 @media (min-width: 901px) and (max-width: 1200px) {
     .view.equus-tile-view .equus-tile-row {
-        width: 48%;
+        width: 48.5%;
+    }
+    .view.equus-tile-view .equus-tile-row:nth-child(3n) {
+        margin-right: 3%;
+    }
+    .view.equus-tile-view .equus-tile-row:nth-child(2n) {
+        margin-right: 0;
     }   
 }
 
@@ -1247,7 +1256,7 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 }
 
 .view.equus-tile-view .equus-tile-row .field-content .content-info {
-    padding: 0px 20px 20px 20px;
+    /*padding: 0px 20px 20px 20px;*/
 }
 
 .view.equus-tile-view img {
@@ -1261,7 +1270,7 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 .equus-tile {
     position: relative;
     padding-bottom: 40px;
-    min-height: 480px;
+    min-height: 440px;
 }
 
 /* .equus-tile .field-name-field-blog-categories a,
@@ -1323,7 +1332,7 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 }
 
 .equus-tile .post-footer span.comments {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     font-size: 12px;
 }
 
@@ -1551,7 +1560,7 @@ table.cols-3 tr td,
 .page-user .quicktabs-tabs,
 .page-user .quicktabs-tabpage,
 .node-type-organization .property-content {
-    padding: 0 50px;
+    padding: 0 3%;
 }
 
 .page-user .user-sub-header,
