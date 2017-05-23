@@ -12,7 +12,7 @@
 		],
 		"max_entries": 20
 	},
-	"combination": {
+	"simulated": {
 		"phases": [
 			"weighted_stat",
 			"roleplay"

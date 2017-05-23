@@ -311,16 +311,6 @@ function equus_shows_entry_form($form, &$form_state) {
 		'#required' => TRUE, //make this field required
 	);
 
-	if ($phase_data->text_entry) {
-		$form['text_entry'] = array(
-			'#type' => 'text_format', //you can find a list of available types in the form api
-			'#title' => 'Include a story',
-			'#multiple' => FALSE,
-			'#required' => FALSE, //make this field required
-			'#rows' => 10
-		);
-	}
-
 	if ($phase_data->image_entry) {
 		$form['image_entry'] = array(
 			'#type' => 'managed_file', //you can find a list of available types in the form api
@@ -328,6 +318,16 @@ function equus_shows_entry_form($form, &$form_state) {
 			'#multiple' => FALSE,
 			'#required' => FALSE, //make this field required
 			'#upload_location' => 'public://'
+		);
+	}
+
+	if ($phase_data->text_entry) {
+		$form['text_entry'] = array(
+			'#type' => 'text_format', //you can find a list of available types in the form api
+			'#title' => 'Include a story',
+			'#multiple' => FALSE,
+			'#required' => FALSE, //make this field required
+			'#rows' => 10
 		);
 	}
 
@@ -421,16 +421,6 @@ function equus_shows_edit_entry_form($form, &$form_state, $entryid) {
         form_set_error('', "You can only add or edit your submissions during the submissions phase of the show.");
         return $form;
     }
-    $form['text_entry'] = array(
-        '#type' => 'text_format', //you can find a list of available types in the form api
-        '#title' => 'Include a story',
-        '#multiple' => FALSE,
-        '#required' => FALSE, //make this field required
-        '#rows' => 10,
-	);
-	if (!empty($entry->field_shows_entry_photo)) {
-		$form['text_entry']['#default_value'] = $entry->field_shows_entry_story[LANGUAGE_NONE][0]['value'];
-	}
 
     $form['image_entry'] = array(
         '#type' => 'managed_file', //you can find a list of available types in the form api
@@ -443,11 +433,25 @@ function equus_shows_edit_entry_form($form, &$form_state, $entryid) {
         $form['image_entry']['#default_value'] = $entry->field_shows_entry_photo[LANGUAGE_NONE][0]['fid'];
     }
 
+    $form['text_entry'] = array(
+        '#type' => 'text_format', //you can find a list of available types in the form api
+        '#title' => 'Include a story',
+        '#multiple' => FALSE,
+        '#required' => FALSE, //make this field required
+        '#rows' => 10,
+	);
+	if (!empty($entry->field_shows_entry_photo)) {
+		$form['text_entry']['#default_value'] = $entry->field_shows_entry_story[LANGUAGE_NONE][0]['value'];
+	}
+
     $form['submit_button'] = array(
         '#type' => 'submit',
         '#value' => t('Save changes'),
     );
     $form_state['rid'] = $entryid;
+
+    dpm($entry);
+    dpm($form_state);
 
     return $form;
 }
@@ -971,7 +975,7 @@ function equus_shows_show_types_photo_validate($data) {
 
 }
 
-function equus_shows_show_types_combination_validate($data) {
+function equus_shows_show_types_simulated_validate($data) {
 	foreach (array("phases", "min_entries", "max_entries") as $field) {
 		if (!property_exists($data, $field)) {
 			throw new Exception("Show type missing $field value.");

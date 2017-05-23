@@ -1,7 +1,7 @@
 {
 	"weighted_stat": {
-		"base_purse": 5000,
-		"entry_fee_mult": 0.10,
+		"base_purse": 300,
+		"entry_fee_mult": 0.075,
 		"placement_weights": [
 			0.30,
 			0.25,
@@ -19,8 +19,8 @@
 		"default_entry_status": "approved"
 	},
 	"photo": {
-		"base_purse": 7500,
-		"entry_fee_mult": 0.10,
+		"base_purse": 3000,
+		"entry_fee_mult": 0.075,
 		"placement_weights": [
 			0.30,
 			0.25,
