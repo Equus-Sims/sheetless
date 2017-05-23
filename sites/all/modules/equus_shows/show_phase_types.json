@@ -1,6 +1,6 @@
 {
 	"weighted_stat": {
-		"base_purse": 300,
+		"base_purse": 1000,
 		"entry_fee_mult": 0.075,
 		"placement_weights": [
 			0.30,
