@@ -82,7 +82,7 @@
 <div class="main-container container">
     <header id="top-bar" role="banner"> <!-- /#top-bar -->
         <!-- <h1><?php print $title_logo . $site_name; ?></h1> -->
-        <h1><?php print $site_name; ?></h1>
+        <h1 id="site-name"><?php print l('Equus','',array('absolute'=>true)); ?></h1>
         <header id="navbar" role="navigation">
             <nav id="main-menu">
                 <?php if (!empty($main_menu)): ?>
@@ -107,7 +107,6 @@
                         <li>Credits: <?php print $total_credits; ?>
                             <ul>
                                 <li><span>Regular Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></span></li>
-                                <li><span>Rare Horse Credit: <?php print l($rare_credit, 'dashboard'); ?></span></li>
                                 <li><span>Organization Credit: <?php print l($org_credit, 'dashboard'); ?></span></li>
                             </ul>
                         </li>
