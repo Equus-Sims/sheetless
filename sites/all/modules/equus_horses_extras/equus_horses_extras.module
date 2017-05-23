@@ -65,35 +65,16 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
     $is_active = false;
     $is_foal = true;
 
-    // If the horse is being edited, disable the creating org field. Creating org should only be accessable on first creation.
+    // If the horse is being edited, disable the creating org field. Creating org should only be accessible on first creation.
     if (!$is_new) {
         $horse = node_load($form['nid']['#value']);
         dpm($horse);
 		$form['field_horse_creating_org']['#access'] = false;
 
-        $aging_details = json_decode($horse->field_horse_aging_details[LANGUAGE_NONE][0]['value']);
-        $aging_details_vars = array(
-            'has_aging_details' => true,
-            'aging_details' => $aging_details,
-        );
         if ($horse->field_horse_activation_status[LANGUAGE_NONE][0]['value'] == 'Active') {
             $is_active = true;
         }
-        $is_foal = equus_horses_extras_check_is_foal($aging_details);
-        $current_time_period = equus_horses_extras_get_time_period($aging_details);
-
-	} else {
-        $aging_details_vars = array(
-            'has_aging_details' => false,
-        );
-        $current_time_period = NULL;
-    }
-
-    $form['aging_details'] = array(
-        '#weight' => 0,
-        '#type' => 'markup',
-        '#markup' => theme("equus_horses_extras_aging_history", $aging_details_vars),
-    );
+	}
 
 	$breed_IDs = array_slice(array_keys($form['field_horse_breed']['und']['#options']),1);
 
@@ -104,97 +85,26 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	}
 
 	asort($form['field_horse_breed']['und']['#options']);
-
-    // Add form element for foal aging speed, age transition year, adult aging speed
-    $speed_options = array(
-        1 => '1x (real time)',
-        3 => '3x (standard ES time)',
-        6 => '6x (double standard ES time)',
-        12 => '12x (standard for foals - not recommended for adults)'
-    );
-
-    $foal_speed_default = $current_time_period ? $current_time_period->speed : 12;
-    $form['foal_speed'] = array(
-        '#type' => 'select',
-        '#title' => 'Foal Aging Speed',
-        '#options' => $speed_options,
-        '#description' => 'insert help text here',
-        // TODO: Write help text for aging systems
-        '#default_value' => $foal_speed_default,
-        '#required' => true,
-        '#weight' => 22,
-        '#chosen' => FALSE,
-    );
-    if ($is_foal || !$is_active) {
-        $form['foal_speed']['#states'] = array(
-            'enabled' => array(
-                'input[name="aging_system_unlock"]' => array(
-                    'checked' => true,
-                )
-            )
-        );
-	} else {
-		$form['foal_speed']['#disabled'] = true;
-	}
-    $form['adult_speed'] = array(
-        '#type' => 'select',
-        '#title' => 'Adult Aging Speed',
-        '#options' => $speed_options,
-        '#description' => 'insert help text here',
-        // TODO: Write help text for aging systems
-        '#default_value' => 3,
-        '#required' => true,
-        '#weight' => 23,
-        '#chosen' => FALSE,
-        '#states' => array(
-            'enabled' => array(
-                'input[name="aging_system_unlock"]' => array(
-                    'checked' => true,
-                )
-            )
-        )
-    );
-    //TODO: Validation!!!
-    $form['transition_year'] = array(
-        '#type' => 'textfield',
-        '#title' => 'Transition Year',
-        '#description' => 'The age the horse transitions from foal to adult.',
-        '#default_value' => '4',
-        '#required' => true,
-        '#size' => 3,
-        '#weight' => 24,
-    );
-    if ($is_foal || !$is_active) {
-        $form['transition_year']['#states'] = array(
-            'enabled' => array(
-                'input[name="aging_system_unlock"]' => array(
-                    'checked' => true,
-                )
-            )
-        );
-    } else {
-		$form['transition_year']['#disabled'] = true;
-	}
     
+	$form['temp_age'] = array(
+	    '#type' => 'textfield',
+	    '#title' => 'Age',
+	    '#description' => 'Enter an age to automatically update the Date of Birth field, or change the date of birth to have the age automatically calculated.',
+	    '#required' => false,
+	    '#size' => 3,
+	    '#weight' => 21,
+	);
+
     if (!$is_active) {
-    	$form['temp_age'] = array(
-	        '#type' => 'textfield',
-	        '#title' => 'Age',
-	        '#description' => 'Enter an age to automatically update the Date of Birth field, or change the date of birth to have the age automatically calculated.',
-	        '#required' => false,
-	        '#size' => 3,
-	        '#weight' => 21,
-	        '#states' => array(
-	            'enabled' => array(
-	                'input[name="aging_system_unlock"]' => array(
-	                    'checked' => true,
-	                )
-	            )
-	        )
+    	$form['temp_age']['#states'] = array(
+            'enabled' => array(
+                'input[name="aging_system_unlock"]' => array(
+                    'checked' => true,
+                )
+            )
     	);
     } else {
-    	$form['field_horse_age']['#access'] = true;
-    	$form['field_horse_age']['#disabled'] = true;
+    	$form['temp_age']['#disabled'] = true;
 	}
 
 	$form['field_horse_date_of_birth'][LANGUAGE_NONE][0]['#element_validate'] = array('equus_horses_extras_dob_validation');
@@ -223,15 +133,16 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	    $form['#group_children']['aging_system_unlock'] = 'group_horse_aging';
 	}
 
-    // add programmatically created aging related fields to the general group on the horse node
-    $form['#group_children']['foal_speed'] = 'group_horse_aging';
-    $form['#group_children']['adult_speed'] = 'group_horse_aging';
-    $form['#group_children']['transition_year'] = 'group_horse_aging';
-    $form['#group_children']['temp_age'] = 'group_horse_aging';
-    $form['#group_children']['aging_details'] = 'group_horse_aging';
+	$form['field_horse_rp_age']['#states'] = array(
+		'enabled' => array(
+            'input[name="aging_system_unlock"]' => array(
+                'checked' => true,
+            )
+        )
+	);
 
-    // hide aging details field from users
-    $form['field_horse_aging_details']['#access'] = 0;
+    // add programmatically created aging related fields to the general group on the horse node
+    $form['#group_children']['temp_age'] = 'group_horse_aging';
 
     // hide horse stats field from users
     $form['field_horse_stats']['#access'] = 0;
@@ -395,15 +306,6 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 		return;
 	}
 
-	//form_set_value($element, $element['#date_items'], $form_state);
-
-	$breedID = $node->field_horse_breed['und'][0]['target_id'];
-	$breed = node_load($breedID);
-
-	$body_typeID = $node->field_horse_body_type['und'][0]['target_id'];
-	$body_type = node_load($body_typeID);
-
-
 	// Verify that user has enough horse credits to activate the horse
 	// TODO: Make this section its own function
 	// check if new horse
@@ -446,124 +348,17 @@ function equus_horses_extras_node_validate($node, $form, &$form_state) {
 	// Pedigree
 	// Show Cooldown
 	// TODO: Ask Peter about doing this in a loop
-
-	if (!isset($form['aging_system_unlock']) || $form['aging_system_unlock']['#value'] == 1) {
-		$transition_year = $form['transition_year']['#value'];
-		if (!is_numeric($transition_year) || $transition_year < 0 || $transition_year != floor($transition_year)) {
-			form_set_error('transition_year', "$transition_year is not a valid year.");
-		}
-		// TODO: Test this
-		if (isset($node->nid) && $transition_year <= $node->field_horse_age[LANGUAGE_NONE][0]['value']) {
-			form_set_error('transition_year', "This transition year has already passed. Choose a transition year that is greater than the horse's current age.");
-		}
-	}
-    //TODO: If already an adult, can't change foal stuff (unless still pending)
 }
 
 function equus_horses_extras_node_submit($node, $form, &$form_state) {
     if ($node->type != 'horse') {
         return;
     }
-    // TODO: Hide all aging fields behind a checkbox that would allow you to edit them.
-    // TODO: Use the status of the checkbox to determine whether to run the next 100 lines of code
+
     if ($node->field_horse_activation_status[LANGUAGE_NONE][0]['value'] == 'Active') {
         $is_active = true;
     } else {
     	$is_active = false;
-    }
-    if (!isset($form['aging_system_unlock']) || $form['aging_system_unlock']['#value'] == 1) {
-	    $now_raw = new DateTime('now');
-	    $now = $now_raw->format('Y-m-d H:i:s');
-	    // TODO: equals null OR is pending
-	    if ($node->nid == NULL) {
-	        $dob = $node->field_horse_date_of_birth[LANGUAGE_NONE][0]['value'];
-	        $dob_date = new DateTime($dob);
-
-	        if ($form['foal_speed']['#value'] == 0) {
-	            $foal_end_date_str = NULL;
-	        } else {
-	            $foal_days = round(($form['transition_year']['#value']*365)/$form['foal_speed']['#value']);
-	            $foal_end_date = $dob_date->add(new DateInterval("P{$foal_days}D"));
-	            $foal_end_date_str = $foal_end_date->format('Y-m-d H:i:s');
-	        }
-
-	        $aging_details = array();
-	        $aging_details[] = array('start' => $dob, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now, 'transition_year' => $form['transition_year']['#value']);
-
-	        // Add adult period if there is one
-	        if ($foal_end_date_str != NULL) {
-	            $adult_start_date = $foal_end_date->add(new DateInterval("P1D"));
-	            $adult_start_date_str = $adult_start_date->format('Y-m-d H:i:s');
-	            $aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
-	        }
-	        $node->field_horse_aging_details[LANGUAGE_NONE][0]['value'] = json_encode($aging_details);
-	    } else {
-
-	        $aging_details = json_decode($node->field_horse_aging_details[LANGUAGE_NONE][0]['value']);
-	        $current_time_period = 0;
-	        $game_days_old = 0;
-	        while ($aging_details[$current_time_period]->end !== NULL && $aging_details[$current_time_period]->end < $now) {
-	            $current_time_period++;
-	            // add this time period to the horse lifetime counter
-	            $end = new DateTime($aging_details[$current_time_period]->end);
-	            $time_period_length = $end->diff(new DateTime($aging_details[$current_time_period]->start))->days+1;
-	            $game_days_old += $time_period_length * $aging_details[$current_time_period]->speed;
-	        }
-	        // at this point, game_days_old only includes completed time periods
-
-	        $current_details = $aging_details[$current_time_period];
-	        // if still a foal
-	        if ($current_details->lifestage == 'foal') {
-	            // delete all entries that start in the future
-	            $new_aging_details = array_slice($aging_details, 0, $current_time_period + 1);
-
-	            // mark the end period of the last entry after all future entries have ben deleted with today's date
-	            $new_aging_details[$current_time_period]->end = $now;
-
-	            // adds however many days the horse lived in the period that was just closed
-	            $end = new DateTime($new_aging_details[$current_time_period]->end);
-	            $time_period_length = $end->diff(new DateTime($new_aging_details[$current_time_period]->start))->days+1;
-	            $game_days_old += $time_period_length * $new_aging_details[$current_time_period]->speed;
-
-	            // if foal speed > 0 create a new entry, starting today, ending at the new transition year end date
-	            if ($form['foal_speed']['#value'] > 0) {
-	                $dob = $new_aging_details[0]->start;
-	                $dob_date = new DateTime($dob);
-	                // given the new information (new speed or new transition year), what real date will the transition happen on?
-	                $foal_game_days_remaining = ($form['transition_year']['#value']*365) - $game_days_old;
-	                if ($foal_game_days_remaining < 0) {
-	                    watchdog('equus_horses_extras', "Attempted to set transition year before current time.", NULL, WATCHDOG_WARNING);
-	                    drupal_goto('/');
-	                }
-
-	                $foal_days_remaining = round(($foal_game_days_remaining/$form['foal_speed']['#value']));
-	                $foal_end_date = $now_raw->add(new DateInterval("P{$foal_days_remaining}D"));
-	                $foal_end_date_str = $foal_end_date->format('Y-m-d H:i:s');
-
-	                $new_aging_details[] = array('start' => $now, 'end' => $foal_end_date_str, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now);
-
-	                // add a new adult phase starting at the transition year end date
-	                $adult_start_date = $foal_end_date->add(new DateInterval("P1D"));
-	                $adult_start_date_str = $adult_start_date->format('Y-m-d H:i:s');
-	                $new_aging_details[] = array('start' => $adult_start_date_str, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
-	            } else {
-	                // if foal speed == 0 create a new entry starting today with an indefinite end period and a speed of 0
-	                $new_aging_details[] = array('start' => $now, 'end' => NULL, 'speed' => $form['foal_speed']['#value'], 'lifestage' => 'foal', 'set_date' => $now);
-	                // and do not create an additional adult phase
-	            }
-	        } else {
-	            // if an adult
-	            // mark the most recent period's end date with today's date
-	            $new_aging_details = $aging_details;
-	            $new_aging_details[$current_time_period]->end = $now;
-
-	            // start a new period with today's date as the starting point and the aging rate being the adult aging rate
-	            $new_aging_details[] = array('start' => $now, 'end' => NULL, 'speed' => $form['adult_speed']['#value'], 'lifestage' => 'adult', 'set_date' => $now);
-	        }
-
-	        $node->field_horse_aging_details[LANGUAGE_NONE][0]['value'] = json_encode($new_aging_details);
-		}
-
     }
 }
 
@@ -727,10 +522,8 @@ function equus_horses_extras_get_body_type_modifiers($body_typeID) {
 }
 
 function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $entity, $field) {
-	$aging_details_json = field_get_items($entity_type, $entity, 'field_horse_aging_details');
-    $aging_details = json_decode($aging_details_json[0]['value']);
-
-    $computed_age = floor(equus_horses_extras_calc_age($aging_details)/365);
+	$dob = field_get_items($entity_type, $entity, 'field_horse_date_of_birth');
+    $computed_age = equus_horses_extras_calc_age($dob[0]['value']);
     // if ($computed_age < 1) {
     // 	$age = "< 1";
     // } else {
@@ -750,73 +543,30 @@ function computed_field_field_horse_age_compute(&$entity_field, $entity_type, $e
  * @param string $today The day to calculate the age against, defaults to today
  * @return int Number of game days old the horse is
  */
-function equus_horses_extras_calc_age($aging_details, $today = NULL) {
-    if (empty($aging_details)) {
+function equus_horses_extras_calc_age($dob) {
+    if (empty($dob)) {
         return NULL;
     }
 
-    if ($today == NULL) {
-        $today = new DateTime('now');
+    // foal speed = 1 months to 1 year
+    $foal_speed = 12;
+    // adult speed = 4 months to 1 year
+    $adult_speed = 3;
+    // transition age = 4
+    $transition_year = 4;
+    $dob_calcd = new DateTime($dob);
+    $today = new DateTime('now');
+    $real_days = (int) $today->diff($dob_calcd)->format('%a');
+    $transition_year = floatval($transition_year);
+    $transition_days = $transition_year * 365;
+
+    $game_days_tentative = $real_days * $foal_speed;
+    if ($game_days_tentative < $transition_days) {
+        return floor($game_days_tentative / 365);
     } else {
-        $today = new DateTime($today);
-    }
-
-    $game_days_old = 0;
-    foreach($aging_details as $time_period) {
-        if ($time_period->end == NULL) {
-            $end = $today;
-        } else {
-            $end = min($today, new DateTime($time_period->end));
-        }
-
-        $time_period_length = $end->diff(new DateTime($time_period->start))->days+1;
-
-        $game_days_old += $time_period_length * $time_period->speed;
-
-        if ($end == $today) {
-            break;
-        }
-    }
-
-    return $game_days_old;
-}
-
-/**
- * Determines, given the aging details, whether the horse is a foal or an adult.
- *
- * @param Array $aging_details Array of time period objects to consider. Each time period
- *                           should have properties start (string:Y-m-d H:i:s),
- *                           end (string:Y-m-d H:i:s), and speed (Integer).
- * @param string $today The day to calculate the age against, defaults to today
- * @return bool True if the horse is currently a foal, false if horse is currently an adult
- */
-function equus_horses_extras_check_is_foal($aging_details, $today = NULL) {
-    $time_period = equus_horses_extras_get_time_period($aging_details, $today);
-    return $time_period->lifestage == 'foal';
-}
-
-function equus_horses_extras_get_time_period($aging_details, $today = NULL) {
-    if (empty($aging_details)) {
-        return NULL;
-    }
-
-    if ($today == NULL) {
-        $today = new DateTime('now');
-    } else {
-        $today = new DateTime($today);
-    }
-
-    foreach ($aging_details as $time_period) {
-        $start = new DateTime($time_period->start);
-        if ($time_period->end != NULL) {
-            $end = new DateTime($time_period->end);
-        } else {
-            $end = NULL;
-        }
-
-        if ($today > $start && ($end == NULL || $today < $end)) {
-            return $time_period;
-        }
+        $real_days_foal = $transition_days / $foal_speed;
+        $real_days_adult = $real_days - $real_days_foal;
+        return floor($transition_year + ($real_days_adult * $adult_speed) / 365);
     }
 }
 

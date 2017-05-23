@@ -2,7 +2,10 @@
  * Created by potetofurai on 6/5/16.
  */
 
-var equusHorsesExtrasCalcAge = function(dob, foal_speed, adult_speed, transition_year) {
+var equusHorsesExtrasCalcAge = function(dob) {
+    var foal_speed = 12;
+    var adult_speed = 3;
+    var transition_year = 4;
     var dob_calcd = moment(dob);
     var today = moment();
     var real_days = today.diff(dob_calcd, "days");
@@ -19,7 +22,10 @@ var equusHorsesExtrasCalcAge = function(dob, foal_speed, adult_speed, transition
     }
 };
 
-var equusHorsesExtrasCalcDob = function(age, foal_speed, adult_speed, transition_year) {
+var equusHorsesExtrasCalcDob = function(age) {
+    var foal_speed = 12;
+    var adult_speed = 3;
+    var transition_year = 4;
     var today = moment();
     var age = parseFloat(age);
     var transition_year = parseFloat(transition_year);
@@ -49,9 +55,6 @@ var equusHorsesExtrasToggleAgingSystem = function() {
     var equusHorsesExtrasCalcAgeHelper = function() {
         var age = equusHorsesExtrasCalcAge(
             $('#edit-field-horse-date-of-birth-und-0-value-datepicker-popup-0').val(),
-            $('#edit-foal-speed').val(),
-            $('#edit-adult-speed').val(),
-            $('#edit-transition-year').val()
         );
         $('#edit-temp-age').val(age);
     };
@@ -59,9 +62,6 @@ var equusHorsesExtrasToggleAgingSystem = function() {
     var equusHorsesExtrasCalcDobHelper = function() {
         var dob = equusHorsesExtrasCalcDob(
             $('#edit-temp-age').val(),
-            $('#edit-foal-speed').val(),
-            $('#edit-adult-speed').val(),
-            $('#edit-transition-year').val()
         );
         $('#edit-field-horse-date-of-birth-und-0-value-datepicker-popup-0').val(dob);
     };
