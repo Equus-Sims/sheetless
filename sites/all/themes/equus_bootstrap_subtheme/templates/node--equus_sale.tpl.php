@@ -95,6 +95,26 @@
 
       <?php if ($page): ?>
 
+        <div class="category"><?php print render($sale_type); ?> | <?php print render($content['field_equus_sale_item_type']); ?></div>
+
+        <?php print render($title_prefix); ?>
+        <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
+        <?php print render($title_suffix); ?>
+
+        <?php if ($display_submitted): ?>
+          <div class="submitted">
+            <?php if ($submitted): ?>
+              <span class="date">Posted on <?php print $submitted; ?></span>
+            <?php endif; ?>
+            <?php if ($name): ?>
+              <span class="author">by <?php print $name ?></span>
+            <?php endif; ?>
+            <?php if ($hosting_org): ?>
+              <span class="org">for <?php print l($hosting_org, $hosting_org_path) ?></span>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
+
         <?php if ($cover_image): ?>
           <div class="node-saleimage"><?php print render($cover_image); ?></div>
         <?php endif; ?>
@@ -117,24 +137,9 @@
     </div>
 
     <div class="region-sidebar-small">
-      <div class="category"><?php print render($sale_type); ?> | <?php print render($content['field_equus_sale_item_type']); ?></div>
-
-      <?php print render($title_prefix); ?>
-      <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
-      <?php print render($title_suffix); ?>
-
-      <?php if ($display_submitted): ?>
-        <div class="submitted">
-          <?php if ($submitted): ?>
-            <span class="date">Posted on <?php print $submitted; ?></span>
-          <?php endif; ?>
-          <?php if ($name): ?>
-            <span class="author">by <?php print $name ?></span>
-          <?php endif; ?>
-        </div>
-      <?php endif; ?>
-<!--      <div class="go-to-page-btn">--><?php //print l('Go to Page', "node/{$item_nid}"); ?><!--</div>-->
-<!--      --><?php //print render($content['field_equus_sale_quantity']); ?>
+      <div class="buy-label">Buy</div>
+  <!--      <div class="go-to-page-btn">--><?php //print l('Go to Page', "node/{$item_nid}"); ?><!--</div>-->
+  <!--      --><?php //print render($content['field_equus_sale_quantity']); ?>
       <?php print render($content['field_equus_sale_price_per_unit']); ?>
       <?php
         $form = drupal_get_form('equus_store_form');

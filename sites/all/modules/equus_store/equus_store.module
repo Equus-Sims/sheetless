@@ -18,16 +18,36 @@ function equus_store_form($form, &$form_state) {
 	$node_ID = arg(1);
 	$node = node_load($node_ID);
 	global $user;
-    
-  	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
-		$form['quantity'] = array(
-			'#type' => 'textfield', //you can find a list of available types in the form api
-		    '#title' => t('Quantity'),
-		    '#size' => 10,
-		    '#maxlength' => 10,
-		    '#required' => TRUE, //make this field required
-		    '#default_value' => 1, //make this field required 
-		);
+
+	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
+
+		$quantity = $node->field_equus_sale_quantity['und'][0]['value'];
+
+		if ($quantity == -1) {
+			 $form['quantity'] = array(
+			 	'#type' => 'textfield', //you can find a list of available types in the form api
+	 		    '#title' => t('Quantity'),
+				'#size' => 10,
+				'#maxlength' => 10,
+	 		    '#required' => TRUE, //make this field required
+	 		    '#default_value' => 1, //make this field required 
+	 		);
+		} else {
+			$quantity_options = array();
+
+			for ($i = 1; $i <= $quantity; $i++) {
+				$quantity_options[] = $i;
+			}
+
+			$form['quantity'] = array(
+				'#type' => 'select', //you can find a list of available types in the form api
+			    '#title' => t('Quantity'),
+			    '#options' => $quantity_options,
+			    '#required' => TRUE, //make this field required
+			    '#default_value' => 0, //make this field required 
+			);
+		}
+
 		$form['organization'] = array(
 			'#type' => 'select', //you can find a list of available types in the form api
 		    '#title' => t('Organization'),
@@ -48,7 +68,7 @@ function equus_store_form($form, &$form_state) {
 	} else {
 		$form['submit_button'] = array(
 			'#type' => 'submit',
-			'#value' => t('Buy'),
+			'#value' => t('Submit'),
 		);
 	}
 
