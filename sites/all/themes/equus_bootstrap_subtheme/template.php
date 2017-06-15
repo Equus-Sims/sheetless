@@ -301,6 +301,9 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars)
 	}
 
 	if ($vars['node']->type == 'equus_sale') {
+		$hosting_org = node_load($vars['node']->field_hosting_organization['und'][0]['target_id']);
+		$vars['hosting_org_path'] = 'node/$hosting_org';
+		$vars['hosting_org'] = $hosting_org->title;
 	    // set up render array for sale categories and price
         $sale_type = field_view_field('node', $vars['node'], 'field_equus_sale_type');
         $sale_type['#label_display]'] = 'hidden';
