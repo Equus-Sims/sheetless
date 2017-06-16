@@ -139,7 +139,9 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
         $vars['uid'] = $uid;
         $vars['logged_in'] = true;
         $vars['name'] = format_username($GLOBALS['user']);
-        $vars['user_picture'] = "<img src='" . file_create_url($user->picture->uri) . "' />";
+        if (isset($user->picture)) {
+        	$vars['user_picture'] = "<img src='" . file_create_url($user->picture->uri) . "' />";
+        }
         setlocale(LC_MONETARY, 'en_US');
 		$vars['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
 		$vars['orgs'] = array();
