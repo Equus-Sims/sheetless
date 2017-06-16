@@ -82,7 +82,7 @@
 ?>
 
   <div class="organization"<?php print $attributes; ?>>
-    <div id="hero"><?php print render($content['field_cover_image']); ?></div>
+    <!-- <div id="hero"><?php print render($content['field_cover_image']); ?></div> -->
     <div class="org-sub-header">
       <div class="org-sub-header-block">
         <div class="title">
