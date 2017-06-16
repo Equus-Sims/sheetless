@@ -144,20 +144,20 @@
 		  }
 		?> -->
 		<?php
-	      print '<span class="comments">';
-	      print flag_create_link("likes", $node->nid);
-	      $link_body = "<span class='icon'></span><span class='count'>$comment_count</span>";
-	      print l($link_body, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments', 'html' => TRUE));
-	      print '</span>';
+			if ($node->type == 'equus_sale') {
+				print render($price_per_unit);
+			} elseif ($node->type == 'organization') {
+				print '<span class="org-funds">';
+				print l($bank_balance,$bank_transactions_path);
+				print '</span>';	
+			} else {
+				print '<span class="comments">';
+				print flag_create_link("likes", $node->nid);
+				$link_body = "<span class='icon'></span><span class='count'>$comment_count</span>";
+				print l($link_body, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments', 'html' => TRUE));
+				print '</span>';
+		  	}
 	    ?>
-          <?php if ($node->type == 'equus_sale'): ?>
-              <?php print render($price_per_unit); ?>
-          <?php endif; ?>
-	  	<?php if ($node->type == 'organization'): ?>
-	  		<span class="org-funds">
-				<?php print l($bank_balance,$bank_transactions_path); ?>
-			</span>
-	  	<?php endif; ?>
 		  <?php if ($node->type == 'horse'): ?>
 			<?php print '<span class="tags">'; ?>
 			<?php print render($disciplines); ?>

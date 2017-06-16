@@ -35,7 +35,7 @@ function equus_shows_form_show_node_form_alter(&$form, $form_state) {
     // hide show status field from users
     $form['field_show_status']['#access'] = 0;
     // hide current phase field from users
-    $form['field_show_current_phase']['#access'] = 0;
+    // $form['field_show_current_phase']['#access'] = 0;
 }
 
 /**
@@ -172,22 +172,23 @@ function equus_shows_block_info() {
 	// defines our block. Note that the key in
 	// this array can be anything. For this
 	// tutorial, we use 'tellafriend_form'.
-	$blocks['equus_shows_entry_form'] = array(
-		// 'info' is what you will see when viewing the blocks admin page.
-		// Note that we use the t() (translate) function which lets drupal
-		// translate any text passed in if needed.
-		'info' => t('Enter Show'),
-		// 'cache' how this block will be cached
-		'cache' => DRUPAL_CACHE_GLOBAL,
-	);
-	$blocks['equus_shows_compute_form'] = array(
-		// 'info' is what you will see when viewing the blocks admin page.
-		// Note that we use the t() (translate) function which lets drupal
-		// translate any text passed in if needed.
-		'info' => t('Close Show'),
-		// 'cache' how this block will be cached
-		'cache' => DRUPAL_CACHE_GLOBAL,
-	);
+	// $blocks['equus_shows_entry_form'] = array(
+	// 	// 'info' is what you will see when viewing the blocks admin page.
+	// 	// Note that we use the t() (translate) function which lets drupal
+	// 	// translate any text passed in if needed.
+	// 	'info' => t('Enter Show'),
+	// 	// 'cache' how this block will be cached
+	// 	'cache' => DRUPAL_CACHE_GLOBAL,
+	// 	// 'weight' => -300,
+	// );
+	// $blocks['equus_shows_compute_form'] = array(
+	// 	// 'info' is what you will see when viewing the blocks admin page.
+	// 	// Note that we use the t() (translate) function which lets drupal
+	// 	// translate any text passed in if needed.
+	// 	'info' => t('Close Show'),
+	// 	// 'cache' how this block will be cached
+	// 	'cache' => DRUPAL_CACHE_GLOBAL,
+	// );
 
 	// Note, if you wanted to define multiple blocks, you
 	// could simply define more blocks just like above.
@@ -212,27 +213,27 @@ function equus_shows_block_view($delta = '') {
 	// Drupal passes in $delta (the key of the blocks defined
 	// in hook_block_info. In our case, we're checking for
 	// $delta to be 'tellafriend_form'.
-	switch($delta) {
-		case 'equus_shows_entry_form':
-			// Since this $delta matches our case, we'll define
-			// the subject and contents.
+	// switch($delta) {
+	// 	case 'equus_shows_entry_form':
+	// 		// Since this $delta matches our case, we'll define
+	// 		// the subject and contents.
 			 
-			// 'subject' can be blank ('') or anything you wish to define.
-			$block['subject'] = t('Enter this show');
+	// 		// 'subject' can be blank ('') or anything you wish to define.
+	// 		$block['subject'] = t('Enter this show');
 			 
-			// 'content' are just that, the contents of the block.
-			// In our case, we will be showing a form.
-			// We use drupal_get_form() to return a drupal-built form.
-			// Note that the parameter passed to drupal_get_form is the name
-			// of the function we will build below to define our form.
-			// This can be any function name we define below.
-			$block['content'] = drupal_get_form('equus_shows_entry_form');
-			break;
-		case 'equus_shows_compute_form':
-			$block['subject'] = t('Run this show');
-			$block['content'] = drupal_get_form('equus_shows_compute_form');
-			break;
-	}
+	// 		// 'content' are just that, the contents of the block.
+	// 		// In our case, we will be showing a form.
+	// 		// We use drupal_get_form() to return a drupal-built form.
+	// 		// Note that the parameter passed to drupal_get_form is the name
+	// 		// of the function we will build below to define our form.
+	// 		// This can be any function name we define below.
+	// 		$block['content'] = drupal_get_form('equus_shows_entry_form');
+	// 		break;
+	// 	case 'equus_shows_compute_form':
+	// 		$block['subject'] = t('Run this show');
+	// 		$block['content'] = drupal_get_form('equus_shows_compute_form');
+	// 		break;
+	// }
 	 
 	// Finally, we return the $block array.
 	return $block;
@@ -240,6 +241,11 @@ function equus_shows_block_view($delta = '') {
 
 function equus_shows_entry_form($form, &$form_state) {
 	$show = menu_get_object();
+
+	if (!isset($show)) {
+		$show = menu_get_object('node', 2);		
+	}
+
 	if ($show) {
 		$form_state['showid'] = $show->nid;
 	} else {
@@ -269,7 +275,7 @@ function equus_shows_entry_form($form, &$form_state) {
         // TODO: Expand error messages for why a show cannot be entered to include other states
     } else if ($show_status != 'open') {
         $form['some_text'] = array(
-            '#markup' => "<p>The deadline to enter this show has passed. We hope to see you at the next one!</p>"
+            '#markup' => '<p class="run-show-help-text">The deadline to enter this show has passed. We hope to see you at the next one!</p>'
         );
         return $form;
     }
@@ -289,14 +295,14 @@ function equus_shows_entry_form($form, &$form_state) {
 
 	if (empty($nids)) {
 		$form['some_text'] = array(
-			'#markup' => "<p>Either you have no eligible horses or they have all been entered already. Stuff a few more in your barn and enter them in the show!</p>"
+			'#markup' => '<p class="run-show-help-text">Either you have no eligible horses or they have all been entered already. Stuff a few more in your barn and enter them in the show!</p>'
 		);
 
-		$form['submit_button'] = array(
-			'#type' => 'submit',
-			'#value' => t('Submit entry'),
-			'#disabled' => true
-		);
+		// $form['submit_button'] = array(
+		// 	'#type' => 'submit',
+		// 	'#value' => t('Submit entry'),
+		// 	'#disabled' => true
+		// );
 
 		return $form;
 	}
@@ -449,9 +455,6 @@ function equus_shows_edit_entry_form($form, &$form_state, $entryid) {
         '#value' => t('Save changes'),
     );
     $form_state['rid'] = $entryid;
-
-    dpm($entry);
-    dpm($form_state);
 
     return $form;
 }
@@ -1407,7 +1410,7 @@ function equus_shows_preprocess_views_view_field(&$vars) {
     if ($vars['output'] == 'rp_entry') {
         $member_id = $vars['row']->field_field_shows_member_id[0]['raw']['value'];
         if ($user->uid != $member_id) {
-            $vars['output'] = "not your entry";
+            $vars['output'] = "-";
         } else {
             $show_status = $vars['row']->field_field_show_status[0]['raw']['value'];
             $show_phase = $vars['row']->field_field_show_current_phase[0]['raw']['value'];
@@ -1452,3 +1455,11 @@ function equus_shows_get_horses_entered_in_show($show_id) {
 
     return array_map(function($o) { return $o->endpoints['und'][0]['entity_id']; }, $entries);
 }
+
+// // Make the entry form show up in the right spot on the show page
+// function equus_shows_page_alter(&$page) {
+//   if (!empty($page['content']['equus_shows_equus_shows_entry_form'])) {
+//     $page['content']['equus_shows_equus_shows_entry_form']['#weight'] = 300; // move it to the bottom
+//     $page['content']['#sorted'] = FALSE; // indicate that it still needs to be sorted before rendering
+//   }
+// }

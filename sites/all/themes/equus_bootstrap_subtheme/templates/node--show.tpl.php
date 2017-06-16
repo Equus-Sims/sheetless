@@ -88,7 +88,23 @@
   <?php if (!$page): ?>
     <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
   <?php endif; ?>
-  <?php print render($title_suffix); ?>
+
+  <div id="level-container">
+    <div id="level">
+      <?php print render($content['field_show_level']); ?>  
+    </div>
+  </div>
+
+  <div class="show-info"><?php print l($show_type, $show_type_path); ?> | <?php print render($discipline); ?></div>
+
+  <div class=show-header>
+    <div class="show-title"><?php print $title; ?></div>
+    <?php print render($title_suffix); ?>
+    <div id="host">
+      <div class="host-label">hosted by </div>
+      <?php print l($host, $host_org_path); ?>
+    </div>
+  </div>
 
   <?php if ($display_submitted): ?>
     <div class="submitted">
@@ -96,14 +112,48 @@
     </div>
   <?php endif; ?>
 
-  <div class="content"<?php print $content_attributes; ?>>
-    <?php
-      // We hide the comments and links now so that we can render them later.
-      hide($content['comments']);
-      hide($content['links']);
-      print render($content);
-    ?>
+  <div class="show-details">
+    <div class="content"<?php print $content_attributes; ?>>
+      <div class="details-title">Details</div>
+      <div>
+        <span class="event-label">Level</span>
+        <span class="event-value"><?php print $level; ?></span>
+      </div>
+      <div>
+        <span class="event-label">Type</span>
+        <span class="event-value"><?php print $show_type; ?></span>
+      </div>
+      <div>
+        <span class="event-label">Status</span>
+        <span class="event-value"><?php print $show_status; ?></span>
+      </div>
+      <div>
+        <span class="event-label"><?php print $open_label; ?></span>
+        <span class="event-value"><?php print $open_date; ?></span>
+      </div>
+    </div>
+    <div class="show-about">
+      <div class="body-title">About</div>
+      <div class="body"><?php print render($body); ?></div>
+    </div>
   </div>
+
+  <div class="entry-form">
+    <div class="entry-form-title">Enter</div>
+    <?php print render($entry_form); ?> 
+    <!-- TODO: Remove this when automatic show running is done -->  
+    <?php print render($compute_form); ?>
+    <div class="run-show-help-text">Use this temp button until shows auto run.</div>
+  </div>
+
+  <?php print views_embed_view('show_results', 'block'); ?>
+
+  <?php
+    // We hide the comments and links now so that we can render them later.
+    hide($content['comments']);
+    hide($content['links']);
+    // print render($content);
+  ?>
 
   <?php print render($content['links']); ?>
 

@@ -339,6 +339,97 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars)
 //		$vars['disciplines'] = $disciplines;
 		$vars['disciplines'] = "Barrels and Poles";
 	}
+
+	if ($vars['node']->type == 'show') {
+		$show_level = $vars['node']->field_show_level['und'][0]['value'];
+		$vars['level'] = $show_level;
+
+		// set up render array for show type
+		$show_type = field_view_field('node',$vars['node'],'field_show_type');
+	    $show_type_value = $show_type['#items'][0]['value'];
+	    $vars['show_type'] = ucfirst($show_type_value);
+	    
+	    switch ($show_type_value) {
+    		case 'simulated':
+        		$show_type_path = 'node/1200';
+        		break;
+    		case 'roleplay':
+        		$show_type_path = 'node/1203';
+        		break;
+    		case 'randomized':
+        		$show_type_path = 'node/1244';
+        		break;
+    		case 'creative':
+    			$show_type_path = 'node/1243';
+    			break;
+		}
+	    
+	    $vars['show_type_path'] = $show_type_path;
+
+		// set up render array for discipline term
+	    $discipline = field_view_field('node',$vars['node'],'field_discipline');
+	    $discipline['#label_display'] = 'hidden';
+	    $vars['discipline'] = $discipline;
+
+	    $show_status = $vars['node']->field_show_status['und'][0]['value'];
+	    switch ($show_status) {
+	    	case 'open':
+    			$vars['show_status'] = 'Open';
+    			break;
+    		case 'in_progress':
+    			$vars['show_status'] = 'In Progress';
+    			break;
+    		case 'submissions':
+    			$vars['show_status'] = 'Submissions';
+    			break;
+			case 'completed':
+    			$vars['show_status'] = 'Completed';
+    			break;
+    		case 'new_phase':
+    			$vars['show_status'] = 'New Phase';
+    			break;
+			default:
+				$vars['show_status'] = $show_status;
+		}
+
+		$open_date_raw = new DateTime($vars['node']->field_show_open_date['und'][0]['value']);
+		$open_date = $open_date_raw->format('M. d, Y');
+		$vars['open_date'] = $open_date;
+
+		$current_date = new DateTime();
+
+		if ($open_date_raw <= $current_date) {
+			$vars['open_label'] = 'Opened';
+		} else {
+			$vars['open_label'] = 'Opens';
+		}
+
+	    // get the body text
+	    $body = field_view_field('node',$vars['node'],'body');
+	    $body['#label_display'] = 'hidden';
+	    $vars['body'] = $body;
+
+	    // get the host
+	    $host = field_view_field('node',$vars['node'],'field_hosting_organization');
+	    $host_org_name = $host[0]['#markup'];
+	    $vars['host'] = $host_org_name;
+
+	    // get the host org path
+	    $host_org_id = $host['#items'][0]['target_id'];
+	    $host_org_path = 'node/$host_org_id';
+	    $vars['host_org_path'] = $host_org_path;
+
+	    $entry_form = drupal_get_form('equus_shows_entry_form');
+  		$vars['entry_form'] = $entry_form;
+
+  		// TODO: Remove this when automatic show running is done
+  		$compute_form = drupal_get_form('equus_shows_compute_form');
+  		$vars['compute_form'] = $compute_form;
+
+  		// $show_results = views_embed_view('show_results', 'block_1');
+  		// dpm($show_results);
+  		// $vars['show_results'] = $show_results;
+	}
 }
 
 function equus_bootstrap_subtheme_get_content_bottom($view_mode) {
