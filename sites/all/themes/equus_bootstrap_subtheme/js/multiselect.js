@@ -894,56 +894,56 @@ $.widget("ech.multiselect", {
   });
 
 
-jQuery(window).load(function() {
+// jQuery(window).load(function() {
 
-  var selectForm = '.views-exposed-form';
+//   var selectForm = '.views-exposed-form';
 
-  function filterBtnText() {
-    var filterBtn;
+//   function filterBtnText() {
+//     var filterBtn;
 
-    if ( $(selectForm).is(':hidden') ) {
-      filterBtn = 'Show Filters';
-    } else {
-      filterBtn = 'Hide Filters';
-    };
+//     if ( $(selectForm).is(':hidden') ) {
+//       filterBtn = 'Show Filters';
+//     } else {
+//       filterBtn = 'Hide Filters';
+//     };
 
-    return filterBtn;
-  }
+//     return filterBtn;
+//   }
 
-  var filterButton = "<div id='filterBtn' style='display: none;' class='views-submit-button'><button>" + filterBtnText() + "</button></div>";
+//   var filterButton = "<div id='filterBtn' style='display: none;' class='views-submit-button'><button>" + filterBtnText() + "</button></div>";
 
-  $('.view-filters > form').prepend(filterButton);
+//   $('.view-filters > form').prepend(filterButton);
 
-  $('#filterBtn').fadeIn('slow');
+//   $('#filterBtn').fadeIn('slow');
   
-  // disabling this for now because it interferes with the Chosen module
-  // which does something similar.
-  if ( ($('.chosen-container').length <= 0) && ($('select').length > 0) ) {
+//   // disabling this for now because it interferes with the Chosen module
+//   // which does something similar.
+//   if ( ($('.chosen-container').length <= 0) && ($('select').length > 0) ) {
 
-    $('select[id*="breed"]').multiselect().multiselectfilter();
+//     $('select[id*="breed"]').multiselect().multiselectfilter();
 
-    $('select[multiple]').multiselect();
+//     $('select[multiple]').multiselect();
 
-    $('select:not([multiple])').multiselect({
-      multiple: false
-    });
+//     $('select:not([multiple])').multiselect({
+//       multiple: false
+//     });
 
-  };
+//   };
 
-  $('#filterBtn button').click(function(e) {
-    e.preventDefault();
+//   $('#filterBtn button').click(function(e) {
+//     e.preventDefault();
 
-    if ( $('.views-exposed-form').is(':hidden') ) {
-      $(selectForm).slideDown(function() {
-        $('#filterBtn button').html(filterBtnText());
-      });
-    } else {
-      $(selectForm).slideUp(function() {
-        $('#filterBtn button').html(filterBtnText());
-      });
-    };
+//     if ( $('.views-exposed-form').is(':hidden') ) {
+//       $(selectForm).slideDown(function() {
+//         $('#filterBtn button').html(filterBtnText());
+//       });
+//     } else {
+//       $(selectForm).slideUp(function() {
+//         $('#filterBtn button').html(filterBtnText());
+//       });
+//     };
 
-  });
+//   });
 
   });
 
