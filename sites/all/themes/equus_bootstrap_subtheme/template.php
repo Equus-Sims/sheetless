@@ -85,8 +85,26 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
     //         $item['title'] = "<img src=" . base_path() . path_to_theme() . "/horseshoe-nearblack.svg />";
     //     }
     // }
+
 	$vars['main_menu'] = theme('links__system_main_menu', array('links' => $menu));
-	$vars['title_logo'] = "<img src=" . base_path() . path_to_theme() . "/horseshoe-nearblack.svg />";
+
+    // ICONS 
+	$vars['title_logo'] = "<img src=" . base_path() . path_to_theme() . "/horseshoe-white.svg />";
+	$vars['settings_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/settings-white.svg />";
+	$vars['dashboard_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/activity-white.svg />";
+	$vars['messages_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/mail-white.svg />";
+	$vars['bell_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/bell-white.svg />";
+	$vars['credit_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/package-white.svg />";
+	$vars['chevron_down_icon'] = "<img class ='sidebar-chevron expand' src=" . base_path() . path_to_theme() . "/icons/chevron-down-white.svg />";
+	$vars['chevron_up_icon'] = "<img class ='sidebar-chevron' src=" . base_path() . path_to_theme() . "/icons/chevron-up-white.svg />";
+	$vars['plus_circle_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/plus-circle-white.svg />";
+	$vars['log_in_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/log-in-white.svg />";
+	$vars['log_out_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/log-out-white.svg />";
+	$vars['dollar_icon'] = "<img class ='sidebar-dollar' src=" . base_path() . path_to_theme() . "/icons/dollar.svg />";
+	$vars['credit_card_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/credit-card-white.svg />";
+	$vars['register_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/user-plus-white.svg />";
+
+	// END ICONS
 
 	if (arg(0, $alias) == 'user' && arg(1, $alias) == 'login') {
 		$vars['theme_hook_suggestions'][] = 'page__login';

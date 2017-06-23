@@ -102,18 +102,21 @@
                 </nav>
                 <nav id="sidebar-menu">
                     <ul>
-                        <li><?php print l('Edit Profile', "user/$uid/edit"); ?></li>
-                        <li><?php print l('Dashboard', 'dashboard'); ?></li>
-                        <li>Messages</li>
-                        <li>Notifications</li>
-                        <li>Credits: <?php print $total_credits; ?>
-                            <ul>
+                        <li><?php print l("$dashboard_icon Dashboard", 'dashboard', array('html' => TRUE)); ?></li>
+
+                        <li><?php print l("$messages_icon Messages", 'messages', array('html' => TRUE)); ?></li>
+
+                        <li><?php print l("$bell_icon Notifications", 'dashboard', array('html' => TRUE)); ?></li>
+
+                        <li><div class="sidebar-credit-item"><?php print $credit_icon . "Credits: " . $total_credits . $chevron_up_icon . $chevron_down_icon; ?></div>
+                            <ul id="credit-info" class="expand">
                                 <li><span>Regular Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></span></li>
                                 <li><span>Organization Credit: <?php print l($org_credit, 'dashboard'); ?></span></li>
                             </ul>
                         </li>
-                        <li>Net Worth: <?php print $net_worth; ?>
-                            <ul>
+
+                        <li><div class="sidebar-net-worth-item"><?php print $credit_card_icon . "Net Worth: " . $net_worth . $chevron_up_icon . $chevron_down_icon; ?></div>
+                            <ul id="banking-info" class="expand">
                                 <?php foreach($orgs as $org): ?>
                                     <li><span><?php
                                             print l($org['name'], $org['path'], array('attributes' => array('class' => array('org-name'))));
@@ -123,8 +126,9 @@
                                 <?php endforeach; ?>
                             </ul>
                         </li>
-                        <li>Add new
-                            <ul>
+
+                        <li><div class="sidebar-create-item"><?php print $plus_circle_icon . "Create: " . $chevron_up_icon . $chevron_down_icon; ?></div>
+                            <ul id="create_items" class="expand">
                                 <li><?php print l('Blog Entry', 'node/add/blog'); ?></li>
                                 <li><?php print l('Horse', current_path(), array('fragment' => 'overlay=node/add/horse')); ?></li>
                                 <li><?php print l('Organization', 'node/add/organization'); ?></li>
@@ -135,14 +139,16 @@
                             </ul>
                         </li>
 
-                        <li><?php print l('Logout', 'user/logout'); ?></li>
+                        <li><?php print l("$settings_icon Edit Profile", 'user/$uid/edit', array('html' => TRUE)); ?></li>
+
+                        <li><?php print l("$log_out_icon Logout", 'user/logout', array('html' => TRUE)); ?></li>
                     </ul>
                 </nav>
             <?php else: ?>
                 <nav id="sidebar-menu">
                     <ul>
-                        <li><?php print l('Login', 'user/login'); ?></li>
-                        <li><?php print l('Register', 'user/register'); ?></li>
+                        <li><?php print l("$log_in_icon Login", 'user/login', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$register_icon Register", 'user/register', array('html' => TRUE)); ?></li>
                     </ul>
                 </nav>
             <?php endif; ?>

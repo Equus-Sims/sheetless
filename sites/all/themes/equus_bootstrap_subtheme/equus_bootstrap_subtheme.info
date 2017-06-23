@@ -44,6 +44,7 @@ stylesheets[all][] = css/multiselect.css
 ; ;;;;;;;;;;;;;;;;;;;;;
 
 scripts[] = 'js/multiselect.js'
+scripts[] = 'js/sidebar.js'
 
 ; 
 ; scripts[] = 'bootstrap/js/affix.js'

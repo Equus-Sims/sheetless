@@ -119,6 +119,7 @@ button#edit-preview {
     text-transform: uppercase;
     font-size: 12px;
     color: #6d6d6d;
+    margin-bottom: 10px;
 }
 
 /* End Show List */
@@ -515,9 +516,14 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 }
 
 #sidebar {
-    width: 275px;
+    width: 230px;
+    flex-shrink: 0;
     background-color: #1E5454;
     /*color: white;*/
+}
+
+#sidebar-menu {
+    margin-top: 15px;
 }
 
 #sidebar a {
@@ -527,40 +533,60 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 }
 
 #sidebar a:hover {
-    color: grey;
+    /*color: grey;
+    display: inline-block;
+    border-bottom: 2px solid #40B392;*/
+}
+
+#sidebar .sidebar-icon {
+    color: white;
+    margin: 5px;
+    width: 22px;
+}
+
+#sidebar .sidebar-chevron {
+    width: 14px;
+    color: white;
+}
+
+#sidebar .sidebar-dollar {
+    width: 14px;
+    color: white;
+    margin: 8px;
+}
+
+#sidebar .expand {
+    display: none;
+}
+
+#sidebar .sidebar-create-item:hover,
+#sidebar .sidebar-net-worth-item:hover,
+#sidebar .sidebar-credit-item:hover {
+    cursor: pointer;
 }
 
 #sidebar #account {
     color: white;
-    font-family: "Montserrat";
-    font-size: 16px;
-    min-height: 85px;
-    /*border-bottom: 1px solid #d2d2d2;
-    padding-bottom: 20px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;*/
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    min-height: 50px;
+    border-bottom: 1px solid #3a6162;
+    margin: 0 5% 0 5%;
 }
 
 #sidebar #account img {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    margin: 15px;
+    display: inline-block;
 }
 
 #sidebar #account a {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 12px;
-}
-
-#sidebar #sidebar-menu {
-    margin-top: 15px;
+    display: inline-block;
+    /*width: 100%;*/
+    /*text-align: center;*/
+    font-size: 14px;
+    font-weight: 400;
 }
 
 #sidebar #sidebar-menu ul {
@@ -568,14 +594,14 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     /*color: #6d6d6d;*/
     list-style: none;
     font-size: 12px;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     font-weight: 600;
     line-height: 1.5em;
     padding-left: 0;
 }
 
 #sidebar #sidebar-menu ul li {
-    padding: 10px 0 10px 20px;
+    padding: 5px 0 10px 15px;
     vertical-align: middle;
 }
 
@@ -592,10 +618,23 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     white-space: nowrap;
 }
 
+/* search block */
+#sidebar .search-block {
+    position: fixed;
+    bottom: 0;
+    width: 230px;
+}
+
+#sidebar .search-block .input-group {
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* end search block */
+
 #content-area {
-    width: 100%;
-    background-color: #f5f5f5;
-    padding-bottom: 40px;
+    background-color: white;
+    /*background-color: #f5f5f5;*/
     /*box-shadow: -3px 0px 3px rgba(0,0,0,0.2);*/
 }
 
