@@ -77,7 +77,8 @@ tr {
 
 tr:hover,
 thead {
-    background-color: #eee;
+    /*background-color: #eee;*/
+    background: #f5f5f5;
 }
 
 tr a {
