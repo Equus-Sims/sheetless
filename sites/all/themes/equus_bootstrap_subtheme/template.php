@@ -333,7 +333,8 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars)
         $item_type['#label_display]'] = 'hidden';
         $vars['item_type'] = $item_type;
 
-	    $price_per_unit = field_view_field('node',$vars['node'],'field_equus_sale_price_per_unit');
+	    $price_per_unit = field_view_field('node',$vars['node'],'field_equus_sale_price_per_unit',
+	    	'default');
 	    $price_per_unit['#label_display'] = 'hidden';
 	    $vars['price_per_unit'] = $price_per_unit;
 
