@@ -171,11 +171,11 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <footer class="footer container">
+                <?php print render($page['footer']); ?>
+            </footer>
         </div>
     </div>
       <!-- content_bottom_region is being printed by the node.tpl.php file -->
   </div>
 </div>
-<footer class="footer container">
-  <?php print render($page['footer']); ?>
-</footer>

@@ -3295,10 +3295,82 @@ div.tabbable.tabs-left > ul {
 /* Footer */
 
 footer.footer {
-    background: #6D6D6D;
-    padding: 50px;
+    /*background: #bababa;*/
+    background: #dddddd;
+    padding: 3% 5%;
     margin-top: 0;
     border: none;
+    text-align: center;
+    position: relative;
+}
+
+footer.footer .footer-title {
+    color: #383737;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: top;
+    margin-bottom: 10px;
+}
+
+footer.footer #equus-season-icon {
+    display: inline-block;
+    border-radius: 50%;
+    /*background: #353535;*/
+    /*background: #6E6E6E;*/
+    background: #383737;
+    padding: 8px;
+    border: 3px solid white;
+    position: absolute;
+    top: -22px;
+    left: 48%;
+}
+
+footer.footer #equus-year-text {
+    display: block;
+    font-family: 'Just Another Hand', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 1.7em;
+    /*color: #6E6E6E;*/
+    color: #383737;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+footer.footer #footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 30px 5% 0 5%;
+}
+
+footer.footer .view-footer-news-block {
+    color: #6D6D6D;
+    text-align: left;
+}
+
+footer.footer #footer-content #recent-news {
+    width: 30%;
+}
+
+footer.footer #footer-content #recent-news a {
+    font-weight: 600;
+}
+
+footer.footer #site-logo {
+    display: block;
+    margin: 0 0 10px 0;
+}
+
+footer.footer #site-name {
+    display: block;
+    margin-top: 0;
+}
+
+footer.footer #site-name a {
+    /*color: #6D6D6D;*/
+    color: #383737;
+    vertical-align: top;
 }
 
 footer.footer a:hover, footer.footer a:focus, footer.footer a:active {
@@ -3311,77 +3383,33 @@ footer.footer > div.region-footer {
     max-width: 1000px;
 }
 
-footer.footer div > section {
-    display: inline-block;
-    vertical-align: top;
-    width: 13%;
+footer.footer ul {
+    padding-left: 0;
+    text-align: left;
 }
 
-footer.footer div > section:not(:last-child) {
-    margin-right: 3%;
-}
-
-footer.footer div section > h2.block-title {
-    color: #383737;
-    text-transform: uppercase;
-    font-size: 1em;
-    font-weight: bold;
-    display: inline-block;
+footer.footer li {
+    display: block;
+    font-weight: 600;
+    color: #6D6D6D;
 }
 
 footer.footer a,
-footer.footer a:hover,
 footer.footer a:visited,
 footer.footer a:active {
-    color: #bababa;
+    color: #6D6D6D;
     background: none;
+    text-decoration: none;
 }
 
-footer.footer div section ul.menu a,
-footer #block-views-footer-news-block-block .view-footer-news-block,
-footer #block-views-footer-news-block-block .view-content {
-    padding: 2px 0;
-    font-size: .95em;
-    font-weight: bold;
-}
+/*footer.footer a:hover {
+    border-bottom: 2px solid #40B392;
+}*/
 
-footer #block-equus-core-footer-logo {
-    padding-right: 3%;
-    border-right: 1px solid #888;
-    width: 15%;
-}
-
-footer #block-equus-core-footer-logo img {
-    max-width: 80%;
+footer.footer #footer-content #social-media {
+    width: 100%;
     display: block;
-}
-
-footer #block-equus-core-footer-logo span {
-    display: block;
-    font-weight: bold;
-}
-
-footer #block-equus-core-footer-logo .footer-header {
-    color: #383737;
-    font-size: 1em;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    line-height: 1.1;
-}
-
-footer #block-equus-core-footer-logo .footer-year {
-    color: #bababa;
-}
-
-footer #block-views-footer-news-block-block {
-    width: 31%;
-}
-
-footer #block-views-footer-news-block-block .view-footer-news-block,
-footer #block-views-footer-news-block-block .view-content {
-    color: #bababa;
-    font-weight: bold;
-    line-height: 1.7em;
+    text-align: left;
 }
 
 /* End Footer */
