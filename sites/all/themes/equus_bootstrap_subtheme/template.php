@@ -94,7 +94,7 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	$vars['dashboard_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/activity-white.svg />";
 	$vars['messages_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/mail-white.svg />";
 	$vars['bell_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/bell-white.svg />";
-	$vars['credit_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/package-white.svg />";
+	$vars['credit_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/diamond.svg />";
 	$vars['chevron_down_icon'] = "<img class ='sidebar-chevron expand' src=" . base_path() . path_to_theme() . "/icons/chevron-down-white.svg />";
 	$vars['chevron_up_icon'] = "<img class ='sidebar-chevron' src=" . base_path() . path_to_theme() . "/icons/chevron-up-white.svg />";
 	$vars['plus_circle_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/plus-circle-white.svg />";
