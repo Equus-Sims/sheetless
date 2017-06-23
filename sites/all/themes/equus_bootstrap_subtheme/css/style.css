@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300,400,700,900);
+@import url(https://fonts.googleapis.com/css?family=Grand+Hotel|Just+Another+Hand|Over+the+Rainbow);
 
 @font-face {
     font-family: icons;
@@ -60,14 +61,6 @@ div.main-container > h1 {
 
 #edit-text-entry-format {
     display: none;
-}
-
-#site-name a {
-    color: white;
-}
-
-#site-name a:hover {
-    text-decoration: none;
 }
 
 /* Tables */
@@ -494,11 +487,27 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     font-family: "Montserrat";
     text-transform: uppercase;
     font-size: 24px;
+}
+
+#site-logo {
+    width: 28px;
+    margin: 18px 10px 0 19px;
+}
+
+#site-name {
+    margin-top: 18px;
+}
+
+#site-name a {
     color: white;
-    margin-left: 10px;
-    padding: 0 0 10px 10px;
-    letter-spacing: 5px;
-    /*line-height: 2; */
+    font-family: 'Just Another Hand', 'Open Sans', Helvetica, Arial, sans-serif;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-size: 34px;
+}
+
+#site-name a:hover {
+    text-decoration: none;
 }
 
 #content-container {

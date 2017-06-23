@@ -81,7 +81,9 @@
 
 <div class="main-container container">
     <header id="top-bar" role="banner"> <!-- /#top-bar -->
-        <!-- <h1><?php print $title_logo . $site_name; ?></h1> -->
+        <h1 id="site-logo">
+            <img src="<?php print $logo; ?>">
+        </h1>
         <h1 id="site-name"><?php print l('Equus','',array('absolute'=>true)); ?></h1>
         <header id="navbar" role="navigation">
             <nav id="main-menu">
