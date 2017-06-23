@@ -228,6 +228,16 @@ button#edit-preview {
 
 /* END Icons */
 
+/* Home Page */
+#hero #block-imageblock-3 .block-body {
+    font-family: 'Just Another Hand', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 8vw;
+    text-transform: none;
+    top: 24%;
+}
+
+/* End home Page */
+
 /* Login Page & Register Page */
 
 .page-user-login section, 
