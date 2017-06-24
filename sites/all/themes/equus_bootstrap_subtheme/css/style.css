@@ -673,6 +673,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     min-height: 500px;
     max-width: 1100px;
     position: relative;
+    padding-bottom: 40px;
 }
 
 #content-with-sidebar {
