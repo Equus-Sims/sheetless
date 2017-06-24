@@ -98,7 +98,13 @@
   <div class="show-info"><?php print l($show_type, $show_type_path); ?> | <?php print render($discipline); ?></div>
 
   <div class=show-header>
-    <div class="show-title"><?php print $title; ?></div>
+    <div class="show-title">
+      <?php print $title; ?>
+      <span class="edit-delete">
+        <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+        <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+      </span>
+    </div>
     <?php print render($title_suffix); ?>
     <div id="host">
       <div class="host-label">hosted by </div>

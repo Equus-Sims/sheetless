@@ -2575,8 +2575,14 @@ table.cols-3 tr td,
     text-transform: uppercase;
 }
 
+img.node-icon {
+    width: 18px;
+    margin-bottom: 3px;
+}
+
 .comment > .links > li:before,
-.node-links > .edit-delete > span:before {
+.node-links > .edit-delete > span:before,
+ {
     color: #777;
     font-family: "icons";
     font-size: 1em;

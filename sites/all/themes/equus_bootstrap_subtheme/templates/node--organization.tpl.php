@@ -90,7 +90,12 @@
 <!--					--><?php //echo render($user_profile['user_picture']); ?>
 <!--				</span>-->
           <div class="user-info">
-            <h1><?php echo $title; ?></h1>
+            <h1><?php echo $title; ?>
+              <span class="edit-delete">
+                <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+                <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+              </span>
+            </h1>
             <span class="org-type"><?php echo "Organization | "; print render($content['equus_organizations_type']); ?></span>
           </div>
         </div>

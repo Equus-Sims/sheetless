@@ -237,8 +237,14 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 //	$vars['toolbar'] = theme('equus_toolbar', $vars_toolbar);
 }
 
-function equus_bootstrap_subtheme_preprocess_node(&$vars)
-{
+function equus_bootstrap_subtheme_preprocess_node(&$vars) {
+
+	/* ICONS */
+	$vars['edit_icon'] = "<img class ='node-icon' src=" . base_path() . path_to_theme() . "/icons/edit-grey.svg />";
+	$vars['delete_icon'] = "<img class ='node-icon' src=" . base_path() . path_to_theme() . "/icons/trash-2-grey.svg />";
+
+	/* END ICONS */
+
 	$vars['base_path'] = base_path();
 
 	$vars['theme_hook_suggestions'][] = 'node__' . $vars['view_mode'];
