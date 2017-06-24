@@ -1397,7 +1397,7 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 .view.equus-tile-view .view-content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .page-user .view-user-blog-block {
