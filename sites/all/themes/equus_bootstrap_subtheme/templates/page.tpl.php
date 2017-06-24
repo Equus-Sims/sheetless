@@ -143,6 +143,9 @@
 
                         <li><?php print l("$log_out_icon Logout", 'user/logout', array('html' => TRUE)); ?></li>
                     </ul>
+                    <div class="search-block">
+                        <?php print render($search_box); ?>
+                    </div>
                 </nav>
             <?php else: ?>
                 <nav id="sidebar-menu">

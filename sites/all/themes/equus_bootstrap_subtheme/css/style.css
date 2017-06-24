@@ -633,12 +633,29 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 #sidebar .search-block {
     position: fixed;
     bottom: 0;
-    width: 230px;
+    width: 186px;
+    margin: 10px;
+}
+
+#sidebar .search-block .form-group {
+    margin-bottom: 0;
 }
 
 #sidebar .search-block .input-group {
     display: flex;
     justify-content: flex-start;
+}
+
+#sidebar .search-block .input-group input#edit-keys.form-control.form-text {
+    padding: 0 5px;
+}
+
+#sidebar .search-block button.btn.btn-default.search-button {
+    padding: 0 0 1px 0;
+}
+
+#sidebar .search-block button.btn.btn-default.search-button:hover {
+    background-color: #1E5454;
 }
 
 /* end search block */
@@ -675,10 +692,6 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 #widgets {
     display: flex;
     width: 300px;
-}
-
-#widgets #search-block-form {
-    margin-top: 15px;
 }
 
 .form-control {

@@ -5,6 +5,22 @@
  * template.php
  */
 
+
+
+// Override the bootstrap search box submit icon
+function equus_bootstrap_subtheme_bootstrap_search_form_wrapper($variables) {
+  $output = '<div class="input-group">';
+  $output .= $variables['element']['#children'];
+  $output .= '<span class="input-group-btn">';
+  $output .= '<button type="submit" class="btn btn-default search-button">';
+  $output .= '<img class ="sidebar-icon" src=' . base_path() . path_to_theme() . '/icons/search-white.svg />';
+  $output .= '</button>';
+  $output .= '</span>';
+  $output .= '</div>';
+  return $output;
+}
+
+
 function equus_bootstrap_subtheme_form_comment_form_alter(&$form, &$form_state, &$form_id) {
   $form['comment_body']['#after_build'][] = '_equus_bootstrap_subtheme_customize_comment_form';
 }
@@ -76,7 +92,10 @@ function equus_bootstrap_subtheme_node_view_alter(&$build) {
 }
 
 function equus_bootstrap_subtheme_preprocess_page(&$vars) {
-	 $alias = drupal_get_path_alias();
+	$alias = drupal_get_path_alias();
+
+	$search_box = drupal_get_form('search_form');
+  	$vars['search_box'] = $search_box;
 
 	$menu = menu_navigation_links('main-menu');
     // foreach ($menu as &$item) {
