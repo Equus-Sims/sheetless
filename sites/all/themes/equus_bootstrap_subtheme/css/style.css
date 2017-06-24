@@ -2350,20 +2350,9 @@ table.cols-3 tr td,
     margin-top: 2.6em;
 }
 
-.page-organization .view-transactions table thead {
-    background: #E9F4EE;
-    color: #829E90;
-}
-
 .page-organization .view-transactions table td,
 .page-organization .view-transactions table th {
-    padding: 30px 25px;
     border: 1px solid #DFDEE4;
-    font-weight: normal;
-}
-
-.page-organization .view-transactions table td {
-    background: #FFFFFF;
 }
 
 /* END Bank */
