@@ -1325,10 +1325,39 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 
 
 /* Pagination Styling */
-.pagination > li > a, .pagination > li > span {
+.pagination {
+    border-radius: 0;
+}
+
+.pagination > li > a, 
+.pagination > li > span {
     border: none;
-    background-color: #f5f5f5;
-    padding: 6px;
+    /*background-color: #f5f5f5;*/
+    color: #6d6d6d;
+    margin: 0 5px;
+    padding: 4px;
+}
+
+.pagination > li > a:hover, 
+.pagination > li > span:hover {
+    /*border-bottom: 2px solid #40B392;*/
+    color: #40B392;
+    background: none;
+    border-radius: 0;
+}
+
+.pagination>.disabled>span, 
+.pagination>.disabled>span:hover, 
+.pagination>.disabled>span:focus, 
+.pagination>.disabled>a, 
+.pagination>.disabled>a:hover,
+.pagination>.disabled>a:focus {
+    border-bottom: none;
+}
+
+.pagination>li:first-child>a, 
+.pagination>li:first-child>span {
+    border-radius: 0;
 }
 
 .pagination > .active > a,
@@ -1341,23 +1370,24 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 .pagination > .active.last > span,
 .pagination > .active.first > a,
 .pagination > .active.first > span {
-    background-color: #f5f5f5;
-    color: #6E6E6E;
+    background: none;
+    color: #6d6d6d;
+    border-bottom: 2px solid #40B392;
 }
 
-.pagination > li > a:hover,
+/*.pagination > li > a:hover,
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
     background-color: #f5f5f5;
-}
+}*/
 
 .pagination > .next a,
 .pagination > .last a,
 .pagination > .prev a,
 .pagination > .first a {
     text-transform: uppercase;
-    color: #256E5A;
+    color: #6d6d6d;
 }
 
 /* styling on grid view of equus tiles
