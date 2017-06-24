@@ -1424,6 +1424,15 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     margin: 30px 0;
 }
 
+.views-exposed-widgets {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+div.view-filters {
+    margin-bottom: 30px;
+}
 
 .view.equus-tile-view .equus-tile-row {
     width: 31%;
@@ -2095,14 +2104,14 @@ table.cols-3 tr td,
     display: none;
 }*/
 
-.views-exposed-form .views-exposed-widget {
+/*.views-exposed-form .views-exposed-widget {
     width: auto;
     padding-top: .9em;
-}
+}*/
 
-.form-type-select {
+/*.form-type-select {
     padding: 10px 16px 10px 0;
-}
+}*/
 
 .btn, .form-item input {
     border-radius: 0;
@@ -2115,8 +2124,8 @@ table.cols-3 tr td,
     -webkit-box-shadow: none;
 }
 
-.views-exposed-widget.views-submit-button,
-.views-exposed-widget.views-reset-button,
+/*.views-exposed-widget.views-submit-button,
+.views-exposed-widget.views-reset-button,*/
 #filterBtn {
     display: inline-block;
     width: auto;
@@ -2163,7 +2172,10 @@ table.cols-3 tr td,
 .views-reset-button #edit-reset {
     border: none;
     font-style: italic;
-    padding: 10px 0;
+    padding-left: 1%;
+    background: none;
+    text-transform: lowercase;
+    color: #6d6d6d;
 }
 
 .views-submit-button > button:hover,
@@ -2920,10 +2932,6 @@ table.cols-3 tr td,
     width: 79%;
     display: inline-block;
     margin-bottom: 90px;
-}
-
-.view-show-list {
-    margin-top: 22px;
 }
 
 .entry-form label {
