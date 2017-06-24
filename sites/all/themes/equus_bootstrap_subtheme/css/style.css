@@ -878,7 +878,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     top: 34.5%;
     width: 100%;
     /*font-family: "Montserrat";*/
-    font-family: 'Lato';
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     text-transform: uppercase; 
     font-weight: 400;
     font-size: 4vw;
@@ -2041,7 +2041,7 @@ table.cols-3 tr td,
 
 .page-user .org-funds a,
 .node-type-organization .stats .org-funds a {
-    font-family: Lato;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     font-weight: 800;
     font-size: 22px;
     color: #6E6E6E;
@@ -2296,7 +2296,7 @@ table.cols-3 tr td,
 .node-type-organization .block,
 .node-type-organization .block .view,
 .node-type-organization .main-container .block {
-    font-family: 'Lato',Helvetica,Arial,sans-serif;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
 }
 
 .node-type-organization .region-content > .block {
@@ -2339,7 +2339,7 @@ table.cols-3 tr td,
 .node-type-organization #block-views-user-property-list-block-1 div.view-user-property-list h2:first-child {
     color: #7D9B8F;
     font-size: 1.3em;
-    font-family: 'Lato',Helvetica,Arial,sans-serif;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -3500,7 +3500,7 @@ footer.footer #footer-content #social-media {
     padding: 0;
     font-size: 12px;
     /*text-transform: uppercase;*/
-    font-family: 'Lato';
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     height: 30px;
     /*border: none;*/
 }
