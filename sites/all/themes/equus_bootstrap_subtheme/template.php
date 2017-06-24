@@ -460,7 +460,7 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	    // get the host org path
 	    $host_org_id = $host['#items'][0]['target_id'];
-	    $host_org_path = 'node/$host_org_id';
+	    $host_org_path = "node/$host_org_id";
 	    $vars['host_org_path'] = $host_org_path;
 
 	    $entry_form = drupal_get_form('equus_shows_entry_form');
