@@ -1557,6 +1557,10 @@ div.view-filters {
     width: 100%;
 }
 
+.view-daily-digest .views-submit-button button {
+    padding: 5px 20px;
+}
+
 table.cols-3 span.views-label {
     display: none;
 }
@@ -2140,7 +2144,7 @@ table.cols-3 tr td,
     -moz-border-radius: 0;
     -o-border-radius: 0;
     -webkit-border-radius: 0;
-    /*padding: 9px 30px;*/
+    padding: 9px 28px;
     text-transform: uppercase;
     border: none;
     color: #FFF;
@@ -3523,6 +3527,10 @@ footer.footer #footer-content #social-media {
 
 #edit-submit-show-list {
     margin-top: 46px;
+}
+
+.view-show-list .views-submit-button > button {
+    padding: 5px 20px;
 }
 
 .chosen-container-multi .chosen-choices li.search-choice {
