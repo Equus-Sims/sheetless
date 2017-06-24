@@ -2985,14 +2985,17 @@ div.form-type-select.form-item-horseid.form-item.form-group {
 #host .host-label {
     padding-bottom: 5px;
     color: #6E6E6E;
-    font-style: italic;
     font-size: .9em;
 }
 
 #host a {
-    font-size: 1em;
+    font-size: 1.8em;
+    line-height: 1.8em;
     color: #256E5A;
-    font-weight: 600;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-family: 'Just Another Hand', 'Open Sans', Helvetica, Arial, sans-serif;
+    text-transform: none;
 }
 
 .show-info {
