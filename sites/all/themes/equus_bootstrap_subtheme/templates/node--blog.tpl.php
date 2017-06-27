@@ -191,11 +191,12 @@
         print '</span>';
       }
       ?>
-      <span class="edit-delete">
-        <!-- <?php print $base_path;?>node/<?php print $id;?>/edit -->
-        <span class="edit-icon"><?php print l("Edit", "node/{$node->nid}/edit").' '; ?></span>
-        <span class="delete-icon"><?php print l("Delete", "node/{$node->nid}/delete").' '; ?></span>
-      </span>
+      <?php if (node_access('update', $node)): ?>
+        <span class="edit-delete">
+          <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+          <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+        </span>
+      <?php endif; ?>
     </div>
   </div>
 

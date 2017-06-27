@@ -91,10 +91,12 @@
 <!--				</span>-->
           <div class="user-info">
             <h1><?php echo $title; ?>
-              <span class="edit-delete">
-                <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
-                <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
-              </span>
+              <?php if (node_access('update', $node)): ?>
+                <span class="edit-delete">
+                  <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+                  <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+                </span>
+              <?php endif; ?>
             </h1>
             <span class="org-type"><?php echo "Organization | "; print render($content['equus_organizations_type']); ?></span>
           </div>

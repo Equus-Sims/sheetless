@@ -100,6 +100,13 @@
       <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
       <?php print render($title_suffix); ?>
 
+      <?php if (node_access('update', $node)): ?>
+        <span class="edit-delete">
+          <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+          <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+        </span>
+      <?php endif; ?>
+
       <?php if ($display_submitted): ?>
         <div class="submitted">
           <?php if ($name): ?>
