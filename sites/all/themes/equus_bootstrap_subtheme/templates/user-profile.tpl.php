@@ -59,7 +59,7 @@
 	</div>
 	<div class="user-profile-content">
 		<div class="user-profile-content-about">
-			<h2 class="content-header">About Me</h2>
+			<div class="content-label">About Me</div>
 			<div>
 				<span class="profile-label">Birthday</span>
 				<span class="profile-value"><?php echo $user_dob; ?></span>
@@ -78,7 +78,7 @@
 			</div>
 		</div>
 		<div class="user-profile-content-bio">
-			<h2 class="content-header">Biography</h2>
+			<div class="content-label">Biography</div>
 			<span class="profile-value">
 				<?php if (isset($user_biography)): ?>
 					<?php echo $user_biography; ?>

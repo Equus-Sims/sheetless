@@ -122,7 +122,7 @@
 
   <div class="show-details">
     <div class="content"<?php print $content_attributes; ?>>
-      <div class="details-title">Details</div>
+      <div class="content-label">Details</div>
       <div>
         <span class="event-label">Level</span>
         <span class="event-value"><?php print $level; ?></span>
@@ -141,13 +141,13 @@
       </div>
     </div>
     <div class="show-about">
-      <div class="body-title">About</div>
+      <div class="content-label">About</div>
       <div class="body"><?php print render($body); ?></div>
     </div>
   </div>
 
   <div class="entry-form">
-    <div class="entry-form-title">Enter</div>
+    <div class="content-label">Enter</div>
     <?php print render($entry_form); ?> 
     <!-- TODO: Remove this when automatic show running is done -->  
     <?php print render($compute_form); ?>
