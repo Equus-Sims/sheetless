@@ -143,10 +143,10 @@
 
                         <li><?php print l("$log_out_icon Logout", 'user/logout', array('html' => TRUE)); ?></li>
                     </ul>
-                    <div class="search-block">
-                        <?php print render($search_box); ?>
-                    </div>
                 </nav>
+                <div class="search-block">
+                    <?php print render($search_box); ?>
+                </div>
             <?php else: ?>
                 <nav id="sidebar-menu">
                     <ul>
@@ -160,7 +160,7 @@
             <div id="hero">
                 <?php print render($page['header']); ?>
             </div>
-            <div id="content">
+            <div id="content" class="sidebar-expand">
                 <?php print $messages; ?>
                 <div id="content-with-sidebar">
                     <div>

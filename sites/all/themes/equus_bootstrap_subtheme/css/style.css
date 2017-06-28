@@ -493,6 +493,9 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     justify-content: space-between;
     background-color: #023536;
     min-height: 65px;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
 }
 
 #top-bar h1 {
@@ -523,18 +526,33 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 }
 
 #content-container {
+    margin-top: 65px;
     display: flex;
+}
+
+#content.sidebar-expand {
+    margin-left: 230px;
 }
 
 #sidebar {
     width: 230px;
     flex-shrink: 0;
     background-color: #1E5454;
-    /*color: white;*/
+    position: fixed;
+    height: 100%;
+    overflow-y: scroll;
+    z-index: 1;
+    top:65;
+    left:0;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 65px - 20px);
 }
 
 #sidebar-menu {
     margin-top: 15px;
+    flex-basis: 100vh;
 }
 
 #sidebar a {
@@ -582,6 +600,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     min-height: 50px;
     border-bottom: 1px solid #3a6162;
     margin: 0 5% 0 5%;
+    flex-shrink: 0;
 }
 
 #sidebar #account img {
@@ -631,10 +650,10 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 
 /* search block */
 #sidebar .search-block {
-    position: fixed;
-    bottom: 0;
     width: 186px;
     margin: 10px;
+    flex-shrink: 0;
+    height: 40px;
 }
 
 #sidebar .search-block .form-group {
@@ -670,7 +689,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 #content {
     margin-left: auto;
     margin-right: auto;
-    padding: 0 5%;
+    padding: 0 3%;
     min-height: 500px;
     max-width: 1100px;
     position: relative;
