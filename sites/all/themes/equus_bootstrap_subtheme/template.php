@@ -347,8 +347,15 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	if ($vars['node']->type == 'equus_sale') {
 		$hosting_org = node_load($vars['node']->field_hosting_organization['und'][0]['target_id']);
-		$vars['hosting_org_path'] = 'node/$hosting_org';
+		$vars['hosting_org_path'] = "node/$hosting_org->nid";
 		$vars['hosting_org'] = $hosting_org->title;
+		if (isset($hosting_org->equus_organizations_mission['und'])) {
+			$vars['mission_summary'] = text_summary($hosting_org->equus_organizations_mission['und'][0]['safe_value'], NULL, 200);
+			$vars['mission_summary'] .= '...' . l("read more", "node/{$hosting_org->nid}", array(
+					'attributes' => array(
+						'class' => array(
+							'link-readmore'))));
+		}
 	    // set up render array for sale categories and price
         $sale_type = field_view_field('node', $vars['node'], 'field_equus_sale_type');
         $sale_type['#label_display]'] = 'hidden';

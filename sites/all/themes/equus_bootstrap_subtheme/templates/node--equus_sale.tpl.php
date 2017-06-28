@@ -90,63 +90,118 @@
 
   <?php endif; ?>
 
-  <div id="inner-content-with-sidebar">
-    <div class="node-content">
+  <div class="node-content">
 
-      <?php if ($page): ?>
+    <?php if ($page): ?>
 
-        <div class="category"><?php print render($sale_type); ?> | <?php print render($content['field_equus_sale_item_type']); ?></div>
+      <div class="category"><?php print render($sale_type); ?> | <?php print render($content['field_equus_sale_item_type']); ?></div>
 
-        <?php print render($title_prefix); ?>
-        <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
-        <?php print render($title_suffix); ?>
+      <?php print render($title_prefix); ?>
+      <h1<?php print $title_attributes; ?>><?php print $title ?></h1>
+      <?php print render($title_suffix); ?>
 
-        <?php if ($display_submitted): ?>
-          <div class="submitted">
-            <?php if ($submitted): ?>
-              <span class="date">Posted on <?php print $submitted; ?></span>
-            <?php endif; ?>
-            <?php if ($name): ?>
-              <span class="author">by <?php print $name ?></span>
-            <?php endif; ?>
-            <?php if ($hosting_org): ?>
-              <span class="org">for <?php print l($hosting_org, $hosting_org_path) ?></span>
-            <?php endif; ?>
-          </div>
-        <?php endif; ?>
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($submitted): ?>
+            <span class="date">Posted on <?php print $submitted; ?></span>
+          <?php endif; ?>
+          <?php if ($name): ?>
+          <span class="author">by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($hosting_org): ?>
+            <span class="org">for <?php print l($hosting_org, $hosting_org_path) ?></span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
 
-        <?php if ($cover_image): ?>
-          <div class="node-saleimage"><?php print render($cover_image); ?></div>
-        <?php endif; ?>
+      <?php if ($cover_image): ?>
+        <div class="node-blogimage"><?php print render($cover_image); ?></div>
+      <?php endif; ?>
 
-      <? endif; ?>
+    <? endif; ?>
 
-      <?php
-        if ($teaser) {
-            print $body_teaser;
-        } else {
-            print render($content['body']);
-        }
-      ?>
+    <?php if (!$page): ?>
 
-      <div class="node-comments">
-        <?php print render($content['comments']); ?>
+      <?php print render($title_prefix); ?>
+      <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+      <?php print render($title_suffix); ?>
+
+      <?php if ($display_submitted): ?>
+        <div class="submitted">
+          <?php if ($name): ?>
+          <span class="author">Written by <?php print $name ?></span>
+          <?php endif; ?>
+          <?php if ($submitted): ?>
+            <br/><span class="date">on <?php print $submitted; ?></span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="footer-link">
+        <a class="footer-readmore icon" href="<?php print $node_url; ?>"></a>
       </div>
 
+    <? endif; ?>
 
-    </div>
+  <?php
+    if ($teaser) {
+      print $body_teaser;
+    } else {
+      print render($content['body']);
+    }
+  ?>
 
-    <div class="region-sidebar-small">
-      <div class="buy-label">Buy</div>
-  <!--      <div class="go-to-page-btn">--><?php //print l('Go to Page', "node/{$item_nid}"); ?><!--</div>-->
-  <!--      --><?php //print render($content['field_equus_sale_quantity']); ?>
-      <?php print render($content['field_equus_sale_price_per_unit']); ?>
+  <?php if(!$page): ?>
+    <?php
+      if (!empty($node->field_blog_tags)) {
+        print '<span class="tags">';
+        print '<span class="icon"></span>';
+        foreach($node->field_blog_tags['und'] as $tag) {
+          $term = taxonomy_term_load($tag['tid']);
+          if ($term->vocabulary_machine_name == 'blog_tags') {
+            print l($term->name, "blog-tags/{$term->name}");
+          }
+        };
+        print '</span>';
+      }
+    ?>
+  <? endif; ?>
+
+  <div class="content"<?php print $content_attributes; ?>>
+    <?php
+      hide($content['comments']);
+      hide($content['links']);
+    ?>
+    <div class="node-links">
+
+      <?php print flag_create_link("likes", $node->nid); ?>
       <?php
-        $form = drupal_get_form('equus_store_form');
-        print theme_status_messages(array('display' => 'error'));
-        print drupal_render($form);
+      print '<span class="comments">';
+      $link_body = "<span class='icon'></span><span class='count'>$comment_count</span>";
+      print l($link_body, "user/{$node->uid}/blog/{$node->nid}", array('fragment' => 'comments', 'html' => TRUE));
+      print '</span>'
       ?>
+      <?php
+      if (!empty($node->field_blog_tags)) {
+        print '<span class="tags">';
+        print '<span class="icon"></span>';
+        foreach($node->field_blog_tags['und'] as $tag) {
+          $term = taxonomy_term_load($tag['tid']);
+          if ($term->vocabulary_machine_name == 'blog_tags') {
+            print l($term->name, "blog-tags/{$term->name}");
+          }
+        };
+        print '</span>';
+      }
+      ?>
+      <?php if (node_access('update', $node)): ?>
+        <span class="edit-delete">
+          <?php print l("$edit_icon", "node/{$node->nid}/edit", array('html' => TRUE)); ?>
+          <?php print l("$delete_icon", "node/{$node->nid}/delete", array('html' => TRUE)); ?>
+        </span>
+      <?php endif; ?>
     </div>
-
   </div>
+</div>
+
 </div>

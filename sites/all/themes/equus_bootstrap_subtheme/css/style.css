@@ -226,6 +226,11 @@ button#edit-preview {
     font-weight: 600;
 }
 
+.node-equus-sale .region-sidebar-small .author a, 
+.node-equus-sale .region-sidebar-small .org-mission {
+    display: block;
+}
+
 /* END Icons */
 
 /* Home Page */
@@ -1281,7 +1286,7 @@ table .field-content h2 a {
     text-transform: uppercase;
     font-weight: bold;
     font-size: .9em;
-    margin: 15px 0;
+    margin-top: 15px;
 }
 
 .btn > a,
@@ -1801,12 +1806,6 @@ table.cols-3 tr td,
     padding: 0 3%;
 }
 
-.page-user .user-sub-header,
-.page-user .user-profile-content {
-    margin-bottom: 60px;
-    margin-top: 2%;
-}
-
 .node-type-organization .property-content {
     margin-bottom: 90px;
     margin-top: 3%;
@@ -1903,7 +1902,16 @@ table.cols-3 tr td,
 
 .page-user .user-sub-header {
     border-bottom: 1px solid #d2d2d2;
-    padding: 0 0 20px 0;
+    padding: 20px 0 20px 0;
+    margin-bottom: 40px;
+}
+
+.page-user .user-profile-content {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    padding-bottom: 40px;
 }
 
 .page-user .user-sub-header .title h1 {
@@ -2386,18 +2394,18 @@ table.cols-3 tr td,
 /***** Blog Entries *****/
 
 
-/* Blog Entry Side */
-.node-type-blog .col-sm-3, 
-.node-type-blog .col-sm-9 {
-    margin: 125px 20px 50px 40px;
+/* Region Sidebar */
+.col-sm-3, 
+.col-sm-9 {
+    margin: 122px 0 50px 40px;
     padding: 0;
 }
 .node-type-blog .equus-sub-header {
     display: none;
 }
-.node-type-blog .node-blog {
+/*.node-type-blog .node-blog {
     margin: 19px 0 0;
-}
+}*/
 .node-type-blog #content-container h1,
 .comment h3,
 .node-type-equus-sale #content-container h1 {
@@ -2408,8 +2416,9 @@ table.cols-3 tr td,
     text-transform: uppercase;
     margin-bottom: 0;
     margin-top: 10px;
-    font-size: 1.5em;
+    font-size: 1.8em;
 }
+.node-equus-sale .submitted,
 .node-type-blog .submitted {
     color: #686868;
     font-size: 1.1em;
@@ -2422,16 +2431,17 @@ table.cols-3 tr td,
 .category div > a,
 .category {
     color: #8F7F4C;
+    margin: 30px 0 0;
 }
 .category .field-label {
     display: none;
 }
-.node-type-blog .node-blogimage img {
+.node-blogimage img {
     /* margin: 30px auto; */
     display: block;
     max-width: 100%;
     height: auto;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 .node-type-blog .view-related-blog-posts img {
     padding-bottom: 10px;
@@ -2444,10 +2454,12 @@ table.cols-3 tr td,
     font-weight: bold;
 }
 
+.node-equus-sale .node-content > .submitted,
 .node-type-blog .node-content > .submitted {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
+.node-equus-sale .node-links,
 .node-type-blog .node-links {
     border-bottom: 1px solid #cccccc;
     margin: 20px 0;
@@ -2469,37 +2481,54 @@ table.cols-3 tr td,
     max-width: 275px;
     margin-left: 25px;
 }
-.node-saleimage img {
-    width: 100%;
-    height: auto;
-    margin-bottom: 25px;
-}
 .field-name-field-equus-sale-type,
 .field-name-field-equus-sale-item-type {
     display: inline;
 }
-.node-equus-sale .submitted {
-    padding-bottom: 10px;
-}
 .node-equus-sale h1 {
     margin-top: 20px;
 }
-.node-equus-sale .region-sidebar-small {
-    margin-top: 125px;
+.node-equus-sale h2.block-title {
+    text-transform: uppercase;
+    font-size: 1em;
+    font-family: inherit;
+    color: #6E6E6E;
+    font-weight: 600;
+}
+.node-equus-sale .buy-form {
+    border-bottom: 1px solid #cccccc;
+    margin: 40px 0;
+    padding-bottom: 40px;
+}
+.region-sidebar-small img {
+    max-width: 100%;
+    height: auto;
+}
+.region-sidebar-small div.views-field.views-field-name {
+    margin: 15px 0 10px 0;
+    font-size: 1.1em;
+}
+.region-sidebar-small .views-field-field-hosting-organization {
+    margin: 20px 0 10px 0;
+}
+.region-sidebar-small .views-field-field-hosting-organization a {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 10px 0 0;
+    color: #256E5A;
 }
 .region-sidebar-small .field-name-field-equus-sale-price-per-unit {
     padding: 20px 0;
     border-bottom: 1px solid #cccccc;
     border-top: 1px solid #cccccc;
 }
-.field-name-field-equus-sale-price-per-unit .field-label {
-
+.region-sidebar-small section {
+    margin-bottom: 20px;
 }
-.field-name-field-equus-sale-price-per-unit .field-item {
-    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    color: #6E6E6E;
+.region-sidebar-small .moreBtn > a{
+    width: 100%;
+    text-align: center;
+    background: #1E5454;
 }
 .go-to-page-btn {
     width: 100%;
@@ -2513,29 +2542,27 @@ table.cols-3 tr td,
     color: white;
     text-transform: uppercase;
 }
-.buy-label {
-    text-transform: uppercase;
-    font-size: 1em;
-    font-family: inherit;
-    color: #6E6E6E;
-    font-weight: 600;
+#equus-store-form .form-item-quantity,
+#equus-store-form .price {
+    margin-bottom: 10px;
 }
-.field-name-field-equus-sale-price-per-unit .field-label,
-#equus-store-form {
-    color: #8F7F4C;
-    text-transform: uppercase;
+#equus-store-form .price-label {
+    font-weight: bold;
+    color: #6d6d6d;
+}
+#equus-store-form .price-value {
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: #6E6E6E;
+}
+#equus-store-form button {
+    width: 100%;
+    height: 32px;
+    margin-top: 10px;
 }
 #equus-store-form .form-required {
     display: none;
-}
-#equus-store-form .form-submit {
-    width: 100%;
-    background-color: #1E5454;
-    border: none;
-    text-transform: uppercase;
-    color: white;
-    font-weight: 600;
-    padding: 10px 0;
 }
 
 /* Comment Box */
@@ -2655,15 +2682,14 @@ img.node-icon {
 
 /* Sidebar */
 .node-type-blog #block-views-blog-author-block-block img {
-    margin: 10px auto 20px;
     position: relative;
 }
 .node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
     margin-bottom: 20px;
 }
 
-.node-type-blog #block-views-blog-author-block-block .views-field-name a {
-    color: #40B392;
+ .region-sidebar-small .views-field-name a {
+    color: #256E5A;
     font-weight: 600;
 }
 
@@ -2683,12 +2709,13 @@ img.node-icon {
 .node-type-blog aside section:nth-child(n+2) {
     margin-top: 20px;
 }
-.node-type-blog aside h2.block-title {
+aside h2.block-title {
     text-transform: uppercase;
-    font-size: 1em;
-    font-family: inherit;
-    color: #6E6E6E;
-    font-weight: 600;
+    font-weight: 500;
+    color: #ab995d;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 1.1em;
+    margin-bottom: 20px;
 }
 
 .node-type-blog #block-views-blog-tags-view-block-block .view-content > .views-row {
@@ -2916,6 +2943,7 @@ img.node-icon {
     padding-left: 3%;
 }
 
+#block-block-1,
 #block-menu-block-6 {
     width: 20%;
     display: inline-block;
@@ -2934,6 +2962,7 @@ img.node-icon {
     font-weight: bold;
 }
 
+#block-block-1 h2.block-title,
 #block-menu-block-6 h2.block-title,
 .events-upper-content h2.content-header {
     font-size: 1.1em;
@@ -3080,10 +3109,7 @@ div.form-type-select.form-item-horseid.form-item.form-group {
     width: 21%;
 }
 
-.body-title,
-.details-title,
-.entry-form-title,
-.view-show-results h2 {
+.content-label {
     text-transform: uppercase;
     font-weight: 500;
     color: #ab995d;

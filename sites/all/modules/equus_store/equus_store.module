@@ -19,6 +19,18 @@ function equus_store_form($form, &$form_state) {
 	$node = node_load($node_ID);
 	global $user;
 
+	$raw_price = number_format($node->field_equus_sale_price_per_unit['und'][0]['value']);
+	$price = "$" . $raw_price;
+	$form['price'] = array(
+  		'#markup' => (
+  			"<div class='price'>
+  				<div class='price-label'>Price </div>
+  				<div class='price-value'>$price</div>
+  			</div>"
+  		),
+
+	);
+
 	if ($node->field_equus_sale_item_type['und'][0]['entity']->name != 'Starter Pack') {
 
 		$quantity = $node->field_equus_sale_quantity['und'][0]['value'];
@@ -71,8 +83,78 @@ function equus_store_form($form, &$form_state) {
 			'#value' => t('Submit'),
 		);
 	}
-
 	return $form;
+}
+
+
+/**
+ * Implements hook_block_info().
+ *
+ * This function tells drupal about our block.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_info/7
+ */
+function equus_store_block_info() {
+	// Create an array that will hold our blocks
+	$blocks = array();
+
+	// Create a key in our $blocks array that
+	// defines our block. Note that the key in
+	// this array can be anything. For this
+	// tutorial, we use 'tellafriend_form'.
+	$blocks['equus_store_buy_form'] = array(
+		// 'info' is what you will see when viewing the blocks admin page.
+		// Note that we use the t() (translate) function which lets drupal
+		// translate any text passed in if needed.
+		'info' => t('BUY FORM'),
+		// 'cache' how this block will be cached
+		'cache' => DRUPAL_CACHE_GLOBAL,
+	);
+
+	// Note, if you wanted to define multiple blocks, you
+	// could simply define more blocks just like above.
+
+	// Finally, we return the $blocks array.
+	return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This function tells drupal how to define our block when viewed.
+ *
+ * For more information on this function, see:
+ * http://api.drupal.org/api/drupal/modules block block.api.php/function/hook_block_view/7
+ */
+function equus_store_block_view($delta = '') {
+	// Create an array that will be returned as our block
+	$block = array();
+	 
+	// Since hook_block_view is called for every block,
+	// Drupal passes in $delta (the key of the blocks defined
+	// in hook_block_info. In our case, we're checking for
+	// $delta to be 'tellafriend_form'.
+	switch($delta) {
+		case 'equus_store_buy_form':
+			// Since this $delta matches our case, we'll define
+			// the subject and contents.
+			 
+			// 'subject' can be blank ('') or anything you wish to define.
+			$block['subject'] = t('Buy');
+			 
+			// 'content' are just that, the contents of the block.
+			// In our case, we will be showing a form.
+			// We use drupal_get_form() to return a drupal-built form.
+			// Note that the parameter passed to drupal_get_form is the name
+			// of the function we will build below to define our form.
+			// This can be any function name we define below.
+			$block['content'] = drupal_get_form('equus_store_form');
+			break;
+	}
+	 
+	// Finally, we return the $block array.
+	return $block;
 }
 
 /**
