@@ -139,7 +139,7 @@
                             </ul>
                         </li>
 
-                        <li><?php print l("$settings_icon Edit Profile", 'user/$uid/edit', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$settings_icon Edit Profile", "user/$uid/edit", array('html' => TRUE)); ?></li>
 
                         <li><?php print l("$log_out_icon Logout", 'user/logout', array('html' => TRUE)); ?></li>
                     </ul>
