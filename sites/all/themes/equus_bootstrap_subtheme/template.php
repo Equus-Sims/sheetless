@@ -190,6 +190,7 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 			foreach ($orgs as $org) {
 				$org_info = array();
 				$org_info['name'] = $org->title;
+				$org_info['prefix'] = $org->equus_organizations_prefix['und'][0]['safe_value'];
 				$org_info['path'] = "node/{$org->nid}";
 				$org_info['bank_balance'] = money_format('%.0n', $org->equus_organizations_balance['und'][0]['value']);
 				$org_info['bank_transactions_path'] = "organization/transactions/{$org->nid}";

@@ -119,7 +119,7 @@
                             <ul id="banking-info" class="expand">
                                 <?php foreach($orgs as $org): ?>
                                     <li><span><?php
-                                            print l($org['name'], $org['path'], array('attributes' => array('class' => array('org-name'))));
+                                            print l($org['prefix'], $org['path'], array('attributes' => array('class' => array('org-name'))));
                                             print ": ";
                                             print l($org['bank_balance'], $org['bank_transactions_path']);
                                             ?></span></li>
