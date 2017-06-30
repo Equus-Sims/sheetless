@@ -3576,10 +3576,29 @@ footer.footer #footer-content #social-media {
 
 .chosen-container-multi .chosen-choices {
     height: 30px !important;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+
+.chosen-container-multi .form-control {
+    border: none;
+}
+
+.input-group-addon {
+    padding: 5px 12px;
+}
+
+input#edit-field-blog-tags-tid.form-control.form-text {
+    padding-left: 5px;
+}
+
+div#edit_field_blog_categories_tid_chosen.chosen-container.chosen-container-multi.form-control.form-select.chosen-processed {
+    border: none;
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
 }
 
 .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
-    height: 29px;
+    height: 28px;
     margin: 0;
 }
 
