@@ -122,6 +122,8 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
 	$vars['dollar_icon'] = "<img class ='sidebar-dollar' src=" . base_path() . path_to_theme() . "/icons/dollar.svg />";
 	$vars['credit_card_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/credit-card-white.svg />";
 	$vars['register_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/user-plus-white.svg />";
+	$vars['x_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/x-light-green.svg />";
+	$vars['menu_icon'] = "<img class ='sidebar-icon' src=" . base_path() . path_to_theme() . "/icons/menu-white.svg />";
 
 	// END ICONS
 

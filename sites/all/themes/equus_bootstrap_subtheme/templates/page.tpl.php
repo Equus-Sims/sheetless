@@ -95,27 +95,29 @@
     </header>
 
     <div id="content-container">
-        <div id="sidebar">
+        <div id="sidebar" class="collapse">
+            <div class="sidebar-close-button"><?php print $x_icon; ?></div>
+            <div class="sidebar-menu-button"><?php print $menu_icon; ?></div>
             <?php if ($logged_in): ?>
                 <nav id="account">
-                    <?php print render($user_picture) . l($name, "user/$uid/profile"); ?>
+                    <?php print l("$user_picture <div class='sidebar-item item-hide'>$name</div>", "user/$uid/profile", array('html' => TRUE)); ?>
                 </nav>
                 <nav id="sidebar-menu">
                     <ul>
-                        <li><?php print l("$dashboard_icon Dashboard", 'dashboard', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$dashboard_icon <div class='sidebar-item item-hide'>Dashboard</div>", 'dashboard', array('html' => TRUE)); ?></li>
 
-                        <li><?php print l("$messages_icon Messages", 'messages', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$messages_icon <div class='sidebar-item item-hide'>Messages</div>", 'messages', array('html' => TRUE)); ?></li>
 
-                        <li><?php print l("$bell_icon Notifications", 'dashboard', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$bell_icon <div class='sidebar-item item-hide'>Notifications</div>", 'dashboard', array('html' => TRUE)); ?></li>
 
-                        <li><div class="sidebar-credit-item"><?php print $credit_icon . "Credits: " . $total_credits . $chevron_up_icon . $chevron_down_icon; ?></div>
+                        <li><div class="sidebar-credit-item"><?php print $credit_icon . "<div class='sidebar-item item-hide'>Credits: " . $total_credits . $chevron_up_icon . $chevron_down_icon . "</div>"; ?></div>
                             <ul id="credit-info" class="expand">
-                                <li><span>Regular Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></span></li>
+                                <li><span>Horse Credit: <?php print l($regular_credit, 'dashboard'); ?></span></li>
                                 <li><span>Organization Credit: <?php print l($org_credit, 'dashboard'); ?></span></li>
                             </ul>
                         </li>
 
-                        <li><div class="sidebar-net-worth-item"><?php print $credit_card_icon . "Net Worth: " . $net_worth . $chevron_up_icon . $chevron_down_icon; ?></div>
+                        <li><div class="sidebar-net-worth-item"><?php print $credit_card_icon . "<div class='sidebar-item item-hide'>Net Worth: " . $net_worth . $chevron_up_icon . $chevron_down_icon . "</div>"; ?></div>
                             <ul id="banking-info" class="expand">
                                 <?php foreach($orgs as $org): ?>
                                     <li><span><?php
@@ -127,7 +129,7 @@
                             </ul>
                         </li>
 
-                        <li><div class="sidebar-create-item"><?php print $plus_circle_icon . "Create: " . $chevron_up_icon . $chevron_down_icon; ?></div>
+                        <li><div class="sidebar-create-item"><?php print $plus_circle_icon . "<div class='sidebar-item item-hide'>Create: " . $chevron_up_icon . $chevron_down_icon . "</div>"; ?></div>
                             <ul id="create_items" class="expand">
                                 <li><?php print l('Blog Entry', 'node/add/blog'); ?></li>
                                 <li><?php print l('Horse', current_path(), array('fragment' => 'overlay=node/add/horse')); ?></li>
@@ -139,9 +141,9 @@
                             </ul>
                         </li>
 
-                        <li><?php print l("$settings_icon Edit Profile", "user/$uid/edit", array('html' => TRUE)); ?></li>
+                        <li><?php print l("$settings_icon <div class='sidebar-item item-hide'>Edit Profile</div>", "user/$uid/edit", array('html' => TRUE)); ?></li>
 
-                        <li><?php print l("$log_out_icon Logout", 'user/logout', array('html' => TRUE)); ?></li>
+                        <li><?php print l("$log_out_icon <div class='sidebar-item item-hide'>Logout</div>", 'user/logout', array('html' => TRUE)); ?></li>
                     </ul>
                 </nav>
                 <div class="search-block">
@@ -149,18 +151,18 @@
                 </div>
             <?php else: ?>
                 <nav id="sidebar-menu">
-                    <ul>
-                        <li><?php print l("$log_in_icon Login", 'user/login', array('html' => TRUE)); ?></li>
-                        <li><?php print l("$register_icon Register", 'user/register', array('html' => TRUE)); ?></li>
+                    <ul id="login-menu">
+                        <li><?php print l("$log_in_icon <div class='sidebar-item item-hide'>Login</div>", "user/login", array('html' => TRUE)); ?></li>
+                        <li><?php print l("$register_icon <div class='sidebar-item item-hide'>Register</div>", "user/register", array('html' => TRUE)); ?></li>
                     </ul>
                 </nav>
             <?php endif; ?>
         </div>
-        <div id="content-area">
+        <div id="content-area" class="sidebar-collapse">
             <div id="hero">
                 <?php print render($page['header']); ?>
             </div>
-            <div id="content" class="sidebar-expand">
+            <div id="content">
                 <?php print $messages; ?>
                 <div id="content-with-sidebar">
                     <div>
