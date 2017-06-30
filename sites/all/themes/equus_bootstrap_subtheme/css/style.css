@@ -255,7 +255,7 @@ button#edit-preview {
 
 .page-user-login .logoImg, 
 .page-user-register .logoImg {
-    max-width: 100px;
+    width: 50px;
     display: block;
     margin: 0 auto;
 }
@@ -530,13 +530,20 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     text-decoration: none;
 }
 
-#content-container {
-    margin-top: 65px;
-    display: flex;
+#site-name-register {
+    margin-top: 18px;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
 }
 
-#content.sidebar-expand {
-    margin-left: 230px;
+#site-name-register a {
+    color: #D2D2D2;
+    font-family: 'Just Another Hand', 'Open Sans', Helvetica, Arial, sans-serif;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-size: 2em;
+}
 }
 
 #sidebar {

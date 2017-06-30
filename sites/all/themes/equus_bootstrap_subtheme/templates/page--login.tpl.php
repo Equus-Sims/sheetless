@@ -82,7 +82,7 @@
 <div class="main-container container">
   <div class="row">
     <section<?php print $content_column_class; ?>>
-        <img src="<?php echo base_path() . path_to_theme() . "/horseshoe-nearblack.svg"; ?>" class="logoImg" />
+        <img src="<?php echo base_path() . path_to_theme() . "/horseshoe-grey.svg"; ?>" class="logoImg" />
         <h1>Login</h1><span class="reglink">Not a member? <a href="<?php echo base_path(); ?>user/register">Register now!</a></span>
         <h2>Welcome back!</h2>
         <?php print render($page['content']); ?>
