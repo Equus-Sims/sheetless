@@ -27,9 +27,6 @@
  * @ingroup views_templates
  */
 ?>
-<div class="hero">
-  <?php print theme('image_style', $cover_photo); ?>
-</div>
 <div class="user-sub-header">
   <div class="user-sub-header-block">
     <div class="title">
