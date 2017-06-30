@@ -178,6 +178,8 @@ function equus_bootstrap_subtheme_preprocess_page(&$vars) {
         $vars['name'] = format_username($GLOBALS['user']);
         if (isset($user->picture)) {
         	$vars['user_picture'] = "<img src='" . file_create_url($user->picture->uri) . "' />";
+        } else {
+        	$vars['user_picture'] = "<img src=" . base_path() . path_to_theme() . "/images/avatar_128x128.png />";
         }
         setlocale(LC_MONETARY, 'en_US');
 		$vars['net_worth'] = money_format('%.0n', $user->field_equus_user_net_worth['und'][0]['value']);
@@ -584,7 +586,11 @@ function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
 			'title' => 'User Profile Cover Image'
 		);
 
-		$vars['user_picture'] = "<img src='" . file_create_url($u->picture->uri) . "' />";
+		if (isset($u->picture)) {
+        	$vars['user_picture'] = "<img src='" . file_create_url($u->picture->uri) . "' />";
+        } else {
+        	$vars['user_picture'] = "<img src=" . base_path() . path_to_theme() . "/images/avatar_128x128.png />";
+        }
 
 		$vars['profile_uid'] = $profile_uid;
 
