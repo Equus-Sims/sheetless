@@ -50,8 +50,6 @@
 			<div class="stats">
 				<span class="profile-label">Net Worth</span>
 				<span class="profile-value"><?php echo $user_net_worth; ?></span>
-				<span class="profile-label">Member Points</span>
-				<span class="profile-value">0</span>
 				<span class="profile-label">Achievements</span>
 				<span class="profile-value">0</span>
 			</div>
