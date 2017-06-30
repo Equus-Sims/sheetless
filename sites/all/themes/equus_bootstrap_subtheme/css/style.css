@@ -200,8 +200,8 @@ button#edit-preview {
     content: '\e60f';
     font-size: 3.4em;
     vertical-align: middle;
-    line-height: 0.8em;
-    padding-left: 3px;
+    line-height: 0.78em;
+    padding-left: 3.5px;
     margin: 0px;
     width: 55px;
     height: 36px;
@@ -511,7 +511,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 
 #site-logo {
     width: 28px;
-    margin: 18px 10px 0 19px;
+    margin: 18px 10px 0 11px;
 }
 
 #site-name {
@@ -1288,11 +1288,11 @@ table .field-content h2 a {
 .moreBtn > a {
     display: inline-block;
     background: #8e7f4c;
-    padding: 10px 35px;
+    padding: 9.5px 33px;
     color: #FFF;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: .9em;
+    font-size: 12px;
     margin-top: 15px;
 }
 
@@ -1362,10 +1362,13 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
 }
 
 .quicktabs_main {
-    /*background: #fafafa;*/
     border-top: 1px solid #d2d2d2;
-    /* padding: 30px 0; */
 }
+
+div#quicktabs-tabpage-store_views_tabs-0.quicktabs-tabpage {
+    padding-top: 30px;
+}
+
 
 /* END Tabs Styling
 
@@ -1460,6 +1463,10 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
+}
+
+.views-exposed-widget .form-submit {
+    padding: 5px 28px;
 }
 
 div.view-filters {
@@ -1560,7 +1567,7 @@ div.view-filters {
 
 .equus-tile .post-footer .field-name-field-equus-sale-price-per-unit {
     color: #40B392;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -1845,6 +1852,7 @@ table.cols-3 tr td,
 #block-menu-block-7 {
     border-bottom: 1px solid #d2d2d2;
     padding: 0 3%;
+    margin-bottom: 30px;
 }
 .page-user .user-menu ul,
 .node-type-organization .user-menu ul,
@@ -1910,7 +1918,7 @@ table.cols-3 tr td,
 .page-user .user-sub-header {
     border-bottom: 1px solid #d2d2d2;
     padding: 20px 0 20px 0;
-    margin-bottom: 40px;
+    margin-bottom: 70px;
 }
 
 .page-user .user-profile-content {
@@ -1918,7 +1926,8 @@ table.cols-3 tr td,
     margin-left: auto;
     margin-right: auto;
     display: flex;
-    padding-bottom: 40px;
+    padding: 0 3% 40px 3%;
+    margin-bottom: 30px;
 }
 
 .page-user .user-sub-header .title h1 {
@@ -2184,13 +2193,13 @@ table.cols-3 tr td,
     color: #FFF;
 }
 
-.page-user .view-user-blog,
+/*.page-user .view-user-blog,
 .page-user .view-puppies,
 .page-user .view-organizations,
 .node-type-organization .view-user-property-list,
 .view-view-sales {
-    margin-top: 22px;
-}
+    margin-top: 10px;
+}*/
 
 #filterBtn {
     margin-bottom: 22px;
@@ -2446,7 +2455,7 @@ table.cols-3 tr td,
 .node-blogimage img {
     /* margin: 30px auto; */
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     padding-bottom: 20px;
 }
@@ -2690,9 +2699,6 @@ img.node-icon {
 /* Sidebar */
 .node-type-blog #block-views-blog-author-block-block img {
     position: relative;
-}
-.node-type-blog #block-views-blog-author-block-block .views-field-field-user-biography {
-    margin-bottom: 20px;
 }
 
  .region-sidebar-small .views-field-name a {
