@@ -3,11 +3,10 @@ description = Defines a field type that allows values to be "computed" via PHP c
 core = 7.x
 dependencies[] = field
 package = Fields
-files[]=computed_field.install
-files[]=computed_field.module
-; Information added by  packaging script on 2013-12-03
-version = "7.x-1.0"
+
+; Information added by Drupal.org packaging script on 2016-01-21
+version = "7.x-1.1"
 core = "7.x"
 project = "computed_field"
-datestamp = "1386094705"
+datestamp = "1453389259"
 
