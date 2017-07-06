@@ -4,10 +4,11 @@ core = 7.x
 package = Views
 dependencies[] = views
 files[] = plugins/views_contextual_filters_or_query.inc
+files[] = plugins/views_contextual_filters_or_search_api_query.inc
 
-; Information added by Drupal.org packaging script on 2015-06-12
+; Information added by Drupal.org packaging script on 2016-01-23
 version = "7.x-1.x-dev"
 core = "7.x"
 project = "views_contextual_filters_or"
-datestamp = "1434109067"
+datestamp = "1453588910"
 
