@@ -64,7 +64,7 @@ function adminimal_form_system_theme_settings_alter(&$form, &$form_state) {
       //'dark' => t('Dark'),
       //'flat' => t('Flat'),
       'material' => t('Material (BETA version)'),
-      //'alternative' => t('Alternative'),
+      'alternative' => t('Alternative'),
     ),
     '#description' => t('Select desired skin style. Note that this feature is in beta stage and there might be some issues.'),
     '#required' => FALSE,
@@ -84,11 +84,32 @@ function adminimal_form_system_theme_settings_alter(&$form, &$form_state) {
     '#default_value' => theme_get_setting('display_icons_config'),
   );
 
+  $form['adminimal_custom']['rounded_buttons'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use rounded buttons'),
+    '#description' => t('Uncheck this setting if you dont like the rounded button styling for some action links'),
+    '#default_value' => theme_get_setting('rounded_buttons'),
+  );
+
+  $form['adminimal_custom']['sticky_actions'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Sticky form actions'),
+    '#description' => t('This will make the form actions div fixed bottom positioning. So for example when you visit the node edit page you wont need to scroll down to save/preview/delete the node. The form action buttons will be sticky to the bottom of the screen.'),
+    '#default_value' => theme_get_setting('sticky_actions'),
+  );
+
   $form['adminimal_custom']['avoid_custom_font'] = array(
     '#type' => 'checkbox',
     '#title' => t('Avoid using "Open Sans" font'),
     '#description' => t('(useful for languages that are not well supported by the "Open sans" font. Like Japanese for example)'),
     '#default_value' => theme_get_setting('avoid_custom_font'),
+  );
+
+  $form['adminimal_custom']['adminimal_ckeditor'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('CKEditor support'),
+    '#description' => t('Loads custom adminimal css skin for CKEditor. Disable this to avoid css conflicts when using other CKEditor skins.'),
+    '#default_value' => theme_get_setting('adminimal_ckeditor'),
   );
 
   $form['adminimal_custom']['use_custom_media_queries'] = array(
