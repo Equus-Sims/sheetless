@@ -467,7 +467,7 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 
 	    // get the host
 	    $host = field_view_field('node',$vars['node'],'field_hosting_organization');
-	    $host_org_name = $host[0]['#markup'];
+	    $host_org_name = $host['#object']->field_hosting_organization['und'][0]['entity']->title;
 	    $vars['host'] = $host_org_name;
 
 	    // get the host org path
