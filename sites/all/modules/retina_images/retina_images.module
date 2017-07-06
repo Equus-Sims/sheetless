@@ -254,6 +254,7 @@ function retina_images_image_default_styles() {
   $styles = array();
 
   $styles['thumbnail_retina'] = array(
+    'label' => 'Thumbnail (100x100 retinafied)',
     'effects' => array(
       array(
         'name' => 'image_scale',
@@ -264,6 +265,7 @@ function retina_images_image_default_styles() {
   );
 
   $styles['medium_retina'] = array(
+    'label' => 'Medium (220x220 retinafied)',
     'effects' => array(
       array(
         'name' => 'image_scale',
@@ -274,6 +276,7 @@ function retina_images_image_default_styles() {
   );
 
   $styles['large_retina'] = array(
+    'label' => 'Large (480x480 retinafied)',
     'effects' => array(
       array(
         'name' => 'image_scale',
@@ -314,7 +317,8 @@ function theme_retina_images_image_scale_summary($variables) {
 function theme_retina_images_image_resize_summary($variables) {
   $data = $variables['data'];
 
-  return theme('image_resize_summary', $variables) . ' ' . ($data['retinafy'] ? '(' . t('retinafied') . ')' : '');
+  $retinafied =  isset($data['retinafy']) ? $data['retinafy'] : FALSE;
+  return theme('image_resize_summary', $variables) . ' ' . ($retinafied ? '(' . t('retinafied') . ')' : '');
 }
 
 /**
@@ -329,7 +333,8 @@ function theme_retina_images_image_resize_summary($variables) {
 function theme_retina_images_image_crop_summary($variables) {
   $data = $variables['data'];
 
-  return theme('image_crop_summary', $variables) . ' ' . ($data['retinafy'] ? '(' . t('retinafied') . ')' : '');
+  $retinafied =  isset($data['retinafy']) ? $data['retinafy'] : FALSE;
+  return theme('image_crop_summary', $variables) . ' ' . ($retinafied ? '(' . t('retinafied') . ')' : '');
 }
 
 /**

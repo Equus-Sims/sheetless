@@ -3,9 +3,9 @@ description = "Provide an image effect to output images in high resolution forma
 core = 7.x
 dependencies[] = image
 
-; Information added by drupal.org packaging script on 2013-04-09
-version = "7.x-1.0-beta4"
+; Information added by Drupal.org packaging script on 2016-02-18
+version = "7.x-1.0-beta5"
 core = "7.x"
 project = "retina_images"
-datestamp = "1365529216"
+datestamp = "1455779943"
 
