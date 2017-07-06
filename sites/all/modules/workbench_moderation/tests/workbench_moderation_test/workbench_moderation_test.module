@@ -50,3 +50,47 @@ function workbench_moderation_test_update_node($node, $action = NULL) {
   node_save($node);
   return array('#markup' => t('Node status: @status', array('@status' => $node->status ? t('published') : t('unpublished'))));
 }
+
+/**
+ * Implements hook_workbench_moderation_transition().
+ */
+function workbench_moderation_test_workbench_moderation_transition($node, $previous_state, $new_state) {
+  foreach (array('title', 'nid', 'vid', 'status') as $key) {
+    workbench_moderation_test_set($key, $node->{$key});
+  }
+  workbench_moderation_test_set('previous_state', $previous_state);
+  workbench_moderation_test_set('new_state', $new_state);
+}
+
+/**
+ * Sets values for testing api hooks.
+ *
+ * @param $name
+ *   The name of the value to store.
+ * @param $value
+ *   The value to store.
+ *
+ * @return string | NULL
+ *   The value of a requested named variable, if requested.
+ */
+function workbench_moderation_test_set($name, $value = NULL) {
+  $values = variable_get('workbench_moderation_test', array());
+  if (!is_null($value)) {
+    $values[$name] = $value;
+    variable_set('workbench_moderation_test', $values);
+  }
+  return isset($values[$name]) ? $values[$name] : NULL;
+}
+
+/**
+ * Gets values for testing api hooks.
+ *
+ * @param $name
+ *   The name of the value to store.
+ *
+ * @return string | NULL
+ *   The value of the variable, if set.
+ */
+function workbench_moderation_test_get($name) {
+  return workbench_moderation_test_set($name);
+}

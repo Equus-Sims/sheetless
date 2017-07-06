@@ -11,19 +11,19 @@ class WorkbenchModerationPermsTestCase extends DrupalWebTestCase {
   protected $author_user;
 
   function setUp($modules = array()) {
-    $modules = array_merge($modules, array('workbench_moderation'));
+    $modules = array_merge($modules, array('drafty', 'workbench_moderation'));
     parent::setUp($modules);
 
     // Create a new content type and enable moderation on it.
     $type = $this->drupalCreateContentType();
     $this->content_type = $type->name;
     variable_set('node_options_' . $this->content_type, array('revision', 'moderation'));
-// The editor should be able to view all unpublished content, even without authoring perms.
+    // The editor should be able to view all unpublished content, even without authoring perms.
     $editor_permissions = array(
       0 => 'view all unpublished content',
     );
     $this->editor_user = $this->drupalCreateUser($editor_permissions);
-// The Author will create the content.
+    // The Author will create the content.
     $author_permissions = array(
       0 => 'create ' . $type->name . ' content',
     );

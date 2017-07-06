@@ -1,5 +1,5 @@
-name = Workbench Moderation Test
-description = Test module for Workbench Moderation.
+name = Workbench Moderation Node Access Test
+description = Node Access test module for Workbench Moderation.
 package = Workbench
 core = 7.x
 hidden = TRUE
