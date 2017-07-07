@@ -1,6 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Lato:300,400,700,900);
 @import url(https://fonts.googleapis.com/css?family=Grand+Hotel|Just+Another+Hand|Over+the+Rainbow);
 
+div#first-time {
+    display: none;
+}
+
 @font-face {
     font-family: icons;
     src: url('../icons/icons.woff');
@@ -1435,7 +1439,7 @@ div.privatemsg-message .user-picture img,
 /* Quick Tabs Styling */
 
 .quicktabs-tabs {
-    padding-left: 0;
+    padding-left: 3%;
     text-transform: uppercase;
     font-size: 1.1em;
     margin-bottom: 0;
@@ -1469,8 +1473,8 @@ ul.quicktabs-tabs a, .quicktabs-tabs a:hover, .quicktabs-tabs a:focus, .quicktab
     border-top: 1px solid #d2d2d2;
 }
 
-div#quicktabs-tabpage-store_views_tabs-0.quicktabs-tabpage {
-    padding-top: 30px;
+div#quicktabs-container-store_views_tabs {
+    padding: 30px 3%;
 }
 
 
@@ -3056,7 +3060,10 @@ aside h2.block-title {
     display: none;
 }
 
-#block-views-show-list-block-3 {
+#block-block-2,
+#block-views-show-list-block-3,
+#block-views-show-list-block-4,
+#block-views-show-list-block-2 {
     padding-left: 3%;
 }
 
