@@ -565,7 +565,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
 }
 
 body.admin-menu #sidebar {
-    height: calc(100vh - 60px - 30px);   
+    height: calc(100vh - 90px);   
     margin-bottom: 20px;
 }
 
