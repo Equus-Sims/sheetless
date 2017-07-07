@@ -963,7 +963,7 @@ function equus_shows_show_types_weighted_stat_validate($data) {
 
 }
 
-function equus_shows_show_types_photo_validate($data) {
+function equus_shows_show_types_creative_validate($data) {
 	foreach (array("phases", "max_entries") as $field) {
 		if (!property_exists($data, $field)) {
 			throw new Exception("Show type missing $field value.");

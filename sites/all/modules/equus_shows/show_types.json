@@ -6,7 +6,7 @@
 		"min_entries": 10,
 		"max_entries": 20
 	},
-	"photo": {
+	"creative": {
 		"phases": [
 			"photo"
 		],
