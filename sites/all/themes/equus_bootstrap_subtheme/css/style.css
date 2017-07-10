@@ -559,7 +559,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     background-color: #1E5454;
     position: fixed;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     z-index: 1;
     top:65;
     left:0;
