@@ -560,6 +560,7 @@ div.form-item div.password-suggestions, .page-user-register #edit-field-user-dob
     position: fixed;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1;
     top:65;
     left:0;
