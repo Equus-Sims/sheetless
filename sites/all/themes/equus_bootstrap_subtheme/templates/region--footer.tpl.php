@@ -28,7 +28,7 @@
 		    	<li><?php print l("Members", 'member-directory'); ?></li>
 		    	<li><?php print l("Staff", 'staff-directory'); ?></li>
 		    	<li><?php print l("Organizations", 'organizations'); ?></li>
-		    	<li><?php print l("Horses", 'horses'); ?></li>
+		    	<li><?php print l("Horses", 'horse-directory'); ?></li>
 		    	<li><?php print l("Sims", 'sims'); ?></li>
 		    </ul>
 	    </div>
