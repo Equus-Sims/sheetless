@@ -115,7 +115,7 @@
         <div class="node-blogimage"><?php print render($cover_image); ?></div>
       <?php endif; ?>
 
-    <? endif; ?>
+    <?php endif; ?>
 
     <?php if (!$page): ?>
 
@@ -138,7 +138,7 @@
         <a class="footer-readmore icon" href="<?php print $node_url; ?>"></a>
       </div>
 
-    <? endif; ?>
+    <?php endif; ?>
 
   <?php
     if ($teaser) {
@@ -162,7 +162,7 @@
         print '</span>';
       }
     ?>
-  <? endif; ?>
+  <?php endif; ?>
 
   <div class="content"<?php print $content_attributes; ?>>
     <?php
