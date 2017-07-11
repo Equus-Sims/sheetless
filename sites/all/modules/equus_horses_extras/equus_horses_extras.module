@@ -53,11 +53,11 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 
 	$message = "";
 	if ($current_regular_HC == 0) {
-		$message .= "You have 0 Regular Horse Credits ";
+		$message .= "You have 0 Horse Credits ";
 	} else if ($current_regular_HC == 1) {
-		$message .= "You have 1 Regular Horse Credit ";
+		$message .= "You have 1 Horse Credit ";
 	} else if ($current_regular_HC > 1) {
-		$message .= "You have $current_regular_HC Regular Horse Credits ";
+		$message .= "You have $current_regular_HC Horse Credits ";
 	}
 	drupal_set_message($message);
 
