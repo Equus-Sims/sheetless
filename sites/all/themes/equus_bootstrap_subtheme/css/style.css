@@ -152,6 +152,9 @@ button#edit-preview {
 .node-links a, .node-links a:hover, .node-links a:focus {
     text-decoration: none;
 }
+.node-links .tags a {
+    padding-right: 10px;
+}
 .node-links .tags a,
 .node-links .comments .count {
     color: #40B392;
@@ -160,6 +163,9 @@ button#edit-preview {
 .node-links .edit-delete {
     float: right;
     font-size: 1em;
+}
+.node-links span.icon {
+    margin-right: 5px;
 }
 
 .node-links .edit-delete a {
