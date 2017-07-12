@@ -393,7 +393,6 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 //		$disciplines = field_view_field('node',$vars['node'],'field_horse_discipline');
 //		$disciplines['#label_display'] = 'hidden';
 //		$vars['disciplines'] = $disciplines;
-		$vars['disciplines'] = "Barrels and Poles";
 	}
 
 	if ($vars['node']->type == 'show') {

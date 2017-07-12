@@ -160,7 +160,6 @@
 	    ?>
 		  <?php if ($node->type == 'horse'): ?>
 			<?php print '<span class="tags">'; ?>
-			<?php print render($disciplines); ?>
 			<?php print '</span>'; ?>
 		  <?php endif; ?>
 		<div class="footer-link">
