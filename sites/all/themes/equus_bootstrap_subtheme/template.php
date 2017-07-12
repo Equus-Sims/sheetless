@@ -531,6 +531,12 @@ function equus_bootstrap_subtheme_preprocess_user_profile(&$vars) {
 	$created_date = new DateTime('@' . $u->created);
 	$vars['created'] = $created_date->format('M. d, Y');
 
+	if (isset($u->field_user_biography['und'][0]['safe_value'])) {
+		$vars['user_biography'] = $u->field_user_biography['und'][0]['safe_value'];
+	} else {
+		$vars['user_biography'] = "Coming soon!";
+	}
+
 	if (arg(0,$alias) == 'user' && arg(2,$alias) == 'profile') {
 		$vars['user_profile_counters'] = true;
 	} else {
@@ -604,7 +610,11 @@ function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
 		$created_date = new DateTime('@' . $u->created);
 		$vars['created'] = $created_date->format('M. d, Y');
 
-		$vars['user_biography'] = $u->field_user_biography['und'][0]['safe_value'];
+		if (isset($u->field_user_biography['und'][0]['safe_value'])) {
+			$vars['user_biography'] = $u->field_user_biography['und'][0]['safe_value'];
+		} else {
+			$vars['user_biography'] = "Coming soon!";
+		}
 
 		setlocale(LC_MONETARY, 'en_US');
 		$vars['user_net_worth'] = money_format('%.0n', $u->field_equus_user_net_worth['und'][0]['value']);
