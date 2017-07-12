@@ -380,9 +380,8 @@ function equus_bootstrap_subtheme_preprocess_node(&$vars) {
 	}
 
 	if ($vars['node']->type == 'horse') {
-		//	$status = field_view_field('node', $vars['node'], 'field_horse_status');
-		$status = 'Training';
-		// $status['#label_display'] = 'hidden';
+		$status = field_view_field('node', $vars['node'], 'field_horse_status');
+		$status['#label_display'] = 'hidden';
 		$vars['status'] = $status;
 
 	    $real_name = field_view_field('node',$vars['node'],'field_horse_real_name');
