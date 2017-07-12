@@ -58,6 +58,18 @@ function equus_core_block_view($delta='') {
 	return $block;
 }
 
+/**
+ * Implements hook_menu_alter().
+ */
+function equus_core_menu_alter(&$items) {
+  // Take over from the taxonomy module.
+  $items['taxonomy/term/%taxonomy_term'] = array(
+    'page callback' => 'equus_core_term_page',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+  );
+}
+
 function equus_core_theme() {
 	return array(
 		'equus_stats' => array(
@@ -140,4 +152,24 @@ function equus_core_node_load_2($nid, $type) {
 	}
 
 	return $node;
+}
+
+/**
+ * Menu callback; displays all nodes associated with a term.
+ *
+ * @param object $term
+ *   The taxonomy term.
+ *
+ * @return string
+ *   The page content.
+ */
+function equus_core_term_page($term) {
+	// Let i18n translate the term if it exists.
+ 	if (module_exists('i18n_taxonomy') && function_exists('i18n_taxonomy_localize_terms')) {
+		$term = i18n_taxonomy_localize_terms($term);
+	}
+
+	// Set the title and return all the field data.
+	drupal_set_title($term->name);
+	return taxonomy_term_view($term, 'full');
 }
