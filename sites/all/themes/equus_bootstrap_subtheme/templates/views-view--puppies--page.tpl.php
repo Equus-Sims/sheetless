@@ -27,6 +27,10 @@
  * @ingroup views_templates
  */
 ?>
+<?php if ($display_id == 'page_1'): ?>
+    <h2>Horse Directory</h2>
+<?php endif;?>
+<?php if ($display_id != 'page_1'): ?>
 <div class="user-sub-header">
   <div class="user-sub-header-block">
     <div class="title">
@@ -86,6 +90,7 @@
     <li><a <?php echo $horses_active; ?> href=<?php echo base_path() . "user/2/horses#h"; ?> >Horses</a></li>
   </ul>
 </div>
+<?php endif; ?>
 <div class="user-profile-content">
   <div class="<?php print $classes; ?>">
     <?php print render($title_prefix); ?>

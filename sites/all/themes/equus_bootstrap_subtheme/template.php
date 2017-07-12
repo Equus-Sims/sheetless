@@ -553,7 +553,7 @@ function equus_bootstrap_subtheme_preprocess_field(&$vars) {
 }
 
 function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
-    if ($vars['view']->name == 'user_blog' || $vars['view']->name == 'organizations' || $vars['view']->name == 'puppies') {
+    if ($vars['view']->name == 'user_blog' || $vars['view']->name == 'organizations' || ($vars['view']->name == 'puppies' && $vars['display_id'] != 'page_1')) {
 		$alias = drupal_get_path_alias();
 
 		$profile_uid = arg(1,$alias);
