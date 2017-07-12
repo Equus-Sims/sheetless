@@ -69,10 +69,10 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
     if (!$is_new) {
         $horse = node_load($form['nid']['#value']);
 		$form['field_horse_creating_org']['#access'] = false;
-		$form['field_horse_activation_status']['#access'] = false;
 
         if ($horse->field_horse_activation_status[LANGUAGE_NONE][0]['value'] == 'Active') {
             $is_active = true;
+            $form['field_horse_activation_status']['#access'] = false;
         }
 	}
 
