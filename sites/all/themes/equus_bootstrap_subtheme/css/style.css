@@ -1578,6 +1578,7 @@ div#quicktabs-container-store_views_tabs {
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
+    flex-wrap: wrap;
 }
 
 .views-exposed-widget .form-submit {
