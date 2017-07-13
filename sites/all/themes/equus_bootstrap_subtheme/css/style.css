@@ -864,7 +864,6 @@ body.admin-menu #sidebar {
 #navbar #main-menu {
     margin-top: auto;
     margin-bottom: auto;
-    margin-right: 20px;
 }
 
 #navbar #main-menu ul {
@@ -878,7 +877,7 @@ body.admin-menu #sidebar {
 
 #navbar #main-menu li {
     display: inline-block;
-    width: 6em;
+    margin-right: 30px;
 }
 
 #navbar #main-menu li a {
