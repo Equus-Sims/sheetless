@@ -563,7 +563,6 @@ function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
 		$profile_uid = arg(1,$alias);
 
 		$u = user_load($profile_uid);
-		// dpm($u);
 
 		if ($vars['view']->name == 'user_blog') {
 			$vars['blog_active'] = "class='active-trail active'";
@@ -585,13 +584,6 @@ function equus_bootstrap_subtheme_preprocess_views_view(&$vars) {
 		$interval = $dob_raw->diff(new DateTime());
 		$vars['user_age'] = $interval->y;
 		$vars['user_dob'] = $dob;
-
-		$vars['cover_photo'] = array(
-			'style_name' => 'hero_image_style',
-			'path' => $u->field_cover_image['und'][0]['uri'],
-			'alt' => 'User Profile Cover Image',
-			'title' => 'User Profile Cover Image'
-		);
 
 		if (isset($u->picture)) {
         	$vars['user_picture'] = "<img src='" . file_create_url($u->picture->uri) . "' />";
