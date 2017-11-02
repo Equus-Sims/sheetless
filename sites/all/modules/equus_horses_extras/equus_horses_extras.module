@@ -52,14 +52,18 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	$current_regular_HC = userpoints_get_current_points($uid, EQUUS_HORSES_EXTRAS_REGULAR_HC_TID);
 
 	$message = "";
+	$status = "";
 	if ($current_regular_HC == 0) {
 		$message .= "You have 0 Horse Credits ";
+		$status .= "warning";
 	} else if ($current_regular_HC == 1) {
 		$message .= "You have 1 Horse Credit ";
+		$status .= "status";
 	} else if ($current_regular_HC > 1) {
 		$message .= "You have $current_regular_HC Horse Credits ";
+		$status .= "status";
 	}
-	drupal_set_message($message);
+	drupal_set_message($message, $status);
 
     $is_new = $form['nid']['#value'] === NULL;
     $is_active = false;
