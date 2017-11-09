@@ -28,9 +28,17 @@ function equus_shows_node_info() {
 
 function equus_shows_form_show_node_form_alter(&$form, $form_state) {
     $uid = $GLOBALS['user']->uid;
-    // pass the correct organization options to the form for the hosting organization field
-    $organizations = equus_organizations_get_org_options($uid);
-    $form['field_hosting_organization']['und']['#options'] = $organizations;
+
+	// pass the correct organization options to the form for the hosting organization field
+	$org_options = equus_organizations_get_org_options($uid);
+	if ($org_options) {
+		$form['field_hosting_organization']['und']['#options'] = $org_options;
+	} else {
+		$form['field_hosting_organization']['#disabled'] = true;
+		$form['actions']['submit']['#access'] = false;
+    	$form['actions']['preview']['#access'] = false;
+		drupal_set_message(t("You need to create an organization before you can create a show."), 'warning');
+	}
 
     // hide show status field from users
     $form['field_show_status']['#access'] = 0;

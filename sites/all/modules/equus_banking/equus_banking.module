@@ -456,7 +456,14 @@ function equus_banking_form_alter(&$form, &$form_state, $form_id) {
         return;
     }
     global $user;
-    $form['equus_banking_source']['und']['#options'] = equus_organizations_get_org_options($user->uid);
+    $orgs = equus_organizations_get_org_options($user->uid);
+    if (empty($orgs)) {
+        $form['equus_banking_source']['#disabled'] = true;
+        $form['actions']['submit']['#access'] = false;
+        $form['actions']['preview']['#access'] = false;
+        drupal_set_message(t("You need to create an organization before you can create a transaction."), 'warning');
+    }
+    $form['equus_banking_source']['und']['#options'] = $orgs;
 }
 
 function equus_banking_node_validate($node, $form, &$form_state) {

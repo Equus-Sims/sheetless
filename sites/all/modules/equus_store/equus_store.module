@@ -169,6 +169,8 @@ function equus_store_block_view($delta = '') {
 function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 	global $user;
 
+	$disable_submit = false;
+
     // if user is administrator, include admin-only sale item terms in query
     $admin_only = 0;
     if ($user->uid == 1 || $user->uid == 65) {
@@ -194,13 +196,13 @@ function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
         $form['field_equus_sale_item_type']['und']['#options'] = $sale_types;
     }
 
-    // if user is administrator, include admin-only sale types in sale type options
     $form['field_equus_sale_type']['und']['#options'] = array(
         'quicksale' => 'Quick Sale',
         'directsale' => 'Direct Sale',
         'auction' => 'Auction',
         'lease' => 'Lease',
     );
+    // if user is administrator, include admin-only sale types in sale type options
     if ($user->uid == 1 || $user->uid == 65) {
         $form['field_equus_sale_type']['und']['#options']['gameplayitem'] = 'Gameplay Item';
     }
@@ -208,12 +210,34 @@ function equus_store_form_equus_sale_node_form_alter(&$form, $form_state) {
 	// get a list of horse IDs associated with a user
 	$nids = equus_horses_extras_get_assoc_horses($user->uid);
 	// give the IDs to return a list of those horses by name and populate dropdown
-	$form['field_equus_sale_item']['und']['#options'] = equus_horses_extras_get_horse_options($nids);
+	$items = equus_horses_extras_get_horse_options($nids);
+	if (empty($items)) {
+		$form['field_equus_sale_item']['#disabled'] = true;
+		// Chosen module (?) barfs if there aren't any options in a select field so here's a stupid one
+		$items = array("null");
+	}
+	$form['field_equus_sale_item']['und']['#options'] = $items;
+
+
 	// pass the correct organization options to the form for the organization field
-	$form['field_hosting_organization']['und']['#options'] = equus_organizations_get_org_options($user->uid);
+	$org_options = equus_organizations_get_org_options($user->uid);
+	if (empty($org_options)) {
+		$form['field_hosting_organization']['#disabled'] = true;
+		$disable_submit = true;
+		drupal_set_message(t("You need to create an organization before you can create a sale."), 'warning');
+		// Chosen module (?) barfs if there aren't any options in a select field so here's a stupid one
+		$org_options = array("Choose some options");
+	}
+
+	$form['field_hosting_organization']['und']['#options'] = $org_options;
 
     // hide buyer field from users
     $form['field_buyer']['#access'] = 0;
+
+    if ($disable_submit) {
+    	$form['actions']['submit']['#access'] = false;
+    	$form['actions']['preview']['#access'] = false;
+    }
 }
 
 // TODO: Clean up the mess in this function

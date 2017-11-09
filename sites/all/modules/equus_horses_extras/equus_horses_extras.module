@@ -20,12 +20,18 @@ define("EQUUS_HORSES_EXTRAS_CUR_POT_STAT_RATIO", 0.50);
  */
 function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 	$uid = $GLOBALS['user']->uid;
+
+	$disable_submit = false;
+
 	// get all organizations (and properties) associated with the currently logged in user
 	$properties = equus_properties_get_user_assoc_properties_by_org($uid);
 
 	// if the user has no organizations, print an error
 	if (empty($properties)) {
-		drupal_set_message('You need to create an organization and a property before you can create a horse.','error');
+		$disable_submit = true;
+		$form['field_horse_creating_org']['#disabled'] = true;
+		$form['field_horse_residence']['#disabled'] = true;
+		drupal_set_message('You need to create an organization and a property before you can create a horse.','warning');
 	} else {
 		$empty = TRUE;
 
@@ -38,7 +44,9 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 		}
 
 		if ($empty) {
-			drupal_set_message('You need to create a property before you can create a horse.','error');
+			$disable_submit = true;
+			$form['field_horse_residence']['#disabled'] = true;
+			drupal_set_message('You need to create a property before you can create a horse.','warning');
 		}
 	}
 	
@@ -154,6 +162,11 @@ function equus_horses_extras_form_horse_node_form_alter(&$form, $form_state) {
 //    $form['#attached']['js'] = array(
 //        drupal_get_path('module', 'equus_horses_extras') . '/equus_horses_extras.js',
 //    );
+
+    if ($disable_submit) {
+    	$form['actions']['submit']['#access'] = false;
+    	$form['actions']['preview']['#access'] = false;
+    }
 }
 
 function equus_horses_extras_dob_validation($element, &$form_state) {
