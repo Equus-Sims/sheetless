@@ -10,8 +10,19 @@
  * Implements hook_form_alter for the property creation form.
  */
 function equus_properties_extras_form_property_node_form_alter(&$form, $form_state) {
+	global $user;
+
+	$org_options = equus_organizations_get_org_options($user->uid);
+
 	// pass the correct organization options to the form for the property ownership field
-	$form['field_property_ownership']['und']['#options'] = equus_organizations_get_org_options($GLOBALS['user']->uid);
+	if ($org_options) {
+		$form['field_property_ownership']['und']['#options'] = $org_options;
+	} else {
+		$form['field_property_ownership']['#disabled'] = true;
+		$form['actions']['submit']['#access'] = false;
+    	$form['actions']['preview']['#access'] = false;
+		drupal_set_message(t("You need to create an organization before you can create a property."), 'warning');
+	}
 }
 
 /**

@@ -5,18 +5,3 @@
  */
 
 include_once 'equus_properties.features.inc';
-
-function equus_properties_form_property_node_form_alter(&$form, $form_state) {
-	global $user;
-
-	// pass the correct organization options to the form for the property ownership field
-	$org_options = equus_organizations_get_org_options($user->uid);
-	if ($org_options) {
-		$form['field_property_ownership']['und']['#options'] = $org_options;
-	} else {
-		$form['field_property_ownership']['#disabled'] = true;
-		$form['actions']['submit']['#access'] = false;
-    	$form['actions']['preview']['#access'] = false;
-		drupal_set_message(t("You need to create an organization before you can create a property."), 'warning');
-	}
-}
