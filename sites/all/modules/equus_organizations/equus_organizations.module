@@ -38,6 +38,8 @@ function equus_organizations_node_update($node) {
 	if ($node->type != 'organization') {
 		return;
 	}
+
+	// if the organization's prefix changed, update the real name for all horses created by that org
 	if ($node->equus_organizations_prefix['und'][0]['value'] != $node->original->equus_organizations_prefix['und'][0]['value'] || 
 		$node->equus_organizations_pfx_display['und'][0]['value'] != $node->original->equus_organizations_pfx_display['und'][0]['value'])
 	{
@@ -58,6 +60,24 @@ function equus_organizations_node_update($node) {
 			//TODO: Is there a way to not save horses in this organizations module?
 			node_save($horse);
 		}
+	}
+
+	// if the list of users has been changed, update the user's net worth
+	$previous_users = array();
+	$new_users = array();
+	if (!empty($node->original->equus_organizations_users)) {
+		foreach($node->original->equus_organizations_users['und'] as $user) {
+			$previous_users[] = $user['target_id'];
+		}
+	}
+	if (!empty($node->equus_organizations_users)) {
+		foreach ($node->equus_organizations_users['und'] as $user) {
+			$new_users[] = $user['target_id'];
+		}
+	}
+	$user_diff = array_diff(array_merge($new_users, $previous_users), array_intersect($new_users, $previous_users));
+	foreach ($user_diff as $user) {
+		equus_banking_update_user_net_worth($user);
 	}
 }
 

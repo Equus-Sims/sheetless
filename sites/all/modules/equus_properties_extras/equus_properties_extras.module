@@ -1,6 +1,38 @@
 <?php 
 
 /**
+ * Ensure that all members of an org can access that org's properties to edit.
+ *
+ * Implements hook_node_access
+ */
+function equus_properties_extras_node_access($node, $op, $account) {
+	$type = is_string($node) ? $node : $node->type;
+
+	if ($type == 'property' && $op == 'update') {
+		// get hosting org
+		$org_id = $node->field_property_ownership['und'][0]['target_id'];
+		$org = node_load($org_id);
+
+		// get members of hosting org
+		$members = array();
+		$members[] = $org->uid;
+		if (!empty($org->equus_organizations_users)) {
+			foreach ($org->equus_organizations_users['und'] as $user) {
+				$members[] = $user['target_id'];
+			}
+		}
+
+		// if current user is not member of hosting org, deny access
+		if (!in_array($account->uid, $members)) {
+			return NODE_ACCESS_DENY;
+		}
+		if (in_array($account->uid, $members)) {
+			return NODE_ACCESS_ALLOW;
+		}
+	}
+}
+
+/**
  * Displays an error message if the user has not created 
  * an organization when attempting to create a property.
  *

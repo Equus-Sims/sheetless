@@ -11,4 +11,5 @@ files[] = equus_shows_show.inc
 dependencies[] = equus_core
 dependencies[] = relation
 dependencies[] = equus_banking
+dependencies[] = equus_organizations
 dependencies[] = equus_horses_extras
